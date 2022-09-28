@@ -1,0 +1,163 @@
+{
+	"global": {
+		"color": "#828282",
+		"color2": "#606060",
+		"width": 1280,
+		"height": 720,
+		"fontsize": 30,
+		"colormul": 10,
+		"size": 30
+	},
+	"LD":
+	{
+		"unlock_keys": [],
+		"buttons": 
+		[
+			["OPEN", [50, 0, 50, 100], [100, 100, 100], "open", "non", "open project"],
+			["NEW", [0, 0, 50, 100], [100, 100, 100], "new", "non", "new project"]
+		],
+		"labels":[
+			
+		]
+	},
+	"MN":
+	{
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"name": "Menu",
+		"buttons":
+		[
+			["LS", [10, 0, 10, 14], [100, 100, 100], "non", "non", "level Size(9)"],
+			["GE", [0, 0, 10, 14], [100, 100, 100], "GE", "non", "Geometry Editor(2)"],
+			["TE", [0, 14, 10, 14], [100, 100, 100], "TE", "non", "Tile Editor(3)"],
+			["CE", [0, 28, 10, 14], [100, 100, 100], "non", "non", "Camera Editor(4)"],
+			["LE", [0, 42, 10, 14], [100, 100, 100], "LE", "non", "Light Editor(5)"],
+			["EE", [0, 56, 10, 14], [100, 100, 100], "non", "non", "Environment Editor(6)"],
+			["FE", [0, 70, 10, 14], [100, 100, 100], "non", "non", "Effect Editor(7)"],
+			["PE", [0, 84, 10, 14], [100, 100, 100], "non", "non", "Prop Editor(8)"],
+			["Render", [90, 60, 10, 10], [100, 100, 100], "render", "non", "Render project using Drizzle(ctrl+r)"],
+			["Save as txt", [90, 70, 10, 10], [100, 100, 100], "saveastxt", "non", "save as official level editor file"],
+			["Save", [90, 80, 10, 10], [100, 100, 100], "save", "non", "save as .wep project(ctrl+s)"],
+			["Quit", [90, 90, 10, 10], [100, 100, 100], "quit", "non", "Close RWE+(q)"]
+		],
+		"labels":[
+			["Welcome to RWE+", [20, 5], [0, 0, 0], 50]
+		]
+	}, 
+	"GE":
+	{
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"buttons":[
+			["AR", [4, 0, 4, 6], [120, 120, 120], "s0", "air", "Air(a)", ["geometry.png", [2, 0]]],
+			["SL", [4, 6, 4, 6], [100, 100, 100], "s0", "slope", "Slope(s)", ["geometry.png", [3, 0]]],
+			["RK", [4, 12, 4, 6], [100, 100, 100], "s0", "rock", "Rock(r)", ["geometry.png", [2, 1]]],
+			["MV", [4, 18, 4, 6], [100, 100, 100], "s0", "move", "Move(v)", ["geometry.png", [1, 1]]],
+			["BM", [4, 24, 4, 6], [80, 80, 80], "s0", "beam", "Beam(b)", ["geometry.png", [2, 2]]],
+			["SC", [4, 30, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(z)", ["geometry.png", [1, 3]]],
+			["D", [4, 36, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(t)", ["geometry.png", [2, 3]]],
+			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(m).\nUse ctrl + arrows to move and rotate it.", ["geometry.png", [1, 6]]],
+			["FC", [4, 48, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(y)", ["geometry.png", [0, 4]]],
+			["SH", [4, 54, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(n)", ["geometry.png", [0, 5]]],
+			["W", [4, 60, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(u)", ["geometry.png", [2, 4]]],
+			["CL", [4, 66, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(d)"],
+
+
+			["WL", [0, 0, 4, 6], [120, 120, 120], "s0", "walls", "Walls(w)", ["geometry.png", [1, 0]]],
+			["IN", [0, 6, 4, 6], [120, 120, 120], "s0", "inverse", "Inverse(i)", ["geometry.png", [0, 0]]],
+			["FL", [0, 12, 4, 6], [100, 100, 100], "s0", "floor", "Floor(f)", ["geometry.png", [0, 1]]],
+			["SP", [0, 18, 4, 6], [100, 100, 100], "s0", "spear", "Spear(q)", ["geometry.png", [3, 1]]],
+			["CR", [0, 24, 4, 6], [80, 80, 80], "s0", "crack", "Crack(c)", ["geometry.png", [0, 2]]],
+			["GL", [0, 30, 4, 6], [80, 80, 80], "s0", "glass", "Glass(g)", ["geometry.png", [3, 2]]],
+			["SE", [0, 36, 4, 6], [70, 70, 200], "s0", "shortcutenterance", "Shortcut Enterance(x)", ["geometry.png", [0, 3]]],
+			["E", [0, 42, 4, 6], [50, 50, 180], "s0", "enterance", "Enterance(e)", ["geometry.png", [3, 3]]],
+			["CA", [0, 48, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(tab)", ["geometry.png", [0, 6]]],
+			["HV", [0, 54, 4, 6], [100, 100, 100], "s0", "flyhive", "Fly Hive(h)", ["geometry.png", [1, 4]]],
+			["GWD", [0, 60, 4, 6], [70, 70, 200], "s0", "garbagewormden", "Garbage Worm Den(j)", ["geometry.png", [2, 5]]],
+			["WG", [0, 66, 4, 6], [100, 100, 100], "s0", "wormgrass", "WormGrass(k)", ["geometry.png", [3, 4]]],
+			["CB", [0, 72, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(o).\nClears only top layers, like beams and paths"]
+		],
+		"d1":
+		{
+			"rect":[10, 2, 88, 96],
+			"color":[90, 90, 90],
+			"border":[255, 255, 255]
+		}, 
+		"labels":[
+			["Tile: ", [0, 79], [255, 255, 255], 30],
+			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25]
+		],
+		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WG":0},
+		"names": {
+			"0": "Air",
+			"1": "Solid",
+			"2": "Slope NE",
+			"3": "Slope NW",
+			"4": "Slope SE",
+			"5": "Slope SW",
+			"6": "Platform",
+			"7": "Shortcut Enterance",
+			"9": "Glass"
+		},
+		"cellsize": 10
+	}, 
+	"TE":
+	{
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"buttons": [
+			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(d)"],
+			["Set as default", [8, 2, 14, 4], [100, 100, 100], "sad", "non", "Set material as default(e)"],
+			["<", [4, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(a)"],
+			["CT", [0, 2, 4, 4], [100, 100, 100], "cleartool", "non", "Clear tool(tab)"],
+			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(space)"]
+			
+		],
+		"d1":{
+			"rect": [28, 2, 70, 96],
+			"color": [90, 90, 90],
+			"border": [255, 255, 255]
+		},
+		"labels": [
+			["Tile: ", [0, 93], [255, 255, 255], 25],
+			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25],
+			["Default material: ", [0, 90], [0, 0, 0], 25]
+		],
+		"cellsize": 10,
+		"itemsize": 2,
+		"menucolor": [120, 120, 120]
+	},
+
+	"LE":{
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e"],
+		"buttons": [
+			["^", [1, 2, 5, 6], [100, 100, 100], "non", "non", "Previous image(r)"],
+			["v", [1, 8, 5, 6], [100, 100, 100], "non", "non", "Next image(f)"],
+			["S", [1, 14, 5, 6], [100, 100, 100], "non", "non", "Dark/Light swich(z, tab, space)"],
+			["D", [1, 20, 5, 6], [100, 100, 100], "non", "non", "Dark mode(ctrl + e)"],
+			["L", [1, 26, 5, 6], [100, 100, 100], "non", "non", "Light mode(ctrl + q)"]
+		],
+		"labels": [
+			["Tile: ", [0, 93], [255, 255, 255], 25],
+			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25],
+			["Default material: ", [0, 90], [0, 0, 0], 25]
+		],
+		"d1":{
+			"rect": [6, 2, 92, 96],
+			"color": [90, 90, 90],
+			"border": [255, 255, 255]
+		},
+		"images": [
+			"Internal_265_bigCircle.png",
+			"Internal_266_leaves.png",
+			"Internal_267_oilyLight.png",
+			"Internal_268_directionalLight.png",
+			"Internal_269_blobLight1.png",
+			"Internal_270_blobLight2.png",
+			"Internal_271_wormsLight.png",
+			"Internal_272_crackLight.png",
+			"Internal_273_squareishLight.png",
+			"Internal_274_holeLight.png",
+			"Internal_275_roundedRectLight.png"
+		]
+	},
+
+	"CE":{}, "PE":{}, "FE":{}, "EE":{}
+}

@@ -1,0 +1,7 @@
+Usage: RWE.exe filename [-h]
+
+parameters:
+filename: name of file to load
+
+arguments:
+-h: returns help message

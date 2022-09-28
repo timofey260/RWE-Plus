@@ -1,0 +1,2 @@
+[ Delete/Move ]: 
+Delete     Move Back     - Move Forth -   

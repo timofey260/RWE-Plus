@@ -1,0 +1,10 @@
+
+["Rainbow", color(254, 1, 254)]
+
+["Dark Red", color(94, 42, 36)]
+
+["Yellow", color(251, 207, 0)]
+
+["White", color(242, 242, 244)]
+
+["SU Dark", color(37, 35, 46)]

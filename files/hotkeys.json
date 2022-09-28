@@ -1,0 +1,125 @@
+{
+  	"global": {
+  	  	"K_1": "MN",
+  	  	"K_2": "GE",
+  	  	"K_3": "TE",
+  	  	"K_4": "CE",
+  	  	"K_5": "LE",
+  	  	"K_6": "EE",
+  	  	"K_7": "FE",
+  	  	"K_8": "PE",
+  	  	"K_9": "LS",
+  	  	"K_0+": "RELOAD",
+  	  	"K_ESCAPE": "quit",
+  	  	"K_s+": "save",
+  	  	"K_o+": "open",
+  	  	"K_n+": "new"
+  	},
+  	"LD": {
+  	  	"K_n": "new",
+  	  	"K_n+": "new",
+  	  	"K_o": "open",
+  	  	"K_o+": "open"
+  	},
+  	"MN": {
+  	  	"K_q": "quit",
+  	  	"K_r+": "render"
+  	},
+  	"GE": {
+    	"K_l": "swichlayers",
+    	"K_l+": "swichlayers_back",
+
+    	"K_i": "-inverse",
+    	"K_w": "-walls",
+    	"K_a": "-air",
+    	"K_s": "-slope",
+    	"K_f": "-floor",
+    	"K_r": "-rock",
+    	"K_q": "-spear",
+    	"K_v": "-move",
+    	"K_c": "-crack",
+    	"K_b": "-beam",
+    	"K_g": "-glass",
+    	"K_x": "-shortcutenterance",
+    	"K_z": "-shortcut",
+    	"K_t": "-dragonden",
+    	"K_e": "-enterance",
+    	"K_m": "-mirror",
+    	"K_TAB": "-clearall",
+    	"K_y": "-flychains",
+    	"K_h": "-flyhive",
+    	"K_n": "-scavengerhole",
+    	"K_j": "-garbagewormden",
+    	"K_u": "-waterfall",
+    	"K_k": "-wormgrass",
+    	"K_d": "-clearlayer",
+    	"K_o": "-clearblock",
+
+    	"K_SPACE": "rotate",
+    	"K_RETURN": "saveit",
+    	
+    	"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down",
+
+    	"K_LEFT+": "mleft",
+    	"K_RIGHT+": "mright",
+    	"K_UP+": "mup",
+    	"K_DOWN+": "mdown"
+  	},
+  	"TE": {
+    	"K_q": "copy",
+    	"K_l": "swichlayers",
+    	"K_l+": "swichlayers_back",
+
+    	"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down",
+
+    	"K_d": "-rt",
+    	"K_a": "-lt",
+    	"K_w": "-ut",
+    	"K_s": "-dt",
+    	"K_TAB": "-cleartool",
+    	"K_SPACE": "-changetools",
+    	"K_e": "-sad"
+  	},
+	"CE": {
+
+  	},
+	"PE": {
+
+  	},
+	"FE": {
+
+  	},
+	"EE": {
+
+  	},
+  	"LE": {
+  		"K_q+": "lightmod",
+  		"K_e+": "darkmod",
+
+  		"K_w": "-hp",
+  		"K_a": "-wp",
+  		"K_s": "-hm",
+  		"K_d": "-wm",
+
+  		"K_q": "-rl",
+  		"K_e": "-rr",
+
+  		"K_r": "-changeup",
+  		"K_f": "-changedown",
+
+  		"K_z": "-togglemod",
+  		"K_TAB": "-togglemod",
+  		"K_SPACE": "-togglemod",
+
+  		"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down"
+  	}
+}

@@ -1,0 +1,23 @@
+Press 'A' to apply changes, 'C' to cancel
+
+
+Change:                                                            Add tiles to left and top
+
+Width                                                                  Left
+Height                                                                 Top
+
+(including buffer tiles)                       
+(input the TOTAL new dimensions)                  (Input the tiles to ADD)
+
+
+
+
+Buffer tiles:
+
+Left
+
+Top
+
+Right
+
+Bottom

@@ -1,0 +1,450 @@
+from menuclass import *
+
+
+
+class GE(menu):
+    def __init__(self, surface: pg.surface.Surface, data):
+        self.menu = "GE"
+        self.surface = surface
+        self.field = widgets.window(self.surface, settings["GE"]["d1"])
+        self.btiles = data["EX2"]["extraTiles"]
+        self.data = data["GE"]
+
+        self.xoffset = 0
+        self.yoffset = 0
+        self.size = settings["GE"]["cellsize"]
+        self.state = 0
+        self.mx = 0
+        self.rectdata = [[0, 0], [0, 0], [0, 0]]
+
+        self.message = ''
+
+        self.selectedtool = ""
+        self.tools = toolmenu
+        self.tooltiles = tooltiles
+        self.toolrender = self.tooltiles
+
+        self.tools.set_alpha(150)
+        self.layer = 0
+        self.placetile = 0
+        self.area = []
+
+        self.mirrorp = False
+        self.mirrorpos = [0, 0]
+
+        self.air()
+        self.init()
+        self.rs()
+        self.renderfield()
+
+    def resize(self):
+        super().resize()
+        self.field.resize()
+        self.rs()
+        self.renderfield()
+
+    def send(self, message):
+        if message[0] == "-":
+            getattr(self, message[1:])()
+        match message:
+            case "left":
+                self.xoffset += 1
+                self.renderfield()
+            case "right":
+                self.xoffset -= 1
+                self.renderfield()
+            case "up":
+                self.yoffset += 1
+                self.renderfield()
+            case "down":
+                self.yoffset -= 1
+                self.renderfield()
+            case "swichlayers":
+                self.layer = (self.layer + 1) % 3
+                self.renderfield()
+            case "swichlayers_back":
+                self.layer -= 1
+                if self.layer < 0:
+                    self.layer = 2
+                self.renderfield()
+            case "SU":
+                self.size += 1
+                self.rs()
+                self.renderfield()
+            case "SD":
+                if self.size - 1 != 0:
+                    self.size -= 1
+                self.rs()
+                self.renderfield()
+            case "rotate":
+                if self.mx != 0:
+                    self.state = (self.state + 1) % self.mx
+                else:
+                    self.state = 0
+            case "saveit":
+                self.message = "saveGE"
+                print("Saving...")
+            case "mleft":
+                if self.mirrorpos[1] == 0:
+                    self.mirrorpos[0] -= 1
+                else:
+                    self.mirrorpos[1] = 0
+                    self.mirrorpos[0] = len(self.data) // 2
+            case "mright":
+                if self.mirrorpos[1] == 0:
+                    self.mirrorpos[0] += 1
+                else:
+                    self.mirrorpos[1] = 0
+                    self.mirrorpos[0] = len(self.data) // 2
+            case "mup":
+                if self.mirrorpos[1] == 1:
+                    self.mirrorpos[0] -= 1
+                else:
+                    self.mirrorpos[1] = 1
+                    self.mirrorpos[0] = len(self.data[0]) // 2
+            case "mdown":
+                if self.mirrorpos[1] == 1:
+                    self.mirrorpos[0] += 1
+                else:
+                    self.mirrorpos[1] = 1
+                    self.mirrorpos[0] = len(self.data[0]) // 2
+
+    def rs(self):
+        self.toolrender = pg.transform.scale(self.tooltiles,
+                                             [self.tooltiles.get_width() / graphics["tilesize"][0] * self.size,
+                                              self.tooltiles.get_height() / graphics["tilesize"][1] * self.size])
+
+    def renderfield(self):
+        renderfield(self.field, self.size, self.layer, [self.xoffset, self.yoffset], self.data)
+
+    def blit(self):
+        global mousp, mousp2, mousp1
+        cellsize2 = [self.size, self.size]
+        self.field.blit()
+        super().blit()
+        if self.field.rect.collidepoint(pg.mouse.get_pos()):
+            curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
+                       graphics["tools"][self.selectedtool][1] * graphics["tilesize"][1]]
+            self.surface.blit(self.tools, pg.mouse.get_pos(), [curtool, graphics["tilesize"]])
+
+            # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
+            # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
+            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
+                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
+            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
+            pg.draw.rect(self.surface, [255, 0, 0], [pos2, [self.size, self.size]], 1)
+            posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            self.labels[1].set_text("X: %3d, Y: %3d, Z: %3d" % (posoffset[0], posoffset[1], self.layer + 1))
+            if self.selectedtool in settings[self.menu]["codes"].keys():
+                if type(self.placetile) == int:
+                    if settings[self.menu]["codes"][self.selectedtool] == 1:
+                        curtool = [graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                                   graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                    else:
+                        curtool = [graphics["tileplaceicon"][str(self.placetile - self.state)][0] * self.size,
+                                   graphics["tileplaceicon"][str(self.placetile - self.state)][1] * self.size]
+                    # print([abs(self.field.rect.x - pos2[0]), abs(self.field.rect.y - pos2[1])])
+                    self.surface.blit(self.toolrender, pos2, [curtool, cellsize2])
+            rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data) * self.size,
+                    len(self.data[0]) * self.size]
+            pg.draw.rect(self.field.field, black, rect, 5)
+            if (0 <= posoffset[0] < len(self.data)) and (0 <= posoffset[1] < len(self.data[0])):
+                tilename = settings["GE"]["names"][str(self.data[posoffset[0]][posoffset[1]][self.layer][0])]
+                self.labels[0].set_text("Tile: " + tilename)
+
+            bp = pg.mouse.get_pressed(3)
+
+            if bp[0] == 1 and mousp and (mousp2 and mousp1):
+                if self.selectedtool == "MV":
+                    self.rectdata[0] = pos
+                    self.rectdata[1] = [self.xoffset, self.yoffset]
+                    self.field.field.fill(self.field.color)
+                else:
+                    self.area = [[1 for _ in range(len(self.data[0]))] for _ in range(len(self.data))]
+                mousp = False
+            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+                if self.selectedtool == "MV":
+                    self.xoffset = self.rectdata[1][0] - (self.rectdata[0][0] - pos[0])
+                    self.yoffset = self.rectdata[1][1] - (self.rectdata[0][1] - pos[1])
+                else:
+                    if (0 <= posoffset[0] < len(self.data)) and (0 <= posoffset[1] < len(self.data[0])):
+                        if self.area[posoffset[0]][posoffset[1]] == 1:
+                            self.place(posoffset[0], posoffset[1], False)
+                            self.area[posoffset[0]][posoffset[1]] = 0
+                            if type(self.placetile) == int:
+                                if settings[self.menu]["codes"][self.selectedtool] == 1:
+                                    curtool = [
+                                        graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                                        graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                                else:
+                                    curtool = [
+                                        graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                                        graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                                rect = [pos2[0] - self.field.rect.x, pos2[1] - self.field.rect.y]
+                                self.field.field.blit(self.toolrender, rect, [curtool, cellsize2])
+                                if self.mirrorp:
+                                    px = pos[0]
+                                    py = pos[1]
+                                    if self.mirrorpos[1] == 0:
+                                        px = pos[0] - self.xoffset * 2
+                                        px = self.mirrorpos[0] * 2 + (-px - 1)
+                                    else:
+                                        py = pos[1] - self.yoffset * 2
+                                        py = self.mirrorpos[0] * 2 + (-py - 1)
+                                    px = px * self.size
+                                    py = py * self.size
+                                    self.field.field.blit(self.toolrender, [px, py], [curtool, cellsize2])
+            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
+                mousp = True
+                self.renderfield()
+
+            self.movemiddle(bp, pos)
+
+            if bp[2] == 1 and mousp2 and (mousp and mousp1):
+                mousp2 = False
+                self.rectdata = [posoffset, [0, 0], pos2]
+            elif bp[2] == 1 and not mousp2 and (mousp and mousp1):
+                self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
+                # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
+                rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
+                pg.draw.rect(self.surface, red, rect, 5)
+                ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
+            elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
+                # self.rectdata = [self.rectdata[0], posoffset]
+                for x in range(self.rectdata[1][0]):
+                    for y in range(self.rectdata[1][1]):
+                        self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
+                self.renderfield()
+                mousp2 = True
+            if self.mirrorp:
+                px = pos[0]
+                py = pos[1]
+                if self.mirrorpos[1] == 0:
+                    px = pos[0] - self.xoffset * 2
+                    px = self.mirrorpos[0] * 2 + (-px - 1)
+                else:
+                    py = pos[1] - self.yoffset * 2
+                    py = self.mirrorpos[0] * 2 + (-py - 1)
+                px = px * self.size + self.field.rect.x
+                py = py * self.size + self.field.rect.y
+                pg.draw.rect(self.surface, blue, [px, py, self.size, self.size], 1)
+        if self.mirrorp:
+
+            px = (self.mirrorpos[0] + self.xoffset) * self.size + self.field.rect.x
+            py = (self.mirrorpos[0] + self.yoffset) * self.size + self.field.rect.y
+            if self.mirrorpos[1] == 0:
+                pg.draw.rect(self.surface, red, [px, self.field.rect.y, 3, self.field.field.get_height()])
+            else:
+                pg.draw.rect(self.surface, red, [self.field.rect.x, py, self.field.field.get_width(), 3])
+        fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size, (len(self.data) - self.btiles[2] - self.btiles[0]) * self.size, (len(self.data[0]) - self.btiles[3] - self.btiles[1]) * self.size]
+        rect = pg.rect.Rect(fig)
+        pg.draw.rect(self.field.field, white, rect, 5)
+
+    def s0(self):
+        self.state = 0
+
+    def inverse(self):
+        self.selectedtool = "IN"
+        self.placetile = 0.2
+        self.mx = 0
+
+    def walls(self):
+        self.selectedtool = "WL"
+        self.placetile = 1
+        self.mx = 0
+
+    def air(self):
+        self.selectedtool = "AR"
+        self.placetile = 0
+        self.mx = 0
+
+    def slope(self):
+        self.selectedtool = "SL"
+        self.placetile = 2
+        self.mx = 4
+
+    def floor(self):
+        self.selectedtool = "FL"
+        self.placetile = 6
+        self.mx = 0
+
+    def rock(self):
+        self.selectedtool = "RK"
+        self.placetile = -9
+        self.mx = 0
+
+    def spear(self):
+        self.selectedtool = "SP"
+        self.placetile = -10
+        self.mx = 0
+
+    def move(self):
+        self.selectedtool = "MV"
+        self.placetile = 0.1
+        self.mx = 0
+
+    def crack(self):
+        self.selectedtool = "CR"
+        self.placetile = -11
+        self.mx = 0
+
+    def beam(self):
+        self.selectedtool = "BM"
+        self.placetile = -1
+        self.mx = 2
+
+    def glass(self):
+        self.selectedtool = "GL"
+        self.placetile = 9
+        self.mx = 0
+
+    def shortcutenterance(self):
+        self.selectedtool = "SE"
+        self.placetile = 0.4
+        self.mx = 0
+
+    def shortcut(self):
+        self.selectedtool = "SC"
+        self.placetile = -5
+        self.mx = 0
+
+    def dragonden(self):
+        self.selectedtool = "D"
+        self.placetile = -7
+        self.mx = 0
+
+    def enterance(self):
+        self.selectedtool = "E"
+        self.placetile = -6
+        self.mx = 0
+
+    def mirror(self):
+        self.mirrorp = not self.mirrorp
+        self.mirrorpos = [len(self.data) // 2, 0]
+
+    def clearall(self):
+        self.selectedtool = "CA"
+        self.placetile = 0.3
+
+    def flychains(self):
+        self.selectedtool = "FC"
+        self.placetile = -12
+        self.mx = 0
+
+    def flyhive(self):
+        self.selectedtool = "HV"
+        self.placetile = -3
+        self.mx = 0
+
+    def scavengerhole(self):
+        self.selectedtool = "SH"
+        self.placetile = -21
+        self.mx = 0
+
+    def garbagewormden(self):
+        self.selectedtool = "GWD"
+        self.placetile = -13
+        self.mx = 0
+
+    def waterfall(self):
+        self.selectedtool = "W"
+        self.placetile = -18
+        self.mx = 0
+
+    def wormgrass(self):
+        self.selectedtool = "WG"
+        self.placetile = -20
+        self.mx = 0
+
+    def clearlayer(self):
+        self.selectedtool = "CL"
+        self.placetile = 0.5
+        self.mx = 0
+
+    def clearblock(self):
+        self.selectedtool = "CB"
+        self.placetile = 0.6
+        self.mx = 0
+
+    def place(self, x, y, render=True):
+        self.mirrorplace(x, y, render)
+        if x >= len(self.data) or y >= len(self.data[0]) or x < 0 or y < 0:
+            return
+        if self.placetile != 0.1:  # dont place
+            if self.placetile == 0.2:  # inverse
+                if self.data[x][y][self.layer][0] == 0:
+                    self.data[x][y][self.layer][0] = 1
+                else:
+                    self.data[x][y][self.layer][0] = self.reverseslope(self.data[x][y][self.layer][0])
+            elif self.placetile == 0.3:  # clear all
+                self.data[x][y] = [[0, []], [0, []], [0, []]]
+            elif self.placetile == 0.4:  # shortcut enterance
+                self.data[x][y][self.layer][0] = 7
+                if 4 not in self.data[x][y][self.layer][1]:
+                    self.data[x][y][self.layer][1].append(4)
+            elif self.placetile == 0.5:  # clear layer
+                self.data[x][y][self.layer] = [0, []]
+            elif self.placetile == 0.6:  # clear upper
+                self.data[x][y][self.layer][1] = []
+            elif self.selectedtool in settings[self.menu]["codes"].keys():  # else
+                if settings[self.menu]["codes"][self.selectedtool] == 1:
+                    self.data[x][y][self.layer][0] = self.placetile + self.state
+                if settings[self.menu]["codes"][self.selectedtool] == 0:
+                    if self.placetile not in self.data[x][y][self.layer][1]:
+                        self.data[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
+            else:
+                self.data[x][y][self.layer][0] = self.placetile
+        if render:
+            self.renderfield()
+
+    def mirrorplace(self, xm, ym, render=False):
+        if not self.mirrorp:
+            return
+        x = xm
+        y = ym
+        if self.mirrorpos[1] == 0:
+            x = self.mirrorpos[0] * 2 + (-xm - 1)
+        else:
+            y = self.mirrorpos[0] * 2 + (-ym - 1)
+        if x >= len(self.data) or y >= len(self.data[0]) or x < 0 or y < 0:
+            return
+        if self.placetile != 0.1:
+            if self.placetile == 0.2:
+                if self.data[x][y][self.layer][0] == 0:
+                    self.data[x][y][self.layer][0] = 1
+                else:
+                    self.data[x][y][self.layer][0] = self.reverseslope(self.data[x][y][self.layer][0])
+            elif self.placetile == 0.3:
+                self.data[x][y] = [[0, []], [0, []], [0, []]]
+            elif self.placetile == 0.4:
+                self.data[x][y][self.layer][0] = 7
+                if 4 not in self.data[x][y][self.layer][1]:
+                    self.data[x][y][self.layer][1].append(4)
+            elif self.placetile == 0.5:
+                self.data[x][y][self.layer] = [0, []]
+            elif self.placetile == 0.6:
+                self.data[x][y][self.layer][1] = []
+            elif self.selectedtool in settings[self.menu]["codes"].keys():
+                if settings[self.menu]["codes"][self.selectedtool] == 1:
+                    self.data[x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
+                if settings[self.menu]["codes"][self.selectedtool] == 0:
+                    if self.placetile not in self.data[x][y][self.layer][1]:
+                        self.data[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
+            else:
+                self.data[x][y][self.layer][0] = self.reverseslope(self.placetile)
+        if render:
+            self.renderfield()
+
+    def reverseslope(self, slope):
+        if slope in [2, 3, 4, 5]:
+            if self.selectedtool == "SL":
+                if self.mirrorp:
+                    if self.mirrorpos[1] == 0:
+                        return [3, 2, 5, 4][slope - 2]
+                    else:
+                        return [4, 5, 2, 3][slope - 2]
+            elif self.selectedtool == "IN":
+                return [5, 4, 3, 2][slope - 2]
+        if self.selectedtool == "IN":
+            return 0
+        return slope
