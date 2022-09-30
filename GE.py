@@ -132,7 +132,7 @@ class GE(menu):
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
-            pg.draw.rect(self.surface, [255, 0, 0], [pos2, [self.size, self.size]], 1)
+            pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
             self.labels[1].set_text("X: %3d, Y: %3d, Z: %3d" % (posoffset[0], posoffset[1], self.layer + 1))
             if self.selectedtool in settings[self.menu]["codes"].keys():
@@ -147,7 +147,7 @@ class GE(menu):
                     self.surface.blit(self.toolrender, pos2, [curtool, cellsize2])
             rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data) * self.size,
                     len(self.data[0]) * self.size]
-            pg.draw.rect(self.field.field, black, rect, 5)
+            pg.draw.rect(self.field.field, border, rect, 5)
             if (0 <= posoffset[0] < len(self.data)) and (0 <= posoffset[1] < len(self.data[0])):
                 tilename = settings["GE"]["names"][str(self.data[posoffset[0]][posoffset[1]][self.layer][0])]
                 self.labels[0].set_text("Tile: " + tilename)
@@ -207,7 +207,7 @@ class GE(menu):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
                 # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
                 rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
-                pg.draw.rect(self.surface, red, rect, 5)
+                pg.draw.rect(self.surface, select, rect, 5)
                 ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
             elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
@@ -227,18 +227,18 @@ class GE(menu):
                     py = self.mirrorpos[0] * 2 + (-py - 1)
                 px = px * self.size + self.field.rect.x
                 py = py * self.size + self.field.rect.y
-                pg.draw.rect(self.surface, blue, [px, py, self.size, self.size], 1)
+                pg.draw.rect(self.surface, cursor2, [px, py, self.size, self.size], 1)
         if self.mirrorp:
 
             px = (self.mirrorpos[0] + self.xoffset) * self.size + self.field.rect.x
             py = (self.mirrorpos[0] + self.yoffset) * self.size + self.field.rect.y
             if self.mirrorpos[1] == 0:
-                pg.draw.rect(self.surface, red, [px, self.field.rect.y, 3, self.field.field.get_height()])
+                pg.draw.rect(self.surface, mirror, [px, self.field.rect.y, 3, self.field.field.get_height()])
             else:
-                pg.draw.rect(self.surface, red, [self.field.rect.x, py, self.field.field.get_width(), 3])
+                pg.draw.rect(self.surface, mirror, [self.field.rect.x, py, self.field.field.get_width(), 3])
         fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size, (len(self.data) - self.btiles[2] - self.btiles[0]) * self.size, (len(self.data[0]) - self.btiles[3] - self.btiles[1]) * self.size]
         rect = pg.rect.Rect(fig)
-        pg.draw.rect(self.field.field, white, rect, 5)
+        pg.draw.rect(self.field.field, bftiles, rect, 5)
 
     def s0(self):
         self.state = 0

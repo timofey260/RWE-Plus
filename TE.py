@@ -68,11 +68,11 @@ class TE(menu):
                         "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
             bord = 3
             if self.cols and not self.tool:
-                pg.draw.rect(self.surface, green, [[cposx - bord, cposy - bord],
+                pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
                                                    [self.tileimage["image"].get_width() + bord * 2,
                                                     self.tileimage["image"].get_height() + bord * 2]], bord)
             else:
-                pg.draw.rect(self.surface, red, [[cposx - bord, cposy - bord],
+                pg.draw.rect(self.surface, cannotplace, [[cposx - bord, cposy - bord],
                                                  [self.tileimage["image"].get_width() + bord * 2,
                                                   self.tileimage["image"].get_height() + bord * 2]], bord)
             if not self.tool:
@@ -106,7 +106,7 @@ class TE(menu):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
                 # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
                 rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
-                pg.draw.rect(self.surface, red, rect, 5)
+                pg.draw.rect(self.surface, select, rect, 5)
                 ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
             elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
@@ -121,12 +121,12 @@ class TE(menu):
 
         rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
                 len(self.data["GE"][0]) * self.size]
-        pg.draw.rect(self.field.field, black, rect, 5)
+        pg.draw.rect(self.field.field, border, rect, 5)
         fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size,
                (len(self.data["GE"]) - self.btiles[2] - self.btiles[0]) * self.size,
                (len(self.data["GE"][0]) - self.btiles[3] - self.btiles[1]) * self.size]
         rect = pg.rect.Rect(fig)
-        pg.draw.rect(self.field.field, white, rect, 5)
+        pg.draw.rect(self.field.field, bftiles, rect, 5)
 
     def rebuttons(self):
         self.buttonslist = []
@@ -317,10 +317,10 @@ class TE(menu):
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
-                printtile(0, red)
+                printtile(0, layer1)
                 if sp2 != 0:
                     csp = sp2[x2 * h + y2]
-                    printtile(shift, blue)
+                    printtile(shift, layer2)
 
     def place(self, x, y):
         px = x + (self.tileimage["size"][0] // 3)

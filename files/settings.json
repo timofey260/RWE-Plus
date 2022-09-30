@@ -6,7 +6,19 @@
 		"height": 720,
 		"fontsize": 30,
 		"colormul": 10,
-		"size": 30
+		"size": 30,
+		"colors": {
+			"cursor": [255, 0, 0],
+			"cursor2": [50, 0, 255],
+			"mirror": [100, 0, 0],
+			"bftiles": [255, 255, 255],
+			"border": [0, 0, 0],
+			"canplace": [0, 255, 0],
+			"cannotplace": [255, 0, 0],
+			"select": [255, 0, 0],
+			"layer1": [255, 0, 0],
+			"layer2": [0, 0, 255]
+		}
 	},
 	"LD":
 	{
@@ -135,9 +147,8 @@
 			["L", [1, 26, 5, 6], [100, 100, 100], "non", "non", "Light mode(ctrl + q)"]
 		],
 		"labels": [
-			["Tile: ", [0, 93], [255, 255, 255], 25],
-			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25],
-			["Default material: ", [0, 90], [0, 0, 0], 25]
+			["Image: ", [0, 93], [255, 255, 255], 25],
+			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25]
 		],
 		"d1":{
 			"rect": [6, 2, 92, 96],
@@ -145,6 +156,7 @@
 			"border": [255, 255, 255]
 		},
 		"images": [
+			"Internal_244_bigSignGradient1.png",
 			"Internal_265_bigCircle.png",
 			"Internal_266_leaves.png",
 			"Internal_267_oilyLight.png",

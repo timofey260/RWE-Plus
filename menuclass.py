@@ -8,12 +8,27 @@ from files import *
 
 prefix = "RWE+: "
 
-red = [255, 0, 0]
-darkred = [100, 0, 0]
-blue = [50, 0, 255]
-green = [0, 255, 0]
-black = [0, 0, 0]
-white = [255, 255, 255]
+colors = settings["global"]["colors"]
+
+cursor = pg.Color(colors["cursor"])
+cursor2 = pg.Color(colors["cursor2"])
+mirror = pg.Color(colors["mirror"])
+bftiles = pg.Color(colors["bftiles"])
+border = pg.Color(colors["border"])
+select = pg.Color(colors["select"])
+
+layer1 = pg.Color(colors["layer1"])
+layer2 = pg.Color(colors["layer2"])
+
+canplace = pg.Color(colors["canplace"])
+cannotplace = pg.Color(colors["cannotplace"])
+
+red = pg.Color([255, 0, 0])
+darkred = pg.Color([100, 0, 0])
+blue = pg.Color([50, 0, 255])
+green = pg.Color([0, 255, 0])
+black = pg.Color([0, 0, 0])
+white = pg.Color([255, 255, 255])
 
 mousp = True
 mousp2 = True
@@ -106,12 +121,10 @@ def renderfield(field: widgets.window, size: int, mainlayer, offset, data):
         renderedimage.set_alpha(50)
         if i == mainlayer:
             renderedimage.set_alpha(255)
-        xp = 0
-        for x in data:
-            yp = 0
+        for xp, x in enumerate(data):
             if (xp + offset[0]) * size > field.field.get_width():
                 break
-            for y in x:
+            for yp, y in enumerate(x):
                 if (yp + offset[1]) * size > field.field.get_height():
                     break
                 cell = y[i][0]
@@ -131,21 +144,17 @@ def renderfield(field: widgets.window, size: int, mainlayer, offset, data):
                     field.field.blit(renderedimage,
                                      [(xp + offset[0]) * size, (yp + offset[1]) * size],
                                      [curtool, cellsize2])
-                yp += 1
-            xp += 1
 
 
 def renderfield2(field: widgets.window, size: int, mainlayer, offset, json, items: dict):
     global mat
     material = pg.transform.scale(mat, [mat.get_width() / 16 * size, mat.get_height() / 16 * size])
     images = {}
-    xp = 0
     data = json["TE"]["tlMatrix"]
-    for x in data:
-        yp = 0
+    for xp, x in enumerate(data):
         if (xp + offset[0]) * size > field.field.get_width():
             break
-        for y in x:
+        for yp, y in enumerate(x):
             if (yp + offset[1]) * size > field.field.get_height():
                 break
             cell = y[mainlayer]
@@ -184,5 +193,3 @@ def renderfield2(field: widgets.window, size: int, mainlayer, offset, json, item
                 field.field.blit(it["image"], [cposx, cposy])
             elif datcell == "tileBody":
                 pass
-            yp += 1
-        xp += 1

@@ -103,9 +103,9 @@
   		"K_e+": "darkmod",
 
   		"K_w": "-hp",
-  		"K_a": "-wp",
+  		"K_a": "-wm",
   		"K_s": "-hm",
-  		"K_d": "-wm",
+  		"K_d": "-wp",
 
   		"K_q": "-rl",
   		"K_e": "-rr",
@@ -113,9 +113,9 @@
   		"K_r": "-changeup",
   		"K_f": "-changedown",
 
-  		"K_z": "-togglemod",
-  		"K_TAB": "-togglemod",
-  		"K_SPACE": "-togglemod",
+  		"K_z": "-inverse",
+  		"K_TAB": "-inverse",
+  		"K_SPACE": "-inverse",
 
   		"K_LEFT": "left",
     	"K_RIGHT": "right",
