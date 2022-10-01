@@ -10,6 +10,9 @@ prefix = "RWE+: "
 
 colors = settings["global"]["colors"]
 
+color = pg.Color(settings["global"]["color"])
+color2 = pg.Color(settings["global"]["color2"])
+
 cursor = pg.Color(colors["cursor"])
 cursor2 = pg.Color(colors["cursor2"])
 mirror = pg.Color(colors["mirror"])
@@ -45,7 +48,7 @@ class menu():
 
     def unlock_keys(self):
         self.uc = []
-        for i in settings[self.menu]["unlock_keys"]:
+        for i in hotkeys[self.menu]["unlock_keys"]:
             self.uc.append(getattr(pg, i))
     def init(self):
         self.message = ""
@@ -109,10 +112,28 @@ class menu():
             mousp1 = True
             self.renderfield()
 
+    def drawborder(self):
+        rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
+                len(self.data["GE"][0]) * self.size]
+        pg.draw.rect(self.field.field, border, rect, 5)
+        fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size,
+               (len(self.data["GE"]) - self.btiles[2] - self.btiles[0]) * self.size,
+               (len(self.data["GE"][0]) - self.btiles[3] - self.btiles[1]) * self.size]
+        rect = pg.rect.Rect(fig)
+        pg.draw.rect(self.field.field, bftiles, rect, 5)
+        self.field.blit()
 
-def renderfield(field: widgets.window, size: int, mainlayer, offset, data):
+    def drawmap(self):
+        self.field.field.fill(self.field.color)
+        self.field.field.blit(self.fieldmap, [self.xoffset * self.size, self.yoffset * self.size])
+        self.field.field.blit(self.fieldadd, [self.xoffset * self.size, self.yoffset * self.size])
+        self.drawborder()
+
+
+def renderfield(field: widgets.window | pg.surface.Surface, size: int, mainlayer, data):
     global tooltiles
-    field.field.fill(field.color)
+    f = field
+    f.fill(color2)
     renderedimage = pg.transform.scale(tooltiles, [
         (tooltiles.get_width() / graphics["tilesize"][0]) * size,
         (tooltiles.get_height() / graphics["tilesize"][1]) * size])
@@ -122,44 +143,33 @@ def renderfield(field: widgets.window, size: int, mainlayer, offset, data):
         if i == mainlayer:
             renderedimage.set_alpha(255)
         for xp, x in enumerate(data):
-            if (xp + offset[0]) * size > field.field.get_width():
-                break
             for yp, y in enumerate(x):
-                if (yp + offset[1]) * size > field.field.get_height():
-                    break
                 cell = y[i][0]
                 if cell == 7 and 4 not in y[i][1]:
                     data[xp][yp][i][0] = 0
                     cell = data[xp][yp][i][0]
                 curtool = [graphics["shows"][str(cell)][0] * size,
                            graphics["shows"][str(cell)][1] * size]
-                field.field.blit(renderedimage,
-                                 [(xp + offset[0]) * size, (yp + offset[1]) * size],
-                                 [curtool, cellsize2])
+                f.blit(renderedimage, [xp * size, yp * size], [curtool, cellsize2])
                 for adds in y[i][1]:
                     if 4 in y[i][1] and data[xp][yp][i][0] != 7:
                         data[xp][yp][i][1].remove(4)
                     curtool = [graphics["shows2"][str(adds)][0] * size,
                                graphics["shows2"][str(adds)][1] * size]
-                    field.field.blit(renderedimage,
-                                     [(xp + offset[0]) * size, (yp + offset[1]) * size],
-                                     [curtool, cellsize2])
+                    f.blit(renderedimage, [xp * size, yp * size], [curtool, cellsize2])
 
 
-def renderfield2(field: widgets.window, size: int, mainlayer, offset, json, items: dict):
+def renderfield2(field: widgets.window, size: int, mainlayer, json, items: dict):
     global mat
     material = pg.transform.scale(mat, [mat.get_width() / 16 * size, mat.get_height() / 16 * size])
     images = {}
     data = json["TE"]["tlMatrix"]
+    f = field
     for xp, x in enumerate(data):
-        if (xp + offset[0]) * size > field.field.get_width():
-            break
         for yp, y in enumerate(x):
-            if (yp + offset[1]) * size > field.field.get_height():
-                break
             cell = y[mainlayer]
-            posx = (xp + offset[0]) * size
-            posy = (yp + offset[1]) * size
+            posx = xp * size
+            posy = yp * size
 
             datcell = cell["tp"]
             datdata = cell["data"]
@@ -170,7 +180,7 @@ def renderfield2(field: widgets.window, size: int, mainlayer, offset, json, item
             elif datcell == "material":
                 if json["GE"][xp][yp][mainlayer][0] != 0:
                     area = pg.rect.Rect([graphics["matposes"].index(datdata) * size, 0, size, size])
-                    field.field.blit(material, [posx, posy], area)
+                    f.blit(material, [posx, posy], area)
             elif datcell == "tileHead":
                 it = None
                 if datdata[1] in images.keys():
@@ -189,7 +199,7 @@ def renderfield2(field: widgets.window, size: int, mainlayer, offset, json, item
                 cposx = posx - (it["size"][0] // 3) * size
                 cposy = posy - (it["size"][1] // 3) * size
                 siz = pg.rect.Rect([cposx, cposy, it["size"][0] * size, it["size"][1] * size])
-                pg.draw.rect(field.field, it["color"], siz, 0)
-                field.field.blit(it["image"], [cposx, cposy])
+                pg.draw.rect(f, it["color"], siz, 0)
+                f.blit(it["image"], [cposx, cposy])
             elif datcell == "tileBody":
                 pass

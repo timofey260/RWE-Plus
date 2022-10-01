@@ -31,6 +31,4 @@ class MN(menu):
         os.system(application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render " + fl)
 
     def quit(self):
-        pg.quit()
-
-        exit(0)
+        self.message = "quit"

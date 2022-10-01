@@ -8,7 +8,14 @@ class GE(menu):
         self.surface = surface
         self.field = widgets.window(self.surface, settings["GE"]["d1"])
         self.btiles = data["EX2"]["extraTiles"]
-        self.data = data["GE"]
+        self.data = data
+        self.mapdata = data["GE"]
+
+        self.fieldmap = self.field.field
+
+        self.fieldadd = self.fieldmap
+        self.fieldadd.fill(white)
+        self.fieldadd.set_colorkey(white)
 
         self.xoffset = 0
         self.yoffset = 0
@@ -49,16 +56,12 @@ class GE(menu):
         match message:
             case "left":
                 self.xoffset += 1
-                self.renderfield()
             case "right":
                 self.xoffset -= 1
-                self.renderfield()
             case "up":
                 self.yoffset += 1
-                self.renderfield()
             case "down":
                 self.yoffset -= 1
-                self.renderfield()
             case "swichlayers":
                 self.layer = (self.layer + 1) % 3
                 self.renderfield()
@@ -89,25 +92,25 @@ class GE(menu):
                     self.mirrorpos[0] -= 1
                 else:
                     self.mirrorpos[1] = 0
-                    self.mirrorpos[0] = len(self.data) // 2
+                    self.mirrorpos[0] = len(self.mapdata) // 2
             case "mright":
                 if self.mirrorpos[1] == 0:
                     self.mirrorpos[0] += 1
                 else:
                     self.mirrorpos[1] = 0
-                    self.mirrorpos[0] = len(self.data) // 2
+                    self.mirrorpos[0] = len(self.mapdata) // 2
             case "mup":
                 if self.mirrorpos[1] == 1:
                     self.mirrorpos[0] -= 1
                 else:
                     self.mirrorpos[1] = 1
-                    self.mirrorpos[0] = len(self.data[0]) // 2
+                    self.mirrorpos[0] = len(self.mapdata[0]) // 2
             case "mdown":
                 if self.mirrorpos[1] == 1:
                     self.mirrorpos[0] += 1
                 else:
                     self.mirrorpos[1] = 1
-                    self.mirrorpos[0] = len(self.data[0]) // 2
+                    self.mirrorpos[0] = len(self.mapdata[0]) // 2
 
     def rs(self):
         self.toolrender = pg.transform.scale(self.tooltiles,
@@ -115,12 +118,12 @@ class GE(menu):
                                               self.tooltiles.get_height() / graphics["tilesize"][1] * self.size])
 
     def renderfield(self):
-        renderfield(self.field, self.size, self.layer, [self.xoffset, self.yoffset], self.data)
+        renderfield(self.fieldmap, self.size, self.layer, self.mapdata)
 
     def blit(self):
         global mousp, mousp2, mousp1
         cellsize2 = [self.size, self.size]
-        self.field.blit()
+        self.drawmap()
         super().blit()
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
@@ -134,7 +137,7 @@ class GE(menu):
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
-            self.labels[1].set_text("X: %3d, Y: %3d, Z: %3d" % (posoffset[0], posoffset[1], self.layer + 1))
+            self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
             if self.selectedtool in settings[self.menu]["codes"].keys():
                 if type(self.placetile) == int:
                     if settings[self.menu]["codes"][self.selectedtool] == 1:
@@ -145,11 +148,11 @@ class GE(menu):
                                    graphics["tileplaceicon"][str(self.placetile - self.state)][1] * self.size]
                     # print([abs(self.field.rect.x - pos2[0]), abs(self.field.rect.y - pos2[1])])
                     self.surface.blit(self.toolrender, pos2, [curtool, cellsize2])
-            rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data) * self.size,
-                    len(self.data[0]) * self.size]
+            rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.mapdata) * self.size,
+                    len(self.mapdata[0]) * self.size]
             pg.draw.rect(self.field.field, border, rect, 5)
-            if (0 <= posoffset[0] < len(self.data)) and (0 <= posoffset[1] < len(self.data[0])):
-                tilename = settings["GE"]["names"][str(self.data[posoffset[0]][posoffset[1]][self.layer][0])]
+            if (0 <= posoffset[0] < len(self.mapdata)) and (0 <= posoffset[1] < len(self.mapdata[0])):
+                tilename = settings["GE"]["names"][str(self.mapdata[posoffset[0]][posoffset[1]][self.layer][0])]
                 self.labels[0].set_text("Tile: " + tilename)
 
             bp = pg.mouse.get_pressed(3)
@@ -160,14 +163,14 @@ class GE(menu):
                     self.rectdata[1] = [self.xoffset, self.yoffset]
                     self.field.field.fill(self.field.color)
                 else:
-                    self.area = [[1 for _ in range(len(self.data[0]))] for _ in range(len(self.data))]
+                    self.area = [[1 for _ in range(len(self.mapdata[0]))] for _ in range(len(self.mapdata))]
                 mousp = False
             elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
                 if self.selectedtool == "MV":
                     self.xoffset = self.rectdata[1][0] - (self.rectdata[0][0] - pos[0])
                     self.yoffset = self.rectdata[1][1] - (self.rectdata[0][1] - pos[1])
                 else:
-                    if (0 <= posoffset[0] < len(self.data)) and (0 <= posoffset[1] < len(self.data[0])):
+                    if (0 <= posoffset[0] < len(self.mapdata)) and (0 <= posoffset[1] < len(self.mapdata[0])):
                         if self.area[posoffset[0]][posoffset[1]] == 1:
                             self.place(posoffset[0], posoffset[1], False)
                             self.area[posoffset[0]][posoffset[1]] = 0
@@ -181,7 +184,7 @@ class GE(menu):
                                         graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
                                         graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
                                 rect = [pos2[0] - self.field.rect.x, pos2[1] - self.field.rect.y]
-                                self.field.field.blit(self.toolrender, rect, [curtool, cellsize2])
+                                self.fieldadd.blit(self.toolrender, rect, [curtool, cellsize2])
                                 if self.mirrorp:
                                     px = pos[0]
                                     py = pos[1]
@@ -193,7 +196,7 @@ class GE(menu):
                                         py = self.mirrorpos[0] * 2 + (-py - 1)
                                     px = px * self.size
                                     py = py * self.size
-                                    self.field.field.blit(self.toolrender, [px, py], [curtool, cellsize2])
+                                    self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 mousp = True
                 self.renderfield()
@@ -236,9 +239,6 @@ class GE(menu):
                 pg.draw.rect(self.surface, mirror, [px, self.field.rect.y, 3, self.field.field.get_height()])
             else:
                 pg.draw.rect(self.surface, mirror, [self.field.rect.x, py, self.field.field.get_width(), 3])
-        fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size, (len(self.data) - self.btiles[2] - self.btiles[0]) * self.size, (len(self.data[0]) - self.btiles[3] - self.btiles[1]) * self.size]
-        rect = pg.rect.Rect(fig)
-        pg.draw.rect(self.field.field, bftiles, rect, 5)
 
     def s0(self):
         self.state = 0
@@ -320,7 +320,7 @@ class GE(menu):
 
     def mirror(self):
         self.mirrorp = not self.mirrorp
-        self.mirrorpos = [len(self.data) // 2, 0]
+        self.mirrorpos = [len(self.mapdata) // 2, 0]
 
     def clearall(self):
         self.selectedtool = "CA"
@@ -368,32 +368,32 @@ class GE(menu):
 
     def place(self, x, y, render=True):
         self.mirrorplace(x, y, render)
-        if x >= len(self.data) or y >= len(self.data[0]) or x < 0 or y < 0:
+        if x >= len(self.mapdata) or y >= len(self.mapdata[0]) or x < 0 or y < 0:
             return
         if self.placetile != 0.1:  # dont place
             if self.placetile == 0.2:  # inverse
-                if self.data[x][y][self.layer][0] == 0:
-                    self.data[x][y][self.layer][0] = 1
+                if self.mapdata[x][y][self.layer][0] == 0:
+                    self.mapdata[x][y][self.layer][0] = 1
                 else:
-                    self.data[x][y][self.layer][0] = self.reverseslope(self.data[x][y][self.layer][0])
+                    self.mapdata[x][y][self.layer][0] = self.reverseslope(self.mapdata[x][y][self.layer][0])
             elif self.placetile == 0.3:  # clear all
-                self.data[x][y] = [[0, []], [0, []], [0, []]]
+                self.mapdata[x][y] = [[0, []], [0, []], [0, []]]
             elif self.placetile == 0.4:  # shortcut enterance
-                self.data[x][y][self.layer][0] = 7
-                if 4 not in self.data[x][y][self.layer][1]:
-                    self.data[x][y][self.layer][1].append(4)
+                self.mapdata[x][y][self.layer][0] = 7
+                if 4 not in self.mapdata[x][y][self.layer][1]:
+                    self.mapdata[x][y][self.layer][1].append(4)
             elif self.placetile == 0.5:  # clear layer
-                self.data[x][y][self.layer] = [0, []]
+                self.mapdata[x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:  # clear upper
-                self.data[x][y][self.layer][1] = []
+                self.mapdata[x][y][self.layer][1] = []
             elif self.selectedtool in settings[self.menu]["codes"].keys():  # else
                 if settings[self.menu]["codes"][self.selectedtool] == 1:
-                    self.data[x][y][self.layer][0] = self.placetile + self.state
+                    self.mapdata[x][y][self.layer][0] = self.placetile + self.state
                 if settings[self.menu]["codes"][self.selectedtool] == 0:
-                    if self.placetile not in self.data[x][y][self.layer][1]:
-                        self.data[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
+                    if self.placetile not in self.mapdata[x][y][self.layer][1]:
+                        self.mapdata[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
-                self.data[x][y][self.layer][0] = self.placetile
+                self.mapdata[x][y][self.layer][0] = self.placetile
         if render:
             self.renderfield()
 
@@ -406,32 +406,32 @@ class GE(menu):
             x = self.mirrorpos[0] * 2 + (-xm - 1)
         else:
             y = self.mirrorpos[0] * 2 + (-ym - 1)
-        if x >= len(self.data) or y >= len(self.data[0]) or x < 0 or y < 0:
+        if x >= len(self.mapdata) or y >= len(self.mapdata[0]) or x < 0 or y < 0:
             return
         if self.placetile != 0.1:
             if self.placetile == 0.2:
-                if self.data[x][y][self.layer][0] == 0:
-                    self.data[x][y][self.layer][0] = 1
+                if self.mapdata[x][y][self.layer][0] == 0:
+                    self.mapdata[x][y][self.layer][0] = 1
                 else:
-                    self.data[x][y][self.layer][0] = self.reverseslope(self.data[x][y][self.layer][0])
+                    self.mapdata[x][y][self.layer][0] = self.reverseslope(self.mapdata[x][y][self.layer][0])
             elif self.placetile == 0.3:
-                self.data[x][y] = [[0, []], [0, []], [0, []]]
+                self.mapdata[x][y] = [[0, []], [0, []], [0, []]]
             elif self.placetile == 0.4:
-                self.data[x][y][self.layer][0] = 7
-                if 4 not in self.data[x][y][self.layer][1]:
-                    self.data[x][y][self.layer][1].append(4)
+                self.mapdata[x][y][self.layer][0] = 7
+                if 4 not in self.mapdata[x][y][self.layer][1]:
+                    self.mapdata[x][y][self.layer][1].append(4)
             elif self.placetile == 0.5:
-                self.data[x][y][self.layer] = [0, []]
+                self.mapdata[x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:
-                self.data[x][y][self.layer][1] = []
+                self.mapdata[x][y][self.layer][1] = []
             elif self.selectedtool in settings[self.menu]["codes"].keys():
                 if settings[self.menu]["codes"][self.selectedtool] == 1:
-                    self.data[x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
+                    self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
                 if settings[self.menu]["codes"][self.selectedtool] == 0:
-                    if self.placetile not in self.data[x][y][self.layer][1]:
-                        self.data[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
+                    if self.placetile not in self.mapdata[x][y][self.layer][1]:
+                        self.mapdata[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
-                self.data[x][y][self.layer][0] = self.reverseslope(self.placetile)
+                self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile)
         if render:
             self.renderfield()
 

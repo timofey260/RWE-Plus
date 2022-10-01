@@ -29,7 +29,9 @@ def keypress(window, surf, file, file2, level):
                 if pg.key.get_pressed()[getattr(pg, i)]:
                     pressed = hotkeys["global"][i]
     for i in hotkeys[surf.menu].keys():
-        if i[-1] == "+":
+        if i == "unlock_keys":
+            continue
+        elif i[-1] == "+":
             if ctrl == 1:
                 if pg.key.get_pressed()[getattr(pg, i[:-1])]:
                     pressed = hotkeys[surf.menu][i]
@@ -122,6 +124,8 @@ def launch(level):
                         surf.send("SD")
         if surf.message != "":
             match surf.message:
+                case "quit":
+                    asktoexit(file, file2)
                 case "MN":
                     surf = MN(window, file)
                 case "GE":

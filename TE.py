@@ -11,6 +11,12 @@ class TE(menu):
         self.btiles = data["EX2"]["extraTiles"]
         self.data = data
 
+        self.fieldmap = self.field.field
+
+        self.fieldadd = self.fieldmap
+        self.fieldadd.fill(white)
+        self.fieldadd.set_colorkey(white)
+
         self.xoffset = 0
         self.yoffset = 0
         self.size = settings["TE"]["cellsize"]
@@ -39,7 +45,8 @@ class TE(menu):
 
     def blit(self):
         global mousp, mousp2, mousp1
-        self.field.blit()
+        self.drawmap()
+
         self.buttonslist[-1].blit(20)
         for i in self.buttonslist[:-1]:
             i.blit(15)
@@ -62,7 +69,7 @@ class TE(menu):
             if posoffset != self.mpos:
                 self.cols = self.test_cols(cposxo, cposyo)
                 self.mpos = posoffset
-                self.labels[1].set_text("X: %3d, Y: %3d, Z: %3d" % (posoffset[0], posoffset[1], self.layer + 1))
+                self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
                 if self.canplace(posoffset[0], posoffset[1], cposxo, cposyo):
                     self.labels[0].set_text(
                         "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
@@ -88,11 +95,11 @@ class TE(menu):
                 if not self.tool:
                     if self.cols:
                         self.place(cposxo, cposyo)
-                        self.field.field.blit(self.tileimage["image"],
+                        self.fieldadd.blit(self.tileimage["image"],
                                               [cposx - self.field.rect.x, cposy - self.field.rect.y])
                 else:
                     self.destroy(posoffset[0], posoffset[1])
-                    pg.draw.rect(self.field.field, red, [pos[0] * self.size, pos[1] * self.size, self.size, self.size])
+                    pg.draw.rect(self.fieldadd, red, [pos[0] * self.size, pos[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 mousp = True
                 self.renderfield()
@@ -118,15 +125,6 @@ class TE(menu):
                             self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
                 self.renderfield()
                 mousp2 = True
-
-        rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
-                len(self.data["GE"][0]) * self.size]
-        pg.draw.rect(self.field.field, border, rect, 5)
-        fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size,
-               (len(self.data["GE"]) - self.btiles[2] - self.btiles[0]) * self.size,
-               (len(self.data["GE"][0]) - self.btiles[3] - self.btiles[1]) * self.size]
-        rect = pg.rect.Rect(fig)
-        pg.draw.rect(self.field.field, bftiles, rect, 5)
 
     def rebuttons(self):
         self.buttonslist = []
@@ -158,8 +156,8 @@ class TE(menu):
         self.renderfield()
 
     def renderfield(self):
-        renderfield(self.field, self.size, self.layer, [self.xoffset, self.yoffset], self.data["GE"])
-        renderfield2(self.field, self.size, self.layer, [self.xoffset, self.yoffset], self.data, self.items)
+        renderfield(self.fieldmap, self.size, self.layer, self.data["GE"])
+        renderfield2(self.fieldmap, self.size, self.layer, self.data, self.items)
         self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"], [self.size * self.tileimage2["size"][0],
                                                                                 self.size * self.tileimage2["size"][1]])
         self.tileimage["image"].set_colorkey(None)
@@ -178,16 +176,12 @@ class TE(menu):
                     self.renderfield()
             case "left":
                 self.xoffset += 1
-                self.renderfield()
             case "right":
                 self.xoffset -= 1
-                self.renderfield()
             case "up":
                 self.yoffset += 1
-                self.renderfield()
             case "down":
                 self.yoffset -= 1
-                self.renderfield()
             case "swichlayers":
                 self.layer = (self.layer + 1) % 3
                 self.mpos = 1

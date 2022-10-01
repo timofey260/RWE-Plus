@@ -4,6 +4,7 @@
 		"color2": "#606060",
 		"width": 1280,
 		"height": 720,
+		"fullscreen": false,
 		"fontsize": 30,
 		"colormul": 10,
 		"size": 30,
@@ -22,7 +23,6 @@
 	},
 	"LD":
 	{
-		"unlock_keys": [],
 		"buttons": 
 		[
 			["OPEN", [50, 0, 50, 100], [100, 100, 100], "open", "non", "open project"],
@@ -34,7 +34,6 @@
 	},
 	"MN":
 	{
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 		"name": "Menu",
 		"buttons":
 		[
@@ -57,7 +56,6 @@
 	}, 
 	"GE":
 	{
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 		"buttons":[
 			["AR", [4, 0, 4, 6], [120, 120, 120], "s0", "air", "Air(a)", ["geometry.png", [2, 0]]],
 			["SL", [4, 6, 4, 6], [100, 100, 100], "s0", "slope", "Slope(s)", ["geometry.png", [3, 0]]],
@@ -113,7 +111,6 @@
 	}, 
 	"TE":
 	{
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 		"buttons": [
 			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(d)"],
 			["Set as default", [8, 2, 14, 4], [100, 100, 100], "sad", "non", "Set material as default(e)"],
@@ -138,7 +135,6 @@
 	},
 
 	"LE":{
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e"],
 		"buttons": [
 			["^", [1, 2, 5, 6], [100, 100, 100], "non", "non", "Previous image(r)"],
 			["v", [1, 8, 5, 6], [100, 100, 100], "non", "non", "Next image(f)"],

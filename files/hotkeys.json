@@ -16,16 +16,19 @@
   	  	"K_n+": "new"
   	},
   	"LD": {
+  		"unlock_keys": [],
   	  	"K_n": "new",
   	  	"K_n+": "new",
   	  	"K_o": "open",
   	  	"K_o+": "open"
   	},
   	"MN": {
+  		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
   	  	"K_q": "quit",
   	  	"K_r+": "render"
   	},
   	"GE": {
+  		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
     	"K_l": "swichlayers",
     	"K_l+": "swichlayers_back",
 
@@ -69,6 +72,7 @@
     	"K_DOWN+": "mdown"
   	},
   	"TE": {
+  		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
     	"K_q": "copy",
     	"K_l": "swichlayers",
     	"K_l+": "swichlayers_back",
@@ -99,6 +103,7 @@
 
   	},
   	"LE": {
+  		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
   		"K_q+": "lightmod",
   		"K_e+": "darkmod",
 
@@ -106,6 +111,13 @@
   		"K_a": "-wm",
   		"K_s": "-hm",
   		"K_d": "-wp",
+
+  		"K_KP8": "-fp",
+  		"K_KP5": "-fm",
+  		"K_KP2": "-fm",
+
+  		"K_KP4": "-lp",
+  		"K_KP6": "-lm",
 
   		"K_q": "-rl",
   		"K_e": "-rr",
