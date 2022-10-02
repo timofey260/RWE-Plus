@@ -1,6 +1,6 @@
-from menuclass import *
-from tkinter.filedialog import askopenfilename, asksaveasfilename
 from lingotojson import turntolingo
+from menuclass import *
+
 
 class MN(menu):
     def __init__(self, surface: pg.surface.Surface, data):

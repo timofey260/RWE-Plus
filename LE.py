@@ -1,5 +1,5 @@
-from menuclass import *
 from lingotojson import *
+from menuclass import *
 
 
 class LE(menu):
@@ -17,10 +17,12 @@ class LE(menu):
         self.fieldadd.set_colorkey(white)
 
         try:
-            self.field2.field = pg.image.load(data["level"])
-        except:
+            lev = os.path.splitext(data["path"])[0] + ".png"
+            print(lev)
+            self.field2.field = pg.image.load(lev)
+        except FileNotFoundError:
             self.field2.field.fill(white)
-        self.field3 = self.field2
+
         self.btiles = data["EX2"]["extraTiles"]
         self.data = data
 
@@ -31,6 +33,9 @@ class LE(menu):
         self.size = settings["TE"]["cellsize"]
 
         self.message = ''
+
+        self.ofstop = 11
+        self.ofsleft = 11
 
         self.imagerect = [375, 375]
         self.direction = 0
@@ -59,6 +64,7 @@ class LE(menu):
 
             self.images[False].append(img)
 
+        self.rs()
         self.retile()
         self.init()
         self.renderfield()
@@ -67,24 +73,39 @@ class LE(menu):
 
     def blit(self):
         global mousp, mousp2, mousp1
-        self.drawmap()
+        self.fieldadd.fill(white)
+        if not pg.key.get_pressed()[pg.K_LCTRL]:
+            self.drawmap()
+        else:
+            self.field.field.fill(self.field.color)
 
-        fieldpos = [self.field.rect.x + self.xoffset * self.size, self.field.rect.y + self.yoffset * self.size]
-        fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness, fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness]
-        self.surface.blit(self.field3.field, fieldpos)
-        self.surface.blit(self.field3.field, fieldpos2)
+        xos = self.xoffset * self.size
+        yos = self.yoffset * self.size
+
+        fieldpos = [(self.xoffset - self.ofsleft) * self.size, (self.yoffset - self.ofstop) * self.size]
+        fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness,
+                     fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness]
+
+        self.field.field.blit(self.field3.field, fieldpos)
+        if not pg.key.get_pressed()[pg.K_LSHIFT]:
+            self.field.field.blit(self.field3.field, fieldpos2)
+        self.field.blit(False)
         super().blit()
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
-            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
+            #  pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             mouspos = pg.mouse.get_pos()
+            mouspos_onfield = [mouspos[0] - self.field.rect.x - fieldpos[0], mouspos[1] - self.field.rect.y - fieldpos[1]]
             curpos = [mouspos[0] - self.tileimage.get_width() / 2, mouspos[1] - self.tileimage.get_height() / 2]
-            curpos_on_field = [curpos[0] - fieldpos[0], curpos[1] - fieldpos[1]]
+
+            curpos_on_field = [mouspos_onfield[0] - self.tileimage.get_width() / 2,
+                               mouspos_onfield[1] - self.tileimage.get_height() / 2]
+
+            curpos_on_field2 = self.map_to_field(curpos_on_field[0], curpos_on_field[1])
 
             self.labels[0].set_text("Image: " + settings[self.menu]["images"][self.selectedimage])
-            self.labels[1].set_text(f"X: {curpos[0]}, Y: {curpos[1]}")
-
+            self.labels[1].set_text(f"X: {curpos_on_field[0]}, Y: {curpos_on_field[1]}")
 
             self.surface.blit(self.tileimage, curpos)
             bp = pg.mouse.get_pressed(3)
@@ -92,23 +113,44 @@ class LE(menu):
             if bp[0] == 1 and mousp and (mousp2 and mousp1):
                 mousp = False
             elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
-                self.field2.field.blit(self.tileimage, curpos_on_field)
+                sizepr = self.map_to_field(self.tileimage.get_width(), self.tileimage.get_height())
+                print(sizepr)
+                self.field3.field.blit(self.tileimage, curpos_on_field)
+                self.fieldadd.blit(self.field3.field, fieldpos)
+                self.field2.field.blit(pg.transform.scale(self.tileimage, sizepr), curpos_on_field2)
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
-                # self.field2.field = pg.transform.scale(self.field3.field, [])
+                self.fieldadd.fill(white)
                 mousp = True
                 self.renderfield()
             self.movemiddle(bp, pos)
 
+    def map_to_field(self, x, y):
+        return [x / ((len(self.data["GE"]) + self.ofsleft) * self.size) * self.field2.field.get_width(),
+                y / ((len(self.data["GE"][0]) + self.ofstop) * self.size) * self.field2.field.get_height()]
+
     def resize(self):
         super().resize()
         self.field.resize()
-        self.field2.field = self.field2.field.subsurface(pg.rect.Rect(0, 0, len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size))
-        self.field2.field = self.field2.field.convert_alpha()
-        self.field2.field.set_alpha(50)
-        self.field2.field.fill(white)
+        # self.field2.field = self.field2.field.subsurface(pg.rect.Rect(0, 0, len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size))
+        # self.field2.field = self.field2.field.convert_alpha()
+        # self.field2.field.set_alpha(50)
+        # self.field2.field.fill(white)
         self.renderfield()
 
+    def rs(self):
+        self.field3 = self.field2.copy()
+        self.field3.field = pg.transform.scale(self.field2.field,
+                                               [(len(self.data["GE"]) + self.ofsleft) * self.size,
+                                                (len(self.data["GE"][0]) + self.ofstop) * self.size])
+        self.field3.field.set_alpha(100)
+        self.field3.field.set_colorkey(white)
+
     def renderfield(self):
+        self.rs()
+        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd = pg.transform.scale(self.fieldadd,
+                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd.fill(white)
         renderfield(self.fieldmap, self.size, 0, self.data["GE"])
 
     def send(self, message):
@@ -118,10 +160,12 @@ class LE(menu):
         match message:
             case "SU":
                 self.size += 1
+                self.rs()
                 self.renderfield()
             case "SD":
                 if self.size - 1 != 0:
                     self.size -= 1
+                    self.rs()
                     self.renderfield()
             case "left":
                 self.xoffset += 1
@@ -131,6 +175,19 @@ class LE(menu):
                 self.yoffset += 1
             case "down":
                 self.yoffset -= 1
+
+    def save(self):
+        if self.data["path"] == "":
+            level = asksaveasfilename(defaultextension="wep")
+            self.data["level"] = os.path.basename(level)
+            self.data["path"] = level
+            self.data["dir"] = os.path.abspath(level)
+            self.message = "save"
+            lev = os.path.splitext(self.data["path"])[0] + ".png"
+            pg.image.save(self.field2.field, lev)
+        else:
+            lev = os.path.splitext(self.data["path"])[0] + ".png"
+            pg.image.save(self.field2.field, lev)
 
     def retile(self):
         self.tileimage2 = self.images[self.mode][self.selectedimage].copy()
@@ -202,12 +259,24 @@ class LE(menu):
 
     def fp(self):
         self.flatness += 1
+        self.data[self.menu]["flatness"] = self.flatness
 
     def fm(self):
         self.flatness -= 1
+        self.data[self.menu]["flatness"] = self.flatness
 
     def lp(self):
         self.lightAngle += 1
+        self.data[self.menu]["lightAngle"] = self.lightAngle
 
     def lm(self):
         self.lightAngle -= 1
+        self.data[self.menu]["lightAngle"] = self.lightAngle
+
+    def lightmod(self):
+        if self.mode:
+            self.inverse()
+
+    def darkmod(self):
+        if not self.mode:
+            self.inverse()

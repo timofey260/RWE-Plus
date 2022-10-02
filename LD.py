@@ -6,6 +6,7 @@ class load(menu):
         self.menu = "LD"
         self.surface = surface
         self.data = data
+        self.message = ""
         self.init()
 
     def send(self, message):

@@ -104,8 +104,8 @@
   	},
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
-  		"K_q+": "lightmod",
-  		"K_e+": "darkmod",
+  		"K_q+": "-lightmod",
+  		"K_e+": "-darkmod",
 
   		"K_w": "-hp",
   		"K_a": "-wm",
@@ -132,6 +132,8 @@
   		"K_LEFT": "left",
     	"K_RIGHT": "right",
     	"K_UP": "up",
-    	"K_DOWN": "down"
+    	"K_DOWN": "down",
+
+    	"K_RETURN": "-save"
   	}
 }

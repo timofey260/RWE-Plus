@@ -101,6 +101,7 @@ class TE(menu):
                     self.destroy(posoffset[0], posoffset[1])
                     pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
+                self.fieldadd.fill(white)
                 mousp = True
                 self.renderfield()
 
@@ -157,6 +158,9 @@ class TE(menu):
 
     def renderfield(self):
         self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd = pg.transform.scale(self.fieldadd,
+                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd.fill(white)
         renderfield(self.fieldmap, self.size, self.layer, self.data["GE"])
         renderfield2(self.fieldmap, self.size, self.layer, self.data, self.items)
         self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"], [self.size * self.tileimage2["size"][0],

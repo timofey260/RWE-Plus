@@ -1,7 +1,6 @@
 from menuclass import *
 
 
-
 class GE(menu):
     def __init__(self, surface: pg.surface.Surface, data):
         self.menu = "GE"
@@ -119,6 +118,9 @@ class GE(menu):
 
     def renderfield(self):
         self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd = pg.transform.scale(self.fieldadd,
+                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd.fill(white)
         renderfield(self.fieldmap, self.size, self.layer, self.mapdata)
 
     def blit(self):
@@ -197,6 +199,7 @@ class GE(menu):
                                     py = py * self.size
                                     self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
+                self.fieldadd.fill(white)
                 mousp = True
                 self.renderfield()
 

@@ -107,7 +107,7 @@ def launch(level):
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
-    surf = MN(window, "")
+    surf = MN(window, file)
     run = True
     while run:
         for event in pg.event.get():
@@ -172,18 +172,18 @@ def save_txt(file):
 
 
 def save(file):
-    if file["level"] != "":
-        open(file["level"], "w").write(json.dumps(file))
+    if file["path"] != "":
+        open(file["path"], "w").write(json.dumps(file))
     else:
         savedest = asksaveasfilename(defaultextension="wep")
         if savedest != "":
             open(savedest, "w").write(json.dumps(file))
-            file["level"] = savedest
+            file["path"] = savedest
 
 
 def loadmenu():
     window = pg.display.set_mode([400, 200], flags=pg.RESIZABLE)
-    surf = load(window, "")
+    surf = load(window, {"path": ""})
     run = True
     while run:
         for event in pg.event.get():

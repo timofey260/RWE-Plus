@@ -4,9 +4,8 @@ import math
 import widgets
 import pygame as pg
 import json
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from files import *
-
-prefix = "RWE+: "
 
 colors = settings["global"]["colors"]
 
@@ -50,9 +49,10 @@ class menu():
         self.uc = []
         for i in hotkeys[self.menu]["unlock_keys"]:
             self.uc.append(getattr(pg, i))
+
     def init(self):
         self.message = ""
-        pg.display.set_caption(prefix + self.menu)
+        pg.display.set_caption(f"RWE+: {self.menu} - {self.data['path']}")
         self.buttons = []
         for i in settings[self.menu]["buttons"]:
             if len(i) == 6:
