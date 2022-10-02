@@ -118,6 +118,7 @@ class GE(menu):
                                               self.tooltiles.get_height() / graphics["tilesize"][1] * self.size])
 
     def renderfield(self):
+        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         renderfield(self.fieldmap, self.size, self.layer, self.mapdata)
 
     def blit(self):
@@ -183,16 +184,14 @@ class GE(menu):
                                     curtool = [
                                         graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
                                         graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
-                                rect = [pos2[0] - self.field.rect.x, pos2[1] - self.field.rect.y]
+                                rect = [posoffset[0] * self.size, posoffset[1] * self.size]
                                 self.fieldadd.blit(self.toolrender, rect, [curtool, cellsize2])
                                 if self.mirrorp:
-                                    px = pos[0]
-                                    py = pos[1]
+                                    px = posoffset[0]
+                                    py = posoffset[1]
                                     if self.mirrorpos[1] == 0:
-                                        px = pos[0] - self.xoffset * 2
                                         px = self.mirrorpos[0] * 2 + (-px - 1)
                                     else:
-                                        py = pos[1] - self.yoffset * 2
                                         py = self.mirrorpos[0] * 2 + (-py - 1)
                                     px = px * self.size
                                     py = py * self.size

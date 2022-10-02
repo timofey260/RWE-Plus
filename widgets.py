@@ -118,6 +118,7 @@ class window:
             pg.draw.rect(self.surface, self.color, self.rect)
             pg.draw.rect(self.surface, self.border, self.rect, 6)
         self.surface.blit(self.field, self.rect.topleft)
+
     def resize(self):
         self.field = pg.surface.Surface(
             [self.rect2.width / 100 * self.surface.get_width(), self.rect2.height / 100 * self.surface.get_height()])
@@ -126,6 +127,15 @@ class window:
             self.rect2.y / 100 * self.surface.get_height(),
             self.rect2.width / 100 * self.surface.get_width(),
             self.rect2.height / 100 * self.surface.get_height()])
+
+    def copy(self):
+        wcopy = window(self.surface, {"rect": [0, 0, 1, 1], "color": [0, 0, 0], "border": [0, 0, 0]})
+        wcopy.rect = self.rect.copy()
+        wcopy.rect2 = self.rect2.copy()
+        wcopy.field = self.field.copy()
+        self.color = self.color.copy()
+        self.border = self.border.copy()
+        return wcopy
 
 
 class lable:

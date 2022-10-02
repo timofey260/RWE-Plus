@@ -8,6 +8,7 @@
 		"fontsize": 30,
 		"colormul": 10,
 		"size": 30,
+		"font": "Rodondo.otf",
 		"colors": {
 			"cursor": [255, 0, 0],
 			"cursor2": [50, 0, 255],
@@ -136,9 +137,9 @@
 
 	"LE":{
 		"buttons": [
-			["^", [1, 2, 5, 6], [100, 100, 100], "non", "non", "Previous image(r)"],
-			["v", [1, 8, 5, 6], [100, 100, 100], "non", "non", "Next image(f)"],
-			["S", [1, 14, 5, 6], [100, 100, 100], "non", "non", "Dark/Light swich(z, tab, space)"],
+			["^", [1, 2, 5, 6], [100, 100, 100], "changeup", "non", "Previous image(r)"],
+			["v", [1, 8, 5, 6], [100, 100, 100], "changedown", "non", "Next image(f)"],
+			["S", [1, 14, 5, 6], [100, 100, 100], "inverse", "non", "Dark/Light swich(z, tab, space)"],
 			["D", [1, 20, 5, 6], [100, 100, 100], "non", "non", "Dark mode(ctrl + e)"],
 			["L", [1, 26, 5, 6], [100, 100, 100], "non", "non", "Light mode(ctrl + q)"]
 		],

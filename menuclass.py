@@ -159,7 +159,7 @@ def renderfield(field: widgets.window | pg.surface.Surface, size: int, mainlayer
                     f.blit(renderedimage, [xp * size, yp * size], [curtool, cellsize2])
 
 
-def renderfield2(field: widgets.window, size: int, mainlayer, json, items: dict):
+def renderfield2(field: widgets.window | pg.surface.Surface, size: int, mainlayer, json, items: dict):
     global mat
     material = pg.transform.scale(mat, [mat.get_width() / 16 * size, mat.get_height() / 16 * size])
     images = {}

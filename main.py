@@ -55,7 +55,11 @@ def keypress(window, surf, file, file2, level):
         case "le":
             surf.message = "LE"
         case "save":
-            open(asksaveasfilename(defaultextension="wep"), "w").write(json.dumps(file))
+            filen = asksaveasfilename(defaultextension="wep")
+            file["level"] = os.path.basename(filen)
+            file["path"] = filen
+            file["dir"] = os.path.abspath(filen)
+            open(filen, "w").write(json.dumps(file))
         case "open":
             if surf.menu == "MN":
                 launch(askopenfilename(defaultextension="txt",
@@ -84,14 +88,20 @@ def launch(level):
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
         file["level"] = ""
+        file["path"] = ""
+        file["dir"] = ""
     elif level == "":
         return
     elif level[-3:] == "txt":
         file = turntoproject(open(level, "r").read())
-        file["level"] = ""
+        file["level"] = os.path.basename(level)
+        file["path"] = level
+        file["dir"] = os.path.abspath(level)
     else:
         file = json.load(open(level, "r"))
-        file["level"] = level
+        file["level"] = os.path.basename(level)
+        file["path"] = level
+        file["dir"] = os.path.abspath(level)
     items = inittolist(application_path + "\\drizzle\\Data\\Graphics\\init.txt")
     file2 = copy.deepcopy(file)
     width = settings["global"]["width"]

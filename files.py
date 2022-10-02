@@ -30,4 +30,4 @@ mat = pg.image.load(path + graphics["materials"])
 
 
 def fs(sz):
-    return pg.font.Font(path + "\\" + "Rodondo.otf", sz)
+    return pg.font.Font(path + "\\" + settings["global"]["font"], sz)
