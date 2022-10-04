@@ -1,9 +1,6 @@
 import copy
 import json
 import re
-
-import matplotlib.style.core
-import pygame as pg
 from files import *
 
 
@@ -61,12 +58,14 @@ def tolingo(string: dict):
     #print(t)
     return t
 
+
 def toarr(col: str, mark):
     s = col.replace(mark + "(", "")
     s = s.replace(",", " ")
     s = s.replace(")", "")
     a = [int(i) for i in s.split()]
     return a
+
 
 def inittolist(file: str):
     s = open(file, "r").readlines()
@@ -134,7 +133,6 @@ def inittolist(file: str):
         a["material"].append({"name": i, "image": img, "size": [1, 1], "category": "material", "color": col, "cols": [[-1], 0], "cat": [1, counter]})
         counter += 1
     return a
-
 
 
 def turntolingo(string: dict, file):

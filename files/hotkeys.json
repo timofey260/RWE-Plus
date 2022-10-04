@@ -1,14 +1,14 @@
 {
   	"global": {
-  	  	"K_1": "MN",
-  	  	"K_2": "GE",
-  	  	"K_3": "TE",
-  	  	"K_4": "CE",
-  	  	"K_5": "LE",
-  	  	"K_6": "EE",
-  	  	"K_7": "FE",
-  	  	"K_8": "PE",
-  	  	"K_9": "LS",
+  	  	"K_1": "/MN",
+  	  	"K_2": "/GE",
+  	  	"K_3": "/TE",
+  	  	"K_4": "/CE",
+  	  	"K_5": "/LE",
+  	  	"K_6": "/EE",
+  	  	"K_7": "/FE",
+  	  	"K_8": "/PE",
+  	  	"K_9": "/LS",
   	  	"K_0+": "RELOAD",
   	  	"K_ESCAPE": "quit",
   	  	"K_s+": "save",
@@ -59,7 +59,6 @@
     	"K_o": "-clearblock",
 
     	"K_SPACE": "rotate",
-    	"K_RETURN": "saveit",
     	
     	"K_LEFT": "left",
     	"K_RIGHT": "right",
@@ -135,5 +134,8 @@
     	"K_DOWN": "down",
 
     	"K_RETURN": "-save"
+  	},
+  	"LS": {
+  		"unlock_keys": []
   	}
 }

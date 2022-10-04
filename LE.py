@@ -16,15 +16,19 @@ class LE(menu):
         self.fieldadd.fill(white)
         self.fieldadd.set_colorkey(white)
 
-        try:
-            lev = os.path.splitext(data["path"])[0] + ".png"
-            print(lev)
-            self.field2.field = pg.image.load(lev)
-        except FileNotFoundError:
-            self.field2.field.fill(white)
+        self.ofstop = ofstop
+        self.ofsleft = ofsleft
 
         self.btiles = data["EX2"]["extraTiles"]
         self.data = data
+
+        try:
+            lev = os.path.splitext(data["path"])[0] + ".png"
+            self.field2.field = pg.image.load(lev)
+        except FileNotFoundError:
+            self.field2.field = pg.surface.Surface([(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size])
+            self.field2.field.fill(white)
+
 
         self.rectdata = [[0, 0], [0, 0], [0, 0]]
         self.xoffset = 0
@@ -33,9 +37,6 @@ class LE(menu):
         self.size = settings["TE"]["cellsize"]
 
         self.message = ''
-
-        self.ofstop = 11
-        self.ofsleft = 11
 
         self.imagerect = [375, 375]
         self.direction = 0
@@ -82,7 +83,7 @@ class LE(menu):
         xos = self.xoffset * self.size
         yos = self.yoffset * self.size
 
-        fieldpos = [(self.xoffset - self.ofsleft) * self.size, (self.yoffset - self.ofstop) * self.size]
+        fieldpos = [xos - (self.ofsleft * self.size), yos - (self.ofstop * self.size)]
         fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness,
                      fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness]
 
@@ -114,7 +115,6 @@ class LE(menu):
                 mousp = False
             elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
                 sizepr = self.map_to_field(self.tileimage.get_width(), self.tileimage.get_height())
-                print(sizepr)
                 self.field3.field.blit(self.tileimage, curpos_on_field)
                 self.fieldadd.blit(self.field3.field, fieldpos)
                 self.field2.field.blit(pg.transform.scale(self.tileimage, sizepr), curpos_on_field2)
@@ -155,7 +155,6 @@ class LE(menu):
 
     def send(self, message):
         if message[0] == "-":
-            self.mpos = 1
             getattr(self, message[1:])()
         match message:
             case "SU":

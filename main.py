@@ -13,7 +13,6 @@ run = True
 keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 
-
 def keypress(window, surf, file, file2, level):
     global run
     pressed = ""
@@ -41,19 +40,13 @@ def keypress(window, surf, file, file2, level):
                 if pg.key.get_pressed()[getattr(pg, i)]:
                     pressed = hotkeys[surf.menu][i]
                     surf.send(pressed)
+    if len(pressed) > 0 and pressed[0] == "/" and surf.menu != "LD":
+        surf.message = pressed[1:]
     match pressed.lower():
         case "quit":
             asktoexit(file, file2)
         case "reload":
             surf.reload()
-        case "mn":
-            surf.message = "MN"
-        case "ge":
-            surf.message = "GE"
-        case "te":
-            surf.message = "TE"
-        case "le":
-            surf.message = "LE"
         case "save":
             filen = asksaveasfilename(defaultextension="wep")
             file["level"] = os.path.basename(filen)
@@ -84,7 +77,7 @@ def asktoexit(file, file2):
 
 
 def launch(level):
-    global bol
+    global bol, surf
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
         file["level"] = ""
@@ -144,6 +137,8 @@ def launch(level):
                     surf = TE(window, file, items)
                 case "LE":
                     surf = LE(window, file)
+                case "LS":
+                    surf = LS(window, file)
                 case "saveGE":
                     file["GE"] = surf.data
                     print("Saved!")
@@ -182,6 +177,7 @@ def save(file):
 
 
 def loadmenu():
+    global surf
     window = pg.display.set_mode([400, 200], flags=pg.RESIZABLE)
     surf = load(window, {"path": ""})
     run = True

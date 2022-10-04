@@ -28,6 +28,10 @@ toolmenu = pg.image.load(path + graphics["toolmenu"])
 
 mat = pg.image.load(path + graphics["materials"])
 
+ofstop = 11
+ofsleft = 11
+image1size = 20
+
 
 def fs(sz):
     return pg.font.Font(path + "\\" + settings["global"]["font"], sz)

@@ -83,9 +83,6 @@ class GE(menu):
                     self.state = (self.state + 1) % self.mx
                 else:
                     self.state = 0
-            case "saveit":
-                self.message = "saveGE"
-                print("Saving...")
             case "mleft":
                 if self.mirrorpos[1] == 0:
                     self.mirrorpos[0] -= 1

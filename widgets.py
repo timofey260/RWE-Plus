@@ -142,6 +142,7 @@ class lable:
     def __init__(self, surface: pg.surface.Surface, text, pos, color, fontsize=15):
         self.surface = surface
         self.text = text
+        self.originaltext = text
         self.pos = copy.deepcopy(pos)
         self.posp = copy.deepcopy(pos)
         self.color = color
