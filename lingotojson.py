@@ -66,6 +66,9 @@ def toarr(col: str, mark):
     a = [int(i) for i in s.split()]
     return a
 
+def makearr(col: list, mark):
+    return f"{mark}({col[0]}, {col[1]})"
+
 
 def inittolist(file: str):
     s = open(file, "r").readlines()

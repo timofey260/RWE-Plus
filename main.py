@@ -138,7 +138,7 @@ def launch(level):
                 case "LE":
                     surf = LE(window, file)
                 case "LS":
-                    surf = LS(window, file)
+                    surf = LS(window, file, items)
                 case "saveGE":
                     file["GE"] = surf.data
                     print("Saved!")

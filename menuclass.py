@@ -5,6 +5,7 @@ import widgets
 import pygame as pg
 import json
 from tkinter.filedialog import askopenfilename, asksaveasfilename
+from lingotojson import *
 from files import *
 
 colors = settings["global"]["colors"]
@@ -203,3 +204,55 @@ def renderfield2(field: widgets.window | pg.surface.Surface, size: int, mainlaye
                 f.blit(it["image"], [cposx, cposy])
             elif datcell == "tileBody":
                 pass
+
+def canplaceit(data, x, y, x2, y2):
+    return (0 <= x2 and x < len(data["tlMatrix"])) and (0 <= y2 and y < len(data["tlMatrix"][0]))
+
+
+def destroy(data, x, y, items, layer):
+    def clearitem(mx, my, layer):
+        val = data["tlMatrix"][mx][my][layer]
+        if val["data"] == 0:
+            return
+        name = val["data"][1]
+        itm = None
+        for i in items.keys():
+            for i2 in items[i]:
+                if i2["name"] == name:
+                    itm = i2
+                    break
+            if itm is not None:
+                break
+        backx = mx - (itm["size"][0] // 3)
+        backy = my - (itm["size"][1] // 3)
+        if backx + itm["size"][0] >= len(data["tlMatrix"]) or backy + itm["size"][1] >= len(data["tlMatrix"][0]):
+            return
+        # startcell = self.data["TE"]["tlMatrix"][backx][backy][layer]
+        sp = itm["cols"][0]
+        sp2 = itm["cols"][1]
+        w, h = itm["size"]
+        data["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
+        for x2 in range(w):
+            for y2 in range(h):
+                posx = backx + x2
+                posy = backy + y2
+                csp = sp[x2 * h + y2]
+                if csp != -1:
+                    data["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
+                if sp2 != 0:
+                    csp = sp2[x2 * h + y2]
+                    if csp != -1 and layer + 1 <= 2:
+                        data["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
+
+    if not canplaceit(data, x, y, x, y):
+        return
+    tile = data["tlMatrix"][x][y][layer]
+    if tile["tp"] != "default":
+        match tile["tp"]:
+            case "tileBody":
+                posx, posy = toarr(tile["data"][0], "point")
+                clearitem(posx - 1, posy - 1, tile["data"][1] - 1)
+            case "tileHead":
+                clearitem(x, y, layer)
+            case "material":
+                data["tlMatrix"][x][y][layer] = {"tp": "default", "data": 0}

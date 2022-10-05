@@ -338,71 +338,26 @@ class TE(menu):
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
                                                                            "data": self.tileimage["name"]}
                 elif x + x2 == px and y + y2 == py:
-                    p = "point(%1d, %1d)" % (self.tileimage["cat"][0], self.tileimage["cat"][1])
+                    p = makearr(self.tileimage["cat"], "point")
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
                                                                            "data": [p, self.tileimage["name"]]}
                 elif csp != -1:
-                    p = "point(%1d, %1d)" % (px + 1, py + 1)
+                    p = makearr([px + 1, py + 1], "point")
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
                                                                            "data": [p, self.layer + 1]}
                 if sp2 != 0:
                     csp = sp2[x2 * h + y2]
                     if self.layer + 1 <= 2 and csp != -1:
-                        p = "point(%1d, %1d)" % (px + 1, py + 1)
+                        p = makearr([px + 1, py + 1], "point")
                         self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1] = {"tp": "tileBody",
                                                                                    "data": [p, self.layer + 1]}
         self.mpos = 1
 
     def destroy(self, x, y):
-        def clearitem(mx, my, layer):
-            val = self.data["TE"]["tlMatrix"][mx][my][layer]
-            if val["data"] == 0:
-                return
-            name = val["data"][1]
-            itm = None
-            for i in self.items.keys():
-                for i2 in self.items[i]:
-                    if i2["name"] == name:
-                        itm = i2
-                        break
-                if itm is not None:
-                    break
-            backx = mx - (itm["size"][0] // 3)
-            backy = my - (itm["size"][1] // 3)
-            if backx + itm["size"][0] >= len(self.data["GE"]) or backy + itm["size"][1] >= len(self.data["GE"][0]):
-                return
-            # startcell = self.data["TE"]["tlMatrix"][backx][backy][layer]
-            sp = itm["cols"][0]
-            sp2 = itm["cols"][1]
-            w, h = itm["size"]
-            self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
-            for x2 in range(w):
-                for y2 in range(h):
-                    posx = backx + x2
-                    posy = backy + y2
-                    csp = sp[x2 * h + y2]
-                    if csp != -1:
-                        self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
-                    if sp2 != 0:
-                        csp = sp2[x2 * h + y2]
-                        if csp != -1 and layer + 1 <= 2:
-                            self.data["TE"]["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
-
-        if not self.canplace(x, y, x, y):
-            return
-        tile = self.data["TE"]["tlMatrix"][x][y][self.layer]
-        if tile["tp"] != "default":
-            match tile["tp"]:
-                case "tileBody":
-                    posx, posy = toarr(tile["data"][0], "point")
-                    clearitem(posx - 1, posy - 1, tile["data"][1] - 1)
-                case "tileHead":
-                    clearitem(x, y, self.layer)
-                case "material":
-                    self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
+        destroy(self.data["TE"], x, y, self.items, self.layer)
 
     def canplace(self, x, y, x2, y2):
-        return (0 <= x2 and x < len(self.data["GE"])) and (0 <= y2 and y < len(self.data["GE"][0]))
+        return canplaceit(self.data["TE"], x, y, x2, y2)
 
     def sad(self):
         if self.tileimage["category"] == "material":

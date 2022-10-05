@@ -136,6 +136,11 @@
     	"K_RETURN": "-save"
   	},
   	"LS": {
-  		"unlock_keys": []
+  		"unlock_keys": [],
+
+  		"K_a": "-as_left",
+  		"K_w": "-as_top",
+  		"K_s": "-set_height",
+  		"K_d": "-set_width"
   	}
 }
