@@ -22,11 +22,12 @@ class LE(menu):
         self.btiles = data["EX2"]["extraTiles"]
         self.data = data
 
+        sc = [(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size]
         try:
             lev = os.path.splitext(data["path"])[0] + ".png"
-            self.field2.field = pg.image.load(lev)
+            self.field2.field = pg.transform.scale(pg.image.load(lev), sc)
         except FileNotFoundError:
-            self.field2.field = pg.surface.Surface([(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size])
+            self.field2.field = pg.surface.Surface(sc)
             self.field2.field.fill(white)
 
 

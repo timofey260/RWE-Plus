@@ -171,24 +171,26 @@
 	},
 	"LS": {
 		"buttons": [
+			["Shadows sizing: ", [70, 2, 30, 6], [100, 100, 100], "mswich", "non", "Cut shadows(q)"],
 			["Add/sub left", [1, 2, 30, 6], [100, 100, 100], "as_left", "non", "Add or sub from left border of level(a)"],
 			["Add/sub top", [1, 8, 30, 6], [100, 100, 100], "as_top", "non", "Add or sub from top border of level(a)"],
 			["Change width", [1, 14, 30, 6], [100, 100, 100], "set_width", "non", "set width of level(d)"],
 			["Change height", [1, 20, 30, 6], [100, 100, 100], "set_height", "non", "set height of level(s)"],
-			["Cut shadows top/left", [1, 26, 30, 6], [100, 100, 100], "non", "non", "Cut shadows from top left corner of geometry(q)"],
-			["Cut shadows bottom/right", [1, 32, 30, 6], [100, 100, 100], "non", "non", "Cut shadows from bottom right corner of geometry(e)"],
-			["Rescale shadows", [1, 38, 30, 6], [100, 100, 100], "non", "non", "Rescale image to current layer geometry(r)"],
-			["Change buffer tiles", [1, 44, 30, 6], [100, 100, 100], "non", "non", "Change buffer tiles zone(z)"]
+			["Change buffer tiles", [1, 26, 30, 6], [100, 100, 100], "bftileschange", "non", "Change buffer tiles zone(z)"]
 
 		],
+		"tm1": "Cut",
+		"tt1": "Cut shadows(q)",
+
+		"tm2": "Strech",
+		"tt2": "Scale shadows to a geometry(q)",
 		"labels": [
 			["Image sizes: %3d, %3d(%3d, %3d)", [0, 89], [255, 255, 255], 25],
 			["Geometry sizes: %3d, %3d", [0, 93], [255, 255, 255], 25],
 			["Tile sizes: %3d, %3d", [0, 97], [255, 255, 255], 25],
 			["Buffer tiles: %10s", [0, 85], [255, 255, 255], 25],
 			["Rescale geometry/tiles/effects(no undo)", [32, 2], [0, 0, 0], 30],
-			["Rescale shadows image(no undo)", [32, 26], [0, 0, 0], 30],
-			["Change buffer tiles zone", [32, 44], [0, 0, 0], 30]
+			["Change buffer tiles zone", [32, 26], [0, 0, 0], 30]
 		]
 	},
 	"CE":{}, "PE":{}, "FE":{}, "EE":{}

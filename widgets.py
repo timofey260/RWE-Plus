@@ -36,6 +36,7 @@ class button:
         self.lastrect = copy.deepcopy(rect)
         self.col = pg.Color(col)
         self.text = text
+        self.originstext = text
         self.icon = None
         self.loadicon = icon
         if icon is not None:

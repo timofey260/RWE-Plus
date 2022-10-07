@@ -12,18 +12,14 @@ class LS(menu):
 
         self.items = items
 
-        self.rectdata = [[0, 0], [0, 0], [0, 0]]
-        self.xoffset = 0
-        self.yoffset = 0
-
-        self.size = settings["TE"]["cellsize"]
-
         self.message = ''
 
         self.ofstop = ofstop
         self.ofsleft = ofsleft
 
         self.field = None
+
+        self.shadowmode = True
 
         self.recount()
         self.init()
@@ -43,6 +39,12 @@ class LS(menu):
             self.labels[0].set_text(self.labels[0].originaltext % (self.imagew, self.imageh, self.imagewp, self.imagehp))
         else:
             self.labels[0].set_text("Image not found! try make it in light editor!")
+
+        mt = settings[self.menu]["tm" + str(int(self.shadowmode) + 1)]
+        tt = settings[self.menu]["tt" + str(int(self.shadowmode) + 1)]
+        self.buttons[0].text = self.buttons[0].originstext + mt
+        self.buttons[0].tooltip = self.buttons[0].originstext + tt
+
         self.labels[1].set_text(self.labels[1].originaltext % (self.gw, self.gh))
         self.labels[2].set_text(self.labels[2].originaltext % (self.tw, self.th))
         self.labels[3].set_text(self.labels[3].originaltext % (str(self.btiles)))
@@ -71,28 +73,31 @@ class LS(menu):
 
     def set_width(self):
         try:
-            val = int(input("Enter width: "))
-            self.cuteverydata(0, 0, self.gw - val, 0)
+            val = int(input(f"Enter width({self.gw}): "))
+            self.cuteverydata(0, 0, val, 0)
         except ValueError:
             print("non valid answer")
 
     def set_height(self):
         try:
             val = int(input(f"Enter height({self.gh}): "))
-            self.cuteverydata(0, 0, val - self.gh, 0)
+            self.cuteverydata(0, 0, 0, val)
         except ValueError:
             print("non valid answer")
 
     def cuteverydata(self, x, y, w, h):
         ans = input("Are you sure?(y/n)>> ")
-        if ans.lower() == "n":
+        if ans.lower() != "y":
+            print("Not changed")
             return
         self.data["GE"] = self.cutdata(x, y, w, h, self.data["GE"], [[0, []], [0, []], [0, []]])
-        print(self.data["GE"][0])
         self.cuttiles(x, y, w, h)
         for num, effect in enumerate(self.data["FE"]["effects"]):
             self.data["FE"]["effects"][num]["mtrx"] = self.cutdata(x, y, w, h, effect["mtrx"], 0)
         self.recount()
+        self.resizeimage(x, y, w, h)
+        self.recount_image()
+        print("done")
 
     def cutdata(self, x, y, w, h, array, default_instance):
         arr = array
@@ -102,11 +107,12 @@ class LS(menu):
         else:
             arr = arr[-x:]
 
-        if w >= 0:
-            for _ in range(w):
-                arr.append([default_instance for _ in range(len(arr[0]))])
-        else:
-            arr = arr[:len(arr) + w]
+        if w != 0:
+            if w < self.gw:
+                arr = arr[:w]
+            else:
+                for _ in range(w - self.gw):
+                    arr.append([default_instance for _ in range(len(arr[0]))])
 
         if y >= 0:
             for i in range(len(arr)):
@@ -116,13 +122,13 @@ class LS(menu):
             for i in range(len(arr)):
                 arr[i] = arr[i][-y:]
 
-        if h >= 0:
+        if h != 0:
             for i in range(len(arr)):
-                for _ in range(h):
-                    arr.append(default_instance)
-        else:
-            for i in range(len(arr)):
-                arr[i] = arr[i][:len(arr) + h]
+                if h < self.gh:
+                    arr[i] = arr[i][:h]
+                else:
+                    for _ in range(h - self.gh):
+                        arr[i].append(default_instance)
         return arr
 
     def cuttiles(self, x, y, w, h):
@@ -137,7 +143,7 @@ class LS(menu):
                         dat[0] -= x
                         dat[1] -= y
                         if dat[0] < 0 or dat[1] < 0 or dat[0] > len(self.data["GE"]) or dat[1] > len(self.data["GE"][0]):
-                            destroy(self.data["TE"], xp, yp, self.items, layer)
+                            cutted[xp][yp][layer] = {"tp": "default", "data": 0}
                         else:
                             cutted[xp][yp][layer]["data"][0] = makearr(dat, "point")
 
@@ -152,3 +158,33 @@ class LS(menu):
             self.imagehp = self.imageh / image1size - self.ofstop + 1
         except FileNotFoundError:
             self.field = None
+
+    def bftileschange(self):
+        try:
+            x = int(input(f"({self.btiles[0]})Left: "))
+            y = int(input(f"({self.btiles[1]})Top: "))
+            w = int(input(f"({self.btiles[2]})Right: "))
+            h = int(input(f"({self.btiles[3]})Bottom: "))
+            self.data["EX2"]["extraTiles"] = [x, y, w, h]
+            self.btiles = self.data["EX2"]["extraTiles"]
+        except ValueError:
+            print("Error: non valid answer")
+
+    def resizeimage(self, x, y, w, h):
+        if self.field is not None:
+            f2 = pg.surface.Surface([(abs(x) + self.gw + self.ofsleft) * image1size, (abs(y) + self.gh + self.ofstop) * image1size])
+            f2.fill(white)
+            f2.blit(self.field, [x * image1size, y * image1size])
+            if not self.shadowmode:
+                self.field = f2.subsurface(pg.rect.Rect(0, 0, (self.gw + self.ofsleft) * image1size, (self.gh + self.ofstop) * image1size))
+            else:
+                sc = [
+                    (len(self.data["GE"]) + self.ofsleft) * image1size,
+                    (len(self.data["GE"][0]) + self.ofstop) * image1size
+                ]
+                self.field = pg.transform.scale(self.field, sc)
+            lev = os.path.splitext(self.data["path"])[0] + ".png"
+            pg.image.save(self.field, lev)
+
+    def mswich(self):
+        self.shadowmode = not self.shadowmode

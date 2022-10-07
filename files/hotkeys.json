@@ -10,7 +10,6 @@
   	  	"K_8": "/PE",
   	  	"K_9": "/LS",
   	  	"K_0+": "RELOAD",
-  	  	"K_ESCAPE": "quit",
   	  	"K_s+": "save",
   	  	"K_o+": "open",
   	  	"K_n+": "new"
@@ -29,6 +28,7 @@
   	},
   	"GE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+  		"K_ESCAPE": "/MN",
     	"K_l": "swichlayers",
     	"K_l+": "swichlayers_back",
 
@@ -72,6 +72,7 @@
   	},
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+  		"K_ESCAPE": "/MN",
     	"K_q": "copy",
     	"K_l": "swichlayers",
     	"K_l+": "swichlayers_back",
@@ -103,6 +104,9 @@
   	},
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
+  		"K_ESCAPE": "-save",
+  		"K_ESCAPE": "/MN",
+  		
   		"K_q+": "-lightmod",
   		"K_e+": "-darkmod",
 
@@ -137,10 +141,12 @@
   	},
   	"LS": {
   		"unlock_keys": [],
+  		"K_ESCAPE": "/MN",
 
   		"K_a": "-as_left",
   		"K_w": "-as_top",
   		"K_s": "-set_height",
-  		"K_d": "-set_width"
+  		"K_d": "-set_width",
+  		"K_q": "-mswich"
   	}
 }
