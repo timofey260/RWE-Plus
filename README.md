@@ -10,4 +10,4 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Geometry editor
 * Tile editor
 * Light editor
-* Level resizing(not working)
+* Level resizing
