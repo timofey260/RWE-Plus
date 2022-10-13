@@ -21,6 +21,7 @@ pg.font.init()
 settings = json.load(open(path + "settings.json", "r"))
 graphics = json.load(open(path + "graphics.json", "r"))
 hotkeys = json.load(open(path + "hotkeys.json", "r"))
+e = json.load(open(path + "effects.json", "r"))
 
 
 tooltiles = pg.image.load(path + graphics["tooltiles"])
@@ -35,3 +36,22 @@ image1size = 20
 
 def fs(sz):
     return pg.font.Font(path + "\\" + settings["global"]["font"], sz)
+
+
+def solveeffects(effects):
+    ef = []
+    for cat in effects["effects"]:
+        efcat = {"nm": cat["nm"], "efs": []}
+        for effect in cat["efs"]:
+            d = {**effects["defaultproperties"], **effect}
+            if "options" not in d:
+                d["options"] = []
+            for i in effects["defaultparams"]:
+                d["options"].append(i)
+            efcat["efs"].append(d)
+        ef.append(efcat)
+    print(ef)
+    return ef
+
+
+effects = solveeffects(e)

@@ -75,7 +75,7 @@ def inittolist(file: str):
     a = {}
     a2 = []
     cat = ''
-    col = [0, 0, 0]
+    colr = pg.Color(0, 0, 0)
     counter = 0
     counter2 = 2
     for i in s:
@@ -87,7 +87,7 @@ def inittolist(file: str):
                 a2 = []
                 js = tojson(i[1:])
                 cat = js[0]
-                col = toarr(js[1], "color")
+                colr = pg.Color(toarr(js[1], "color"))
                 counter = 0
             else:
 
@@ -122,9 +122,20 @@ def inittolist(file: str):
                     except ValueError:
                         rect = pg.rect.Rect([0, 0, 1, 1])
                         img = img.subsurface(rect)
+                # srf = img.copy()
+                # srf.fill(colr)
+                # img.set_colorkey(pg.Color(0, 0, 0))
+                # srf.blit(img, [0, 0])
+                # img.fill(colr)
+
+                # arr = pg.pixelarray.PixelArray(img)
+                # arr.replace(pg.Color(0, 0, 0), pg.color.Color(colr))
+                # img = arr.make_surface()
+                # print(colr, img.get_at([0, 0]))
+
                 img.set_colorkey(pg.color.Color(255, 255, 255))
 
-                a2.append({"name": js["nm"], "image": img, "size": sz, "category": cat, "color": col, "cols": [js["specs"], js["specs2"]], "cat": [counter2, counter + 1]})
+                a2.append({"name": js["nm"], "image": img, "size": sz, "category": cat, "color": colr, "cols": [js["specs"], js["specs2"]], "cat": [counter2, counter + 1]})
                 counter += 1
     del a[""]
     a["material"] = []

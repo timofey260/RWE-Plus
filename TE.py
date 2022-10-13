@@ -28,6 +28,7 @@ class TE(menu):
         self.items = items
         self.buttonslist = []
         self.currentcategory = 0
+        self.toolindex = 0
 
         self.layer = 0
         self.tileimage = None
@@ -47,10 +48,13 @@ class TE(menu):
         global mousp, mousp2, mousp1
         self.drawmap()
 
-        self.buttonslist[-1].blit(20)
-        for i in self.buttonslist[:-1]:
-            i.blit(15)
+        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
+        pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        for button in self.buttonslist[:-1]:
+            button.blit(sum(pg.display.get_window_size()) // 120)
         super().blit()
+        cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
+        pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
@@ -76,12 +80,12 @@ class TE(menu):
             bord = 3
             if self.cols and not self.tool:
                 pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
-                                                   [self.tileimage["image"].get_width() + bord * 2,
-                                                    self.tileimage["image"].get_height() + bord * 2]], bord)
+                                                      [self.tileimage["image"].get_width() + bord * 2,
+                                                       self.tileimage["image"].get_height() + bord * 2]], bord)
             else:
                 pg.draw.rect(self.surface, cannotplace, [[cposx - bord, cposy - bord],
-                                                 [self.tileimage["image"].get_width() + bord * 2,
-                                                  self.tileimage["image"].get_height() + bord * 2]], bord)
+                                                         [self.tileimage["image"].get_width() + bord * 2,
+                                                          self.tileimage["image"].get_height() + bord * 2]], bord)
             if not self.tool:
                 self.surface.blit(self.tileimage["image"], [cposx, cposy])
                 self.printcols(cposxo, cposyo)
@@ -96,7 +100,7 @@ class TE(menu):
                     if self.cols:
                         self.place(cposxo, cposyo)
                         self.fieldadd.blit(self.tileimage["image"],
-                                              [cposxo * self.size, cposyo * self.size])
+                                           [cposxo * self.size, cposyo * self.size])
                 else:
                     self.destroy(posoffset[0], posoffset[1])
                     pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
@@ -129,15 +133,14 @@ class TE(menu):
 
     def rebuttons(self):
         self.buttonslist = []
-        count = 0
         btn2 = None
-        for item in self.items[list(self.items.keys())[self.currentcategory]]:
+        for count, item in enumerate(self.items[list(self.items.keys())[self.currentcategory]]):
             # rect = pg.rect.Rect([0, count * settings[self.menu]["itemsize"], self.field2.field.get_width(), settings[self.menu]["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect([settings[self.menu]["buttons"][2][1][0], 6, 22, 4])
+            cat = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][0], 6, 22, 4])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], item["category"])
 
-            rect = pg.rect.Rect([settings[self.menu]["buttons"][2][1][0], count * settings[self.menu]["itemsize"] + settings[self.menu]["buttons"][2][1][1] + settings[self.menu]["buttons"][2][1][3] + 4, 22, settings[self.menu]["itemsize"]])
+            rect = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][0], count * settings[self.menu]["itemsize"] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][1] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][3] + 4, 22, settings[self.menu]["itemsize"]])
             if item["category"] == "material":
                 btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getmaterial)
             else:
@@ -225,28 +228,19 @@ class TE(menu):
                 return
         self.set(self.tileimage["category"], self.items[self.tileimage["category"]][-1]["name"])
 
-    def getblock(self):
-        button = None
-        for i in self.buttonslist[:-1]:
-            if i.onmouseover():
-                button = i.text
-                break
+    def getblock(self, text):
         cat = self.buttonslist[-1].text
-        self.set(cat, button)
+        self.set(cat, text)
 
-    def getmaterial(self):
-        button = None
-        for i in self.buttonslist[:-1]:
-            if i.onmouseover():
-                button = i.text
-                break
+    def getmaterial(self, text):
         cat = self.buttonslist[-1].text
-        self.set(cat, button)
+        self.set(cat, text)
 
     def set(self, cat, name):
         self.tool = 0
-        for i in self.items[cat]:
+        for num, i in enumerate(self.items[cat]):
             if i["name"] == name:
+                self.toolindex = num
                 self.tileimage2 = i
                 self.tileimage2["image"].set_alpha(100)
                 self.tileimage = self.tileimage2.copy()

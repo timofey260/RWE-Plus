@@ -13,18 +13,23 @@ colors = settings["global"]["colors"]
 color = pg.Color(settings["global"]["color"])
 color2 = pg.Color(settings["global"]["color2"])
 
-cursor = pg.Color(colors["cursor"])
-cursor2 = pg.Color(colors["cursor2"])
-mirror = pg.Color(colors["mirror"])
-bftiles = pg.Color(colors["bftiles"])
-border = pg.Color(colors["border"])
-select = pg.Color(colors["select"])
+dc = pg.Color(0, 0, 0)
 
-layer1 = pg.Color(colors["layer1"])
-layer2 = pg.Color(colors["layer2"])
+cursor = dc
+cursor2 = dc
+mirror = dc
+bftiles = dc
+border = dc
+canplace = dc
+cannotplace = dc
+select = dc
+layer1 = dc
+layer2 = dc
+mixcol_empty = dc
+mixcol_fill = dc
 
-canplace = pg.Color(colors["canplace"])
-cannotplace = pg.Color(colors["cannotplace"])
+for key, value in colors.items():
+    exec(f"{key} = pg.Color({value})")
 
 red = pg.Color([255, 0, 0])
 darkred = pg.Color([100, 0, 0])
@@ -204,6 +209,19 @@ def renderfield2(field: widgets.window | pg.surface.Surface, size: int, mainlaye
                 f.blit(it["image"], [cposx, cposy])
             elif datcell == "tileBody":
                 pass
+
+
+def renderfield3(field: widgets.window | pg.surface.Surface, size: int, matrix):
+    f = field
+    for xp, x in enumerate(matrix):
+        for yp, cell in enumerate(x):
+            surf = pg.surface.Surface([size, size])
+            col = mixcol_empty.lerp(mixcol_fill, cell / 100)
+            surf.set_alpha(col.a)
+            surf.fill(col)
+            f.blit(surf, [xp * size, yp * size])
+            # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
+
 
 def canplaceit(data, x, y, x2, y2):
     return (0 <= x2 and x < len(data["tlMatrix"])) and (0 <= y2 and y < len(data["tlMatrix"][0]))

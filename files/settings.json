@@ -19,7 +19,10 @@
 			"cannotplace": [255, 0, 0],
 			"select": [255, 0, 0],
 			"layer1": [255, 0, 0],
-			"layer2": [0, 0, 255]
+			"layer2": [0, 0, 255],
+
+			"mixcol_empty": [119, 7, 171, 200],
+			"mixcol_fill": [22, 166, 0, 200]
 		}
 	},
 	"LD":
@@ -44,12 +47,13 @@
 			["CE", [0, 28, 10, 14], [100, 100, 100], "non", "non", "Camera Editor(4)"],
 			["LE", [0, 42, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(5)"],
 			["EE", [0, 56, 10, 14], [100, 100, 100], "non", "non", "Environment Editor(6)"],
-			["FE", [0, 70, 10, 14], [100, 100, 100], "non", "non", "Effect Editor(7)"],
+			["FE", [0, 70, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(7)"],
 			["PE", [0, 84, 10, 14], [100, 100, 100], "non", "non", "Prop Editor(8)"],
-			["Render", [90, 60, 10, 10], [100, 100, 100], "render", "non", "Render project using Drizzle(ctrl+r)"],
-			["Save as txt", [90, 70, 10, 10], [100, 100, 100], "saveastxt", "non", "save as official level editor file"],
-			["Save", [90, 80, 10, 10], [100, 100, 100], "save", "non", "save as .wep project(ctrl+s)"],
-			["Quit", [90, 90, 10, 10], [100, 100, 100], "quit", "non", "Close RWE+(q)"]
+			
+			["Render", [90, 60, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(ctrl+r)"],
+			["Save as txt", [90, 70, 10, 10], [90, 90, 90], "saveastxt", "non", "save as official level editor file"],
+			["Save", [90, 80, 10, 10], [90, 90, 90], "save", "non", "save as .wep project(ctrl+s)"],
+			["Quit", [90, 90, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(q)"]
 		],
 		"labels":[
 			["Welcome to RWE+", [20, 5], [0, 0, 0], 50]
@@ -120,6 +124,7 @@
 			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(space)"]
 			
 		],
+		"itemsposindex": 2,
 		"d1":{
 			"rect": [28, 2, 70, 96],
 			"color": [90, 90, 90],
@@ -193,5 +198,43 @@
 			["Change buffer tiles zone", [32, 26], [0, 0, 0], 30]
 		]
 	},
-	"CE":{}, "PE":{}, "FE":{}, "EE":{}
+	"FE":{
+		"buttons": [
+			[">", [12, 2, 4, 4], [100, 100, 100], "non", "non", "Next category(d)"],
+			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(e)"],
+			["<", [2, 2, 4, 4], [100, 100, 100], "non", "non", "Previous category(a)"],
+
+			["v", [12, 60, 4, 4], [100, 100, 100], "non", "non", "Next category(d)"],
+			["Delete", [6, 60, 6, 4], [100, 100, 100], "non", "non", "Delete effect from project(e)"],
+			["^", [2, 60, 4, 4], [100, 100, 100], "non", "non", "Previous category(a)"],
+
+
+			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(f)"],
+			["0", [28, 70, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
+			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(r)"]
+			
+		],
+
+		"itemsposindex": 2,
+		"itemsposindex2": 5,
+		"currentparamindex": 7,
+
+		"paramspos": [32, 68],
+		"seedchange_size": [10, 10],
+
+		"additionspace": 5,
+
+		"d1":{
+			"rect": [28, 2, 70, 62],
+			"color": [90, 90, 90],
+			"border": [255, 255, 255]
+		},
+		"labels": [
+			["%1s: %10s", [32, 64], [255, 255, 255], 25]
+		],
+		"cellsize": 10,
+		"itemsize": 2,
+		"menucolor": [120, 120, 120]
+	},
+	"CE":{}, "PE":{}, "EE":{}
 }

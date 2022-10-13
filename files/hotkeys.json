@@ -12,7 +12,8 @@
   	  	"K_0+": "RELOAD",
   	  	"K_s+": "save",
   	  	"K_o+": "open",
-  	  	"K_n+": "new"
+  	  	"K_n+": "new",
+  	  	"K_F11": "fc"
   	},
   	"LD": {
   		"unlock_keys": [],
@@ -97,7 +98,14 @@
 
   	},
 	"FE": {
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"K_ESCAPE": "/MN",
 
+
+		"K_RETURN": "-addeffect",
+
+		"K_r": "-prevparam",
+		"K_f": "-nextparam"
   	},
 	"EE": {
 

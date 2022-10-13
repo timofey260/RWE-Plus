@@ -21,6 +21,9 @@ class MN(menu):
     def LS(self):
         self.message = "LS"
 
+    def FE(self):
+        self.message = "FE"
+
     def save(self):
         self.message = "save"
 

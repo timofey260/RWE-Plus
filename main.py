@@ -12,6 +12,7 @@ bol = True
 run = True
 keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
+fullscreen = settings["global"]["fullscreen"]
 
 def keypress(window, surf, file, file2, level):
     global run
@@ -59,6 +60,8 @@ def keypress(window, surf, file, file2, level):
                                        initialdir=os.path.dirname(os.path.abspath(__file__)) + "\LevelEditorProjects"))
         case "new":
             run = False
+        case "fc":
+            surf.message = "fc"
 
 
 def asktoexit(file, file2):
@@ -77,7 +80,7 @@ def asktoexit(file, file2):
 
 
 def launch(level):
-    global bol, surf
+    global bol, surf, fullscreen
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
         file["level"] = ""
@@ -99,7 +102,7 @@ def launch(level):
     file2 = copy.deepcopy(file)
     width = settings["global"]["width"]
     height = settings["global"]["height"]
-    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
+    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
     surf = MN(window, file)
     run = True
     while run:
@@ -139,9 +142,13 @@ def launch(level):
                     surf = LE(window, file)
                 case "LS":
                     surf = LS(window, file, items)
-                case "saveGE":
-                    file["GE"] = surf.data
-                    print("Saved!")
+                case "FE":
+                    surf = FE(window, file, items)
+                case "fc":
+                    fullscreen = not fullscreen
+                    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
+                    # pg.display.toggle_fullscreen()
+                    surf.resize()
                 case "save":
                     save(file)
                     file2 = copy.deepcopy(file)

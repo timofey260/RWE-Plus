@@ -52,8 +52,10 @@ class button:
         self.tooltip = tooltip
         self.bol = True
 
-    def blit(self, fontsize=30):
+    def blit(self, fontsize=None):
         global bol
+        if fontsize is None:
+            fontsize = sum(pg.display.get_window_size()) // 70
         cp = False
         col = self.col
         if self.onmouseover():
@@ -62,12 +64,18 @@ class button:
                 self.bol = False
                 bol = False
                 if self.onpress is not None:
-                    self.onpress()
+                    try:
+                        self.onpress(self.text)
+                    except TypeError:
+                        self.onpress()
             elif pg.mouse.get_pressed(3)[0] == 0 and not bol:
                 self.bol = True
                 bol = True
                 if self.onrelease is not None:
-                    self.onrelease()
+                    try:
+                        self.onrelease(self.text)
+                    except TypeError:
+                        self.onrelease()
 
             col = [abs(self.col.r - mul), abs(self.col.g - mul), abs(self.col.b - mul)]
         pg.draw.rect(self.surface, col, self.rect, 0, 10)
@@ -102,6 +110,10 @@ class button:
 
     def onmouseover(self):
         return self.rect.collidepoint(pg.mouse.get_pos())
+
+    @property
+    def xy(self):
+        return [self.rect.x, self.rect.y]
 
 
 class window:
