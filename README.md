@@ -11,3 +11,4 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Tile editor
 * Light editor
 * Level resizing
+* Effect editor(Not working)
