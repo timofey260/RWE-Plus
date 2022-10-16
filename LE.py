@@ -2,25 +2,15 @@ from lingotojson import *
 from menuclass import *
 
 
-class LE(menu):
+class LE(menu_with_field):
 
     def __init__(self, surface: pg.surface.Surface, data):
         self.menu = "LE"
-        self.surface = surface
-        self.field = widgets.window(self.surface, settings[self.menu]["d1"])
+        super().__init__(surface, data, "LE")
         self.field2 = widgets.window(self.surface, settings[self.menu]["d1"])
-
-        self.fieldmap = self.field.field
-
-        self.fieldadd = self.fieldmap
-        self.fieldadd.fill(white)
-        self.fieldadd.set_colorkey(white)
 
         self.ofstop = ofstop
         self.ofsleft = ofsleft
-
-        self.btiles = data["EX2"]["extraTiles"]
-        self.data = data
 
         sc = [(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size]
         try:
@@ -66,10 +56,11 @@ class LE(menu):
 
             self.images[False].append(img)
 
+        super().__init__(surface, data, "LE")
         self.rs()
         self.retile()
         self.init()
-        self.renderfield()
+        self.renderfield_all()
         self.blit()
         self.resize()
 
@@ -129,15 +120,6 @@ class LE(menu):
         return [x / ((len(self.data["GE"]) + self.ofsleft) * self.size) * self.field2.field.get_width(),
                 y / ((len(self.data["GE"][0]) + self.ofstop) * self.size) * self.field2.field.get_height()]
 
-    def resize(self):
-        super().resize()
-        self.field.resize()
-        # self.field2.field = self.field2.field.subsurface(pg.rect.Rect(0, 0, len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size))
-        # self.field2.field = self.field2.field.convert_alpha()
-        # self.field2.field.set_alpha(50)
-        # self.field2.field.fill(white)
-        self.renderfield()
-
     def rs(self):
         self.field3 = self.field2.copy()
         self.field3.field = pg.transform.scale(self.field2.field,
@@ -148,11 +130,10 @@ class LE(menu):
 
     def renderfield(self):
         self.rs()
-        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        super().renderfield()
         self.fieldadd = pg.transform.scale(self.fieldadd,
                                            [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd.fill(white)
-        renderfield(self.fieldmap, self.size, 0, self.data["GE"])
 
     def send(self, message):
         if message[0] == "-":

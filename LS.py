@@ -97,6 +97,7 @@ class LS(menu):
         self.recount()
         self.resizeimage(x, y, w, h)
         self.recount_image()
+        self.data["EX2"]["size"] = makearr([len(self.data["GE"]), len(self.data["GE"][0])], "point")
         print("done")
 
     def cutdata(self, x, y, w, h, array, default_instance):

@@ -1,5 +1,5 @@
 {
-	"defaultparams": [["Delete/Move", ["Delete", "Move Back", "Move Forth"], ""]],
+	"defaultparams": [["Delete/Move", ["Delete", "Move Back", "Move Forth"], ""], ["Seed", [], 0]],
 
 	"defaultproperties": {"tp": "nn", "crossScreen": 0},
 	
@@ -68,7 +68,6 @@
 			{"nm": "Ceramic Chaos", "options": [["Colored", ["None", "White"], "White"]]}
 		]}
 	],
-	"maxstr": [
-		"BlackGoo"
-	]
+	"maxstr": ["BlackGoo", "Fungi Flowers", "Lighthouse Flowers", "Fern", "Giant Mushroom", "Sprawlbush", "featherFern", "Fungus Tree", "Restore As Scaffolding", "Restore As Pipes"]
+
 }

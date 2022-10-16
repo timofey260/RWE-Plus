@@ -50,6 +50,8 @@ def keypress(window, surf, file, file2, level):
             surf.reload()
         case "save":
             filen = asksaveasfilename(defaultextension="wep")
+            if filen == '':
+                return
             file["level"] = os.path.basename(filen)
             file["path"] = filen
             file["dir"] = os.path.abspath(filen)
@@ -60,8 +62,6 @@ def keypress(window, surf, file, file2, level):
                                        initialdir=os.path.dirname(os.path.abspath(__file__)) + "\LevelEditorProjects"))
         case "new":
             run = False
-        case "fc":
-            surf.message = "fc"
 
 
 def asktoexit(file, file2):
@@ -185,9 +185,11 @@ def save(file):
 
 def loadmenu():
     global surf
-    window = pg.display.set_mode([400, 200], flags=pg.RESIZABLE)
-    surf = load(window, {"path": ""})
     run = True
+    width = 400
+    height = 200
+    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
+    surf = load(window, {"path": ""})
     while run:
         for event in pg.event.get():
             match event.type:

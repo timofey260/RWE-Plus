@@ -2,45 +2,28 @@ from menuclass import *
 from lingotojson import *
 
 
-class TE(menu):
+class TE(menu_with_field):
 
     def __init__(self, surface: pg.surface.Surface, data, items):
         self.menu = "TE"
-        self.surface = surface
-        self.field = widgets.window(self.surface, settings["TE"]["d1"])
-        self.btiles = data["EX2"]["extraTiles"]
-        self.data = data
-
-        self.fieldmap = self.field.field
-
-        self.fieldadd = self.fieldmap
-        self.fieldadd.fill(white)
-        self.fieldadd.set_colorkey(white)
-
-        self.xoffset = 0
-        self.yoffset = 0
-        self.size = settings["TE"]["cellsize"]
         self.tool = False # 0  place, 1 - destroy
-        self.rectdata = [[0, 0], [0, 0], [0, 0]]
-
-        self.message = ''
 
         self.items = items
         self.buttonslist = []
         self.currentcategory = 0
         self.toolindex = 0
 
-        self.layer = 0
         self.tileimage = None
         self.tileimage2 = None
         self.mpos = [0, 0]
         self.cols = False
-        self.set("material", "Standart")
 
+        super().__init__(surface, data, "TE")
+        self.set("material", "Standart")
         self.init()
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
         self.rebuttons()
-        self.renderfield()
+        self.renderfield_all(rendersecond=True, items=self.items)
         self.blit()
         self.resize()
 
@@ -107,7 +90,7 @@ class TE(menu):
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 self.fieldadd.fill(white)
                 mousp = True
-                self.renderfield()
+                self.renderfield_all(rendersecond=True, items=self.items)
 
             self.movemiddle(bp, pos)
 
@@ -128,7 +111,7 @@ class TE(menu):
                             self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
                         else:
                             self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
-                self.renderfield()
+                self.renderfield_all(rendersecond=True, items=self.items)
                 mousp2 = True
 
     def rebuttons(self):
@@ -154,18 +137,17 @@ class TE(menu):
 
     def resize(self):
         super().resize()
-        self.field.resize()
-        for i in self.buttonslist:
-            i.resize()
-        self.renderfield()
+        if hasattr(self, "field"):
+            self.field.resize()
+            for i in self.buttonslist:
+                i.resize()
+            self.renderfield()
 
     def renderfield(self):
-        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd = pg.transform.scale(self.fieldadd,
                                            [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd.fill(white)
-        renderfield(self.fieldmap, self.size, self.layer, self.data["GE"])
-        renderfield2(self.fieldmap, self.size, self.layer, self.data, self.items)
+        super().renderfield()
         self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"], [self.size * self.tileimage2["size"][0],
                                                                                 self.size * self.tileimage2["size"][1]])
         self.tileimage["image"].set_colorkey(None)
@@ -193,13 +175,13 @@ class TE(menu):
             case "swichlayers":
                 self.layer = (self.layer + 1) % 3
                 self.mpos = 1
-                self.renderfield()
+                self.renderfield_all(rendersecond=True, items=self.items)
             case "swichlayers_back":
                 self.layer -= 1
                 if self.layer < 0:
                     self.layer = 2
                 self.mpos = 1
-                self.renderfield()
+                self.renderfield_all(rendersecond=True, items=self.items)
 
     def lt(self):
         if self.currentcategory - 1 < 0:

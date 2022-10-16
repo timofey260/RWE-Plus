@@ -43,12 +43,15 @@ mousp2 = True
 mousp1 = True
 
 class menu():
-    def __init__(self, surface: pg.surface.Surface, data):
+    def __init__(self, surface: pg.surface.Surface, data, name):
         self.surface = surface
-        self.menu = ""
+        self.menu = name
         self.data = data
-        self.rectdata = [[0, 0], [0, 0], [0, 0]]
         self.uc = []
+
+        self.size = image1size
+        self.message = ''
+
         self.init()
 
     def unlock_keys(self):
@@ -104,6 +107,38 @@ class menu():
     def send(self, message):
         pass
 
+    def findparampressed(self, paramname):
+        for key, value in hotkeys[self.menu].items():
+            if value == paramname:
+                if pg.key.get_pressed()[getattr(pg, key)]:
+                    return True
+                return False
+        # if param not found
+        return False
+
+
+class menu_with_field(menu):
+    def __init__(self, surface: pg.Surface, data, name):
+        super(menu_with_field, self).__init__(surface, data, name)
+
+        self.menu = name
+
+        self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
+
+        self.field = widgets.window(self.surface, settings[self.menu]["d1"])
+        self.btiles = data["EX2"]["extraTiles"]
+        self.fieldmap = self.field.field
+
+        self.fieldadd = self.fieldmap
+        self.fieldadd.fill(white)
+        self.fieldadd.set_colorkey(white)
+
+        self.xoffset = 0
+        self.yoffset = 0
+        self.size = image1size
+        self.rectdata = [[0, 0], [0, 0], [0, 0]]
+        self.layer = 0
+
     def movemiddle(self, bp, pos):
         global mousp1, mousp2, mousp3
         if bp[1] == 1 and mousp1 and (mousp2 and mousp):
@@ -134,6 +169,24 @@ class menu():
         self.field.field.blit(self.fieldmap, [self.xoffset * self.size, self.yoffset * self.size])
         self.field.field.blit(self.fieldadd, [self.xoffset * self.size, self.yoffset * self.size])
         self.drawborder()
+
+    def renderfield_all(self, renrerfirst=True, rendersecond=False, items=None):
+        self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
+        if renrerfirst:
+            renderfield(self.f, image1size, self.layer, self.data["GE"])
+        if rendersecond:
+            renderfield2(self.f, image1size, self.layer, self.data, items)
+        self.renderfield()
+
+    def renderfield(self):
+        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size, self.f.get_height() / image1size * self.size]), [0, 0])
+
+    def resize(self):
+        super().resize()
+        if hasattr(self, "field"):
+            self.field.resize()
+            self.renderfield()
 
 
 def renderfield(field: widgets.window | pg.surface.Surface, size: int, mainlayer, data):

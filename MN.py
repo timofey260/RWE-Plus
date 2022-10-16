@@ -4,10 +4,7 @@ from menuclass import *
 
 class MN(menu):
     def __init__(self, surface: pg.surface.Surface, data):
-        self.menu = "MN"
-        self.surface = surface
-        self.data = data
-        self.init()
+        super().__init__(surface, data, "MN")
 
     def GE(self):
         self.message = "GE"

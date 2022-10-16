@@ -1,29 +1,13 @@
 from menuclass import *
 
 
-class GE(menu):
+class GE(menu_with_field):
     def __init__(self, surface: pg.surface.Surface, data):
         self.menu = "GE"
-        self.surface = surface
-        self.field = widgets.window(self.surface, settings["GE"]["d1"])
-        self.btiles = data["EX2"]["extraTiles"]
-        self.data = data
         self.mapdata = data["GE"]
-
-        self.fieldmap = self.field.field
-
-        self.fieldadd = self.fieldmap
-        self.fieldadd.fill(white)
-        self.fieldadd.set_colorkey(white)
-
-        self.xoffset = 0
-        self.yoffset = 0
-        self.size = settings["GE"]["cellsize"]
         self.state = 0
         self.mx = 0
         self.rectdata = [[0, 0], [0, 0], [0, 0]]
-
-        self.message = ''
 
         self.selectedtool = ""
         self.tools = toolmenu
@@ -31,23 +15,22 @@ class GE(menu):
         self.toolrender = self.tooltiles
 
         self.tools.set_alpha(150)
-        self.layer = 0
         self.placetile = 0
         self.area = []
 
         self.mirrorp = False
         self.mirrorpos = [0, 0]
 
+        super().__init__(surface, data, "GE")
         self.air()
         self.init()
         self.rs()
-        self.renderfield()
+        self.renderfield_all()
 
     def resize(self):
         super().resize()
-        self.field.resize()
-        self.rs()
-        self.renderfield()
+        if hasattr(self, "field"):
+            self.rs()
 
     def send(self, message):
         if message[0] == "-":
@@ -63,12 +46,12 @@ class GE(menu):
                 self.yoffset -= 1
             case "swichlayers":
                 self.layer = (self.layer + 1) % 3
-                self.renderfield()
+                self.renderfield_all()
             case "swichlayers_back":
                 self.layer -= 1
                 if self.layer < 0:
                     self.layer = 2
-                self.renderfield()
+                self.renderfield_all()
             case "SU":
                 self.size += 1
                 self.rs()
@@ -114,11 +97,11 @@ class GE(menu):
                                               self.tooltiles.get_height() / graphics["tilesize"][1] * self.size])
 
     def renderfield(self):
-        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        super().renderfield()
         self.fieldadd = pg.transform.scale(self.fieldadd,
                                            [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd.fill(white)
-        renderfield(self.fieldmap, self.size, self.layer, self.mapdata)
+        # renderfield(self.fieldmap, self.size, self.layer, self.mapdata)
 
     def blit(self):
         global mousp, mousp2, mousp1
@@ -198,7 +181,7 @@ class GE(menu):
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 self.fieldadd.fill(white)
                 mousp = True
-                self.renderfield()
+                self.renderfield_all()
 
             self.movemiddle(bp, pos)
 
@@ -216,7 +199,7 @@ class GE(menu):
                 for x in range(self.rectdata[1][0]):
                     for y in range(self.rectdata[1][1]):
                         self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
-                self.renderfield()
+                self.renderfield_all()
                 mousp2 = True
             if self.mirrorp:
                 px = pos[0]
@@ -394,7 +377,7 @@ class GE(menu):
             else:
                 self.mapdata[x][y][self.layer][0] = self.placetile
         if render:
-            self.renderfield()
+            self.renderfield_all()
 
     def mirrorplace(self, xm, ym, render=False):
         if not self.mirrorp:
@@ -432,7 +415,7 @@ class GE(menu):
             else:
                 self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile)
         if render:
-            self.renderfield()
+            self.renderfield_all()
 
     def reverseslope(self, slope):
         if slope in [2, 3, 4, 5]:

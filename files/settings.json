@@ -117,9 +117,9 @@
 	"TE":
 	{
 		"buttons": [
-			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(d)"],
+			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(d)", ["arrows.png", [0, 0]]],
 			["Set as default", [8, 2, 14, 4], [100, 100, 100], "sad", "non", "Set material as default(e)"],
-			["<", [4, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(a)"],
+			["<", [4, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
 			["CT", [0, 2, 4, 4], [100, 100, 100], "cleartool", "non", "Clear tool(tab)"],
 			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(space)"]
 			
@@ -142,8 +142,8 @@
 
 	"LE":{
 		"buttons": [
-			["^", [1, 2, 5, 6], [100, 100, 100], "changeup", "non", "Previous image(r)"],
-			["v", [1, 8, 5, 6], [100, 100, 100], "changedown", "non", "Next image(f)"],
+			["^", [1, 2, 5, 6], [100, 100, 100], "changeup", "non", "Previous image(r)", ["arrows.png", [1, 0]]],
+			["v", [1, 8, 5, 6], [100, 100, 100], "changedown", "non", "Next image(f)", ["arrows.png", [2, 0]]],
 			["L/D", [1, 14, 5, 6], [100, 100, 100], "inverse", "non", "Dark/Light swich(z, tab, space)"],
 			["D", [1, 20, 5, 6], [30, 30, 30], "darkmod", "non", "Dark mode(ctrl + e)"],
 			["L", [1, 26, 5, 6], [230, 230, 230], "lightmod", "non", "Light mode(ctrl + q)"],
@@ -200,24 +200,27 @@
 	},
 	"FE":{
 		"buttons": [
-			[">", [12, 2, 4, 4], [100, 100, 100], "non", "non", "Next category(d)"],
-			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(e)"],
-			["<", [2, 2, 4, 4], [100, 100, 100], "non", "non", "Previous category(a)"],
-
-			["v", [12, 60, 4, 4], [100, 100, 100], "non", "non", "Next category(d)"],
-			["Delete", [6, 60, 6, 4], [100, 100, 100], "non", "non", "Delete effect from project(e)"],
-			["^", [2, 60, 4, 4], [100, 100, 100], "non", "non", "Previous category(a)"],
+			["v", [20, 2, 4, 4], [100, 100, 100], "scrl_down_new", "non", "Next effect(s)", ["arrows.png", [2, 0]]],
+			["^", [16, 2, 4, 4], [100, 100, 100], "scrl_up_new", "non", "Previous effect(w)", ["arrows.png", [1, 0]]],
+			[">", [12, 2, 4, 4], [100, 100, 100], "nextcat", "non", "Next category(d)", ["arrows.png", [0, 0]]],
+			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(space)"],
+			["<", [2, 2, 4, 4], [100, 100, 100], "prevcat", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
 
 
-			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(f)"],
+			["v", [12, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(s)", ["arrows.png", [2, 0]]],
+			["Delete", [6, 60, 6, 4], [100, 100, 100], "non", "non", "Delete effect from project(x, delete)"],
+			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(w)", ["arrows.png", [1, 0]]],
+
+
+			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(r)", ["arrows.png", [1, 0]]],
 			["0", [28, 70, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
-			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(r)"]
+			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(f)", ["arrows.png", [2, 0]]]
 			
 		],
 
-		"itemsposindex": 2,
-		"itemsposindex2": 5,
-		"currentparamindex": 7,
+		"itemsposindex": 4,
+		"itemsposindex2": 7,
+		"currentparamindex": 9,
 
 		"paramspos": [32, 68],
 		"seedchange_size": [10, 10],
@@ -230,7 +233,8 @@
 			"border": [255, 255, 255]
 		},
 		"labels": [
-			["%1s: %10s", [32, 64], [255, 255, 255], 25]
+			["%1s: %10s", [32, 64], [255, 255, 255], 25],
+			["Selected effect: ", [0, 97], [255, 255, 255], 25]
 		],
 		"cellsize": 10,
 		"itemsize": 2,

@@ -13,7 +13,7 @@
   	  	"K_s+": "save",
   	  	"K_o+": "open",
   	  	"K_n+": "new",
-  	  	"K_F11": "fc"
+  	  	"K_F11": "/fc"
   	},
   	"LD": {
   		"unlock_keys": [],
@@ -102,10 +102,25 @@
 		"K_ESCAPE": "/MN",
 
 
-		"K_RETURN": "-addeffect",
+		"K_SPACE": "-addordeleteselectedeffect",
 
-		"K_r": "-prevparam",
-		"K_f": "-nextparam"
+		"K_r+": "-prevparam",
+		"K_f+": "-nextparam",
+
+		"K_r": "-bsup",
+		"K_f": "-bsdown",
+
+		"K_e": "-notinnewtab",
+		"K_n": "-innewtab",
+
+		"K_w": "-scrl_up",
+		"K_s": "-scrl_down",
+
+		"K_t": "str100",
+
+		"K_x": "-deleteeffect",
+		"K_DELETE": "-deleteeffect"
+
   	},
 	"EE": {
 

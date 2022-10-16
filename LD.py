@@ -12,6 +12,10 @@ class load(menu):
     def send(self, message):
         self.message = message
 
+    def blit(self):
+        for i in self.buttons:
+            i.blit(30)
+
     def open(self):
         self.message = "open"
 
