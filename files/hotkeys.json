@@ -118,6 +118,9 @@
 
 		"K_t": "str100",
 
+		"K_d": "-nextcat",
+		"K_a": "-prevcat",
+
 		"K_x": "-deleteeffect",
 		"K_DELETE": "-deleteeffect"
 

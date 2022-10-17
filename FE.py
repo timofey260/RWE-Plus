@@ -49,18 +49,19 @@ class FE(menu_with_field):
         for i in self.params:
             i.blit()
         super().blit()
-        cir = [self.buttonslist[self.currentindex].rect.x + 3,
-               self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
+        if len(self.buttonslist2) > 0:
+            cir = [self.buttonslist[self.currentindex].rect.x + 3,
+                   self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
 
-        cir2 = [self.buttonslist2[self.selectedeffect].rect.x + 3,
-               self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
+            cir2 = [self.buttonslist2[self.selectedeffect].rect.x + 3,
+                   self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
 
-        if self.innew:
-            pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.currentindex].rect.h / 2)
-            pg.draw.circle(self.surface, cursor2, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
-        else:
-            pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
-            pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
+            if self.innew:
+                pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.currentindex].rect.h / 2)
+                pg.draw.circle(self.surface, cursor2, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
+            else:
+                pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
+                pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
 
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             pg.draw.circle(self.surface, cursor, pg.mouse.get_pos(), self.brushsize * self.size, 4)
@@ -221,6 +222,7 @@ class FE(menu_with_field):
             self.rebuttons()
             return
         self.currentcategory += 1
+        self.currentindex = 0
         self.rebuttons()
     def prevcat(self):
         self.innew = True
@@ -229,6 +231,7 @@ class FE(menu_with_field):
             self.rebuttons()
             return
         self.currentcategory -= 1
+        self.currentindex = 0
         self.rebuttons()
 
     def resize(self):
@@ -354,10 +357,9 @@ class FE(menu_with_field):
 
     def scrl_up_new(self):
         self.innewtab()
-        print(' do')
         self.currentindex -= 1
         if self.currentindex < 0:
-            self.currentindex = len(effects[self.paramindex]["efs"]) - 1
+            self.currentindex = len(self.buttonslist) - 2
 
     def scrl_up_menu(self):
         self.notinnewtab()
@@ -369,7 +371,7 @@ class FE(menu_with_field):
     def scrl_down_new(self):
         self.innewtab()
         self.currentindex += 1
-        if self.currentindex > len(effects[self.paramindex]["efs"]) - 1:
+        if self.currentindex > len(self.buttonslist) - 2:
             self.currentindex = 0
 
     def scrl_down_menu(self):

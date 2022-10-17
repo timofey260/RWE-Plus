@@ -203,12 +203,12 @@
 			["v", [20, 2, 4, 4], [100, 100, 100], "scrl_down_new", "non", "Next effect(s)", ["arrows.png", [2, 0]]],
 			["^", [16, 2, 4, 4], [100, 100, 100], "scrl_up_new", "non", "Previous effect(w)", ["arrows.png", [1, 0]]],
 			[">", [12, 2, 4, 4], [100, 100, 100], "nextcat", "non", "Next category(d)", ["arrows.png", [0, 0]]],
-			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(space)"],
+			["Add", [6, 2, 6, 4], [100, 100, 100], "innewtab", "addordeleteselectedeffect", "Add effect to project(space)"],
 			["<", [2, 2, 4, 4], [100, 100, 100], "prevcat", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
 
 
 			["v", [12, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(s)", ["arrows.png", [2, 0]]],
-			["Delete", [6, 60, 6, 4], [100, 100, 100], "non", "non", "Delete effect from project(x, delete)"],
+			["Delete", [6, 60, 6, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(x, delete)"],
 			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(w)", ["arrows.png", [1, 0]]],
 
 
