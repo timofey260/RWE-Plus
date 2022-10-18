@@ -64,7 +64,7 @@ class FE(menu_with_field):
                 pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
                 pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
 
-        if self.field.rect.collidepoint(pg.mouse.get_pos()):
+        if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["FE"]["effects"]) > 0:
             pg.draw.circle(self.surface, cursor, pg.mouse.get_pos(), self.brushsize * self.size, 4)
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
@@ -340,6 +340,8 @@ class FE(menu_with_field):
 
                     val = min(max(val + strength * dist * st, 0), 100)
 
+                    if val == 100:
+                        val = 100
                     self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = round(val, 4)
 
         self.rf3()
