@@ -14,6 +14,7 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
+
 def keypress(window, surf, file, file2, level):
     global run
     pressed = ""
@@ -49,13 +50,8 @@ def keypress(window, surf, file, file2, level):
         case "reload":
             surf.reload()
         case "save":
-            filen = asksaveasfilename(defaultextension="wep")
-            if filen == '':
-                return
-            file["level"] = os.path.basename(filen)
-            file["path"] = filen
-            file["dir"] = os.path.abspath(filen)
-            open(filen, "w").write(json.dumps(file))
+            save(file)
+            file2 = copy.deepcopy(file)
         case "open":
             if surf.menu == "MN":
                 launch(askopenfilename(defaultextension="txt",
@@ -167,6 +163,7 @@ def launch(level):
         pg.display.flip()
         pg.display.update()
 
+
 def save_txt(file):
     savedest = asksaveasfilename(defaultextension="txt")
     if savedest != "":
@@ -174,13 +171,16 @@ def save_txt(file):
 
 
 def save(file):
+    print(file["path"])
     if file["path"] != "":
         open(file["path"], "w").write(json.dumps(file))
     else:
         savedest = asksaveasfilename(defaultextension="wep")
         if savedest != "":
             open(savedest, "w").write(json.dumps(file))
+            file["level"] = os.path.basename(savedest)
             file["path"] = savedest
+            file["dir"] = os.path.abspath(savedest)
 
 
 def loadmenu():

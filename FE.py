@@ -2,6 +2,7 @@ from menuclass import *
 from lingotojson import *
 import random
 
+
 class FE(menu_with_field):
     def __init__(self, surface: pg.surface.Surface, data, items):
         self.menu = "FE"
@@ -98,6 +99,7 @@ class FE(menu_with_field):
             elif bp[2] == 1 and not mousp2 and (mousp and mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
                     self.paint(posoffset[0], posoffset[1], -1)
+                    self.mmove = False
             elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
                 mousp2 = True
                 self.renderfield()
@@ -217,21 +219,21 @@ class FE(menu_with_field):
 
     def nextcat(self):
         self.innew = True
+        self.currentindex = 0
         if self.currentcategory + 1 >= len(effects):
             self.currentcategory = 0
             self.rebuttons()
             return
         self.currentcategory += 1
-        self.currentindex = 0
         self.rebuttons()
     def prevcat(self):
         self.innew = True
+        self.currentindex = 0
         if self.currentcategory - 1 < 0:
             self.currentcategory = len(effects) - 1
             self.rebuttons()
             return
         self.currentcategory -= 1
-        self.currentindex = 0
         self.rebuttons()
 
     def resize(self):
@@ -338,7 +340,7 @@ class FE(menu_with_field):
 
                     val = min(max(val + strength * dist * st, 0), 100)
 
-                    self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = val
+                    self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = round(val, 4)
 
         self.rf3()
 
