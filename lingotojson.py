@@ -63,7 +63,7 @@ def toarr(col: str, mark):
     s = col.replace(mark + "(", "")
     s = s.replace(",", " ")
     s = s.replace(")", "")
-    a = [int(i) for i in s.split()]
+    a = [float(i) if int(float(i)) != float(i) else int(i) for i in s.split()]
     return a
 
 def makearr(col: list, mark):

@@ -29,14 +29,16 @@ class FE(menu_with_field):
 
         self.init()
         self.makeparams()
-        self.renderfield_all(rendersecond=True, items=self.items)
+        self.rfa()
         self.rebuttons()
         self.blit()
         self.resize()
 
+    def rfa(self):
+        self.renderfield_all(rendersecond=True, items=self.items)
+
     def blit(self):
         global mousp, mousp2, mousp1
-        self.drawmap()
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[:-1][0].xy,
                                                                              [self.buttonslist[:-1][0].rect.w,
@@ -66,12 +68,9 @@ class FE(menu_with_field):
 
         if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["FE"]["effects"]) > 0:
             pg.draw.circle(self.surface, cursor, pg.mouse.get_pos(), self.brushsize * self.size, 4)
-            # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
-            # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
 
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
-            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
 
             if posoffset != self.mpos:
@@ -87,9 +86,7 @@ class FE(menu_with_field):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
                     self.paint(posoffset[0], posoffset[1], 1)
                     self.mmove = False
-                    # pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
-                # self.fieldadd.fill(white)
                 mousp = True
                 self.renderfield()
 
@@ -277,16 +274,6 @@ class FE(menu_with_field):
                 self.yoffset += 1
             case "down":
                 self.yoffset -= 1
-            case "swichlayers":
-                self.layer = (self.layer + 1) % 3
-                self.mpos = 1
-                self.renderfield_all(rendersecond=True, items=self.items)
-            case "swichlayers_back":
-                self.layer -= 1
-                if self.layer < 0:
-                    self.layer = 2
-                self.mpos = 1
-                self.renderfield_all(rendersecond=True, items=self.items)
 
     def deleteeffect(self):
         self.data["FE"]["effects"].pop(self.selectedeffect)

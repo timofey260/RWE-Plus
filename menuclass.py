@@ -28,6 +28,10 @@ layer2 = dc
 mixcol_empty = dc
 mixcol_fill = dc
 
+camera_border = dc
+camera_held = dc
+camera_notheld = dc
+
 for key, value in colors.items():
     exec(f"{key} = pg.Color({value})")
 
@@ -182,11 +186,30 @@ class menu_with_field(menu):
         self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size, self.f.get_height() / image1size * self.size]), [0, 0])
 
+    def rfa(self):
+        self.renderfield_all()
+        # used for future modifying
+
     def resize(self):
         super().resize()
         if hasattr(self, "field"):
             self.field.resize()
             self.renderfield()
+
+    def blit(self):
+        self.drawmap()
+        super().blit()
+
+    def swichlayers(self):
+        self.layer = (self.layer + 1) % 3
+        self.mpos = 1
+        self.rfa()
+    def swichlayers_back(self):
+        self.layer -= 1
+        if self.layer < 0:
+            self.layer = 2
+        self.mpos = 1
+        self.rfa()
 
 
 def renderfield(field: widgets.window | pg.surface.Surface, size: int, mainlayer, data):

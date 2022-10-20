@@ -19,17 +19,19 @@ class TE(menu_with_field):
         self.cols = False
 
         super().__init__(surface, data, "TE")
-        self.set("material", "Standart")
+        self.set("material", "Standard")
         self.init()
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
         self.rebuttons()
-        self.renderfield_all(rendersecond=True, items=self.items)
+        self.rfa()
         self.blit()
         self.resize()
 
+    def rfa(self):
+        self.renderfield_all(rendersecond=True, items=self.items)
+
     def blit(self):
         global mousp, mousp2, mousp1
-        self.drawmap()
 
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
@@ -38,7 +40,7 @@ class TE(menu_with_field):
         super().blit()
         cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
-        if self.field.rect.collidepoint(pg.mouse.get_pos()):
+        if self.field.rect.collidepoint(pg.mouse.get_pos()) and self.tileimage is not None:
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
 
@@ -90,7 +92,7 @@ class TE(menu_with_field):
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 self.fieldadd.fill(white)
                 mousp = True
-                self.renderfield_all(rendersecond=True, items=self.items)
+                self.rfa()
 
             self.movemiddle(bp, pos)
 
@@ -111,7 +113,7 @@ class TE(menu_with_field):
                             self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
                         else:
                             self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
-                self.renderfield_all(rendersecond=True, items=self.items)
+                self.rfa()
                 mousp2 = True
 
     def rebuttons(self):
@@ -148,9 +150,10 @@ class TE(menu_with_field):
                                            [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd.fill(white)
         super().renderfield()
-        self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"], [self.size * self.tileimage2["size"][0],
+        if self.tileimage is not None:
+            self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"], [self.size * self.tileimage2["size"][0],
                                                                                 self.size * self.tileimage2["size"][1]])
-        self.tileimage["image"].set_colorkey(None)
+            self.tileimage["image"].set_colorkey(None)
 
     def send(self, message):
         if message[0] == "-":
@@ -172,16 +175,6 @@ class TE(menu_with_field):
                 self.yoffset += 1
             case "down":
                 self.yoffset -= 1
-            case "swichlayers":
-                self.layer = (self.layer + 1) % 3
-                self.mpos = 1
-                self.renderfield_all(rendersecond=True, items=self.items)
-            case "swichlayers_back":
-                self.layer -= 1
-                if self.layer < 0:
-                    self.layer = 2
-                self.mpos = 1
-                self.renderfield_all(rendersecond=True, items=self.items)
 
     def lt(self):
         if self.currentcategory - 1 < 0:
@@ -345,3 +338,41 @@ class TE(menu_with_field):
 
     def changetools(self):
         self.tool = not self.tool
+
+    def copytile(self):
+        pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
+               math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
+        posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+        if not 0 < posoffset[0] < len(self.data["GE"]) or not 0 < posoffset[1] < len(self.data["GE"][0]):
+            return
+        tile = self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]
+        cat = "material"
+        name = "Standard"
+
+        match tile["tp"]:
+            case "default":
+                return
+            case "material":
+                name = tile["data"]
+            case "tileBody":
+                pos = toarr(tile["data"][0], "point")
+                pos[0] -= 1
+                pos[1] -= 1
+                tile = self.data["TE"]["tlMatrix"][pos[0]][pos[1]][tile["data"][1] - 1]
+
+        if tile["tp"] == "tileHead":
+            i = 0
+            for catname, items in self.items.items():
+                for item in items:
+                    if item["name"] == tile["data"][1]:
+                        cat = catname
+                        name = tile["data"][1]
+                        self.currentcategory = i
+                        self.rebuttons()
+                        self.set(cat, name)
+                        return
+                i += 1
+
+        self.currentcategory = len(self.items) - 1
+        self.rebuttons()
+        self.set(cat, name)

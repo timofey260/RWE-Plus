@@ -33,6 +33,9 @@ ofstop = 11
 ofsleft = 11
 image1size = 20
 
+camw = 70
+camh = 40
+
 
 def fs(sz):
     return pg.font.Font(path + "\\" + settings["global"]["font"], sz)

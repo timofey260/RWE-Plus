@@ -76,8 +76,8 @@ class LE(menu_with_field):
         yos = self.yoffset * self.size
 
         fieldpos = [xos - (self.ofsleft * self.size), yos - (self.ofstop * self.size)]
-        fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness,
-                     fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness]
+        fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness * (self.size/10),
+                     fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness * (self.size/10)]
 
         self.field.field.blit(self.field3.field, fieldpos)
         if not pg.key.get_pressed()[pg.K_LSHIFT]:

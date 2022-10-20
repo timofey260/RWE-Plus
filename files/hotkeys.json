@@ -30,8 +30,8 @@
   	"GE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
   		"K_ESCAPE": "/MN",
-    	"K_l": "swichlayers",
-    	"K_l+": "swichlayers_back",
+    	"K_l": "-swichlayers",
+    	"K_l+": "-swichlayers_back",
 
     	"K_i": "-inverse",
     	"K_w": "-walls",
@@ -75,8 +75,8 @@
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
   		"K_ESCAPE": "/MN",
     	"K_q": "copy",
-    	"K_l": "swichlayers",
-    	"K_l+": "swichlayers_back",
+    	"K_l": "-swichlayers",
+    	"K_l+": "-swichlayers_back",
 
     	"K_LEFT": "left",
     	"K_RIGHT": "right",
@@ -89,9 +89,22 @@
     	"K_s": "-dt",
     	"K_TAB": "-cleartool",
     	"K_SPACE": "-changetools",
-    	"K_e": "-sad"
+    	"K_e": "-sad",
+    	"K_q": "-copytile"
+
   	},
 	"CE": {
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"K_ESCAPE": "/MN",
+
+		"K_d": "-deletecamera",
+		"K_DELETE": "-deletecamera",
+
+		"K_n": "-addcamera",
+
+		"K_e": "-pickupcamera",
+
+		"K_p": "-placecamera"
 
   	},
 	"PE": {
@@ -103,6 +116,9 @@
 
 
 		"K_SPACE": "-addordeleteselectedeffect",
+
+		"K_l": "-swichlayers",
+    	"K_l+": "-swichlayers_back",
 
 		"K_r+": "-prevparam",
 		"K_f+": "-nextparam",

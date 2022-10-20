@@ -25,7 +25,7 @@ class GE(menu_with_field):
         self.air()
         self.init()
         self.rs()
-        self.renderfield_all()
+        self.rfa()
 
     def resize(self):
         super().resize()
@@ -44,23 +44,15 @@ class GE(menu_with_field):
                 self.yoffset += 1
             case "down":
                 self.yoffset -= 1
-            case "swichlayers":
-                self.layer = (self.layer + 1) % 3
-                self.renderfield_all()
-            case "swichlayers_back":
-                self.layer -= 1
-                if self.layer < 0:
-                    self.layer = 2
-                self.renderfield_all()
             case "SU":
                 self.size += 1
                 self.rs()
-                self.renderfield()
+                self.rfa()
             case "SD":
                 if self.size - 1 != 0:
                     self.size -= 1
                 self.rs()
-                self.renderfield()
+                self.rfa()
             case "rotate":
                 if self.mx != 0:
                     self.state = (self.state + 1) % self.mx
@@ -106,7 +98,6 @@ class GE(menu_with_field):
     def blit(self):
         global mousp, mousp2, mousp1
         cellsize2 = [self.size, self.size]
-        self.drawmap()
         super().blit()
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
@@ -181,7 +172,7 @@ class GE(menu_with_field):
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 self.fieldadd.fill(white)
                 mousp = True
-                self.renderfield_all()
+                self.rfa()
 
             self.movemiddle(bp, pos)
 
@@ -199,7 +190,7 @@ class GE(menu_with_field):
                 for x in range(self.rectdata[1][0]):
                     for y in range(self.rectdata[1][1]):
                         self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
-                self.renderfield_all()
+                self.rfa()
                 mousp2 = True
             if self.mirrorp:
                 px = pos[0]
@@ -377,7 +368,7 @@ class GE(menu_with_field):
             else:
                 self.mapdata[x][y][self.layer][0] = self.placetile
         if render:
-            self.renderfield_all()
+            self.rfa()
 
     def mirrorplace(self, xm, ym, render=False):
         if not self.mirrorp:
@@ -415,7 +406,7 @@ class GE(menu_with_field):
             else:
                 self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile)
         if render:
-            self.renderfield_all()
+            self.rfa()
 
     def reverseslope(self, slope):
         if slope in [2, 3, 4, 5]:
