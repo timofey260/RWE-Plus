@@ -47,12 +47,12 @@ class GE(menu_with_field):
             case "SU":
                 self.size += 1
                 self.rs()
-                self.rfa()
+                self.renderfield()
             case "SD":
                 if self.size - 1 != 0:
                     self.size -= 1
                 self.rs()
-                self.rfa()
+                self.renderfield()
             case "rotate":
                 if self.mx != 0:
                     self.state = (self.state + 1) % self.mx

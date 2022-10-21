@@ -25,7 +25,18 @@
   	"MN": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
   	  	"K_q": "quit",
-  	  	"K_r+": "render"
+  	  	"K_r+": "render",
+
+  	  	"K_g": "/GE",
+  	  	"K_t": "/TE",
+  	  	"K_c": "/CE",
+  	  	"K_l": "/LE",
+  	  	"K_e": "/EE",
+  	  	"K_f": "/FE",
+  	  	"K_p": "/PE",
+  	  	"K_s": "/LS",
+  	  	"K_z": "/LP"
+
   	},
   	"GE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
@@ -201,5 +212,13 @@
   		"K_s": "-set_height",
   		"K_d": "-set_width",
   		"K_q": "-mswich"
+  	},
+  	"LP": {
+  		"unlock_keys": [],
+  		"K_ESCAPE": "/MN",
+
+  		"K_b": "-changeborder",
+  		"K_l": "-changelight",
+  		"K_w": "-changewd"
   	}
 }

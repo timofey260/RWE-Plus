@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='F:\\Desktop\\RWE+\\files\\tcon.ico',
+    icon='F:\\Desktop\\RWE+\\files\\icon.ico',
 )

@@ -24,6 +24,9 @@ class MN(menu):
     def CE(self):
         self.message = "CE"
 
+    def LP(self):
+        self.message = "LP"
+
     def save(self):
         self.message = "save"
 

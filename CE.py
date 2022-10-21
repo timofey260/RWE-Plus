@@ -34,7 +34,11 @@ class CE(menu_with_field):
 
             mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size
             if self.held and self.heldindex < len(self.data["CM"]["cameras"]):
-                self.data["CM"]["cameras"][self.heldindex] = makearr(list(self.camoffset + mpos), "point")
+                val = list(self.camoffset + mpos)
+                val[0] = round(val[0], 4)
+                val[1] = round(val[1], 4)
+                val = makearr(val, "point")
+                self.data["CM"]["cameras"][self.heldindex] = val
 
             if bp[0] == 1 and mousp and (mousp2 and mousp1):
                 mousp = False
