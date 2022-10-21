@@ -35,6 +35,7 @@ class MN(menu):
         file = open(fl, "w")
         turntolingo(self.data, file)
         os.system(application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render " + fl)
+        os.system("explorer " + path2renderedlevels)
 
     def quit(self):
         self.message = "quit"

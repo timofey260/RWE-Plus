@@ -99,7 +99,7 @@ def launch(level):
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
-    pg.display.set_icon(pg.image.load(application_path + "\\icon.png"))
+    pg.display.set_icon(pg.image.load(application_path + "\\files\\icon.png"))
     surf = MN(window, file)
     run = True
     while run:

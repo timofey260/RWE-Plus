@@ -15,6 +15,7 @@ elif __file__:
 path = application_path + name
 path2graphics = application_path + "\\drizzle\\Data\\Graphics\\"
 path2cast = application_path + "\\drizzle\\Data\\Cast\\"
+path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
 
 pg.font.init()
 

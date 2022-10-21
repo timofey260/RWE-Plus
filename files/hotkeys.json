@@ -94,7 +94,7 @@
 
   	},
 	"CE": {
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_i", "K_k", "K_j", "K_l"],
 		"K_ESCAPE": "/MN",
 
 		"K_d": "-deletecamera",
@@ -104,7 +104,18 @@
 
 		"K_e": "-pickupcamera",
 
-		"K_p": "-placecamera"
+		"K_p": "-placecamera",
+		"K_SPACE": "-placecamera",
+
+		"K_i": "-addup",
+		"K_k": "-adddown",
+		"K_j": "-addleft",
+		"K_l": "-addright",
+
+		"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down"
 
   	},
 	"PE": {

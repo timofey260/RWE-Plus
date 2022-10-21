@@ -247,7 +247,7 @@
 	"CE":{
 		"buttons": [
 			["New", [2, 2, 4, 4], [100, 100, 100], "addcamera", "non", "Add new camera to level(n)", ["icons.png", [3, 0]]],
-			["Delete", [2, 6, 4, 4], [100, 100, 100], "addcamera", "non", "Delete camera from level(d, delete)", ["icons.png", [0, 0]]]
+			["Delete", [2, 6, 4, 4], [100, 100, 100], "deletecamera", "non", "Delete camera from level(d, delete)", ["icons.png", [0, 0]]]
 			
 		],
 		"d1":{
@@ -256,8 +256,12 @@
 			"border": [255, 255, 255]
 		},
 		"labels": [
+			["Total cameras: %2d", [0, 97], [255, 255, 255], 25]
 		],
-		"menucolor": [120, 120, 120]
+		"menucolor": [120, 120, 120],
+		"addspeed": 0.01,
+		"rotatespeed": 0.03
+
 	},
 	"PE":{}, "EE":{}
 }
