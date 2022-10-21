@@ -1,4 +1,4 @@
-# RWE-Plus
+# RWE-Plus ![image](https://github.com/timofey260/RWE-Plus/blob/master/files/icon.png)
 Maybe better version of official rain world editor
 
 uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
@@ -12,4 +12,4 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Light editor
 * Level resizing
 * Effect editor
-* Camera editor(not working)
+* Camera editor
