@@ -12,4 +12,4 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Light editor
 * Level resizing
 * Effect editor
-* Camera editor(not working)
+* Camera editor
