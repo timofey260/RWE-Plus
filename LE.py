@@ -79,11 +79,11 @@ class LE(menu_with_field):
         fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness * (self.size/10),
                      fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness * (self.size/10)]
 
+        super().blit()
         self.field.field.blit(self.field3.field, fieldpos)
         if not pg.key.get_pressed()[pg.K_LSHIFT]:
             self.field.field.blit(self.field3.field, fieldpos2)
         self.field.blit(False)
-        super().blit()
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
