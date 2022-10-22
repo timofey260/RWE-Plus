@@ -155,27 +155,6 @@ class TE(menu_with_field):
                                                                                 self.size * self.tileimage2["size"][1]])
             self.tileimage["image"].set_colorkey(None)
 
-    def send(self, message):
-        if message[0] == "-":
-            self.mpos = 1
-            getattr(self, message[1:])()
-        match message:
-            case "SU":
-                self.size += 1
-                self.renderfield()
-            case "SD":
-                if self.size - 1 != 0:
-                    self.size -= 1
-                    self.renderfield()
-            case "left":
-                self.xoffset += 1
-            case "right":
-                self.xoffset -= 1
-            case "up":
-                self.yoffset += 1
-            case "down":
-                self.yoffset -= 1
-
     def lt(self):
         if self.currentcategory - 1 < 0:
             self.currentcategory = len(self.items) - 1

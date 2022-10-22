@@ -26,7 +26,9 @@
 
 			"camera_border": [50, 50, 50],
 			"camera_held": [255, 10, 5],
-			"camera_notheld": [50, 250, 40]
+			"camera_notheld": [50, 250, 40],
+
+			"slidebar": [255, 0, 0]
 		}
 	},
 	"LD":
@@ -46,15 +48,15 @@
 		"buttons":
 		[
 			["LS", [10, 0, 10, 14], [90, 90, 90], "LS", "non", "Level Size(9, s)"],
+			["LP", [10, 14, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(z)"],
 			["GE", [0, 0, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(2, g)"],
 			["TE", [0, 14, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(3, t)"],
 			["CE", [0, 28, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(4, c)"],
 			["LE", [0, 42, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(5, l)"],
-			["EE", [0, 56, 10, 14], [100, 100, 100], "non", "non", "Environment Editor(6, e)"],
+			["EE", [0, 56, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(6, e)"],
 			["FE", [0, 70, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(7, f)"],
 			["PE", [0, 84, 10, 14], [100, 100, 100], "non", "non", "Prop Editor(8, p)"],
 
-			["LP", [90, 50, 10, 10], [90, 90, 90], "LP", "non", "Level Properties(z)"],
 			
 			["Render", [90, 60, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(ctrl+r)"],
 			["Save as txt", [90, 70, 10, 10], [90, 90, 90], "saveastxt", "non", "save as official level editor file"],
@@ -268,14 +270,12 @@
 	"LP": {
 		"buttons": [
 			["Change Border", [2, 2, 20, 14], [100, 100, 100], "changeborder", "non", "Change border settings(b)"],
-			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(l)"],
-			["Water Drips", [2, 30, 20, 14], [100, 100, 100], "changewd", "non", "Toggle Water drips(w)"]
+			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(l)"]
 			
 		],
 		"labels": [
 			["Border: %10s", [0, 97], [255, 255, 255], 25],
-			["Sunlight: %10s", [0, 93], [255, 255, 255], 25],
-			["Water Drips: %10s", [0, 89], [255, 255, 255], 25]
+			["Sunlight: %10s", [0, 93], [255, 255, 255], 25]
 		],
 		"nmd0": "Passable",
 		"nmd1": "Solid",
@@ -283,9 +283,30 @@
 		"nml0": "OFF",
 		"nml1": "ON",
 
-		"nmw0": "OFF",
-		"nmw1": "ON"
+		"sliders": [
+			["Tile seed", [2, 50], 20, [0, 400, 1], ["EX2", "tileSeed"]]
+		]
 
 	},
-	"PE":{}, "EE":{}
+	"PE":{
+
+	},
+	"EE":{
+		"buttons": [
+			["AW", [2, 2, 4, 6], [100, 100, 100], "water", "non", "Adds water to the level(w)"],
+			["RW", [2, 8, 4, 6], [100, 100, 100], "nowater", "non", "Delete water from level(d, delete)"],
+			["WIF", [2, 14, 4, 6], [100, 100, 100], "swichlayers", "non", "Change layer of water(f)"]
+			
+		],
+		"d1":{
+			"rect": [6, 2, 92, 96],
+			"color": [90, 90, 90],
+			"border": [255, 255, 255]
+		},
+		"labels": [
+			["Water Level: %2d", [0, 93], [255, 255, 255], 25],
+			["Water Layer: %2d", [0, 97], [255, 255, 255], 25]
+		],
+		"menucolor": [120, 120, 120]
+	}
 }

@@ -254,27 +254,6 @@ class FE(menu_with_field):
         if len(self.data["FE"]["effects"]) > 0:
             renderfield3(self.fieldmap, self.size, self.data["FE"]["effects"][self.selectedeffect]["mtrx"])
 
-    def send(self, message):
-        if message[0] == "-":
-            self.mpos = 1
-            getattr(self, message[1:])()
-        match message:
-            case "SU":
-                self.size += 1
-                self.renderfield()
-            case "SD":
-                if self.size - 1 != 0:
-                    self.size -= 1
-                    self.renderfield()
-            case "left":
-                self.xoffset += 1
-            case "right":
-                self.xoffset -= 1
-            case "up":
-                self.yoffset += 1
-            case "down":
-                self.yoffset -= 1
-
     def deleteeffect(self):
         self.data["FE"]["effects"].pop(self.selectedeffect)
         self.selectedeffect = 0

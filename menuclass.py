@@ -32,6 +32,8 @@ camera_border = dc
 camera_held = dc
 camera_notheld = dc
 
+slidebar = dc
+
 for key, value in colors.items():
     exec(f"{key} = pg.Color({value})")
 
@@ -204,12 +206,34 @@ class menu_with_field(menu):
         self.layer = (self.layer + 1) % 3
         self.mpos = 1
         self.rfa()
+
     def swichlayers_back(self):
         self.layer -= 1
         if self.layer < 0:
             self.layer = 2
         self.mpos = 1
         self.rfa()
+
+    def send(self, message):
+        if message[0] == "-":
+            self.mpos = 1
+            getattr(self, message[1:])()
+        match message:
+            case "SU":
+                self.size += 1
+                self.renderfield()
+            case "SD":
+                if self.size - 1 != 0:
+                    self.size -= 1
+                    self.renderfield()
+            case "left":
+                self.xoffset += 1
+            case "right":
+                self.xoffset -= 1
+            case "up":
+                self.yoffset += 1
+            case "down":
+                self.yoffset -= 1
 
 
 def renderfield(field: widgets.window | pg.surface.Surface, size: int, mainlayer, data):

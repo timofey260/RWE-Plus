@@ -135,28 +135,6 @@ class LE(menu_with_field):
                                            [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd.fill(white)
 
-    def send(self, message):
-        if message[0] == "-":
-            getattr(self, message[1:])()
-        match message:
-            case "SU":
-                self.size += 1
-                self.rs()
-                self.renderfield()
-            case "SD":
-                if self.size - 1 != 0:
-                    self.size -= 1
-                    self.rs()
-                    self.renderfield()
-            case "left":
-                self.xoffset += 1
-            case "right":
-                self.xoffset -= 1
-            case "up":
-                self.yoffset += 1
-            case "down":
-                self.yoffset -= 1
-
     def save(self):
         if self.data["path"] == "":
             level = asksaveasfilename(defaultextension="wep")

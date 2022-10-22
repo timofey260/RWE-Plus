@@ -111,6 +111,7 @@ class GE(menu_with_field):
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+
             self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
             if self.selectedtool in settings[self.menu]["codes"].keys():
                 if type(self.placetile) == int:

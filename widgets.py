@@ -2,7 +2,7 @@ import pygame as pg
 import copy
 import json
 import os
-from files import settings, fs, path
+from files import settings, fs, path, map
 
 pg.font.init()
 
@@ -170,3 +170,52 @@ class lable:
 
     def set_text(self, text):
         self.text = text
+
+class slider:
+    def __init__(self, surface: pg.surface.Surface, text, pos, len, min, max, value, step):
+        self.surface = surface
+        self.text = text
+        self.originaltext = text
+        self.pos = pg.Vector2(copy.deepcopy(pos)) / 100 * pg.display.get_window_size()[0]
+        self.posp = pg.Vector2(copy.deepcopy(pos))
+
+        self.len = len / 100 * pg.display.get_window_size()[0]
+        self.lens = len
+        self.min = min
+        self.max = max
+        self.value = value
+        self.step = step
+
+        self.held = False
+        self.mp = False
+        self.resize()
+
+    def blit(self):
+        screensize = sum(pg.display.get_window_size())
+        s = screensize // 100
+        mpos = pg.Vector2(pg.mouse.get_pos())
+        sliderpos = self.pos.lerp(self.pos + pg.Vector2(self.len, 0), map(self.value, self.min, self.max, 0, 1))
+        pos2 = self.pos + pg.Vector2(self.len, 0)
+
+        pg.draw.line(self.surface, black, self.pos, pos2, 5)
+        pg.draw.circle(self.surface, pg.Color(settings["global"]["colors"]["slidebar"]), sliderpos, s)
+        mts(self.surface, f"{self.text}: ({self.value})", self.pos.x, self.pos.y)
+
+        if pg.mouse.get_pressed()[0] and self.mp:
+            self.mp = False
+            if pg.Rect([sliderpos.x - s / 2, sliderpos.y - s / 2, s, s]).collidepoint(list(mpos)):
+                self.held = True
+        elif pg.mouse.get_pressed()[0] and not self.mp:
+            if self.held:
+                val = max(min(map(mpos.x, self.pos.x, pos2.x, self.min, self.max), self.max), self.min)
+                self.value = val - val % self.step
+        elif not pg.mouse.get_pressed()[0] and not self.mp:
+            self.mp = True
+            self.held = False
+
+    def resize(self):
+        screensize = pg.Vector2(pg.display.get_window_size())
+        self.pos = pg.Vector2(copy.deepcopy(self.posp)) / 100
+        self.pos.x *= screensize.x
+        self.pos.y *= screensize.y
+        self.len = self.lens / 100 * pg.display.get_window_size()[0]

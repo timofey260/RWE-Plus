@@ -166,26 +166,6 @@ class CE(menu_with_field):
         self.fieldadd.fill(white)
         super().renderfield()
 
-    def send(self, message):
-        if message[0] == "-":
-            getattr(self, message[1:])()
-        match message:
-            case "SU":
-                self.size += 1
-                self.renderfield()
-            case "SD":
-                if self.size - 1 != 0:
-                    self.size -= 1
-                    self.renderfield()
-            case "left":
-                self.xoffset += 1
-            case "right":
-                self.xoffset -= 1
-            case "up":
-                self.yoffset += 1
-            case "down":
-                self.yoffset -= 1
-
     def getquad(self, indx):
         mpos = pg.Vector2(pg.mouse.get_pos())
         rect = self.getcamerarect(self.data["CM"]["cameras"][indx])

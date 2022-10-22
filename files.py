@@ -37,6 +37,8 @@ image1size = 20
 camw = 70
 camh = 40
 
+wladd = 5.7
+
 
 def fs(sz):
     return pg.font.Font(path + "\\" + settings["global"]["font"], sz)
@@ -54,8 +56,13 @@ def solveeffects(effects):
                 d["options"].append(i)
             efcat["efs"].append(d)
         ef.append(efcat)
-    print(ef)
+    # print(ef)
     return ef
+
+
+def map(x, in_min, in_max, out_min, out_max):
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
 
 
 effects = solveeffects(e)

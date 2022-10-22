@@ -145,6 +145,8 @@ def launch(level):
                     surf = CE(window, file)
                 case "LP":
                     surf = LP(window, file)
+                case "EE":
+                    surf = EE(window, file)
                 case "fc":
                     fullscreen = not fullscreen
                     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
