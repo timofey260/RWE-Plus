@@ -64,7 +64,18 @@
 			["Quit", [90, 90, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(q)"]
 		],
 		"labels":[
-			["Welcome to RWE+", [20, 5], [0, 0, 0], 50]
+			["Welcome to RWE+", [24, 5], [0, 0, 0], 50],
+			["Made by Timofey#5110", [26, 10], [40, 40, 40], 30],
+			["Available Editors:", [24, 15], [0, 0, 0], 40],
+
+			["GE(Geometry Editor) - full work", [26, 20], [0, 0, 0], 25],
+			["TE(Tile Editor) - full work", [26, 24], [0, 0, 0], 25],
+			["FE(Effect Editor) - full work", [26, 28], [0, 0, 0], 25],
+			["CE(Camera Editor) - full work", [26, 32], [0, 0, 0], 25],
+			["LE(Light Editor) - full work", [26, 36], [0, 0, 0], 25],
+			["LS(Level Resizing) - full work", [26, 40], [0, 0, 0], 25],
+			["LP(Level Properties) - full work", [26, 44], [0, 0, 0], 25]
+
 		]
 	}, 
 	"GE":
