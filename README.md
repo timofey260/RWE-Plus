@@ -13,3 +13,4 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Level resizing
 * Effect editor
 * Camera editor
+* Level properties(demo)
