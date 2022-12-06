@@ -4,6 +4,7 @@ import copy
 from menus import *
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import *
+import argparse
 
 from lingotojson import *
 from files import settings, hotkeys, path, application_path
@@ -14,6 +15,8 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
+version = "v1.6 alpha"
+
 
 def keypress(window, surf, file, file2, level):
     global run
@@ -21,27 +24,18 @@ def keypress(window, surf, file, file2, level):
     ctrl = pg.key.get_pressed()[pg.K_LCTRL]
     # shift = pg.key.get_pressed()[pg.K_LSHIFT]
     for i in hotkeys["global"].keys():
-        if i[-1] == "+":
-            if ctrl == 1:
-                if pg.key.get_pressed()[getattr(pg, i[:-1])]:
-                    pressed = hotkeys["global"][i]
-        else:
-            if ctrl == 0:
-                if pg.key.get_pressed()[getattr(pg, i)]:
-                    pressed = hotkeys["global"][i]
+        key = i.replace("@", "").replace("+", "")
+        if int(i.find("+") != -1) - int(ctrl) == 0:
+            if pg.key.get_pressed()[getattr(pg, key)]:
+                pressed = hotkeys["global"][i]
     for i in hotkeys[surf.menu].keys():
+        key = i.replace("@", "").replace("+", "")
         if i == "unlock_keys":
             continue
-        elif i[-1] == "+":
-            if ctrl == 1:
-                if pg.key.get_pressed()[getattr(pg, i[:-1])]:
-                    pressed = hotkeys[surf.menu][i]
-                    surf.send(pressed)
-        else:
-            if ctrl == 0:
-                if pg.key.get_pressed()[getattr(pg, i)]:
-                    pressed = hotkeys[surf.menu][i]
-                    surf.send(pressed)
+        if int(i.find("+") != -1) - int(ctrl) == 0:
+            if pg.key.get_pressed()[getattr(pg, key)]:
+                pressed = hotkeys[surf.menu][i]
+                surf.send(pressed)
     if len(pressed) > 0 and pressed[0] == "/" and surf.menu != "LD":
         surf.message = pressed[1:]
     match pressed.lower():
@@ -94,7 +88,9 @@ def launch(level):
         file["level"] = os.path.basename(level)
         file["path"] = level
         file["dir"] = os.path.abspath(level)
-    items = inittolist(application_path + "\\drizzle\\Data\\Graphics\\init.txt")
+    items = inittolist()
+    propcolors = getcolors()
+    props = getprops(items)
     file2 = copy.deepcopy(file)
     width = settings["global"]["width"]
     height = settings["global"]["height"]
@@ -147,6 +143,8 @@ def launch(level):
                     surf = LP(window, file)
                 case "EE":
                     surf = EE(window, file)
+                case "PE":
+                    surf = PE(window, file, props, propcolors)
                 case "fc":
                     fullscreen = not fullscreen
                     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
@@ -165,7 +163,10 @@ def launch(level):
                 if pg.key.get_pressed()[i]:
                     keypress(window, surf, file, file2, level)
 
-        window.fill(pg.color.Color(settings["global"]["color"]))
+        if settings[surf.menu].get("menucolor") is not None:
+            window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
+        else:
+            window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
         pg.display.flip()
         pg.display.update()
@@ -180,7 +181,8 @@ def save_txt(file):
 def save(file):
     print(file["path"])
     if file["path"] != "":
-        open(file["path"], "w").write(json.dumps(file))
+        open(os.path.splitext(file["path"])[0] + ".wep", "w").write(json.dumps(file))
+        file["path"] = os.path.splitext(file["path"])[0] + ".wep"
     else:
         savedest = asksaveasfilename(defaultextension="wep")
         if savedest != "":
@@ -218,16 +220,35 @@ def loadmenu():
     exit(0)
 
 
+def new():
+    loadmenu()
+    launch(askopenfilename(defaultextension="txt",
+                           initialdir=application_path + "\\LevelEditorProjects"))
+
+
 if __name__ == "__main__":
-    args = sys.argv
-    if len(args) == 1:
-        loadmenu()
-        launch(askopenfilename(defaultextension="txt",
-                               initialdir=application_path + "\\LevelEditorProjects"))
-    elif len(args) == 2:
-        if args[1] == "-h": # there needs to be argument parser
-            print(open(path + "helpmessage.txt", "r").read())
-        else:
-            launch(args[1])
+    parser = argparse.ArgumentParser(prog="RWE+ console", description="maybe a better, than official LE.")
+    parser.version = version
+    parser.add_argument("filename", type=str, nargs="?", help="level to load")
+    parser.add_argument("-n", "--new", help="opens new file", dest="new", action="store_true")
+    parser.add_argument("-v", "--version", help="shows current version and exits", action="version")
+    parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str, help="renders levels with drizzle.")
+    parser.parse_args()
+    args = parser.parse_args()
+
+    if args.new:
+        new()
+    if args.renderfiles is not None:
+        s = application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render "
+        for i in args.renderfiles:
+            s += i + " "
+        os.system(s)
+        os.system("explorer " + path2renderedlevels)
+        exit(0)
+    if args.filename is not None:
+        try:
+            launch(args.filename)
+        except FileNotFoundError:
+            print("File not found!")
     else:
-        pass
+        new()

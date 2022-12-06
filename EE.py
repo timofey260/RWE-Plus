@@ -1,4 +1,3 @@
-import widgets
 from menuclass import *
 
 

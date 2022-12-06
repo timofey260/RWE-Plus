@@ -6,9 +6,7 @@ class LS(menu):
 
     def __init__(self, surface: pg.surface.Surface, data, items):
         self.menu = "LS"
-        self.surface = surface
         self.btiles = data["EX2"]["extraTiles"]
-        self.data = data
 
         self.items = items
 
@@ -21,6 +19,7 @@ class LS(menu):
 
         self.shadowmode = True
 
+        super().__init__(surface, data, "LS")
         self.recount()
         self.init()
         self.blit()
@@ -40,8 +39,8 @@ class LS(menu):
         else:
             self.labels[0].set_text("Image not found! try make it in light editor!")
 
-        mt = settings[self.menu]["tm" + str(int(self.shadowmode) + 1)]
-        tt = settings[self.menu]["tt" + str(int(self.shadowmode) + 1)]
+        mt = self.settings["tm" + str(int(self.shadowmode) + 1)]
+        tt = self.settings["tt" + str(int(self.shadowmode) + 1)]
         self.buttons[0].text = self.buttons[0].originaltext + mt
         self.buttons[0].tooltip = self.buttons[0].originaltext + tt
 

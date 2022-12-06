@@ -7,7 +7,7 @@ class LE(menu_with_field):
     def __init__(self, surface: pg.surface.Surface, data):
         self.menu = "LE"
         super().__init__(surface, data, "LE")
-        self.field2 = widgets.window(self.surface, settings[self.menu]["d1"])
+        self.field2 = widgets.window(self.surface, self.settings["d1"])
 
         self.ofstop = ofstop
         self.ofsleft = ofsleft
@@ -19,11 +19,6 @@ class LE(menu_with_field):
         except FileNotFoundError:
             self.field2.field = pg.surface.Surface(sc)
             self.field2.field.fill(white)
-
-
-        self.rectdata = [[0, 0], [0, 0], [0, 0]]
-        self.xoffset = 0
-        self.yoffset = 0
 
         self.size = settings["TE"]["cellsize"]
 
@@ -41,7 +36,7 @@ class LE(menu_with_field):
 
         self.images = {True: [], False: []}
 
-        for i in settings[self.menu]["images"]:
+        for i in self.settings["images"]:
             img = pg.image.load(path2cast + i)
             img.set_colorkey(white)
             self.images[True].append(img)
@@ -79,11 +74,11 @@ class LE(menu_with_field):
         fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness * (self.size/10),
                      fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness * (self.size/10)]
 
-        super().blit()
         self.field.field.blit(self.field3.field, fieldpos)
         if not pg.key.get_pressed()[pg.K_LSHIFT]:
             self.field.field.blit(self.field3.field, fieldpos2)
         self.field.blit(False)
+        super().blit()
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
@@ -97,7 +92,7 @@ class LE(menu_with_field):
 
             curpos_on_field2 = self.map_to_field(curpos_on_field[0], curpos_on_field[1])
 
-            self.labels[0].set_text("Image: " + settings[self.menu]["images"][self.selectedimage])
+            self.labels[0].set_text("Image: " + self.settings["images"][self.selectedimage])
             self.labels[1].set_text(f"X: {curpos_on_field[0]}, Y: {curpos_on_field[1]}")
 
             self.surface.blit(self.tileimage, curpos)

@@ -1,21 +1,21 @@
 import json
 import pygame as pg
-
 import os
 import sys
 
-name = "\\files\\"
+name = r"\\files\\"
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
-elif __file__:
+else:
     application_path = os.path.dirname(__file__)
 
 path = application_path + name
-path2graphics = application_path + "\\drizzle\\Data\\Graphics\\"
-path2cast = application_path + "\\drizzle\\Data\\Cast\\"
-path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
+path2graphics = application_path + r"\\drizzle\\Data\\Graphics\\"
+path2cast = application_path + r"\\drizzle\\Data\\Cast\\"
+path2renderedlevels = application_path + r"\\drizzle\\Data\\Levels\\"
+path2props = application_path + r"\\drizzle\\Data\\Props\\"
 
 pg.font.init()
 
@@ -32,16 +32,28 @@ mat = pg.image.load(path + graphics["materials"])
 
 ofstop = 11
 ofsleft = 11
+
 image1size = 20
+spritesize = 16
+image2sprite = spritesize / image1size
+sprite2image = image1size / spritesize
 
 camw = 70
 camh = 40
 
 wladd = 5.7
+bignum = 9999999
+
+
+fonts: dict[pg.font.Font, ...] = {}
 
 
 def fs(sz):
-    return pg.font.Font(path + "\\" + settings["global"]["font"], sz)
+    if sz in fonts.keys():
+        return fonts[sz]
+    else:
+        fonts[sz] = pg.font.Font(path + "\\" + settings["global"]["font"], sz)
+        return fonts[sz]
 
 
 def solveeffects(effects):
@@ -62,7 +74,6 @@ def solveeffects(effects):
 
 def map(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-
 
 
 effects = solveeffects(e)

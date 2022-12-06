@@ -30,6 +30,9 @@ class MN(menu):
     def EE(self):
         self.message = "EE"
 
+    def PE(self):
+        self.message = "PE"
+
     def save(self):
         self.message = "save"
 
@@ -37,11 +40,7 @@ class MN(menu):
         self.message = "savetxt"
 
     def render(self):
-        fl = os.path.splitext(self.data["path"])[0] + ".txt"
-        file = open(fl, "w")
-        turntolingo(self.data, file)
-        os.system(application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render " + fl)
-        os.system("explorer " + path2renderedlevels)
+        render(self.data)
 
     def quit(self):
         self.message = "quit"

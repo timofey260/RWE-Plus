@@ -2,6 +2,7 @@ import copy
 import json
 import re
 from files import *
+import math
 
 
 def tojson(string: str):
@@ -71,16 +72,16 @@ def toarr(col: str, mark):
         a.append(n)
     return a
 
+
 def makearr(col: list, mark):
     return f"{mark}({col[0]}, {col[1]})"
 
 
-def inittolist(file: str):
+def init_solve(file: str):
     s = open(file, "r").readlines()
     a = {}
     a2 = []
     cat = ''
-    colr = pg.Color(0, 0, 0)
     counter = 0
     counter2 = 2
     for i in s:
@@ -89,69 +90,188 @@ def inittolist(file: str):
             if i[0] == "-":
                 counter2 += 1
                 a[cat] = a2
-                a2 = []
                 js = tojson(i[1:])
+                a2 = [js]
                 cat = js[0]
-                colr = pg.Color(toarr(js[1], "color"))
                 counter = 0
             else:
-
                 js = tojson(i)
-                img = pg.image.load(path2graphics + js["nm"] + ".png")
-                sz = toarr(js["sz"], "point")
-                try:
-                    ln = len(js["repeatL"])
-                except KeyError:
-                    ln = 1
-                    # sz:point(x,y) + ( #bfTiles * 2 )) * 20
-                try:
-                    tp = js["tp"]
-                except KeyError:
-                    tp = ""
-                if tp == "box":  # math
-                    ln = 4
-                    size = (ln * sz[1] + (js["bfTiles"] * 2)) * 20
-                    rect = pg.rect.Rect([0, size, sz[0] * 16, sz[1] * 16])
-                elif ((ln * sz[1] + (js["bfTiles"] * 2 * ln)) * 20 + 1) > img.get_height():
-                    rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
-                else:
-                    size = (sz[1] + (js["bfTiles"] * 2)) * ln * 20 + 1
-                    rect = pg.rect.Rect([0, size, sz[0] * 16, sz[1] * 16])
+                item = {}
+                for p, val in js.items():
+                    item[p] = val
+                a2.append(item)
+                counter += 1
+    return a
 
+
+def inittolist():
+    solved = init_solve(application_path + "\\drizzle\\Data\\Graphics\\init.txt")
+    del solved['']
+    solved_copy = solved.copy()
+    for catnum, catitem in enumerate(solved.items()):
+        cat, items = catitem
+        colr = pg.Color(toarr(items[0][1], "color"))
+        solved_copy[cat] = []
+        for indx, item in enumerate(items[1:]):
+
+            img = pg.image.load(path2graphics + item["nm"] + ".png")
+            sz = toarr(item["sz"], "point")
+            try:
+                ln = len(item["repeatL"])
+            except KeyError:
+                ln = 1
+                # sz:point(x,y) + ( #bfTiles * 2 )) * 20
+            try:
+                tp = item["tp"]
+            except KeyError:
+                tp = ""
+            if tp == "box":  # math
+                ln = 4
+                size = (ln * sz[1] + (item["bfTiles"] * 2)) * 20
+                rect = pg.rect.Rect([0, size, sz[0] * 16, sz[1] * 16])
+            elif ((ln * sz[1] + (item["bfTiles"] * 2 * ln)) * 20 + 1) > img.get_height():
+                rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
+            else:
+                size = (sz[1] + (item["bfTiles"] * 2)) * ln * 20 + 1
+                rect = pg.rect.Rect([0, size, sz[0] * 16, sz[1] * 16])
+
+            try:
+                img = img.subsurface(rect)
+            except ValueError:
                 try:
+                    rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
                     img = img.subsurface(rect)
                 except ValueError:
-                    try:
-                        rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
-                        img = img.subsurface(rect)
-                    except ValueError:
-                        rect = pg.rect.Rect([0, 0, 1, 1])
-                        img = img.subsurface(rect)
-                # srf = img.copy()
-                # srf.fill(colr)
-                # img.set_colorkey(pg.Color(0, 0, 0))
-                # srf.blit(img, [0, 0])
-                # img.fill(colr)
+                    rect = pg.rect.Rect([0, 0, 1, 1])
+                    img = img.subsurface(rect)
+            # srf = img.copy()
+            # srf.fill(colr)
+            # img.set_colorkey(pg.Color(0, 0, 0))
+            # srf.blit(img, [0, 0])
+            # img.fill(colr)
 
-                # arr = pg.pixelarray.PixelArray(img)
-                # arr.replace(pg.Color(0, 0, 0), pg.color.Color(colr))
-                # img = arr.make_surface()
-                # print(colr, img.get_at([0, 0]))
+            # arr = pg.pixelarray.PixelArray(img)
+            # arr.replace(pg.Color(0, 0, 0), pg.color.Color(colr))
+            # img = arr.make_surface()
+            # print(colr, img.get_at([0, 0]))
 
-                img.set_colorkey(pg.color.Color(255, 255, 255))
+            img.set_colorkey(pg.color.Color(255, 255, 255))
 
-                a2.append({"name": js["nm"], "image": img, "size": sz, "category": cat, "color": colr, "cols": [js["specs"], js["specs2"]], "cat": [counter2, counter + 1]})
-                counter += 1
-    del a[""]
-    a["material"] = []
+            newitem = {
+                "name": item["nm"],
+                "image": img,
+                "size": sz,
+                "category": cat,
+                "color": colr,
+                "cols": [item["specs"], item["specs2"]],
+                "cat": [catnum + 1, indx + 1],
+                "tags": item["tags"]
+            }
+            solved_copy[cat].append(newitem)
+    solved_copy["material"] = []
     counter = 1
     for i in graphics["matposes"]:
         col = settings["global"]["color2"]
         rect = pg.rect.Rect(graphics["matposes"].index(i) * 16, 0, 16, 16)
         img = mat.subsurface(rect)
-        a["material"].append({"name": i, "image": img, "size": [1, 1], "category": "material", "color": col, "cols": [[-1], 0], "cat": [1, counter]})
+        solved_copy["material"].append(
+            {
+                "name": i,
+                "image": img,
+                "size": [1, 1],
+                "category": "material",
+                "color": col,
+                "cols": [[-1], 0],
+                "cat": [1, counter],
+                "tags": [""]
+            })
         counter += 1
-    return a
+    return solved_copy
+
+
+def render(data):
+    fl = os.path.splitext(data["path"])[0] + ".txt"
+    file = open(fl, "w")
+    turntolingo(data, file)
+    os.system(application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render " + fl)
+    os.system("explorer " + path2renderedlevels)
+
+
+def getcolors():
+    solved = open(application_path + '/drizzle/Data/Props/propColors.txt', 'r').readlines()
+    cols = []
+    for line in solved:
+        if line[0] != '[':
+            continue
+        l = tojson(line)
+        l[1] = toarr(l[1], "color")
+        cols.append(l)
+    return cols
+
+
+def getprops(tiles: dict):
+    # turning tiles to props and then add them to all other props
+    solved = init_solve(application_path + "\\drizzle\\Data\\Props\\init.txt")
+    del solved['']
+    solved_copy = solved.copy()
+    for catnum, catitem in enumerate(solved.items()):
+        cat, items = catitem
+        colr = pg.Color(toarr(items[0][1], "color"))
+        solved_copy[cat] = []
+        for indx, item in enumerate(items[1:]):
+
+            img = pg.image.load(path2props + item["nm"] + ".png")
+            img.set_colorkey(pg.color.Color(255, 255, 255))
+
+            images = []
+
+            ws, hs = img.get_size()
+
+            if item.get("pxlSize") is not None:
+                w, h = toarr(item["pxlSize"], "point")
+            else:
+                w, h = ws, hs
+                if item.get("vars") is not None:
+                    w = round(ws / item["vars"])
+                if item.get("repeatL") is not None:
+                    h = math.floor((hs / len(item["repeatL"])))
+
+                    cons = 0.4
+                    wh = pg.Color("#ffffff")
+                    gr = pg.Color("#dddddd")
+                    bl = pg.Color("#000000")
+
+                    vars = 1
+                    if item.get("vars") is not None:
+                        vars = item["vars"]
+
+                    for varindx in range(vars):
+                        curcol = gr
+
+                        for iindex, _ in enumerate(item["repeatL"]):
+                            # print(img, item["nm"], varindx * w, hs - h, w, h)
+                            curcol = curcol.lerp(bl, cons)
+                            ss = img.subsurface(varindx * w, (len(item["repeatL"]) - 1 - iindex) * h, w, h).copy()
+                            pxl = pg.PixelArray(ss)
+                            pxl.replace(bl, curcol)
+                            ss = pxl.make_surface()
+                            ss.set_colorkey(wh)
+                            img.blit(ss, [0, hs - h])
+
+            if item.get("vars") is not None:
+                for iindex in range(item["vars"]):
+                    images.append(img.subsurface(iindex * w, 0, w, h))
+            else:
+                images.append(img.subsurface(0, hs - h, w, h))
+
+            newitem = solved[cat][indx + 1]
+            newitem["images"] = images
+            newitem["color"] = list(colr)
+            solved_copy[cat].append(newitem)
+    # solved_copy["material"] = []
+    # for cat in tiles:
+    #     pass
+    return solved_copy
 
 
 def turntolingo(string: dict, file):

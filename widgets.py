@@ -1,7 +1,5 @@
 import pygame as pg
 import copy
-import json
-import os
 from files import settings, fs, path, map
 
 pg.font.init()
@@ -13,17 +11,43 @@ black = [0, 0, 0]
 white = [255, 255, 255]
 
 
-def mts(window, text: str = "", x: int = 0, y: int = 0, col=None, fontsize=settings["global"]["fontsize"],
-        centered: bool = False):
+def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
+
     if col is None:
-        col = [0, 0, 0]
-    fontr = fs(fontsize)
-    screen_text = fontr.render(text, True, col, None)
+        col = black
+    fontr: pg.font.Font = fs(fontsize)
+    items = text.split("\n")
+    rendered = []
+    w = 0
+    h = 0
+    poses = []
+    for l in items:
+        render = fontr.render(l, True, col, None)
+        rendered.append(render)
+        poses.append(h)
+        h += render.get_height()
+        if render.get_width() > w:
+            w = render.get_width()
+
+    surf = pg.Surface([w, h])
+    surf = surf.convert_alpha(surf)
+    surf.fill([0, 0, 0, 0])
+
+    for i, r in enumerate(rendered):
+        surf.blit(r, [0, poses[i]])
+    return surf
+
+
+def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int | float, centered: bool=False, nocenter=True):
     if centered:
         window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
     else:
-        if x + screen_text.get_width() > window.get_width():
+        if x + screen_text.get_width() < window.get_width():
+            window.blit(screen_text, [x, y])
+        elif x - screen_text.get_width() > 0:
             window.blit(screen_text, [x - screen_text.get_width(), y])
+        elif nocenter:
+            window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
         else:
             window.blit(screen_text, [x, y])
 
@@ -35,8 +59,16 @@ class button:
         self.rect = copy.deepcopy(rect)
         self.lastrect = copy.deepcopy(rect)
         self.col = pg.Color(col)
+        self.col2 = pg.Color(abs(self.col.r - mul), abs(self.col.g - mul), abs(self.col.b - mul))
+        self.glow = 0
+        self.fontsize = sum(pg.display.get_window_size()) // 70
+
         self.text = text
         self.originaltext = text
+        self.textimage = mts(self.originaltext, black, self.fontsize)
+        self.tooltip = tooltip
+        self.tooltipimage = mts(self.tooltip, white, self.fontsize)
+
         self.icon = None
         self.loadicon = icon
         if icon is not None:
@@ -49,17 +81,17 @@ class button:
             self.icon = image
         self.onpress = onpress
         self.onrelease = onrelease
-        self.tooltip = tooltip
         self.bol = True
 
     def blit(self, fontsize=None):
         global bol
-        if fontsize is None:
-            fontsize = sum(pg.display.get_window_size()) // 70
+        if fontsize is not None and fontsize != self.fontsize:
+            self.set_text(self.text, fontsize)
+            self.tooltipimage = mts(self.tooltip, white, self.fontsize)
         cp = False
-        col = self.col
         if self.onmouseover():
             cp = True
+            self.glow = min(self.glow + 1, 100)
             if pg.mouse.get_pressed(3)[0] == 1 and bol:
                 self.bol = False
                 bol = False
@@ -76,21 +108,34 @@ class button:
                         self.onrelease(self.text)
                     except TypeError:
                         self.onrelease()
+        else:
+            self.glow = max(0, self.glow - 1)
+        paintcol = self.col.lerp(self.col2, self.glow / 100)
 
-            col = [abs(self.col.r - mul), abs(self.col.g - mul), abs(self.col.b - mul)]
-        pg.draw.rect(self.surface, col, self.rect, 0, 10)
+        pg.draw.rect(self.surface, paintcol, self.rect, 0, settings["global"]["roundbuttons"])
         if self.icon is None:
-            mts(self.surface, self.text, self.rect.center[0], self.rect.center[1], black, centered=True, fontsize=fontsize)
+            textblit(self.surface, self.textimage, self.rect.center[0], self.rect.center[1], True)
+            # mts(self.surface, self.text, self.rect.center[0], self.rect.center[1], black, centered=True, fontsize=fontsize)
         else:
             self.icon.set_alpha(255)
             if cp:
-                self.icon.set_alpha(50)
+                self.icon.set_alpha(255 - self.glow)
             px = self.rect.w / 2 - self.icon.get_width() / 2
             py = self.rect.h / 2 - self.icon.get_height() / 2
             pos = [px + self.rect.x, py + self.rect.y]
             self.surface.blit(self.icon, pos)
-        if cp:
-            mts(self.surface, self.tooltip, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, white, centered=False)
+
+    def blitshadow(self):
+        invglow = 100 - self.glow
+        r2 = self.rect.copy()
+        r2 = r2.move(settings["global"]["doublerectoffsetx"] / 100 * invglow,
+                     settings["global"]["doublerectoffsety"] / 100 * invglow)
+        pg.draw.rect(self.surface, self.col2, r2, 0, settings["global"]["roundbuttons"])
+
+    def blittooltip(self):
+        if self.onmouseover():
+            textblit(self.surface, self.tooltipimage, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, False)
+            # mts(self.surface, self.tooltip, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, white, centered=False)
 
     def resize(self):
         x = self.lastrect.x / 100 * self.surface.get_width()
@@ -107,9 +152,20 @@ class button:
             size = [wh, wh]
             image = pg.transform.scale(image, size)
             self.icon = image
+        self.set_text(self.text, self.fontsize)
 
     def onmouseover(self):
         return self.rect.collidepoint(pg.mouse.get_pos())
+
+    def set_text(self, text, fontsize=None):
+        if text == self.text and self.fontsize == fontsize:
+            return
+        self.text = text
+        if fontsize is not None:
+            self.fontsize = fontsize
+            self.textimage = mts(text, black, self.fontsize)
+            return
+        self.textimage = mts(text, black, sum(pg.display.get_window_size()) // 70)
 
     @property
     def xy(self):
@@ -135,11 +191,11 @@ class window:
     def resize(self):
         self.field = pg.surface.Surface(
             [self.rect2.width / 100 * self.surface.get_width(), self.rect2.height / 100 * self.surface.get_height()])
-        self.rect = pg.rect.Rect([
+        self.rect = pg.rect.Rect(
             self.rect2.x / 100 * self.surface.get_width(),
             self.rect2.y / 100 * self.surface.get_height(),
             self.rect2.width / 100 * self.surface.get_width(),
-            self.rect2.height / 100 * self.surface.get_height()])
+            self.rect2.height / 100 * self.surface.get_height())
 
     def copy(self):
         wcopy = window(self.surface, {"rect": [0, 0, 1, 1], "color": [0, 0, 0], "border": [0, 0, 0]})
@@ -156,13 +212,15 @@ class lable:
         self.surface = surface
         self.text = text
         self.originaltext = text
+        self.textimage = mts(text, color, fontsize)
         self.pos = copy.deepcopy(pos)
         self.posp = copy.deepcopy(pos)
         self.color = color
         self.fontsize = fontsize
 
     def blit(self):
-        mts(self.surface, self.text, self.pos[0], self.pos[1], self.color, self.fontsize)
+        textblit(self.surface, self.textimage, self.pos[0], self.pos[1], nocenter=False)
+        # mts(self.surface, self.text, self.pos[0], self.pos[1], self.color, self.fontsize)
 
     def resize(self):
         self.pos[0] = self.posp[0] / 100 * self.surface.get_width()
@@ -170,12 +228,14 @@ class lable:
 
     def set_text(self, text):
         self.text = text
+        self.textimage = mts(text, self.color, self.fontsize)
 
 class slider:
     def __init__(self, surface: pg.surface.Surface, text, pos, len, min, max, value, step):
         self.surface = surface
         self.text = text
         self.originaltext = text
+        self.textimage = mts(text, black)
         self.pos = pg.Vector2(copy.deepcopy(pos)) / 100 * pg.display.get_window_size()[0]
         self.posp = pg.Vector2(copy.deepcopy(pos))
 
@@ -199,7 +259,7 @@ class slider:
 
         pg.draw.line(self.surface, black, self.pos, pos2, 5)
         pg.draw.circle(self.surface, pg.Color(settings["global"]["colors"]["slidebar"]), sliderpos, s)
-        mts(self.surface, f"{self.text}: ({self.value})", self.pos.x, self.pos.y)
+        textblit(self.surface, self.textimage, self.pos.x, self.pos.y)
 
         if pg.mouse.get_pressed()[0] and self.mp:
             self.mp = False
@@ -219,3 +279,7 @@ class slider:
         self.pos.x *= screensize.x
         self.pos.y *= screensize.y
         self.len = self.lens / 100 * pg.display.get_window_size()[0]
+
+    def set_text(self, text):
+        self.text = text
+        self.textimage = mts(text, black)

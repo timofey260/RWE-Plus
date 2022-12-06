@@ -1,14 +1,8 @@
-# class default():
-import copy
-import math
 import widgets
-import pygame as pg
-import json
-from tkinter.filedialog import askopenfilename, asksaveasfilename
 from lingotojson import *
 from files import *
 
-colors = settings["global"]["colors"]
+colors = settings["global"]["colors"] # NOQA
 
 color = pg.Color(settings["global"]["color"])
 color2 = pg.Color(settings["global"]["color2"])
@@ -48,11 +42,14 @@ mousp = True
 mousp2 = True
 mousp1 = True
 
+
 class menu():
     def __init__(self, surface: pg.surface.Surface, data, name):
         self.surface = surface
         self.menu = name
         self.data = data
+        self.settings = settings[self.menu]
+        self.hotkeys = hotkeys[name]
         self.uc = []
 
         self.size = image1size
@@ -62,24 +59,32 @@ class menu():
 
     def unlock_keys(self):
         self.uc = []
-        for i in hotkeys[self.menu]["unlock_keys"]:
+        for i in self.hotkeys["unlock_keys"]:
             self.uc.append(getattr(pg, i))
 
     def init(self):
         self.message = ""
         pg.display.set_caption(f"RWE+: {self.menu} - {self.data['path']}")
-        self.buttons = []
-        for i in settings[self.menu]["buttons"]:
+        self.buttons: list[widgets.button, ...] = []
+        for i in self.settings["buttons"]:
+            try:
+                f = getattr(self, i[3])
+            except AttributeError:
+                f = self.non
+            try:
+                f2 = getattr(self, i[4])
+            except AttributeError:
+                f2 = self.non
             if len(i) == 6:
                 self.buttons.append(
-                    widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=getattr(self, i[3]),
-                                   onrelease=getattr(self, i[4]), tooltip=i[5]))
+                    widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
+                                   onrelease=f2, tooltip=self.returnkeytext(i[5])))
             elif len(i) == 7:
                 self.buttons.append(
-                    widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=getattr(self, i[3]),
-                                   onrelease=getattr(self, i[4]), tooltip=i[5], icon=i[6]))
-        self.labels = []
-        for i in settings[self.menu]["labels"]:
+                    widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
+                                   onrelease=f2, tooltip=self.returnkeytext(i[5]), icon=i[6]))
+        self.labels: list[widgets.lable, ...] = []
+        for i in self.settings["labels"]:
             if len(i) == 3:
                 self.labels.append(widgets.lable(self.surface, i[0], i[1], i[2]))
             elif len(i) == 4:
@@ -87,11 +92,16 @@ class menu():
         self.unlock_keys()
         self.resize()
 
-    def blit(self):
+    def blit(self, fontsize=None):
+        if settings["global"]["doublerect"]:
+            for i in self.buttons:
+                i.blitshadow()
         for i in self.labels:
             i.blit()
         for i in self.buttons:
-            i.blit()
+            i.blit(fontsize)
+        for i in self.buttons:
+            i.blittooltip()
 
     def non(self):
         pass
@@ -114,13 +124,58 @@ class menu():
         pass
 
     def findparampressed(self, paramname):
-        for key, value in hotkeys[self.menu].items():
-            if value == paramname:
-                if pg.key.get_pressed()[getattr(pg, key)]:
+        for key, value in self.hotkeys.items():
+            if key == "unlock_keys":
+                continue
+            if value.lower() == paramname.lower():
+                if pg.key.get_pressed()[getattr(pg, key.replace("@", "").replace("+", ""))]:
                     return True
                 return False
         # if param not found
         return False
+
+    def findkey(self, paramname, manyparams=False):
+        p = []
+        for key, value in self.hotkeys.items():
+            if key == "unlock_keys":
+                continue
+            if value.lower() == paramname.lower():
+                k = key.replace("@", "")
+                if not manyparams:
+                    return k
+                p.append(k)
+        for key, value in hotkeys["global"].items():
+            if value.lower() == paramname.lower():
+                k = key.replace("@", "")
+                if not manyparams:
+                    return k
+                p.append(k)
+        if not manyparams:
+            return None
+        return p
+
+    def returnkeytext(self, text):
+        pat = r"(<\[([a-z0-9\-\_\/]+)\]>)"
+        found = re.findall(pat, text, flags=re.IGNORECASE)
+        if found is None:
+            return text
+        groups = []
+        string = text
+        for index, fgroup in enumerate(found):
+            groups.append(list(tuple(self.findkey(fgroup[1], manyparams=True))))
+            groups[-1].sort()
+            for i, key in enumerate(groups[-1]):
+                k = key.replace("+", "").replace("@", "")
+                if key.find("+") != -1:
+                    groups[-1][i] = "ctrl + " + pg.key.name(getattr(pg, k))
+                else:
+                    groups[-1][i] = pg.key.name(getattr(pg, k))
+            rep = str(groups[-1]).replace("[", "").replace("]", "").replace("'", "").replace(" ", "").replace("+", " + ")
+            rep = " or ".join(rep.rsplit(",", 1))
+            rep = rep.replace(",", ", ")
+            string = string.replace(fgroup[0], rep)
+        # string = re.sub(pat, rep, text, flags=re.IGNORECASE)
+        return string
 
 
 class menu_with_field(menu):
@@ -131,7 +186,7 @@ class menu_with_field(menu):
 
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
 
-        self.field = widgets.window(self.surface, settings[self.menu]["d1"])
+        self.field = widgets.window(self.surface, self.settings["d1"])
         self.btiles = data["EX2"]["extraTiles"]
         self.fieldmap = self.field.field
 
@@ -198,7 +253,7 @@ class menu_with_field(menu):
             self.field.resize()
             self.renderfield()
 
-    def blit(self):
+    def blit(self): # NOQA
         self.drawmap()
         super().blit()
 

@@ -9,6 +9,7 @@
   	  	"K_7": "/FE",
   	  	"K_8": "/PE",
   	  	"K_9": "/LS",
+  	  	"K_0": "/LP",
   	  	"K_0+": "RELOAD",
   	  	"K_s+": "save",
   	  	"K_o+": "open",
@@ -130,7 +131,62 @@
 
   	},
 	"PE": {
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_SPACE", "K_q", "K_e",
+			"K_u", "K_i", "K_o", "K_p", "K_y", "K_g", "K_h", "K_j"
+		],
 
+		"K_ESCAPE": "/MN",
+		"K_w": "-browse_prev",
+		"K_a": "-cat_prev_propupdate",
+		"K_s": "-browse_next",
+		"K_d": "-cat_next_propupdate",
+
+		"K_w+": "-rotate0",
+		"K_a+": "-rotate270",
+		"K_s+": "-rotate180",
+		"K_d+": "-rotate90",
+
+		"K_u": "stretch_topleft",
+		"K_i": "stretch_topright",
+		"K_o": "stretch_bottomright",
+		"K_p": "stretch_bottomleft",
+
+		"K_y": "-stretchy_up",
+		"K_g": "-stretchx_down",
+		"K_h": "-stretchy_down",
+		"K_j": "-stretchx_up",
+
+		"K_y+": "-flipy",
+		"K_g+": "-flipx",
+		"K_h+": "-flipy",
+		"K_j+": "-flipx",
+		"K_SPACE": "stretch_flip",
+
+		"K_c": "-props_clear",
+
+		"K_v": "-delete_mode",
+		"K_b": "-pickup_mode",
+		"K_f": "-propvariation_change",
+		"K_m": "-pickuppropoptions_change",
+
+		"K_n": "-propoptions_toggle",
+
+
+		"K_r": "-transform_reset",
+
+		"K_e": "-rotate_right",
+		"K_q": "-rotate_left",
+		"K_SPACE@": "rotate_speedup",
+
+		"K_l": "-swichlayers",
+    	"K_l+": "-swichlayers_back",
+
+    	"K_SPACE@@": "cursor_propdepth_inverse",
+
+		"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down"
   	},
 	"FE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
@@ -181,7 +237,7 @@
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
   		"K_ESCAPE": "-save",
-  		"K_ESCAPE": "/MN",
+  		"@K_ESCAPE": "/MN",
   		
   		"K_q+": "-lightmod",
   		"K_e+": "-darkmod",
@@ -223,14 +279,14 @@
   		"K_w": "-as_top",
   		"K_s": "-set_height",
   		"K_d": "-set_width",
-  		"K_q": "-mswich"
+  		"K_q": "-mswich",
+  		"K_b": "-bftileschange"
   	},
   	"LP": {
   		"unlock_keys": [],
   		"K_ESCAPE": "/MN",
 
   		"K_b": "-changeborder",
-  		"K_l": "-changelight",
-  		"K_w": "-changewd"
+  		"K_l": "-changelight"
   	}
 }

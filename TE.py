@@ -120,12 +120,12 @@ class TE(menu_with_field):
         self.buttonslist = []
         btn2 = None
         for count, item in enumerate(self.items[list(self.items.keys())[self.currentcategory]]):
-            # rect = pg.rect.Rect([0, count * settings[self.menu]["itemsize"], self.field2.field.get_width(), settings[self.menu]["itemsize"]])
+            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][0], 6, 22, 4])
+            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], item["category"])
 
-            rect = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][0], count * settings[self.menu]["itemsize"] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][1] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][3] + 4, 22, settings[self.menu]["itemsize"]])
+            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], count * self.settings["itemsize"] + self.settings["buttons"][self.settings["itemsposindex"]][1][1] + self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, 22, self.settings["itemsize"]])
             if item["category"] == "material":
                 btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getmaterial)
             else:

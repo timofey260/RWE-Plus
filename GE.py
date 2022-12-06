@@ -7,7 +7,6 @@ class GE(menu_with_field):
         self.mapdata = data["GE"]
         self.state = 0
         self.mx = 0
-        self.rectdata = [[0, 0], [0, 0], [0, 0]]
 
         self.selectedtool = ""
         self.tools = toolmenu
@@ -113,9 +112,9 @@ class GE(menu_with_field):
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
 
             self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
-            if self.selectedtool in settings[self.menu]["codes"].keys():
+            if self.selectedtool in self.settings["codes"].keys():
                 if type(self.placetile) == int:
-                    if settings[self.menu]["codes"][self.selectedtool] == 1:
+                    if self.settings["codes"][self.selectedtool] == 1:
                         curtool = [graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
                                    graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
                     else:
@@ -150,7 +149,7 @@ class GE(menu_with_field):
                             self.place(posoffset[0], posoffset[1], False)
                             self.area[posoffset[0]][posoffset[1]] = 0
                             if type(self.placetile) == int:
-                                if settings[self.menu]["codes"][self.selectedtool] == 1:
+                                if self.settings["codes"][self.selectedtool] == 1:
                                     curtool = [
                                         graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
                                         graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
@@ -193,6 +192,7 @@ class GE(menu_with_field):
                         self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
                 self.rfa()
                 mousp2 = True
+            # aaah math
             if self.mirrorp:
                 px = pos[0]
                 py = pos[1]
@@ -360,10 +360,10 @@ class GE(menu_with_field):
                 self.mapdata[x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:  # clear upper
                 self.mapdata[x][y][self.layer][1] = []
-            elif self.selectedtool in settings[self.menu]["codes"].keys():  # else
-                if settings[self.menu]["codes"][self.selectedtool] == 1:
+            elif self.selectedtool in self.settings["codes"].keys():  # else
+                if self.settings["codes"][self.selectedtool] == 1:
                     self.mapdata[x][y][self.layer][0] = self.placetile + self.state
-                if settings[self.menu]["codes"][self.selectedtool] == 0:
+                if self.settings["codes"][self.selectedtool] == 0:
                     if self.placetile not in self.mapdata[x][y][self.layer][1]:
                         self.mapdata[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
@@ -398,10 +398,10 @@ class GE(menu_with_field):
                 self.mapdata[x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:
                 self.mapdata[x][y][self.layer][1] = []
-            elif self.selectedtool in settings[self.menu]["codes"].keys():
-                if settings[self.menu]["codes"][self.selectedtool] == 1:
+            elif self.selectedtool in self.settings["codes"].keys():
+                if self.settings["codes"][self.selectedtool] == 1:
                     self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
-                if settings[self.menu]["codes"][self.selectedtool] == 0:
+                if self.settings["codes"][self.selectedtool] == 0:
                     if self.placetile not in self.mapdata[x][y][self.layer][1]:
                         self.mapdata[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:

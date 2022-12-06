@@ -45,19 +45,19 @@ class FE(menu_with_field):
                                                                               len(self.buttonslist[:-1]) *
                                                                               self.buttonslist[:-1][0].rect.h + 1]))
         ts = sum(pg.display.get_window_size()) // 120
+        super().blit()
         for i in self.buttonslist[:-1]:
             i.blit(ts)
         for i in self.buttonslist2:
             i.blit(ts)
         for i in self.params:
             i.blit()
-        super().blit()
         if len(self.buttonslist2) > 0:
             cir = [self.buttonslist[self.currentindex].rect.x + 3,
                    self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
 
             cir2 = [self.buttonslist2[self.selectedeffect].rect.x + 3,
-                   self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
+                    self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
 
             if self.innew:
                 pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.currentindex].rect.h / 2)
@@ -107,10 +107,10 @@ class FE(menu_with_field):
         self.buttonslist = []
         btn2 = None
         for count, item in enumerate(effects[self.currentcategory]["efs"]):
-            cat = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][0], 6, 22, 4])
+            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"])
 
-            rect = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][0], count * settings[self.menu]["itemsize"] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][1] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex"]][1][3] + 4, 22, settings[self.menu]["itemsize"]])
+            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], count * self.settings["itemsizey"] + self.settings["buttons"][self.settings["itemsposindex"]][1][1] + self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, self.settings["itemsizex"], self.settings["itemsizey"]])
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.addeffect)
             self.buttonslist.append(btn)
             count += 1
@@ -119,10 +119,10 @@ class FE(menu_with_field):
 
         self.buttonslist2 = []
         for count, item in enumerate(self.data["FE"]["effects"]):
-            # rect = pg.rect.Rect([0, count * settings[self.menu]["itemsize"], self.field2.field.get_width(), settings[self.menu]["itemsize"]])
+            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
 
-            rect = pg.rect.Rect([settings[self.menu]["buttons"][settings[self.menu]["itemsposindex2"]][1][0], count * settings[self.menu]["itemsize"] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex2"]][1][1] + settings[self.menu]["buttons"][settings[self.menu]["itemsposindex2"]][1][3], 22, settings[self.menu]["itemsize"]])
+            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex2"]][1][0], count * self.settings["itemsizey"] + self.settings["buttons"][self.settings["itemsposindex2"]][1][1] + self.settings["buttons"][self.settings["itemsposindex2"]][1][3], self.settings["itemsizex"], self.settings["itemsizey"]])
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.selectmouseeffect)
             self.buttonslist2.append(btn)
             count += 1
@@ -135,11 +135,11 @@ class FE(menu_with_field):
         if len(self.data["FE"]["effects"]) == 0:
             return
         ws = pg.display.get_window_size()
-        addspace = settings[self.menu]["additionspace"] / 100 * ws[0]
-        ppos = settings[self.menu]["paramspos"]
+        addspace = self.settings["additionspace"] / 100 * ws[0]
+        ppos = self.settings["paramspos"]
 
         if self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][0].lower() == "seed":
-            rect = pg.Rect([ppos, settings[self.menu]["seedchange_size"]])
+            rect = pg.Rect([ppos, self.settings["seedchange_size"]])
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), "Set seed",
                                  onpress=self.changeseed)
             btn.resize()
@@ -154,17 +154,17 @@ class FE(menu_with_field):
                 rect = pg.Rect(ppos[0] / 100 * ws[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), i, onpress=self.changeparam)
             self.params.append(btn)
-        self.buttons[settings[self.menu]['currentparamindex']].text = str(self.paramindex)
+        self.buttons[self.settings['currentparamindex']].text = str(self.paramindex)
 
     def chtext(self):
         if len(self.data["FE"]["effects"]) > 0:
             self.labels[0].set_text(self.labels[0].originaltext % (self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][0], self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2]))
             self.labels[1].set_text(self.labels[1].originaltext + self.data["FE"]["effects"][self.selectedeffect]["nm"])
-            self.buttons[settings[self.menu]["currentparamindex"]].text = str(self.paramindex)
+            self.buttons[self.settings["currentparamindex"]].text = str(self.paramindex)
         else:
             self.labels[0].set_text("")
             self.labels[1].set_text("")
-            self.buttons[settings[self.menu]["currentparamindex"]].text = "0"
+            self.buttons[self.settings["currentparamindex"]].text = "0"
 
     def changeparam(self, text): # "Delete", "Move Back", "Move Forth"
         match text:

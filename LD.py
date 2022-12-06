@@ -3,6 +3,7 @@ from menuclass import *
 
 class load(menu):
     def __init__(self, surface: pg.surface.Surface, data):
+        super().__init__(surface, data, "LD")
         self.menu = "LD"
         self.surface = surface
         self.data = data
@@ -13,8 +14,7 @@ class load(menu):
         self.message = message
 
     def blit(self):
-        for i in self.buttons:
-            i.blit(30)
+        super().blit(30)
 
     def open(self):
         self.message = "open"
