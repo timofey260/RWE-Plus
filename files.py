@@ -3,18 +3,16 @@ import pygame as pg
 import os
 import sys
 
-name = r"\\files\\"
-
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
 else:
     application_path = os.path.dirname(__file__)
 
-path = application_path + name
+path = application_path + r"\\files\\"
 path2graphics = application_path + r"\\drizzle\\Data\\Graphics\\"
 path2cast = application_path + r"\\drizzle\\Data\\Cast\\"
-path2renderedlevels = application_path + r"\\drizzle\\Data\\Levels\\"
+path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
 path2props = application_path + r"\\drizzle\\Data\\Props\\"
 
 pg.font.init()
@@ -66,6 +64,11 @@ def solveeffects(effects):
                 d["options"] = []
             for i in effects["defaultparams"]:
                 d["options"].append(i)
+            for indx, option in enumerate(d["options"]):
+                if option[0].lower() == "layers": # idk why, but it is what it is
+                    l = d["options"].pop(indx)
+                    d["options"].insert(1, l)
+                    break
             efcat["efs"].append(d)
         ef.append(efcat)
     # print(ef)

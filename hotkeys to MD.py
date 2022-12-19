@@ -24,10 +24,12 @@ def turntomd(filename, output, mod=False):
                 for line in modded: # NOQA
                     f = re.search(r"### ([a-zA-Z0-9]+)", line)
                     if f is None:
-                        continue
-                    if f[1] == key:
+                        pass
+                    elif f[1] == key:
                         file.write(line)
                         break
+                else:
+                    file.write(f"### {key}\n")
             else:
                 file.write(f"### {key}\n")
             for item, value in items.items():

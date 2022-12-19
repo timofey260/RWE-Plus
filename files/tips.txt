@@ -1,0 +1,24 @@
+TE: Press <[-copytile]> to copy tile
+TE: Some of floors don't have their texture on different materials,\nso be careful with default material and material placing itself
+
+LE: You can change shadow color using <[-inverse]> key(s)
+
+FE: To fill areas faster, press <[str100]>
+
+You can easily read all hotkeys in hotkeys tab(<[/HK]>)
+Use Middle mouse button(MMB) to navigate on level
+Every menu can return you to menu with <[/MN]> button
+Move camera around with <[up]>, <[left]>, <[right]> and <[down]> keys
+Save level before rendering it(<[save]>)
+Switch layers with <[-swichlayers]> key
+
+Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
+Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
+Tile editor is my best and i hate Prop editor
+
+bruh
+Welcome to RWE+
+Pizza time!
+Stop listing this tips, time to make a level now!
+Press it again)------->
+https://www.youtube.com/watch?v=dQw4w9WgXcQ

@@ -1,5 +1,6 @@
 from lingotojson import *
 from menuclass import *
+from tkinter.filedialog import asksaveasfilename
 
 
 class LE(menu_with_field):
@@ -59,13 +60,11 @@ class LE(menu_with_field):
         self.blit()
         self.resize()
 
-    def blit(self):
+    def blit(self): # NOQA
         global mousp, mousp2, mousp1
         self.fieldadd.fill(white)
-        if not pg.key.get_pressed()[pg.K_LCTRL]:
-            self.drawmap()
-        else:
-            self.field.field.fill(self.field.color)
+        self.field.field.fill(self.field.color)
+        super().blit(not pg.key.get_pressed()[pg.K_LCTRL])
 
         xos = self.xoffset * self.size
         yos = self.yoffset * self.size
@@ -78,7 +77,7 @@ class LE(menu_with_field):
         if not pg.key.get_pressed()[pg.K_LSHIFT]:
             self.field.field.blit(self.field3.field, fieldpos2)
         self.field.blit(False)
-        super().blit()
+        super().blit(False)
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]

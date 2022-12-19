@@ -11,6 +11,23 @@ black = [0, 0, 0]
 white = [255, 255, 255]
 
 
+def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["global"]["fontsize"], centered=False, nocenter=False):
+    if col is None:
+        col = black
+    fontr: pg.font.Font = fs(fontsize)
+    surf = fontr.render(text, True, col, None)
+    if centered:
+        window.blit(surf, [x - surf.get_width() / 2, y - surf.get_height() / 2])
+    else:
+        if x + surf.get_width() < window.get_width():
+            window.blit(surf, [x, y])
+        elif x - surf.get_width() > 0:
+            window.blit(surf, [x - surf.get_width(), y])
+        elif nocenter:
+            window.blit(surf, [x - surf.get_width() / 2, y - surf.get_height() / 2])
+        else:
+            window.blit(surf, [x, y])
+
 def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
 
     if col is None:

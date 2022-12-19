@@ -12,6 +12,7 @@ Generated using hotkeys to md converter
 * **8** - /PE - 
 * **9** - /LS - 
 * **0** - /LP - 
+* **-** - /HK - 
 * **ctrl + 0** - RELOAD - 
 * **ctrl + S** - save - 
 * **ctrl + O** - open - 
@@ -34,6 +35,7 @@ Generated using hotkeys to md converter
 * **P** - /PE - 
 * **S** - /LS - 
 * **Z** - /LP - 
+* **H** - /HK - 
 ### GE
 * **Escape** - /MN - 
 * **L** - -swichlayers - 
@@ -127,12 +129,9 @@ Generated using hotkeys to md converter
 * **ctrl + H** - -flipy - 
 * **ctrl + J** - -flipx - 
 * **Space** - stretch_flip - 
-* **C** - -props_clear - 
-* **V** - -delete_mode - 
-* **B** - -pickup_mode - 
-* **F** - -propvariation_change - 
-* **M** - -pickuppropoptions_change - 
-* **N** - -propoptions_toggle - 
+* **V** - delete_mode - 
+* **B** - copy_mode - 
+* **F** - propvariation_change - 
 * **R** - -transform_reset - 
 * **E** - -rotate_right - 
 * **Q** - -rotate_left - 
@@ -162,6 +161,10 @@ Generated using hotkeys to md converter
 * **A** - -prevcat - 
 * **X** - -deleteeffect - 
 * **Delete** - -deleteeffect - 
+* **Left** - left - 
+* **Right** - right - 
+* **Up** - up - 
+* **Down** - down - 
 ### EE
 * **Escape** - /MN - 
 * **Left** - left - 
@@ -210,3 +213,15 @@ Generated using hotkeys to md converter
 * **Escape** - /MN - 
 * **B** - -changeborder - 
 * **L** - -changelight - 
+### HK
+* **Escape** - /MN - 
+* **G** - -GE - 
+* **T** - -TE - 
+* **C** - -CE - 
+* **L** - -LE - 
+* **E** - -EE - 
+* **F** - -FE - 
+* **P** - -PE - 
+* **S** - -LS - 
+* **Z** - -LP - 
+* **H** - -HK - 

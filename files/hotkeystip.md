@@ -1,4 +1,3 @@
-# Hotkeys
 Generated using hotkeys to md converter
 
 
@@ -13,17 +12,18 @@ Generated using hotkeys to md converter
 * **8** - /PE - Prop Editor
 * **9** - /LS - Level Resizing
 * **0** - /LP - Level Properties
-* **ctrl + 0** - reload - Reload interface(buttons, labels etc.)
+* **-** - /HK - Hotkeys
+* **ctrl + 0** - RELOAD - reloads UI
 * **ctrl + S** - save - Saves file
 * **ctrl + O** - open - Opens file
 * **ctrl + N** - new - Makes new file
-* **F11** - fullscreen
-### LD - load screen
+* **F11** - /fc - Fullscreen
+### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
 * **O** - open - Open file
 * **ctrl + O** - open - Open file
-### MN - menu
+### MN
 * **Q** - quit - quits RWE+
 * **ctrl + R** - render - Renders file using Drizzle
 * **G** - /GE - Geometry Editor
@@ -35,7 +35,8 @@ Generated using hotkeys to md converter
 * **P** - /PE - Prop Editor
 * **S** - /LS - Level Resizing
 * **Z** - /LP - Level Properties
-### GE - Geometry Editor
+* **H** - /HK - Hotkeys
+### GE
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
@@ -73,7 +74,7 @@ Generated using hotkeys to md converter
 * **ctrl + Right** - mright - Move mirror right
 * **ctrl + Up** - mup - Move mirror up
 * **ctrl + Down** - mdown - Move mirror down
-### TE - Tile Editor
+### TE
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
@@ -87,9 +88,9 @@ Generated using hotkeys to md converter
 * **S** - -dt - Next tile
 * **Tab** - -cleartool - Clearing tool. removes any tiles
 * **Space** - -changetools - Change between clearing tool and placing tool
-* **E** - -sad - Sets material as default(
+* **E** - -sad - Sets material as default
 * **Q** - -copytile - Copies tile in cursor
-### CE - Camera Editor
+### CE
 * **Escape** - /MN - Returns to menu
 * **D** - -deletecamera - Deletes the nearest placed camera
 * **Delete** - -deletecamera - Deletes the nearest placed camera
@@ -105,50 +106,46 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
-### PE - Prop Editor(in development)
+### PE
 * **Escape** - /MN - Returns to menu
-* **W** - -browse_prev - 
-* **A** - -cat_prev_propupdate - 
-* **S** - -browse_next - 
-* **D** - -cat_next_propupdate - 
-* **ctrl + W** - -rotate0 - 
-* **ctrl + A** - -rotate270 - 
-* **ctrl + S** - -rotate180 - 
-* **ctrl + D** - -rotate90 - 
-* **T** - -stretch_reset - 
-* **C** - -props_clear - 
-* **U** - -stretch_topleft - 
-* **I** - -stretch_topright - 
-* **O** - -stretch_bottomright - 
-* **P** - -stretch_bottomleft - 
-* **Y** - -stretchy_up - 
-* **G** - -stretchx_down - 
-* **H** - -stretchy_down - 
-* **J** - -stretchx_up - 
-* **ctrl + Y** - -flipy_norm - 
-* **ctrl + G** - -flipx_norm - 
-* **ctrl + H** - -flipy_rev - 
-* **ctrl + J** - -flipx_rev - 
-* **Space** - stretch_flip - 
-* **V** - -delete_mode - 
-* **B** - -pickup_mode - 
-* **F** - -propvariation_change - 
-* **M** - -pickuppropoptions_change - 
-* **N** - -propoptions_toggle - 
-* **R** - -all_reset - 
-* **E** - -rotate_right - 
-* **Q** - -rotate_left - 
-* **Space** - rotate_speedup - 
-* **L** - -swichlayers - 
-* **ctrl + L** - -swichlayers_back - 
-* **Space** - cursor_propdepth_inverse - 
-* **Left** - left - 
-* **Right** - right - 
-* **Up** - up - 
-* **Down** - down - 
-### FE - Effect Editor
+* **W** - -browse_prev - Previous prop
+* **A** - -cat_prev_propupdate - Previous category + update current prop
+* **S** - -browse_next - Next prop
+* **D** - -cat_next_propupdate - Next category + update current prop
+* **ctrl + W** - -rotate0 - Rotates prop to 0 degrees, facing north
+* **ctrl + A** - -rotate270 - Rotates prop to 270 degrees, facing west
+* **ctrl + S** - -rotate180 - Rotates prop to 180 degrees, facing south
+* **ctrl + D** - -rotate90 - Rotates prop to 90 degrees, facing east
+* **U** - stretch_topleft - Moves top left corner to mouse position
+* **I** - stretch_topright - Moves top right corner to mouse position
+* **O** - stretch_bottomright - Moves bottom right corner to mouse position
+* **P** - stretch_bottomleft - Moves bottom left corner to mouse position
+* **Y** - -stretchy_up - Streches height up
+* **G** - -stretchx_down - Streches width down
+* **H** - -stretchy_down - Streches height down
+* **J** - -stretchx_up - Streches width up
+* **ctrl + Y** - -flipy - Flips prop by y axis
+* **ctrl + G** - -flipx - Flips prop by x axis
+* **ctrl + H** - -flipy - Flips prop by y axis
+* **ctrl + J** - -flipx - Flips prop by x axis
+* **Space** - stretch_flip - If pressed, turns strech keys to flip keys
+* **V** - delete_mode - Deletes props
+* **B** - copy_mode - Copies props
+* **F** - propvariation_change - While pressed, press mouse buttons to change variation
+* **R** - -transform_reset - Resets transform of props
+* **E** - -rotate_right - Rotates prop to right
+* **Q** - -rotate_left - Rotates prop to left
+* **Space** - rotate_speedup - Rotates prop to right
+* **L** - -swichlayers - Swiches layers up
+* **ctrl + L** - -swichlayers_back - Swiches layers down
+* **Space** - cursor_propdepth_inverse - While pressed, press RMB to change depth down
+* **Left** - left - Move camera left
+* **Right** - right - Move camera right
+* **Up** - up - Move camera up
+* **Down** - down - Move camera down
+### FE
 * **Escape** - /MN - Returns to menu
-* **Space** - -addordeleteselectedeffect - Adds or deletes selected effect. It depends on where we, in effects tab or in new-effects add tab.
+* **Space** - -addordeleteselectedeffect - Adds or deletes selected effect
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
 * **ctrl + R** - -prevparam - Previous effect parameter
@@ -164,7 +161,11 @@ Generated using hotkeys to md converter
 * **A** - -prevcat - Previous category
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect
-### EE - Environment Editor
+* **Left** - left - Move camera left
+* **Right** - right - Move camera right
+* **Up** - up - Move camera up
+* **Down** - down - Move camera down
+### EE
 * **Escape** - /MN - Returns to menu
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
@@ -174,7 +175,7 @@ Generated using hotkeys to md converter
 * **Delete** - -deletewater - Delets water from level
 * **W** - -addwater - Adds water to level
 * **F** - -swichlayers - Switch water layer
-### LE - Light Editor
+### LE
 * **Escape** - -save - Saves shadow
 * **Escape** - /MN - Returns to menu
 * **ctrl + Q** - -lightmod - Makes pixels white
@@ -185,7 +186,7 @@ Generated using hotkeys to md converter
 * **D** - -wp - Width +
 * **[8]** - -fp - Light flatness +
 * **[5]** - -fm - Light flatness -
-* **[2]** - -fm - Also Light flatness -
+* **[2]** - -fm - Light flatness -
 * **[4]** - -lp - Light Angle +
 * **[6]** - -lm - Light Angle -
 * **Q** - -rl - Rotate image counter-clockwise
@@ -200,7 +201,7 @@ Generated using hotkeys to md converter
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
 * **Return** - -save - Saves shadow
-### LS - Level Resizing
+### LS
 * **Escape** - /MN - Returns to menu
 * **A** - -as_left - Add/sub cells from left of level
 * **W** - -as_top - Add/sub cells from top of level
@@ -208,51 +209,19 @@ Generated using hotkeys to md converter
 * **D** - -set_width - Sets level width
 * **Q** - -mswich - Changes shadow cutting method
 * **B** - -bftileschange - Sets buffer tiles
-### LP - Level Properties
+### LP
 * **Escape** - /MN - Returns to menu
 * **B** - -changeborder - changes border, opened or walls
 * **L** - -changelight - changes sunlight
-
-
-
-***
-
-# Hotkey editing
-
-You can add or edit Hotkeys.json file in "files" folder to replace.
-
-## @
-if you want to bind several commands to single key, add "@" sybmol to key
-
-Example:
-
-```json
-"K_SPACE": "stretch_flip",
-...
-"K_SPACE@": "rotate_speedup",
-...
-"K_SPACE@@": "cursor_propdepth_inverse",
-```
-
-"Space" key activates all of functions in menu
-
-***
-## +
-
-If you want to make key activates when ctrl is pressed too?
-
-use "+" symbol to make key use only in ctrl is pressed
-
-Example:
-
-```json
-"K_y": "-stretchy_up",
-"K_g": "-stretchx_down",
-"K_h": "-stretchy_down",
-"K_j": "-stretchx_up",
-
-"K_y+": "-flipy_norm",
-"K_g+": "-flipx_norm",
-"K_h+": "-flipy_rev",
-"K_j+": "-flipx_rev",
-```
+### HK
+* **Escape** - /MN - Returns to menu
+* **G** - -GE - Geometry Editor hotkeys
+* **T** - -TE - Tile Editor hotkeys
+* **C** - -CE - Camera Editor hotkeys
+* **L** - -LE - Light Editor hotkeys
+* **E** - -EE - Environment Editor hotkeys
+* **F** - -FE - Effect Editor hotkeys
+* **P** - -PE - Prop Editor hotkeys
+* **S** - -LS - Level Resizing hotkeys
+* **Z** - -LP - Level Properties hotkeys
+* **H** - -HK - Hotkeys hotkeys

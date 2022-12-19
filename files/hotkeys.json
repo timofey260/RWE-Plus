@@ -10,6 +10,7 @@
   	  	"K_8": "/PE",
   	  	"K_9": "/LS",
   	  	"K_0": "/LP",
+  	  	"K_MINUS": "/HK",
   	  	"K_0+": "RELOAD",
   	  	"K_s+": "save",
   	  	"K_o+": "open",
@@ -36,7 +37,8 @@
   	  	"K_f": "/FE",
   	  	"K_p": "/PE",
   	  	"K_s": "/LS",
-  	  	"K_z": "/LP"
+  	  	"K_z": "/LP",
+  	  	"K_h": "/HK"
 
   	},
   	"GE": {
@@ -162,15 +164,9 @@
 		"K_j+": "-flipx",
 		"K_SPACE": "stretch_flip",
 
-		"K_c": "-props_clear",
-
-		"K_v": "-delete_mode",
-		"K_b": "-pickup_mode",
-		"K_f": "-propvariation_change",
-		"K_m": "-pickuppropoptions_change",
-
-		"K_n": "-propoptions_toggle",
-
+		"K_v": "delete_mode",
+		"K_b": "copy_mode",
+		"K_f": "propvariation_change",
 
 		"K_r": "-transform_reset",
 
@@ -216,7 +212,12 @@
 		"K_a": "-prevcat",
 
 		"K_x": "-deleteeffect",
-		"K_DELETE": "-deleteeffect"
+		"K_DELETE": "-deleteeffect",
+		"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down"
+
 
   	},
 	"EE": {
@@ -288,5 +289,20 @@
 
   		"K_b": "-changeborder",
   		"K_l": "-changelight"
-  	}
+  	},
+	"HK": {
+		"unlock_keys": [],
+		"K_ESCAPE": "/MN",
+
+		"K_g": "-GE",
+  	  	"K_t": "-TE",
+  	  	"K_c": "-CE",
+  	  	"K_l": "-LE",
+  	  	"K_e": "-EE",
+  	  	"K_f": "-FE",
+  	  	"K_p": "-PE",
+  	  	"K_s": "-LS",
+  	  	"K_z": "-LP",
+  	  	"K_h": "-HK"
+	}
 }

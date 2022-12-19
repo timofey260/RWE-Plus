@@ -3,6 +3,28 @@ import cv2
 import numpy as np
 import random as rnd
 
+values = {
+    "release": {
+        -1: "left",
+        1: "right",
+        "def": "none"
+    },
+    "renderTime": {
+        0: "Pre Effcts", # ?
+        "def": "Post Effcts"
+    },
+    "variation": {
+        0: "random"
+    },
+    "applyColor": {
+        0: "NO",
+        "def": "YES"
+    },
+    "color": {
+        0: "NONE"
+    },
+}
+
 
 def quadsize(quad):
     mostleft = bignum
@@ -86,6 +108,18 @@ class PE(menu_with_field):
         super().renderfield()
         self.updateproptransform()
 
+    def getval(self, params, value):
+        if params not in values.keys():
+            return value
+        if value in values[params].keys():
+            return values[params][value]
+        elif "def" in values[params].keys():
+            return values[params]["def"]
+        else:
+            if params == "color":
+                return self.propcolors[value]
+            return value
+
     def rebuttons(self):
         self.buttonslist = []
         btn2 = None
@@ -121,18 +155,48 @@ class PE(menu_with_field):
                                  self.settings["settingssizex"],
                                  self.settings["settingssizey"]])
             btn = widgets.button(self.surface, rect, self.settings["settingscolor"], name, onpress=self.changesettings,
-                                 tooltip=str(val))
+                                 tooltip=str(self.getval(name, val)))
             self.settignslist.append(btn)
         self.resize()
 
     def changesettings(self, name):
         try:
-            print(f"value for {name} property({self.prop_settings[name]}):")
-            val = input(">>> ")
-            val = int(val)
-            self.prop_settings["name"] = val
+            match name:
+                case "release":
+                    val = (self.prop_settings[name] + 2) % 3 - 1
+                case "renderTime":
+                    val = (self.prop_settings[name] + 1) % 2
+                case "variation":
+                    val = (self.prop_settings[name] + 1) % len(self.selectedprop["images"])
+                    self.updateproptransform()
+                case "applyColor":
+                    val = (self.prop_settings[name] + 1) % 2
+                case "color":
+                    val = (self.prop_settings[name] + 1) % len(self.propcolors)
+                case _:
+                    print(f"value for {name} property({self.prop_settings[name]}):")
+                    val = input(">>> ")
+                    val = int(val)
+            self.prop_settings[name] = val
         except ValueError:
             print("non-valid value!")
+        self.settingsupdate()
+
+    def change_variation_up(self):
+        if self.prop_settings.get("variation") is None:
+            return
+        val = (self.prop_settings["variation"] + 1) % len(self.selectedprop["images"])
+        self.prop_settings["variation"] = val
+        self.updateproptransform()
+
+    def change_variation_down(self):
+        if self.prop_settings.get("variation") is None:
+            return
+        val = (self.prop_settings["variation"] - 1)
+        if val < 0:
+            val = len(self.selectedprop["images"]) - 1
+        self.prop_settings["variation"] = val
+        self.updateproptransform()
 
     def resize(self):
         super().resize()
@@ -158,16 +222,25 @@ class PE(menu_with_field):
             for button in self.settignslist:
                 button.blittooltip()
 
+        self.labels[2].set_text(self.labels[2].originaltext + str(self.prop_settings))
         self.labels[0].set_text(self.labels[0].originaltext + "\n".join(self.notes))
+        cir = [self.buttonslist[self.itemindx].rect.x + 3,
+               self.buttonslist[self.itemindx].rect.y + self.buttonslist[self.itemindx].rect.h / 2]
+        pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.itemindx].rect.h / 2)
         if self.field.rect.collidepoint(pg.mouse.get_pos()) or any(self.helds):
 
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
-            pos2 = [round((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size * image1size, 4),
-                    round((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size * image1size, 4)]
-            posoffset = [pos2[0] - self.xoffset * image1size, pos2[1] - self.yoffset * image1size]
+            pos2 = [round(round(pg.mouse.get_pos()[0] / image1size) * image1size - self.selectedimage.get_width() / 2, 4),
+                    round(round(pg.mouse.get_pos()[1] / image1size) * image1size - self.selectedimage.get_height() / 2, 4)]
+
+            posoffset = [(pos[0] - self.xoffset) * spritesize, (pos[1] - self.yoffset) * spritesize]
             bp = pg.mouse.get_pressed(3)
+            delmode = self.findparampressed("delete_mode")
+            copymode = self.findparampressed("copy_mode")
+            render = not delmode and not copymode
             # pg.draw.circle(self.fieldmap, red, pg.Vector2(posoffset) / image1size * self.size, 20)
+            mpos = pg.Vector2(pg.mouse.get_pos())
 
             s = [self.findparampressed("stretch_topleft"),
                  self.findparampressed("stretch_topright"),
@@ -184,18 +257,111 @@ class PE(menu_with_field):
 
             if bp[0] == 1 and mousp and (mousp2 and mousp1):
                 mousp = False
-                self.place()
+                if self.findparampressed("propvariation_change"):
+                    self.change_variation_up()
+                    self.settingsupdate()
+                elif delmode:
+                    *_, near = self.find_nearest(*posoffset)
+                    self.data["PR"]["props"].pop(near)
+                    self.rfa()
+                elif copymode:
+                    name, _, near = self.find_nearest(*posoffset)
+                    self.setprop(name[1])
+                    self.depth = name[0]
+                    quad = []
+                    for q in name[3]:
+                        quad.append(pg.Vector2(toarr(q, "point")))
+                    quads2 = quad.copy()
+                    qv = sum(quad, start=pg.Vector2(0, 0)) / 4
+                    for i, q in enumerate(quad):
+                        vec = pg.Vector2(q) - qv
+                        vec = [round(vec.x, 4), round(vec.y, 4)]
+                        quads2[i] = vec
+                    self.quads = quads2
+                    self.prop_settings = name[4]["settings"]
+                    self.updateproptransform()
+                else:
+                    self.place()
             elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
                 mousp = True
-                # pg.draw.circle(self.f, red, posoffset, 20)
 
-            if not any(self.helds):
-                self.surface.blit(self.selectedimage, pg.Vector2(pg.mouse.get_pos()) - pg.Vector2(self.selectedimage.get_size()) / 2)
-            else:
-                q2s = pg.Vector2(mosts[0], mosts[1])
-                self.surface.blit(self.selectedimage, self.helppoins + q2s)
+            if bp[2] == 1 and mousp2 and (mousp and mousp1):
+                mousp2 = False
+                if self.findparampressed("propvariation_change"):
+                    self.change_variation_down()
+                    self.settingsupdate()
+                elif self.findparampressed("cursor_propdepth_inverse"):
+                    self.depth_down()
+                else:
+                    self.depth_up()
+            elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
+                mousp2 = True
+
+            if render:
+                if not any(self.helds):
+                    if "snapToGrid" in self.selectedprop["tags"]:
+                        self.surface.blit(self.selectedimage, pos2)
+                    else:
+                        self.surface.blit(self.selectedimage, mpos - pg.Vector2(self.selectedimage.get_size()) / 2)
+                else:
+                    q2s = pg.Vector2(mosts[0], mosts[1])
+                    self.surface.blit(self.selectedimage, self.helppoins + q2s)
+            depthpos = [mpos[0] + 20, mpos[1]]
+            if self.findparampressed("propvariation_change"):
+                varpos = [mpos[0] + 20, mpos[1] + 20]
+                if self.prop_settings.get('variation') == 0:
+                    widgets.fastmts(self.surface, "Variation: Random", *varpos, white)
+                else:
+                    widgets.fastmts(self.surface, f"Variation: {self.prop_settings.get('variation')}", *varpos, white)
+            rl = sum(self.selectedprop["repeatL"]) if self.selectedprop.get("repeatL") else self.selectedprop["depth"]
+            widgets.fastmts(self.surface, f"Depth: {self.depth} to {rl + self.depth}", *depthpos, white)
 
             self.movemiddle(bp, pos)
+
+    def find_nearest(self, x, y):
+        mpos = pg.Vector2(x, y)
+        near = pg.Vector2(bignum, bignum)
+        propnear = []
+        nindx = 0
+        for indx, prop in enumerate(self.data["PR"]["props"]):
+            vec = pg.Vector2(toarr(prop[3][0], "point"))
+            if vec.distance_to(mpos) < near.distance_to(mpos):
+                near = vec
+                nindx = indx
+                propnear = prop
+        return propnear, near, nindx
+
+    def depth_up(self):
+        maxdepth = self.layer * 10 + 10
+        self.depth = (self.depth + 1) % maxdepth
+        self.add_warning()
+
+    def depth_down(self):
+        maxdepth = self.layer * 10 + 10
+        self.depth -= 1
+        if self.depth < 0:
+            self.depth = maxdepth - 1
+        self.add_warning()
+
+    def add_warning(self):
+        if self.selectedprop["tp"] not in ["simpleDecal", "variedDecal"]:
+            rl = sum(self.selectedprop["repeatL"]) if self.selectedprop.get("repeatL") else self.selectedprop["depth"]
+            if self.layer * 10 + self.depth <= 5 and self.layer * 10 + self.depth + rl >= 6:
+                self.labels[1].set_text(self.labels[1].originaltext + "this prop will intersect with the play layer!")
+                if self.selectedprop["tp"] == "antimatter":
+                    self.labels[1].set_text(self.labels[1].originaltext + "Antimatter prop intersecting play layer - remember to use a restore effect on affected play relevant terrain")
+            else:
+                self.labels[1].set_text(self.labels[1].originaltext)
+
+    def swichlayers(self):
+        super().swichlayers()
+        self.depth = self.depth % 10 + self.layer * 10
+        self.add_warning()
+
+    def swichlayers_back(self):
+        super().swichlayers_back()
+        self.depth = self.depth % 10 + self.layer * 10
+        self.add_warning()
 
     def if_set(self, pressed, quadindx):
         if pressed and not self.helds[quadindx]:
@@ -242,9 +408,11 @@ class PE(menu_with_field):
         if prop is None:
             print("Prop not found in memory! Try relaunch the app")
             return
-        self.selectedprop = prop
+        self.selectedprop = prop.copy()
         self.currentcategory = ci[0]
         self.itemindx = ci[1]
+        self.add_warning()
+        self.reset_settings()
         self.transform_reset()
         self.applysettings()
         self.applytags()
@@ -317,8 +485,7 @@ class PE(menu_with_field):
         self.prop_settings = {"renderorder": 0, "seed": rnd.randint(0, 1000), "renderTime": 0}
         random = self.selectedprop["random"] if self.selectedprop.get("random") is not None else 1
         notes = self.selectedprop["notes"].copy()
-        match self.selectedprop["tp"]:
-            case "standard", "variedStandard":
+        if self.selectedprop["tp"] in ["standard", "variedStandard"]:
                 if self.selectedprop["colorTreatment"] == "bevel":
                     notes.append("The highlights and shadows on this prop are generated by code,\nso it can be rotated to any degree and they will remain correct.\n")
                 else:
@@ -327,39 +494,40 @@ class PE(menu_with_field):
                     self.prop_settings["variation"] = 0 if random else 1
 
                 if random:
-                    notes.append(f"Will put down a random variation.\nA specific variation can be selected from settings ('{self.findkey('-propoptions_toggle')}\n' key).")
+                    notes.append(f"Will put down a random variation.\nA specific variation can be selected from settings.\n")
                 else:
-                    notes.append(f"This prop comes with many variations.\nWhich variation can be selected from settings ('{self.findkey('-propoptions_toggle')}' key).\n")
-            case "rope":
+                    notes.append(f"This prop comes with many variations.\nWhich variation can be selected from settings.\n")
+        elif self.selectedprop['tp'] == "rope":
                 self.prop_settings["release"] = 0
-            case "variedDecal", "variedSoft":
-                self.prop_settings["variation"] = 0 if random else 1
-                self.prop_settings["customDepth"] = self.depth
-                if self.selectedprop["tp"] == "variedSoft" and self.selectedprop.get("colorize"):
-                    self.prop_settings["applyColor"] = 1
-                    notes.append("It's recommended to render this prop after the effects if the color is activated, as the effects won't affect the color layers.")
-            case "simpleDecal", "soft", "softEffect", "antimatter":
-                self.prop_settings["customDepth"] = self.depth
+        elif self.selectedprop["tp"] in ["variedDecal", "variedSoft"]:
+            self.prop_settings["variation"] = 0 if random else 1
+            self.prop_settings["customDepth"] = self.selectedprop["depth"]
+            if self.selectedprop["tp"] == "variedSoft" and self.selectedprop.get("colorize"):
+                self.prop_settings["applyColor"] = 1
+                notes.append("It's recommended to render this prop after the effects\nif the color is activated, as the effects won't affect the color layers.\n")
+        elif self.selectedprop["tp"] in ["simpleDecal", "soft", "softEffect", "antimatter"]:
+            self.prop_settings["customDepth"] = self.selectedprop["depth"]
+
         if self.selectedprop["tp"] == "soft" or self.selectedprop["tp"] == "softEffect" or self.selectedprop["tp"] == "variedSoft":
             if self.selectedprop.get("selfShade") == 1:
-                notes.append("The highlights and shadows on this prop are generated by code,\nso it can be rotated to any degree and they will remain correct.")
+                notes.append("The highlights and shadows on this prop are generated by code,\nso it can be rotated to any degree and they will remain correct.\n")
             else:
-                notes.append("Be aware that shadows and highlights will not rotate with the prop,\nso extreme rotations may cause incorrect shading.")
+                notes.append("Be aware that shadows and highlights will not rotate with the prop,\nso extreme rotations may cause incorrect shading.\n")
         match self.selectedprop["nm"]:
             case "wire", "Zero-G Wire":
                 self.prop_settings["thickness"] = 2
-                notes.append("The thickness of the wire can be set in settings.")
+                notes.append("The thickness of the wire can be set in settings.\n")
             case "Zero-G Tube":
                 self.prop_settings["applyColor"] = 0
-                notes.append("The tube can be colored white through the settings.")
+                notes.append("The tube can be colored white through the settings.\n")
         for tag in self.selectedprop["tags"]:
             match tag:
                 case "customColor":
                     self.prop_settings["color"] = 0
-                    notes.append("Custom color available")
+                    notes.append("Custom color available\n")
                 case "customColorRainBow":
                     self.prop_settings["color"] = 1
-                    notes.append("Custom color available")
+                    notes.append("Custom color available\n")
         newnotes = []
         for note in self.notes:
             if note in newnotes:
@@ -376,7 +544,9 @@ class PE(menu_with_field):
         self.selectedimage.set_colorkey(white)
 
     def loadimage(self):
-        var = self.selectedprop["vars"] - 1 if self.selectedprop.get("vars") is not None else 0
+        var = rnd.randint(0, len(self.selectedprop["images"]) - 1)
+        if self.prop_settings.get("variation") not in [None, 0]:
+            var = self.prop_settings["variation"] - 1
         self.selectedimage: pg.Surface = self.selectedprop["images"][var]
 
     def transform_reset(self):
@@ -389,14 +559,28 @@ class PE(menu_with_field):
 
     def place(self):
         quads = self.quads.copy()
+        quads2 = quads.copy()
         mousepos = pg.Vector2(pg.mouse.get_pos())
         posonfield = ((mousepos - pg.Vector2(self.field.rect.topleft)) / self.size - pg.Vector2(self.xoffset, self.yoffset)) * spritesize
+        if "snapToGrid" in self.selectedprop["tags"]:
+            posonfield = [round((posonfield[0] / spritesize) * spritesize, 4),
+                          round((posonfield[1] / spritesize) * spritesize, 4)]
+        qv = []
         for i, q in enumerate(quads):
-            vec = pg.Vector2(q) + posonfield
-            quads[i] = makearr(list(vec), "point")
-        prop = [self.depth, self.selectedprop["nm"], makearr([self.currentcategory, self.itemindx], "point"), quads, {"settings": self.prop_settings}]
+            vec = pg.Vector2(q)
+            qv.append(vec)
+        qv = sum(qv, start=pg.Vector2(0, 0)) / 4
+        for i, q in enumerate(quads):
+            vec = pg.Vector2(q) - qv * 2 + posonfield
+            vec = [round(vec.x, 4), round(vec.y, 4)]
+            quads2[i] = makearr(vec, "point")
+        newpropsettings = self.prop_settings.copy()
+        if self.prop_settings.get("variation") is not None:
+            if self.prop_settings["variation"] == 0: # random
+                newpropsettings["variation"] = rnd.randint(1, len(self.selectedprop["images"]))
+        prop = [self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.itemindx + 1], "point"), quads2, {"settings": newpropsettings}]
+        self.data["PR"]["props"].append(prop.copy())
         self.applytags()
-        self.data["PR"]["props"].append(prop)
         self.rfa()
 
     def rotate_right(self):

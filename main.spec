@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['F:\\Desktop\\RWE+\\main.py'],
+    ['C:\\Users\\Admin\\Desktop\\RWE+\\main.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='F:\\Desktop\\RWE+\\files\\icon.ico',
+    icon=['C:\\Users\\Admin\\Desktop\\RWE+\\files\\icon.ico'],
 )

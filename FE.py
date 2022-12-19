@@ -66,18 +66,18 @@ class FE(menu_with_field):
                 pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
                 pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
 
+        pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
+               math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
+        bp = pg.mouse.get_pressed(3)
+
         if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["FE"]["effects"]) > 0:
             pg.draw.circle(self.surface, cursor, pg.mouse.get_pos(), self.brushsize * self.size, 4)
 
-            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
 
             if posoffset != self.mpos:
                 self.mpos = posoffset
                 self.mmove = True
-
-            bp = pg.mouse.get_pressed(3)
 
             if bp[0] == 1 and mousp and (mousp2 and mousp1):
                 mousp = False
@@ -101,7 +101,9 @@ class FE(menu_with_field):
                 mousp2 = True
                 self.renderfield()
 
-            self.movemiddle(bp, pos)
+        self.movemiddle(bp, pos)
+        for i in self.buttons:
+            i.blittooltip()
 
     def rebuttons(self):
         self.buttonslist = []
@@ -154,17 +156,17 @@ class FE(menu_with_field):
                 rect = pg.Rect(ppos[0] / 100 * ws[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), i, onpress=self.changeparam)
             self.params.append(btn)
-        self.buttons[self.settings['currentparamindex']].text = str(self.paramindex)
+        self.buttons[self.settings['currentparamindex']].set_text(str(self.paramindex))
 
     def chtext(self):
         if len(self.data["FE"]["effects"]) > 0:
             self.labels[0].set_text(self.labels[0].originaltext % (self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][0], self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2]))
             self.labels[1].set_text(self.labels[1].originaltext + self.data["FE"]["effects"][self.selectedeffect]["nm"])
-            self.buttons[self.settings["currentparamindex"]].text = str(self.paramindex)
+            self.buttons[self.settings["currentparamindex"]].set_text(str(self.paramindex))
         else:
             self.labels[0].set_text("")
             self.labels[1].set_text("")
-            self.buttons[self.settings["currentparamindex"]].text = "0"
+            self.buttons[self.settings["currentparamindex"]].set_text("0")
 
     def changeparam(self, text): # "Delete", "Move Back", "Move Forth"
         match text:
@@ -198,11 +200,12 @@ class FE(menu_with_field):
             if seed == -1:
                 self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
             if 0 <= seed <= 500:
-                print("Unvalid input!")
+                print("Seed changed!")
             self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = seed
+            self.makeparams()
             return
         except ValueError:
-            print("Unvalid input!")
+            print("Invalid input!")
 
     def prevparam(self):
         if self.paramindex - 1 >= 0:
@@ -255,7 +258,10 @@ class FE(menu_with_field):
             renderfield3(self.fieldmap, self.size, self.data["FE"]["effects"][self.selectedeffect]["mtrx"])
 
     def deleteeffect(self):
-        self.data["FE"]["effects"].pop(self.selectedeffect)
+        try:
+            self.data["FE"]["effects"].pop(self.selectedeffect)
+        except IndexError:
+            print("No elements in list!")
         self.selectedeffect = 0
         self.rebuttons()
         self.makeparams()
@@ -308,7 +314,7 @@ class FE(menu_with_field):
 
                     if val == 100:
                         val = 100
-                    self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = round(val, 4)
+                    self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = round(val)
 
         self.rf3()
 

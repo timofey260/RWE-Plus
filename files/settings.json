@@ -13,6 +13,8 @@
 		"doublerect": true,
 		"doublerectoffsetx": 4,
 		"doublerectoffsety": 4,
+		"primarylayeralpha": 255,
+		"secondarylayeralpha": 50,
 		"colors": {
 			"cursor": [255, 0, 0],
 			"cursor2": [50, 0, 255],
@@ -39,11 +41,12 @@
 	{
 		"buttons": 
 		[
-			["OPEN", [50, 0, 50, 100], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
-			["NEW", [0, 0, 50, 100], [100, 100, 100], "new", "non", "New project(<[new]>)"]
+			["OPEN", [50, 50, 50, 50], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
+			["NEW", [0, 50, 50, 50], [100, 100, 100], "new", "non", "New project(<[new]>)"]
 		],
 		"labels":[
-			
+			["Due to some bugs,\nafter pressing a 'new' button, please save\nproject to not lose progress later", [0, 0], [50, 0, 0], 25],
+			["Welcome to RWE+", [0, 30], [0, 0, 0], 30]
 		]
 	},
 	"MN":
@@ -51,36 +54,30 @@
 		"name": "Menu",
 		"buttons":
 		[
-			["LS", [10, 0, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[/LS]>)"],
-			["LP", [10, 14, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)"],
-			["GE", [0, 0, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)"],
-			["TE", [0, 14, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)"],
-			["CE", [0, 28, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)"],
-			["LE", [0, 42, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)"],
-			["EE", [0, 56, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(<[/EE]>)"],
-			["FE", [0, 70, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)"],
-			["PE", [0, 84, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)"],
+			["GE", [0, 86, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)"],
+			["TE", [10, 86, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)"],
+			["CE", [20, 86, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)"],
+			["LE", [30, 86, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)"],
+			["EE", [40, 86, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(<[/EE]>)"],
+			["FE", [50, 86, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)"],
+			["PE", [60, 86, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)"],
+			["LS", [70, 86, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[/LS]>)"],
+			["LP", [80, 86, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)"],
+			["HK", [90, 86, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)"],
 
 			
-			["Render", [90, 60, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
-			["Save as txt", [90, 70, 10, 10], [90, 90, 90], "saveastxt", "non", "save as official level editor file"],
-			["Save", [90, 80, 10, 10], [90, 90, 90], "save", "non", "save as .wep project(<[save]>)"],
-			["Quit", [90, 90, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)"]
+			["Render", [90, 10, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
+			["Save", [90, 0, 10, 10], [90, 90, 90], "save", "non", "save as .wep project(<[save]>)"],
+			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "save as .wep project"],
+			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "save as official level editor file"],
+			["Next tip", [90, 45, 10, 10], [90, 90, 90], "nexttip", "non", "save as official level editor file"],
+			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)"]
 		],
 		"labels":[
-			["Welcome to RWE+", [24, 5], [0, 0, 0], 50],
-			["Made by Timofey#5110", [26, 10], [40, 40, 40], 30],
-			["Available Editors:", [24, 15], [0, 0, 0], 40],
-
-			["GE(Geometry Editor) - full work", [26, 20], [0, 0, 0], 25],
-			["TE(Tile Editor) - full work", [26, 24], [0, 0, 0], 25],
-			["FE(Effect Editor) - full work", [26, 28], [0, 0, 0], 25],
-			["CE(Camera Editor) - full work", [26, 32], [0, 0, 0], 25],
-			["LE(Light Editor) - full work", [26, 36], [0, 0, 0], 25],
-			["LS(Level Resizing) - full work", [26, 40], [0, 0, 0], 25],
-			["LP(Level Properties) - full work", [26, 44], [0, 0, 0], 25],
-			["EE(Environment Editor) - full work", [26, 48], [0, 0, 0], 25],
-			["PE(Prop Editor) - alpha", [26, 52], [0, 0, 0], 25]
+			["", [0, 50], [0, 0, 0], 30],
+			["Tip:", [0, 44], [255, 255, 255], 30],
+			["RWE+", [0, 3], [20, 20, 20], 300],
+			["Made by Timofey#5110 with <3", [0, 0], [110, 110, 110], 30]
 
 		]
 	}, 
@@ -314,19 +311,15 @@
 			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(space)", ["icons.png", [3, 0]]],
 			["<", [2, 2, 4, 4], [100, 100, 100], "cat_prev", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
 
-
-			["v", [20, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(s)", ["arrows.png", [2, 0]]],
-			["Reset", [6, 60, 14, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(x, delete)"],
-			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(w)", ["arrows.png", [1, 0]]]
+			["Settings", [2, 60, 22, 4], [100, 100, 100], "non", "non", "Prop settings"]
 			
 		],
 
 		"itemsposindex": 4,
-		"itemsposindex2": 7,
 		"itemsizey": 2,
 		"itemsizex": 22,
 
-		"settingsposindex": 7,
+		"settingsposindex": 5,
 		"settingssize": 24,
 		"settingscolor": [90, 90, 90],
 		"settingssizey": 2,
@@ -344,13 +337,14 @@
 		},
 		"labels": [
 			["Notes:\n", [28, 64], [255, 255, 255], 25],
-			["Warning: %1s", [0, 94], [255, 255, 255], 25],
-			["Prop settings: %1s", [0, 97], [255, 255, 255], 25]
+			["Warning: ", [0, 94], [255, 50, 50], 25],
+			["Prop settings: ", [0, 97], [255, 255, 255], 25]
 		],
 		"cellsize": 10,
 		"menucolor": [120, 120, 120],
 
 		"elements_as_tiles_count": 21,
+		"elements_as_tiles_color": [110, 110, 110],
 
 		"rotate_speed": 0.1,
 		"rotate_speedup": 1,
@@ -373,5 +367,25 @@
 			["Water Layer: %2d", [0, 97], [255, 255, 255], 25]
 		],
 		"menucolor": [120, 120, 120]
+	},
+	"HK": {
+		"buttons": 
+		[
+			["LS", [10, 0, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[/LS]>)"],
+			["LP", [10, 14, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)"],
+			["HK", [10, 28, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)"],
+			["MN", [10, 42, 10, 14], [90, 90, 90], "MN", "non", "MN(<[/MN]>)"],
+			["GE", [0, 0, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)"],
+			["TE", [0, 14, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)"],
+			["CE", [0, 28, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)"],
+			["LE", [0, 42, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)"],
+			["EE", [0, 56, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(<[/EE]>)"],
+			["FE", [0, 70, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)"],
+			["PE", [0, 84, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)"]
+		],
+		"labels":[
+			["", [20, 0], [255, 255, 255], 25],
+			["", [30, 3], [0, 0, 0], 25]
+		]
 	}
 }

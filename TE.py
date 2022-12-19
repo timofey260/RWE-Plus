@@ -266,7 +266,10 @@ class TE(menu_with_field):
                 csp = sp[x2 * h + y2]
                 printtile(0, layer1)
                 if sp2 != 0:
-                    csp = sp2[x2 * h + y2]
+                    try:
+                        csp = sp2[x2 * h + y2]
+                    except IndexError:
+                        csp = -1
                     printtile(shift, layer2)
 
     def place(self, x, y):

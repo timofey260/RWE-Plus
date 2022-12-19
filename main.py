@@ -15,7 +15,7 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
-version = "v1.6 alpha"
+version = "v1.6"
 
 
 def keypress(window, surf, file, file2, level):
@@ -25,6 +25,8 @@ def keypress(window, surf, file, file2, level):
     # shift = pg.key.get_pressed()[pg.K_LSHIFT]
     for i in hotkeys["global"].keys():
         key = i.replace("@", "").replace("+", "")
+        if i == "unlock_keys":
+            continue
         if int(i.find("+") != -1) - int(ctrl) == 0:
             if pg.key.get_pressed()[getattr(pg, key)]:
                 pressed = hotkeys["global"][i]
@@ -59,7 +61,7 @@ def asktoexit(file, file2):
     if file2 != file:
         ex = askyesnocancel("Exit from RWE+", "Do you want to save Changes?")
         if ex:
-            open(asksaveasfilename(defaultextension="wep"), "w").write(json.dumps(file))
+            save(file)
             sys.exit(0)
         elif ex is None:
             return
@@ -95,7 +97,7 @@ def launch(level):
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
-    pg.display.set_icon(pg.image.load(application_path + "\\files\\icon.png"))
+    pg.display.set_icon(pg.image.load(path + "icon.png"))
     surf = MN(window, file)
     run = True
     while run:
@@ -145,6 +147,8 @@ def launch(level):
                     surf = EE(window, file)
                 case "PE":
                     surf = PE(window, file, props, propcolors)
+                case "HK":
+                    surf = HK(window, file)
                 case "fc":
                     fullscreen = not fullscreen
                     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
@@ -152,6 +156,9 @@ def launch(level):
                     surf.resize()
                 case "save":
                     save(file)
+                    file2 = copy.deepcopy(file)
+                case "saveas":
+                    saveas(file)
                     file2 = copy.deepcopy(file)
                 case "savetxt":
                     save_txt(file)
@@ -177,12 +184,12 @@ def save_txt(file):
     if savedest != "":
         turntolingo(file, open(savedest, "w"))
 
-
-def save(file):
-    print(file["path"])
-    if file["path"] != "":
+def save(file, saveas=False):
+    global surf
+    if file["path"] != "" and not saveas:
         open(os.path.splitext(file["path"])[0] + ".wep", "w").write(json.dumps(file))
         file["path"] = os.path.splitext(file["path"])[0] + ".wep"
+        print(os.path.splitext(file["path"])[0] + ".wep")
     else:
         savedest = asksaveasfilename(defaultextension="wep")
         if savedest != "":
@@ -190,7 +197,10 @@ def save(file):
             file["level"] = os.path.basename(savedest)
             file["path"] = savedest
             file["dir"] = os.path.abspath(savedest)
+    surf.recaption()
 
+def saveas(file):
+    save(file, True)
 
 def loadmenu():
     global surf
@@ -199,6 +209,7 @@ def loadmenu():
     height = 200
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
     surf = load(window, {"path": ""})
+    pg.display.set_icon(pg.image.load(path + "icon.png"))
     while run:
         for event in pg.event.get():
             match event.type:

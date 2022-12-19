@@ -105,7 +105,7 @@ def init_solve(file: str):
 
 
 def inittolist():
-    solved = init_solve(application_path + "\\drizzle\\Data\\Graphics\\init.txt")
+    solved = init_solve(path2graphics + "init.txt")
     del solved['']
     solved_copy = solved.copy()
     for catnum, catitem in enumerate(solved.items()):
@@ -159,6 +159,9 @@ def inittolist():
 
             newitem = {
                 "name": item["nm"],
+                "tp": item.get("tp"),
+                "repeatL": item["repeatL"] if item.get("repeatL") is not None else [1],
+                "bfTiles": item["bfTiles"],
                 "image": img,
                 "size": sz,
                 "category": cat,
@@ -177,6 +180,9 @@ def inittolist():
         solved_copy["material"].append(
             {
                 "name": i,
+                "tp": None,
+                "repeatL": [1],
+                "bfTiles": 0,
                 "image": img,
                 "size": [1, 1],
                 "category": "material",
@@ -194,6 +200,7 @@ def render(data):
     file = open(fl, "w")
     turntolingo(data, file)
     os.system(application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render " + fl)
+    print(path2renderedlevels)
     os.system("explorer " + path2renderedlevels)
 
 
@@ -271,18 +278,49 @@ def getprops(tiles: dict):
     # solved_copy["material"] = []
     # for cat in tiles:
     #     pass
+    count = 0
+    count2 = 0
+    title = ""
+    itemlist = []
+    for cat, items in tiles.items():
+        if cat == "material":
+            continue
+        for indx, tile in enumerate(items[1:]):
+            if count <= 0:
+                count = settings["PE"]["elements_as_tiles_count"]
+                if title != "":
+                    solved_copy[title] = itemlist
+                    itemlist = []
+                count2 += 1
+                title = f"tiles as prop {count2}"
+            if tile["tp"] == "voxelStruct" and "notProp" not in tile["tags"]:
+                itemlist.append({
+                    "nm": tile["name"],
+                    "tp": "standard",
+                    "images": [tile["image"]],
+                    "colorTreatment": "standard",
+                    "color": settings["PE"]["elements_as_tiles_color"],
+                    "sz": list(pg.Vector2(tile["size"]) + pg.Vector2(tile["bfTiles"] * 2, tile["bfTiles"] * 2)),
+                    "depth": 10 + int(tile["cols"][1] != []),
+                    "repeatL": tile["repeatL"],
+                    "tags": ["tile"],
+                    "layerExceptions": [],
+                    "notes": ["Tile as prop"]
+                })
+                count -= 1
+
     return solved_copy
 
 
 def turntolingo(string: dict, file):
     with file as fl:
-        fl.write(str(string["GE"]) + "\n")
-        fl.write(tolingo(string["TE"]) + "\n")
-        fl.write(tolingo(string["FE"]) + "\n")
-        fl.write(tolingo(string["LE"]) + "\n")
-        fl.write(tolingo(string["EX"]) + "\n")
-        fl.write(tolingo(string["EX2"]) + "\n")
-        fl.write(tolingo(string["CM"]) + "\n")
-        fl.write(tolingo(string["WL"]) + "\n")
-        fl.write(tolingo(string["PR"]) + "\n")
+        fl.write(str(string["GE"]) + "\r")
+        fl.write(tolingo(string["TE"]) + "\r")
+        fl.write(tolingo(string["FE"]) + "\r")
+        fl.write(tolingo(string["LE"]) + "\r")
+        fl.write(tolingo(string["EX"]) + "\r")
+        fl.write(tolingo(string["EX2"]) + "\r")
+        fl.write(tolingo(string["CM"]) + "\r")
+        fl.write(tolingo(string["WL"]) + "\r")
+        fl.write(tolingo(string["PR"]) + "\r")
 

@@ -127,7 +127,7 @@ class GE(menu_with_field):
             pg.draw.rect(self.field.field, border, rect, 5)
             if (0 <= posoffset[0] < len(self.mapdata)) and (0 <= posoffset[1] < len(self.mapdata[0])):
                 tilename = settings["GE"]["names"][str(self.mapdata[posoffset[0]][posoffset[1]][self.layer][0])]
-                self.labels[0].set_text("Tile: " + tilename)
+                self.labels[0].set_text(f"Tile: {tilename} {self.mapdata[posoffset[0]][posoffset[1]][self.layer]}")
 
             bp = pg.mouse.get_pressed(3)
 
@@ -364,7 +364,7 @@ class GE(menu_with_field):
                 if self.settings["codes"][self.selectedtool] == 1:
                     self.mapdata[x][y][self.layer][0] = self.placetile + self.state
                 if self.settings["codes"][self.selectedtool] == 0:
-                    if self.placetile not in self.mapdata[x][y][self.layer][1]:
+                    if (abs(int(self.placetile))) + self.state not in self.mapdata[x][y][self.layer][1]:
                         self.mapdata[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
                 self.mapdata[x][y][self.layer][0] = self.placetile
@@ -402,7 +402,7 @@ class GE(menu_with_field):
                 if self.settings["codes"][self.selectedtool] == 1:
                     self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
                 if self.settings["codes"][self.selectedtool] == 0:
-                    if self.placetile not in self.mapdata[x][y][self.layer][1]:
+                    if (abs(int(self.placetile))) + self.state not in self.mapdata[x][y][self.layer][1]:
                         self.mapdata[x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
                 self.mapdata[x][y][self.layer][0] = self.reverseslope(self.placetile)
