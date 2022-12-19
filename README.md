@@ -15,3 +15,5 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Camera editor
 * Level properties
 * Environment Editor
+* Prop Editor
+* Hotkey view
