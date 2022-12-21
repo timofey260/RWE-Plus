@@ -3,7 +3,9 @@ Maybe better version of official rain world editor
 
 uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 
-![image](https://github.com/timofey260/RWE-Plus/blob/master/files/image.png?raw=true)
+![icon](https://github.com/timofey260/RWE-Plus/blob/master/files/image.png?raw=true)
+
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1054412179786436728/image.png)
 
 
 ## Available Editors
@@ -15,3 +17,5 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 * Camera editor
 * Level properties
 * Environment Editor
+* Prop Editor
+* Hotkey view
