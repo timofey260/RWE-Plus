@@ -15,7 +15,7 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
-version = "v1.6"
+version = "v1.6.5 hotfix"
 
 
 def keypress(window, surf, file, file2, level):

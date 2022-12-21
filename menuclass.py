@@ -458,8 +458,8 @@ def renderfield2(field: widgets.window | pg.surface.Surface, size: int, mainlaye
                                 break
                         if it is not None:
                             break
-                cposx = posx - (it["size"][0] // 3) * size
-                cposy = posy - (it["size"][1] // 3) * size
+                cposx = posx - int((it["size"][0] * .5) + .5) * size + size
+                cposy = posy - int((it["size"][1] * .5) + .5) * size + size
                 siz = pg.rect.Rect([cposx, cposy, it["size"][0] * size, it["size"][1] * size])
                 pg.draw.rect(f, it["color"], siz, 0)
                 f.blit(it["image"], [cposx, cposy])
@@ -497,8 +497,8 @@ def destroy(data, x, y, items, layer):
                     break
             if itm is not None:
                 break
-        backx = mx - (itm["size"][0] // 3)
-        backy = my - (itm["size"][1] // 3)
+        backx = mx - int((itm["size"][0] * .5) + .5) + 1
+        backy = my - int((itm["size"][1] * .5) + .5) + 1
         if backx + itm["size"][0] > len(data["tlMatrix"]) or backy + itm["size"][1] > len(data["tlMatrix"][0]):
             return
         # startcell = self.data["TE"]["tlMatrix"][backx][backy][layer]
@@ -533,3 +533,4 @@ def destroy(data, x, y, items, layer):
                 clearitem(x, y, layer)
             case "material":
                 data["tlMatrix"][x][y][layer] = {"tp": "default", "data": 0}
+    data["tlMatrix"][x][y][layer] = {"tp": "default", "data": 0}

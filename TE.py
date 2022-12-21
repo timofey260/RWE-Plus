@@ -49,11 +49,11 @@ class TE(menu_with_field):
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
 
-            cposx = pos2[0] - (self.tileimage["size"][0] // 3) * self.size
-            cposy = pos2[1] - (self.tileimage["size"][1] // 3) * self.size
+            cposx = pos2[0] - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
+            cposy = pos2[1] - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
 
-            cposxo = posoffset[0] - (self.tileimage["size"][0] // 3)
-            cposyo = posoffset[1] - (self.tileimage["size"][1] // 3)
+            cposxo = posoffset[0] - int((self.tileimage["size"][0] * .5) + .5) + 1
+            cposyo = posoffset[1] - int((self.tileimage["size"][1] * .5) + .5) + 1
 
             if posoffset != self.mpos:
                 self.cols = self.test_cols(cposxo, cposyo)
@@ -273,9 +273,10 @@ class TE(menu_with_field):
                     printtile(shift, layer2)
 
     def place(self, x, y):
-        px = x + (self.tileimage["size"][0] // 3)
-        py = y + (self.tileimage["size"][1] // 3)
         w, h = self.tileimage["size"]
+        px = x + int((w * .5) + .5) - 1
+        py = y + int((h * .5) + .5) - 1
+        p = makearr(self.tileimage["cat"], "point")
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]
         if not self.test_cols(x, y):
@@ -288,8 +289,7 @@ class TE(menu_with_field):
                 if self.tileimage["category"] == "material":
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
                                                                            "data": self.tileimage["name"]}
-                elif x + x2 == px and y + y2 == py:
-                    p = makearr(self.tileimage["cat"], "point")
+                elif xpos == px and ypos == py:
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
                                                                            "data": [p, self.tileimage["name"]]}
                 elif csp != -1:
