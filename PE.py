@@ -267,7 +267,7 @@ class PE(menu_with_field):
                 elif copymode:
                     name, _, near = self.find_nearest(*posoffset)
                     self.setprop(name[1])
-                    self.depth = name[0]
+                    self.depth = -name[0]
                     quad = []
                     for q in name[3]:
                         quad.append(pg.Vector2(toarr(q, "point")))
@@ -578,7 +578,7 @@ class PE(menu_with_field):
         if self.prop_settings.get("variation") is not None:
             if self.prop_settings["variation"] == 0: # random
                 newpropsettings["variation"] = rnd.randint(1, len(self.selectedprop["images"]))
-        prop = [self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.itemindx + 1], "point"), quads2, {"settings": newpropsettings}]
+        prop = [-self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.itemindx + 1], "point"), quads2, {"settings": newpropsettings}]
         self.data["PR"]["props"].append(prop.copy())
         self.applytags()
         self.rfa()
