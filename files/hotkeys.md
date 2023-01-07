@@ -36,6 +36,11 @@ Generated using hotkeys to md converter
 * **S** - /LS - 
 * **Z** - /LP - 
 * **H** - /HK - 
+* **ctrl + Space** - -swichcameras - 
+* **Left** - left - 
+* **Right** - right - 
+* **Up** - up - 
+* **Down** - down - 
 ### GE
 * **Escape** - /MN - 
 * **L** - -swichlayers - 
@@ -65,6 +70,7 @@ Generated using hotkeys to md converter
 * **K** - -wormgrass - 
 * **D** - -clearlayer - 
 * **O** - -clearblock - 
+* **ctrl + Space** - -swichcameras - 
 * **Space** - rotate - 
 * **Left** - left - 
 * **Right** - right - 
@@ -82,6 +88,8 @@ Generated using hotkeys to md converter
 * **Right** - right - 
 * **Up** - up - 
 * **Down** - down - 
+* **G** - force_geometry - 
+* **ctrl + Space** - -swichcameras - 
 * **D** - -rt - 
 * **A** - -lt - 
 * **W** - -ut - 
@@ -90,6 +98,7 @@ Generated using hotkeys to md converter
 * **Space** - -changetools - 
 * **E** - -sad - 
 * **Q** - -copytile - 
+* **Left Shift** - movepreview - 
 ### CE
 * **Escape** - /MN - 
 * **D** - -deletecamera - 
@@ -108,6 +117,7 @@ Generated using hotkeys to md converter
 * **Down** - down - 
 ### PE
 * **Escape** - /MN - 
+* **X** - -togglesnap - 
 * **W** - -browse_prev - 
 * **A** - -cat_prev_propupdate - 
 * **S** - -browse_next - 
@@ -143,6 +153,7 @@ Generated using hotkeys to md converter
 * **Right** - right - 
 * **Up** - up - 
 * **Down** - down - 
+* **ctrl + Space** - -swichcameras - 
 ### FE
 * **Escape** - /MN - 
 * **Space** - -addordeleteselectedeffect - 
@@ -159,6 +170,7 @@ Generated using hotkeys to md converter
 * **T** - str100 - 
 * **D** - -nextcat - 
 * **A** - -prevcat - 
+* **ctrl + Space** - -swichcameras - 
 * **X** - -deleteeffect - 
 * **Delete** - -deleteeffect - 
 * **Left** - left - 
@@ -175,6 +187,7 @@ Generated using hotkeys to md converter
 * **Delete** - -deletewater - 
 * **W** - -addwater - 
 * **F** - -swichlayers - 
+* **ctrl + Space** - -swichcameras - 
 ### LE
 * **Escape** - -save - 
 * **Escape** - /MN - 
@@ -200,6 +213,7 @@ Generated using hotkeys to md converter
 * **Right** - right - 
 * **Up** - up - 
 * **Down** - down - 
+* **ctrl + Space** - -swichcameras - 
 * **Return** - -save - 
 ### LS
 * **Escape** - /MN - 

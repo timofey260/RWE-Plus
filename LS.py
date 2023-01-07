@@ -41,8 +41,7 @@ class LS(menu):
 
         mt = self.settings["tm" + str(int(self.shadowmode) + 1)]
         tt = self.settings["tt" + str(int(self.shadowmode) + 1)]
-        self.buttons[0].text = self.buttons[0].originaltext + mt
-        self.buttons[0].tooltip = self.buttons[0].originaltext + tt
+        self.buttons[0].set_text(self.buttons[0].originaltext + mt)
 
         self.labels[1].set_text(self.labels[1].originaltext % (self.gw, self.gh))
         self.labels[2].set_text(self.labels[2].originaltext % (self.tw, self.th))
@@ -57,36 +56,23 @@ class LS(menu):
             getattr(self, message[1:])()
 
     def as_left(self):
-        try:
-            val = int(input("Enter number of tiles to be deleted/added: "))
-            self.cuteverydata(val, 0, 0, 0)
-        except ValueError:
-            print("non valid answer")
+        val = askinteger(inputpromtname, "Enter number of tiles to be deleted/added: ")
+        self.cuteverydata(val, 0, 0, 0)
 
     def as_top(self):
-        try:
-            val = int(input("Enter number of tiles to be deleted/added: "))
-            self.cuteverydata(0, val, 0, 0)
-        except ValueError:
-            print("non valid answer")
+        val = askinteger(inputpromtname, "Enter number of tiles to be deleted/added: ")
+        self.cuteverydata(0, val, 0, 0)
 
     def set_width(self):
-        try:
-            val = int(input(f"Enter width({self.gw}): "))
-            self.cuteverydata(0, 0, val, 0)
-        except ValueError:
-            print("non valid answer")
+        val = askinteger(inputpromtname, f"Enter width({self.gw}): ")
+        self.cuteverydata(0, 0, val, 0)
 
     def set_height(self):
-        try:
-            val = int(input(f"Enter height({self.gh}): "))
-            self.cuteverydata(0, 0, 0, val)
-        except ValueError:
-            print("non valid answer")
+        val = askinteger(inputpromtname, f"Enter height({self.gh}): ")
+        self.cuteverydata(0, 0, 0, val)
 
     def cuteverydata(self, x, y, w, h):
-        ans = input("Are you sure?(y/n)>> ")
-        if ans.lower() != "y":
+        if x is None or y is None or w is None or h is None:
             print("Not changed")
             return
         self.data["GE"] = self.cutdata(x, y, w, h, self.data["GE"], [[0, []], [0, []], [0, []]])
@@ -161,10 +147,10 @@ class LS(menu):
 
     def bftileschange(self):
         try:
-            x = int(input(f"({self.btiles[0]})Left: "))
-            y = int(input(f"({self.btiles[1]})Top: "))
-            w = int(input(f"({self.btiles[2]})Right: "))
-            h = int(input(f"({self.btiles[3]})Bottom: "))
+            x = askinteger(inputpromtname, f"({self.btiles[0]})Left: ")
+            y = askinteger(inputpromtname, f"({self.btiles[1]})Top: ")
+            w = askinteger(inputpromtname, f"({self.btiles[2]})Right: ")
+            h = askinteger(inputpromtname, f"({self.btiles[3]})Bottom: ")
             self.data["EX2"]["extraTiles"] = [x, y, w, h]
             self.btiles = self.data["EX2"]["extraTiles"]
         except ValueError:

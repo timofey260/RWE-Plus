@@ -101,6 +101,7 @@ def init_solve(file: str):
                     item[p] = val
                 a2.append(item)
                 counter += 1
+    a[cat] = a2
     return a
 
 
@@ -218,7 +219,7 @@ def getcolors():
 
 def getprops(tiles: dict):
     # turning tiles to props and then add them to all other props
-    solved = init_solve(application_path + "\\drizzle\\Data\\Props\\init.txt")
+    solved = init_solve(path2props + "init.txt")
     del solved['']
     solved_copy = solved.copy()
     for catnum, catitem in enumerate(solved.items()):
@@ -233,7 +234,6 @@ def getprops(tiles: dict):
             images = []
 
             ws, hs = img.get_size()
-
             if item.get("pxlSize") is not None:
                 w, h = toarr(item["pxlSize"], "point")
             else:
@@ -242,6 +242,10 @@ def getprops(tiles: dict):
                     w = round(ws / item["vars"])
                 if item.get("repeatL") is not None:
                     h = math.floor((hs / len(item["repeatL"])))
+                    if item.get("sz") is not None and len(item["repeatL"]) < 2:
+                        sz = toarr(item["sz"], "point")
+                        w = sz[0] * image1size
+                        h = sz[1] * image1size
 
                     cons = 0.4
                     wh = pg.Color("#ffffff")

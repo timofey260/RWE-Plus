@@ -41,17 +41,17 @@ def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
     for l in items:
         render = fontr.render(l, True, col, None)
         rendered.append(render)
+        h = render.get_height()
         poses.append(h)
-        h += render.get_height()
         if render.get_width() > w:
             w = render.get_width()
 
-    surf = pg.Surface([w, h])
+    surf = pg.Surface([w, (fontsize - 2) * len(poses)])
     surf = surf.convert_alpha(surf)
     surf.fill([0, 0, 0, 0])
 
     for i, r in enumerate(rendered):
-        surf.blit(r, [0, poses[i]])
+        surf.blit(r, [0, (fontsize - 2) * i])
     return surf
 
 

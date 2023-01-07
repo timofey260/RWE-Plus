@@ -15,6 +15,7 @@
 		"doublerectoffsety": 4,
 		"primarylayeralpha": 255,
 		"secondarylayeralpha": 50,
+		"snap_error": 50,
 		"colors": {
 			"cursor": [255, 0, 0],
 			"cursor2": [50, 0, 255],
@@ -34,7 +35,8 @@
 			"camera_held": [255, 10, 5],
 			"camera_notheld": [50, 250, 40],
 
-			"slidebar": [255, 0, 0]
+			"slidebar": [150, 0, 0],
+			"rope": [255, 0, 0]
 		}
 	},
 	"LD":
@@ -46,12 +48,11 @@
 		],
 		"labels":[
 			["Due to some bugs,\nafter pressing a 'new' button, please save\nproject to not lose progress later", [0, 0], [50, 0, 0], 25],
-			["Welcome to RWE+", [0, 30], [0, 0, 0], 30]
+			["Welcome to RWE+", [0, 32], [0, 0, 0], 30]
 		]
 	},
 	"MN":
 	{
-		"name": "Menu",
 		"buttons":
 		[
 			["GE", [0, 86, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)"],
@@ -65,25 +66,38 @@
 			["LP", [80, 86, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)"],
 			["HK", [90, 86, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)"],
 
+			["Layer", [90, 48, 10, 14], [90, 90, 90], "swichlayers", "non", "Change layer"],
+			["Toggle\ntiles", [90, 62, 10, 14], [90, 90, 90], "tiles", "non", "Toggle tiles layer(<[/HK]>)"],
+
 			
 			["Render", [90, 10, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
 			["Save", [90, 0, 10, 10], [90, 90, 90], "save", "non", "save as .wep project(<[save]>)"],
 			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "save as .wep project"],
 			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "save as official level editor file"],
-			["Next tip", [90, 45, 10, 10], [90, 90, 90], "nexttip", "non", "save as official level editor file"],
-			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)"]
+			["Next tip", [90, 76, 10, 10], [90, 90, 90], "nexttip", "non", "save as official level editor file"],
+			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)"],
+
+			["?", [68, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 		],
 		"labels":[
-			["", [0, 50], [0, 0, 0], 30],
-			["Tip:", [0, 44], [255, 255, 255], 30],
-			["RWE+", [0, 3], [20, 20, 20], 300],
+			["", [0, 79], [0, 0, 0], 30],
+			["Tip:", [0, 75], [255, 255, 255], 30],
+			["RWE+", [0, 3], [20, 20, 20], 150],
 			["Made by Timofey#5110 with <3", [0, 0], [110, 110, 110], 30]
 
-		]
+		],
+		"d1":
+		{
+			"rect": [2, 20, 60, 50],
+			"color": [90, 90, 90],
+			"border": [255, 255, 255]
+		}
 	}, 
 	"GE":
 	{
 		"buttons":[
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"],
+
 			["AR", [4, 0, 4, 6], [120, 120, 120], "s0", "air", "Air(<[-air]>)", ["geometry.png", [2, 0]]],
 			["SL", [4, 6, 4, 6], [100, 100, 100], "s0", "slope", "Slope(<[-slope]>)", ["geometry.png", [3, 0]]],
 			["RK", [4, 12, 4, 6], [100, 100, 100], "s0", "rock", "Rock(<[-rock]>)", ["geometry.png", [2, 1]]],
@@ -114,13 +128,13 @@
 		],
 		"d1":
 		{
-			"rect":[10, 2, 88, 96],
-			"color":[90, 90, 90],
-			"border":[255, 255, 255]
+			"rect": [10, 2, 88, 96],
+			"color": [90, 90, 90],
+			"border": [255, 255, 255]
 		}, 
 		"labels":[
 			["Tile: ", [0, 79], [255, 255, 255], 30],
-			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25]
+			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25]
 		],
 		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WG":0},
 		"names": {
@@ -143,7 +157,8 @@
 			["Set as default", [8, 2, 14, 4], [100, 100, 100], "sad", "non", "Set material as default(<[-sad]>)"],
 			["<", [4, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(<[-lt]>)", ["arrows.png", [3, 0]]],
 			["CT", [0, 2, 4, 4], [100, 100, 100], "cleartool", "non", "Clear tool(<[-cleartool]>)"],
-			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"]
+			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
 		"itemsposindex": 2,
@@ -169,7 +184,8 @@
 			["L/D", [1, 14, 5, 6], [100, 100, 100], "inverse", "non", "Dark/Light swich(<[-inverse]>)"],
 			["D", [1, 20, 5, 6], [30, 30, 30], "darkmod", "non", "Dark mode(<[-darkmod]>)"],
 			["L", [1, 26, 5, 6], [230, 230, 230], "lightmod", "non", "Light mode(<[-lightmod]>)"],
-			["S", [1, 32, 5, 6], [100, 100, 100], "save", "non", "Save as image(<[-save]>)"]
+			["S", [1, 32, 5, 6], [100, 100, 100], "save", "non", "Save as image(<[-save]>)"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 
 		],
 		"labels": [
@@ -198,12 +214,13 @@
 	},
 	"LS": {
 		"buttons": [
-			["Shadows sizing: ", [70, 2, 30, 6], [100, 100, 100], "mswich", "non", "Cut shadows(<[-mswich]>)"],
+			["Shadows sizing: ", [70, 2, 30, 6], [100, 100, 100], "mswich", "non", "Cut shadows/strech them(<[-mswich]>)"],
 			["Add/sub left", [1, 2, 30, 6], [100, 100, 100], "as_left", "non", "Add or sub from left border of level(<[-as_left]>)"],
 			["Add/sub top", [1, 8, 30, 6], [100, 100, 100], "as_top", "non", "Add or sub from top border of level(<[-as_top]>)"],
 			["Change width", [1, 14, 30, 6], [100, 100, 100], "set_width", "non", "set width of level(<[-set_width]>)"],
 			["Change height", [1, 20, 30, 6], [100, 100, 100], "set_height", "non", "set height of level(<[-set_height]>)"],
-			["Change buffer tiles", [1, 26, 30, 6], [100, 100, 100], "bftileschange", "non", "Change buffer tiles zone(<[-bftileschange]>)"]
+			["Change buffer tiles", [1, 26, 30, 6], [100, 100, 100], "bftileschange", "non", "Change buffer tiles zone(<[-bftileschange]>)"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 
 		],
 		"tm1": "Cut",
@@ -236,7 +253,8 @@
 
 			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
 			["0", [28, 70, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
-			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]]
+			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
 
@@ -266,7 +284,8 @@
 	"CE":{
 		"buttons": [
 			["New", [2, 2, 4, 4], [100, 100, 100], "addcamera", "non", "Add new camera to level(<[-addcamera]>)", ["icons.png", [3, 0]]],
-			["Delete", [2, 6, 4, 4], [100, 100, 100], "deletecamera", "non", "Delete camera from level(<[-deletecamera]>)", ["icons.png", [0, 0]]]
+			["Delete", [2, 6, 4, 4], [100, 100, 100], "deletecamera", "non", "Delete camera from level(<[-deletecamera]>)", ["icons.png", [0, 0]]],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
 		"d1":{
@@ -285,7 +304,8 @@
 	"LP": {
 		"buttons": [
 			["Change Border", [2, 2, 20, 14], [100, 100, 100], "changeborder", "non", "Change border settings(changeborder)"],
-			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(changelight)"]
+			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(changelight)"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
 		"labels": [
@@ -311,7 +331,9 @@
 			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(space)", ["icons.png", [3, 0]]],
 			["<", [2, 2, 4, 4], [100, 100, 100], "cat_prev", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
 
-			["Settings", [2, 60, 22, 4], [100, 100, 100], "non", "non", "Prop settings"]
+			["Settings", [2, 60, 22, 4], [100, 100, 100], "non", "non", "Prop settings"],
+			["Snap to grid", [80, 93, 20, 7], [100, 100, 100], "togglesnap", "non", "change snapping"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
 
@@ -354,7 +376,8 @@
 		"buttons": [
 			["AW", [2, 2, 4, 6], [100, 100, 100], "water", "non", "Adds water to the level(w)"],
 			["RW", [2, 8, 4, 6], [100, 100, 100], "nowater", "non", "Delete water from level(d, delete)"],
-			["WIF", [2, 14, 4, 6], [100, 100, 100], "swichlayers", "non", "Change layer of water(f)"]
+			["WIF", [2, 14, 4, 6], [100, 100, 100], "swichlayers", "non", "Change layer of water(f)"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
 		"d1":{
@@ -381,11 +404,12 @@
 			["LE", [0, 42, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)"],
 			["EE", [0, 56, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(<[/EE]>)"],
 			["FE", [0, 70, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)"],
-			["PE", [0, 84, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)"]
+			["PE", [0, 84, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)"],
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 		],
 		"labels":[
-			["", [20, 0], [255, 255, 255], 25],
-			["", [30, 3], [0, 0, 0], 25]
+			["", [20, 0], [255, 255, 255], 20],
+			["", [30, 0], [255, 255, 255], 20]
 		]
 	}
 }

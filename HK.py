@@ -1,21 +1,17 @@
 from menuclass import *
 
 class HK(menu):
-    def __init__(self, surface: pg.surface.Surface, data):
+    def __init__(self, surface: pg.surface.Surface, data, openmenu="MN"):
         self.menu = "HK"
-        self.m = "MN"
+        self.m = openmenu
         self.keys = open(path + "hotkeystip.md").readlines()
 
         super().__init__(surface, data, "HK")
         self.init()
         self.fontsize = self.labels[0].fontsize
-        self.load_menu("MN")
+        self.load_menu(openmenu)
 
     def load_menu(self, name):
-        try:
-            a = getattr(self, "fontsize")
-        except AttributeError:
-            return
         self.m = name
         sw = False
         text = ""
@@ -28,12 +24,12 @@ class HK(menu):
                 if name in line:
                     sw = True
             if sw:
-                if widgets.mts(text, blue, self.fontsize).get_height() > self.surface.get_height():
-                    text2 += line.replace("*", "").replace("###", "") + "\n"
-                    count += 1
-                else:
-                    text += line.replace("*", "").replace("###", "") + "\n"
-                    count += 1
+                ft = line.find("-")
+                tx = line[:ft] + "\n"
+                tx2 = line[ft:]
+                text += tx.replace("*", "").replace("###", "")
+                text2 += tx2.replace("*", "").replace("###", "")
+                count += 1
 
         self.labels[0].set_text(text)
         self.labels[1].set_text(text2)

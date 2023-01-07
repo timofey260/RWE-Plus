@@ -20,7 +20,6 @@ class EE(menu_with_field):
         self.data["WL"]["waterLevel"] = -1
 
     def blit(self):
-        global mousp, mousp2, mousp1
         super().blit()
         self.fieldadd.fill(white)
         if self.data["WL"]["waterLevel"] != -1:
@@ -45,13 +44,13 @@ class EE(menu_with_field):
 
             bp = pg.mouse.get_pressed()
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
-                mousp = False
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = False
                 self.wateroffset = self.data["WL"]["waterLevel"] + posoffset[1]
-            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.data["WL"]["waterLevel"] = max(self.wateroffset - posoffset[1], 0)
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
-                mousp = True
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = True
                 self.rfa()
 
             self.movemiddle(bp, pos)

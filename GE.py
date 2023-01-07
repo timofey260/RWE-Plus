@@ -95,7 +95,6 @@ class GE(menu_with_field):
         # renderfield(self.fieldmap, self.size, self.layer, self.mapdata)
 
     def blit(self):
-        global mousp, mousp2, mousp1
         cellsize2 = [self.size, self.size]
         super().blit()
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
@@ -131,15 +130,15 @@ class GE(menu_with_field):
 
             bp = pg.mouse.get_pressed(3)
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedtool == "MV":
                     self.rectdata[0] = pos
                     self.rectdata[1] = [self.xoffset, self.yoffset]
                     self.field.field.fill(self.field.color)
                 else:
                     self.area = [[1 for _ in range(len(self.mapdata[0]))] for _ in range(len(self.mapdata))]
-                mousp = False
-            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+                self.mousp = False
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedtool == "MV":
                     self.xoffset = self.rectdata[1][0] - (self.rectdata[0][0] - pos[0])
                     self.yoffset = self.rectdata[1][1] - (self.rectdata[0][1] - pos[1])
@@ -166,32 +165,32 @@ class GE(menu_with_field):
                                         px = self.mirrorpos[0] * 2 + (-px - 1)
                                     else:
                                         py = self.mirrorpos[0] * 2 + (-py - 1)
-                                    px = px * self.size
-                                    py = py * self.size
+                                    px *= self.size
+                                    py *= self.size
                                     self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
-                mousp = True
+                self.mousp = True
                 self.rfa()
 
             self.movemiddle(bp, pos)
 
-            if bp[2] == 1 and mousp2 and (mousp and mousp1):
-                mousp2 = False
+            if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
+                self.mousp2 = False
                 self.rectdata = [posoffset, [0, 0], pos2]
-            elif bp[2] == 1 and not mousp2 and (mousp and mousp1):
+            elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
                 # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
                 rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
                 pg.draw.rect(self.surface, select, rect, 5)
                 ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
-            elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
+            elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
                 for x in range(self.rectdata[1][0]):
                     for y in range(self.rectdata[1][1]):
                         self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
                 self.rfa()
-                mousp2 = True
+                self.mousp2 = True
             # aaah math
             if self.mirrorp:
                 px = pos[0]

@@ -5,12 +5,15 @@ LE: You can change shadow color using <[-inverse]> key(s)
 
 FE: To fill areas faster, press <[str100]>
 
+GE: Press <[rotate]> to rotate beams and slopes
+
 You can easily read all hotkeys in hotkeys tab(<[/HK]>)
 Use Middle mouse button(MMB) to navigate on level
 Every menu can return you to menu with <[/MN]> button
 Move camera around with <[up]>, <[left]>, <[right]> and <[down]> keys
 Save level before rendering it(<[save]>)
 Switch layers with <[-swichlayers]> key
+Use <[-swichcameras]> to enable camera showing on editor\nMight be helpful btw
 
 Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
 Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index

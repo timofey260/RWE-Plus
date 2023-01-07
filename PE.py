@@ -72,6 +72,14 @@ def quadtransform(quads, image: pg.Surface):
     return [img, mosts[0], mosts[1], ww, wh]
 
 
+def rotatepoint(point, angle):
+    px, py = point
+    angle = math.radians(angle)
+    qx = math.cos(angle) * px - math.sin(angle) * py
+    qy = math.sin(angle) * px + math.cos(angle) * py
+    return pg.Vector2([qx, qy])
+
+
 class PE(menu_with_field):
     def __init__(self, surface: pg.surface.Surface, data, props, propcolors):
         self.menu = "PE"
@@ -91,7 +99,13 @@ class PE(menu_with_field):
 
         self.selectedprop = self.props[list(self.props.keys())[self.currentcategory]][0]
         self.selectedimage: pg.Surface = self.selectedprop["images"][0]
+        self.snap = False
         self.notes = []
+
+        self.quads = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        self.quadsnor = self.quads.copy() # quad's default position
+
+        self.prop_settings = {}
 
         self.helds = [False, False, False, False]
         self.helppoins = pg.Vector2(0, 0)
@@ -209,8 +223,6 @@ class PE(menu_with_field):
             self.renderfield()
 
     def blit(self):
-        global mousp, mousp2, mousp1
-
         super().blit()
         if len(self.buttonslist) > 2:
             self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
@@ -228,11 +240,12 @@ class PE(menu_with_field):
                self.buttonslist[self.itemindx].rect.y + self.buttonslist[self.itemindx].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.itemindx].rect.h / 2)
         if self.field.rect.collidepoint(pg.mouse.get_pos()) or any(self.helds):
+            mpos = pg.Vector2(pg.mouse.get_pos())
 
-            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
-            pos2 = [round(round(pg.mouse.get_pos()[0] / image1size) * image1size - self.selectedimage.get_width() / 2, 4),
-                    round(round(pg.mouse.get_pos()[1] / image1size) * image1size - self.selectedimage.get_height() / 2, 4)]
+            pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
+                   math.floor((mpos.y - self.field.rect.y) / self.size)]
+            pos2 = [round(math.floor(mpos.x / image1size) * image1size - self.selectedimage.get_width() / 2, 4),
+                    round(math.floor(mpos.y / image1size) * image1size - self.selectedimage.get_height() / 2, 4)]
 
             posoffset = [(pos[0] - self.xoffset) * spritesize, (pos[1] - self.yoffset) * spritesize]
             bp = pg.mouse.get_pressed(3)
@@ -240,7 +253,6 @@ class PE(menu_with_field):
             copymode = self.findparampressed("copy_mode")
             render = not delmode and not copymode
             # pg.draw.circle(self.fieldmap, red, pg.Vector2(posoffset) / image1size * self.size, 20)
-            mpos = pg.Vector2(pg.mouse.get_pos())
 
             s = [self.findparampressed("stretch_topleft"),
                  self.findparampressed("stretch_topright"),
@@ -255,8 +267,8 @@ class PE(menu_with_field):
             self.if_set(s[2], 2)
             self.if_set(s[3], 3)
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
-                mousp = False
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = False
                 if self.findparampressed("propvariation_change"):
                     self.change_variation_up()
                     self.settingsupdate()
@@ -280,13 +292,47 @@ class PE(menu_with_field):
                     self.quads = quads2
                     self.prop_settings = name[4]["settings"]
                     self.updateproptransform()
+                elif self.selectedprop["tp"] == "long":
+                    self.rectdata[0] = posoffset
+                    self.rectdata[1] = mpos
+                    self.transform_reset()
                 else:
                     self.place()
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
-                mousp = True
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
+                if self.selectedprop["tp"] == "long":
+                    p1 = pg.Vector2(self.rectdata[0])
+                    p2 = pg.Vector2(posoffset)
+                    vec = p2 - p1
+                    angle = math.degrees(math.atan2(vec.y, vec.x))
+                    distance = p1.distance_to(p2)
+                    newquads = self.quadsnor.copy()
+                    newquads[1][0] = distance + newquads[0][0]
+                    newquads[2][0] = distance + newquads[0][0]
+                    q = []
+                    point = pg.Vector2(newquads[0])
+                    for quad in newquads:
+                        newq = pg.Vector2(quad).rotate(angle)
+                        if quad[0] < point.x:
+                            point.x = quad[0]
+                        if quad[1] < point.y:
+                            point.y = quad[1]
+                        q.append(newq)
+                    self.quads = q
+                    i, *_, ww, wh = quadtransform(q, self.selectedimage)
+                    self.rectdata[2] = pg.Vector2(i.get_size())
+                    i = pg.transform.scale(i, [ww / spritesize * self.size, wh / spritesize * self.size])
+                    i.set_colorkey(white)
+                    self.surface.blit(i, (pg.Vector2(self.rectdata[1]) + mpos) / 2 - pg.Vector2(i.get_size()) / 2)
 
-            if bp[2] == 1 and mousp2 and (mousp and mousp1):
-                mousp2 = False
+
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = True
+                if self.selectedprop["tp"] == "long":
+                    self.place((pg.Vector2(self.rectdata[0]) + posoffset) / 2)
+                    self.transform_reset()
+
+            if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
+                self.mousp2 = False
                 if self.findparampressed("propvariation_change"):
                     self.change_variation_down()
                     self.settingsupdate()
@@ -294,12 +340,12 @@ class PE(menu_with_field):
                     self.depth_down()
                 else:
                     self.depth_up()
-            elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
-                mousp2 = True
+            elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
+                self.mousp2 = True
 
             if render:
                 if not any(self.helds):
-                    if "snapToGrid" in self.selectedprop["tags"]:
+                    if self.snap:
                         self.surface.blit(self.selectedimage, pos2)
                     else:
                         self.surface.blit(self.selectedimage, mpos - pg.Vector2(self.selectedimage.get_size()) / 2)
@@ -315,7 +361,11 @@ class PE(menu_with_field):
                     widgets.fastmts(self.surface, f"Variation: {self.prop_settings.get('variation')}", *varpos, white)
             rl = sum(self.selectedprop["repeatL"]) if self.selectedprop.get("repeatL") else self.selectedprop["depth"]
             widgets.fastmts(self.surface, f"Depth: {self.depth} to {rl + self.depth}", *depthpos, white)
-
+            if copymode or delmode:
+                _, near, _ = self.find_nearest(*posoffset)
+                ofc = pg.Vector2(self.xoffset, self.yoffset)
+                pos2 = (near / spritesize + ofc) * self.size + self.field.rect.topleft
+                pg.draw.line(self.surface, red, mpos, pos2, 10)
             self.movemiddle(bp, pos)
 
     def find_nearest(self, x, y):
@@ -411,12 +461,16 @@ class PE(menu_with_field):
         self.selectedprop = prop.copy()
         self.currentcategory = ci[0]
         self.itemindx = ci[1]
+        self.snap = "snapToGrid" in self.selectedprop["tags"]
         self.add_warning()
         self.reset_settings()
         self.transform_reset()
         self.applysettings()
         self.applytags()
         self.rebuttons()
+
+    def togglesnap(self):
+        self.snap = not self.snap
 
     def rfa(self):
         super().rfa()
@@ -438,7 +492,13 @@ class PE(menu_with_field):
             surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
             surf.set_colorkey(white)
             surf.set_alpha(100)
-            self.f.blit(surf, [mostleft / 16 * 20, mosttop / 16 * 20])
+            self.f.blit(surf, [mostleft / spritesize * image1size, mosttop / spritesize * image1size])
+            if prop[4].get("points") is not None: # rope showing for future
+                for point in prop[4]["points"]:
+                    px, py = toarr(point, "point")
+                    px = px / spritesize * image1size
+                    py = py / spritesize * image1size
+                    pg.draw.circle(self.f, rope, [px, py], 5)
         self.renderfield()
 
     def findprop(self, name):
@@ -450,10 +510,8 @@ class PE(menu_with_field):
 
     def rotate(self, a):
         for indx, quad in enumerate(self.quads):
-            px, py = quad
-            angle = math.radians(a)
-            qx = math.cos(angle) * px - math.sin(angle) * py
-            qy = math.sin(angle) * px + math.cos(angle) * py
+            rot = rotatepoint(quad, a)
+            qx, qy = rot.x, rot.y
             self.quads[indx] = [round(qx, 4), round(qy, 4)]
         self.updateproptransform()
 
@@ -555,16 +613,17 @@ class PE(menu_with_field):
         w, h = self.selectedimage.get_size()
         wd, hd = w / 2, h / 2
         self.quads = [[-wd, -hd], [wd, -hd], [wd, hd], [-wd, hd]]
+        self.quadsnor = self.quads.copy()
         self.updateproptransform()
 
-    def place(self):
+    def place(self, longpos=None):
         quads = self.quads.copy()
         quads2 = quads.copy()
         mousepos = pg.Vector2(pg.mouse.get_pos())
         posonfield = ((mousepos - pg.Vector2(self.field.rect.topleft)) / self.size - pg.Vector2(self.xoffset, self.yoffset)) * spritesize
-        if "snapToGrid" in self.selectedprop["tags"]:
-            posonfield = [round((posonfield[0] / spritesize) * spritesize, 4),
-                          round((posonfield[1] / spritesize) * spritesize, 4)]
+        if self.snap:
+            posonfield = [round(math.floor(posonfield[0] / image1size) * image1size, 4),
+                          round(math.floor(posonfield[1] / image1size) * image1size, 4)]
         qv = []
         for i, q in enumerate(quads):
             vec = pg.Vector2(q)
@@ -572,6 +631,8 @@ class PE(menu_with_field):
         qv = sum(qv, start=pg.Vector2(0, 0)) / 4
         for i, q in enumerate(quads):
             vec = pg.Vector2(q) - qv * 2 + posonfield
+            if longpos:
+                vec = pg.Vector2(q) - qv + longpos # I literally have no idea how this works
             vec = [round(vec.x, 4), round(vec.y, 4)]
             quads2[i] = makearr(vec, "point")
         newpropsettings = self.prop_settings.copy()

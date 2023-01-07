@@ -61,7 +61,6 @@ class LE(menu_with_field):
         self.resize()
 
     def blit(self): # NOQA
-        global mousp, mousp2, mousp1
         self.fieldadd.fill(white)
         self.field.field.fill(self.field.color)
         super().blit(not pg.key.get_pressed()[pg.K_LCTRL])
@@ -97,16 +96,16 @@ class LE(menu_with_field):
             self.surface.blit(self.tileimage, curpos)
             bp = pg.mouse.get_pressed(3)
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
-                mousp = False
-            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = False
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 sizepr = self.map_to_field(self.tileimage.get_width(), self.tileimage.get_height())
                 self.field3.field.blit(self.tileimage, curpos_on_field)
                 self.fieldadd.blit(self.field3.field, fieldpos)
                 self.field2.field.blit(pg.transform.scale(self.tileimage, sizepr), curpos_on_field2)
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
-                mousp = True
+                self.mousp = True
                 self.renderfield()
             self.movemiddle(bp, pos)
 

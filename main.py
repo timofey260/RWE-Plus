@@ -15,7 +15,7 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
-version = "v1.6.5 hotfix"
+version = "v1.7"
 
 
 def keypress(window, surf, file, file2, level):
@@ -98,7 +98,7 @@ def launch(level):
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
     pg.display.set_icon(pg.image.load(path + "icon.png"))
-    surf = MN(window, file)
+    surf = MN(window, file, items)
     run = True
     while run:
         for event in pg.event.get():
@@ -125,10 +125,12 @@ def launch(level):
                         surf.send("SD")
         if surf.message != "":
             match surf.message:
+                case "%":
+                    surf = HK(window, file, surf.menu)
                 case "quit":
                     asktoexit(file, file2)
                 case "MN":
-                    surf = MN(window, file)
+                    surf = MN(window, file, items)
                 case "GE":
                     surf = GE(window, file)
                 case "TE":

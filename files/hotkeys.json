@@ -38,7 +38,14 @@
   	  	"K_p": "/PE",
   	  	"K_s": "/LS",
   	  	"K_z": "/LP",
-  	  	"K_h": "/HK"
+  	  	"K_h": "/HK",
+
+  	  	"K_SPACE+": "-swichcameras",
+
+  	  	"K_LEFT": "left",
+    	"K_RIGHT": "right",
+    	"K_UP": "up",
+    	"K_DOWN": "down"
 
   	},
   	"GE": {
@@ -73,6 +80,8 @@
     	"K_d": "-clearlayer",
     	"K_o": "-clearblock",
 
+    	"K_SPACE+": "-swichcameras",
+
     	"K_SPACE": "rotate",
     	
     	"K_LEFT": "left",
@@ -97,6 +106,10 @@
     	"K_UP": "up",
     	"K_DOWN": "down",
 
+    	"K_g": "force_geometry",
+
+    	"K_SPACE+": "-swichcameras",
+
     	"K_d": "-rt",
     	"K_a": "-lt",
     	"K_w": "-ut",
@@ -104,7 +117,8 @@
     	"K_TAB": "-cleartool",
     	"K_SPACE": "-changetools",
     	"K_e": "-sad",
-    	"K_q": "-copytile"
+    	"K_q": "-copytile",
+    	"K_LSHIFT": "movepreview"
 
   	},
 	"CE": {
@@ -138,6 +152,7 @@
 		],
 
 		"K_ESCAPE": "/MN",
+		"K_x": "-togglesnap",
 		"K_w": "-browse_prev",
 		"K_a": "-cat_prev_propupdate",
 		"K_s": "-browse_next",
@@ -182,7 +197,9 @@
 		"K_LEFT": "left",
     	"K_RIGHT": "right",
     	"K_UP": "up",
-    	"K_DOWN": "down"
+    	"K_DOWN": "down",
+
+    	"K_SPACE+": "-swichcameras"
   	},
 	"FE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
@@ -211,6 +228,8 @@
 		"K_d": "-nextcat",
 		"K_a": "-prevcat",
 
+		"K_SPACE+": "-swichcameras",
+
 		"K_x": "-deleteeffect",
 		"K_DELETE": "-deleteeffect",
 		"K_LEFT": "left",
@@ -233,7 +252,8 @@
     	"K_DELETE": "-deletewater",
     	"K_w": "-addwater",
 
-    	"K_f": "-swichlayers"
+    	"K_f": "-swichlayers",
+    	"K_SPACE+": "-swichcameras"
   	},
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
@@ -269,6 +289,7 @@
     	"K_RIGHT": "right",
     	"K_UP": "up",
     	"K_DOWN": "down",
+    	"K_SPACE+": "-swichcameras",
 
     	"K_RETURN": "-save"
   	},

@@ -38,7 +38,6 @@ class FE(menu_with_field):
         self.renderfield_all(rendersecond=True, items=self.items)
 
     def blit(self):
-        global mousp, mousp2, mousp1
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[:-1][0].xy,
                                                                              [self.buttonslist[:-1][0].rect.w,
@@ -79,26 +78,26 @@ class FE(menu_with_field):
                 self.mpos = posoffset
                 self.mmove = True
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
-                mousp = False
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = False
                 self.mmove = True
-            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
                     self.paint(posoffset[0], posoffset[1], 1)
                     self.mmove = False
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
-                mousp = True
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = True
                 self.renderfield()
 
-            if bp[2] == 1 and mousp2 and (mousp and mousp1):
-                mousp2 = False
+            if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
+                self.mousp2 = False
                 self.mmove = True
-            elif bp[2] == 1 and not mousp2 and (mousp and mousp1):
+            elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
                     self.paint(posoffset[0], posoffset[1], -1)
                     self.mmove = False
-            elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
-                mousp2 = True
+            elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
+                self.mousp2 = True
                 self.renderfield()
 
         self.movemiddle(bp, pos)
@@ -196,7 +195,7 @@ class FE(menu_with_field):
 
     def changeseed(self):
         try:
-            seed = int(input("Enter seed: "))
+            seed = askinteger(inputpromtname, "Enter seed: ")
             if seed == -1:
                 self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
             if 0 <= seed <= 500:

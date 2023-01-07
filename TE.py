@@ -18,6 +18,8 @@ class TE(menu_with_field):
         self.mpos = [0, 0]
         self.cols = False
 
+        self.lastfg = False
+
         super().__init__(surface, data, "TE")
         self.set("material", "Standard")
         self.init()
@@ -31,8 +33,6 @@ class TE(menu_with_field):
         self.renderfield_all(rendersecond=True, items=self.items)
 
     def blit(self):
-        global mousp, mousp2, mousp1
-
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
         for button in self.buttonslist[:-1]:
@@ -55,9 +55,12 @@ class TE(menu_with_field):
             cposxo = posoffset[0] - int((self.tileimage["size"][0] * .5) + .5) + 1
             cposyo = posoffset[1] - int((self.tileimage["size"][1] * .5) + .5) + 1
 
-            if posoffset != self.mpos:
+            fg = self.findparampressed("force_geometry")
+
+            if posoffset != self.mpos or self.lastfg != fg:
                 self.cols = self.test_cols(cposxo, cposyo)
                 self.mpos = posoffset
+                self.lastfg = fg
                 self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
                 if self.canplace(posoffset[0], posoffset[1], cposxo, cposyo):
                     self.labels[0].set_text(
@@ -73,12 +76,12 @@ class TE(menu_with_field):
                                                           self.tileimage["image"].get_height() + bord * 2]], bord)
             if not self.tool:
                 self.surface.blit(self.tileimage["image"], [cposx, cposy])
-                self.printcols(cposxo, cposyo)
+                self.printcols(cposxo, cposyo, self.tileimage)
             bp = pg.mouse.get_pressed(3)
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
-                mousp = False
-            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = False
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
                     pass
                 if not self.tool:
@@ -89,23 +92,23 @@ class TE(menu_with_field):
                 else:
                     self.destroy(posoffset[0], posoffset[1])
                     pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
-                mousp = True
+                self.mousp = True
                 self.rfa()
 
             self.movemiddle(bp, pos)
 
-            if bp[2] == 1 and mousp2 and (mousp and mousp1):
-                mousp2 = False
+            if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
+                self.mousp2 = False
                 self.rectdata = [posoffset, [0, 0], pos2]
-            elif bp[2] == 1 and not mousp2 and (mousp and mousp1):
+            elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
                 # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
                 rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
                 pg.draw.rect(self.surface, select, rect, 5)
                 ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
-            elif bp[2] == 0 and not mousp2 and (mousp and mousp1):
+            elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
                 for x in range(self.rectdata[1][0]):
                     for y in range(self.rectdata[1][1]):
@@ -114,7 +117,19 @@ class TE(menu_with_field):
                         else:
                             self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
                 self.rfa()
-                mousp2 = True
+                self.mousp2 = True
+        else:
+            for index, button in enumerate(self.buttonslist[:-1]):
+                if button.onmouseover():
+                    cat = list(self.items.keys())[self.currentcategory]
+                    item = self.items[cat][index]
+                    w, h = item["size"]
+                    w *= self.size
+                    h *= self.size
+                    pg.draw.rect(self.surface, item["color"], [self.field.rect.x, self.field.rect.y, w, h])
+                    self.surface.blit(pg.transform.scale(item["image"], [w, h]), [self.field.rect.x, self.field.rect.y])
+                    self.printcols(0, 0, item, True)
+                    break
 
     def rebuttons(self):
         self.buttonslist = []
@@ -206,6 +221,7 @@ class TE(menu_with_field):
                 return
 
     def test_cols(self, x, y):
+        force_geo = self.findparampressed("force_geometry")
         w, h = self.tileimage["size"]
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]
@@ -218,24 +234,30 @@ class TE(menu_with_field):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
                 if csp != -1:
-                    if self.data["GE"][x + x2][y + y2][self.layer][0] != csp or \
-                            self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer]["tp"] != "default":
+                    if self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer]["tp"] != "default":
+                        return False
+                    if self.data["GE"][x + x2][y + y2][self.layer][0] != csp and not force_geo:
                         return False
                 if sp2 != 0:
                     if self.layer + 1 <= 2:
                         csp2 = sp2[x2 * h + y2]
                         if csp2 != -1:
-                            if self.data["GE"][x + x2][y + y2][self.layer + 1][0] != csp2 or \
-                                    self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer + 1]["tp"] != "default":
+                            if self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer + 1]["tp"] != "default":
+                                return False
+                            if self.data["GE"][x + x2][y + y2][self.layer + 1][0] != csp and not force_geo:
                                 return False
 
         return True
         # self.data["TE"]
 
-    def printcols(self, x, y):
+    def printcols(self, x, y, tile, prev=False):
         def printtile(sft, color):
-            px = (x + x2 + self.xoffset) * self.size + self.field.rect.x + sft
-            py = (y + y2 + self.yoffset) * self.size + self.field.rect.y + sft
+            if prev:
+                px = x2 * self.size + self.field.rect.x + sft
+                py = y2 * self.size + self.field.rect.y + sft
+            else:
+                px = (x + x2 + self.xoffset) * self.size + self.field.rect.x + sft
+                py = (y + y2 + self.yoffset) * self.size + self.field.rect.y + sft
             match csp:
                 case 1:
                     pg.draw.rect(self.surface, color, [px, py, self.size, self.size], shift)
@@ -255,12 +277,14 @@ class TE(menu_with_field):
                     pg.draw.polygon(self.surface, color,
                                     [[px, py], [px + self.size, py + self.size], [px + self.size, py]], shift)
 
-        w, h = self.tileimage["size"]
-        sp = self.tileimage["cols"][0]
-        sp2 = self.tileimage["cols"][1]
+        w, h = tile["size"]
+        sp = tile["cols"][0]
+        sp2 = tile["cols"][1]
         shift = self.size // 10
         if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]):
             return
+        if self.findparampressed("movepreview"):
+            pg.draw.rect(self.surface, black, [(x + self.xoffset) * self.size + self.field.rect.x, (y + self.yoffset) * self.size + self.field.rect.y, w * self.size, h * self.size])
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
@@ -273,6 +297,7 @@ class TE(menu_with_field):
                     printtile(shift, layer2)
 
     def place(self, x, y):
+        fg = self.findparampressed("force_geometry")
         w, h = self.tileimage["size"]
         px = x + int((w * .5) + .5) - 1
         py = y + int((h * .5) + .5) - 1
@@ -296,13 +321,20 @@ class TE(menu_with_field):
                     p = makearr([px + 1, py + 1], "point")
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
                                                                            "data": [p, self.layer + 1]}
+                if fg and csp != -1:
+                    self.data["GE"][xpos][ypos][self.layer][0] = csp
+
                 if sp2 != 0:
                     csp = sp2[x2 * h + y2]
                     if self.layer + 1 <= 2 and csp != -1:
                         p = makearr([px + 1, py + 1], "point")
                         self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1] = {"tp": "tileBody",
                                                                                    "data": [p, self.layer + 1]}
+                        if fg:
+                            self.data["GE"][xpos][ypos][self.layer + 1][0] = csp
         self.mpos = 1
+        if fg:
+            self.rfa()
 
     def destroy(self, x, y):
         destroy(self.data["TE"], x, y, self.items, self.layer)

@@ -2,6 +2,7 @@ import json
 import pygame as pg
 import os
 import sys
+from tkinter.simpledialog import *
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
@@ -41,6 +42,8 @@ camh = 40
 
 wladd = 5.7
 bignum = 9999999
+
+inputpromtname = "RWE+ input"
 
 
 fonts: dict[pg.font.Font, ...] = {}

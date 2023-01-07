@@ -36,6 +36,11 @@ Generated using hotkeys to md converter
 * **S** - /LS - Level Resizing
 * **Z** - /LP - Level Properties
 * **H** - /HK - Hotkeys
+* **ctrl + Space** - -swichcameras - toggles camera showing
+* **Left** - left - Move camera left
+* **Right** - right - Move camera right
+* **Up** - up - Move camera up
+* **Down** - down - Move camera down
 ### GE
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
@@ -65,6 +70,7 @@ Generated using hotkeys to md converter
 * **K** - -wormgrass - Adds wormgrass to cell
 * **D** - -clearlayer - Removes only cell, leaves added cells
 * **O** - -clearblock - Removes only added cells, like beams and paths
+* **ctrl + Space** - -swichcameras - toggles camera showing
 * **Space** - rotate - Rotate slopes and beams
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
@@ -82,6 +88,8 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
+* **G** - force_geometry - forces geometry to tile
+* **ctrl + Space** - -swichcameras - toggles camera showing
 * **D** - -rt - Next category
 * **A** - -lt - Previous category
 * **W** - -ut - Previous tile
@@ -90,6 +98,7 @@ Generated using hotkeys to md converter
 * **Space** - -changetools - Change between clearing tool and placing tool
 * **E** - -sad - Sets material as default
 * **Q** - -copytile - Copies tile in cursor
+* **Left Shift** - movepreview - Preview of prop specs on black square
 ### CE
 * **Escape** - /MN - Returns to menu
 * **D** - -deletecamera - Deletes the nearest placed camera
@@ -143,6 +152,7 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
+* **ctrl + Space** - -swichcameras - toggles camera showing
 ### FE
 * **Escape** - /MN - Returns to menu
 * **Space** - -addordeleteselectedeffect - Adds or deletes selected effect
@@ -159,6 +169,7 @@ Generated using hotkeys to md converter
 * **T** - str100 - increases brush fill to 100
 * **D** - -nextcat - Next category
 * **A** - -prevcat - Previous category
+* **ctrl + Space** - -swichcameras - toggles camera showing
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect
 * **Left** - left - Move camera left
@@ -175,6 +186,7 @@ Generated using hotkeys to md converter
 * **Delete** - -deletewater - Delets water from level
 * **W** - -addwater - Adds water to level
 * **F** - -swichlayers - Switch water layer
+* **ctrl + Space** - -swichcameras - toggles camera showing
 ### LE
 * **Escape** - -save - Saves shadow
 * **Escape** - /MN - Returns to menu
@@ -200,6 +212,7 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
+* **ctrl + Space** - -swichcameras - toggles camera showing
 * **Return** - -save - Saves shadow
 ### LS
 * **Escape** - /MN - Returns to menu

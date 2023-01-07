@@ -27,6 +27,7 @@ camera_held = dc
 camera_notheld = dc
 
 slidebar = dc
+rope = dc
 
 for key, value in colors.items():
     exec(f"{key} = pg.Color({value})")
@@ -38,14 +39,10 @@ green = pg.Color([0, 255, 0])
 black = pg.Color([0, 0, 0])
 white = pg.Color([255, 255, 255])
 
-mousp = True
-mousp2 = True
-mousp1 = True
-
 col8 = [
     [-1, -1], [0, -1], [1, -1],
     [-1, 0],           [1, 0],
-    [-1, 1], [0, 1], [1, 1]
+    [-1, 1],  [0, 1],  [1, 1]
 ]
 
 col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
@@ -60,8 +57,15 @@ class menu():
         self.hotkeys = hotkeys[name]
         self.uc = []
 
+        self.mousp = False
+        self.mousp1 = True
+        self.mousp2 = True
+
         self.size = image1size
         self.message = ''
+        print("\n\n\n\n")
+        for key, val in self.hotkeys.items():
+            print(f"{key} - {val}")
 
         self.init()
 
@@ -69,6 +73,9 @@ class menu():
         self.uc = []
         for i in self.hotkeys["unlock_keys"]:
             self.uc.append(getattr(pg, i))
+
+    def watch_keys(self):
+        self.message = "%"
 
     def recaption(self):
         pg.display.set_caption(f"RWE+: {self.menu} - {self.data['path']}")
@@ -136,7 +143,7 @@ class menu():
             self.mpos = 1
             getattr(self, message[1:])()
 
-    def findparampressed(self, paramname):
+    def findparampressed(self, paramname: str):
         for key, value in self.hotkeys.items():
             if key == "unlock_keys":
                 continue
@@ -207,6 +214,7 @@ class menu_with_field(menu):
         super(menu_with_field, self).__init__(surface, data, name)
 
         self.menu = name
+        self.drawcameras = False
 
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
 
@@ -225,17 +233,16 @@ class menu_with_field(menu):
         self.layer = 0
 
     def movemiddle(self, bp, pos):
-        global mousp1, mousp2, mousp3
-        if bp[1] == 1 and mousp1 and (mousp2 and mousp):
+        if bp[1] == 1 and self.mousp1 and (self.mousp2 and self.mousp):
             self.rectdata[0] = pos
             self.rectdata[1] = [self.xoffset, self.yoffset]
-            mousp1 = False
-        elif bp[1] == 1 and not mousp1 and (mousp2 and mousp):
+            self.mousp1 = False
+        elif bp[1] == 1 and not self.mousp1 and (self.mousp2 and self.mousp):
             self.xoffset = self.rectdata[1][0] - (self.rectdata[0][0] - pos[0])
             self.yoffset = self.rectdata[1][1] - (self.rectdata[0][1] - pos[1])
-        elif bp[1] == 0 and not mousp1 and (mousp2 and mousp):
+        elif bp[1] == 0 and not self.mousp1 and (self.mousp2 and self.mousp):
             self.field.field.fill(self.field.color)
-            mousp1 = True
+            self.mousp1 = True
             self.renderfield()
 
     def drawborder(self):
@@ -280,7 +287,12 @@ class menu_with_field(menu):
     def blit(self, draw=True):
         if draw:
             self.drawmap()
+        if self.drawcameras:
+            rendercameras(self)
         super().blit()
+
+    def swichcameras(self):
+        self.drawcameras = not self.drawcameras
 
     def swichlayers(self):
         self.layer = (self.layer + 1) % 3
@@ -534,3 +546,72 @@ def destroy(data, x, y, items, layer):
             case "material":
                 data["tlMatrix"][x][y][layer] = {"tp": "default", "data": 0}
     data["tlMatrix"][x][y][layer] = {"tp": "default", "data": 0}
+
+
+def getcamerarect(self, cam):
+    pos = pg.Vector2(toarr(cam, "point"))
+    p = (pos / image1size) * self.size + self.field.rect.topleft + pg.Vector2(self.xoffset * self.size,
+                                                                              self.yoffset * self.size)
+    return pg.Rect([p, [camw * self.size, camh * self.size]])
+def rendercameras(self):
+    if hasattr(self, "closestcameraindex"):
+        closest = self.closestcameraindex()
+    for indx, cam in enumerate(self.data["CM"]["cameras"]):
+
+        rect = getcamerarect(self, cam)
+        rect2 = pg.Rect(rect.x + self.size, rect.y + self.size, rect.w - self.size * 2, rect.h - self.size * 2)
+        rect3 = pg.Rect(rect2.x + self.size * 8, rect2.y, rect2.w - self.size * 16, rect2.h)
+        # print(camera_border, rect, self.size)
+        pg.draw.rect(self.surface, camera_border, rect, max(self.size // 3, 1))
+        pg.draw.rect(self.surface, camera_border, rect2, max(self.size // 4, 1))
+
+        pg.draw.rect(self.surface, red, rect3, max(self.size // 3, 1))
+
+        pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(self.size * 5, 0),
+                     pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0),
+                     self.size // 3)
+
+        pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(0, self.size * 5),
+                     pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5),
+                     self.size // 3)
+        pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3)
+
+
+        if "quads" not in self.data["CM"]:
+            self.data["CM"]["quads"] = []
+            for _ in self.data["CM"]["cameras"]:
+                self.data["CM"]["quads"].append([[0, 0], [0, 0], [0, 0], [0, 0]])
+        col = camera_notheld
+        if hasattr(self, "heldindex"):
+            if indx == self.heldindex and self.held:
+                col = camera_held
+
+        quads = self.data["CM"]["quads"][indx]
+
+        newquads = quads.copy()
+
+        for i, q in enumerate(quads):
+            n = [0, 0]
+            nq = q[0] % 360
+            n[0] = math.sin(math.radians(nq)) * q[1] * self.size * 5
+            n[1] = -math.cos(math.radians(nq)) * q[1] * self.size * 5
+            newquads[i] = n
+
+        tl = pg.Vector2(rect.topleft) + pg.Vector2(newquads[0])
+        tr = pg.Vector2(rect.topright) + pg.Vector2(newquads[1])
+        br = pg.Vector2(rect.bottomright) + pg.Vector2(newquads[2])
+        bl = pg.Vector2(rect.bottomleft) + pg.Vector2(newquads[3])
+
+        if hasattr(self, "held") and indx == closest and not self.held:
+            quadindx = self.getquad(closest)
+
+            vec = pg.Vector2([tl, tr, br, bl][quadindx])
+
+            pg.draw.line(self.surface, camera_notheld, rect.center, vec, self.size // 3)
+
+            rects = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
+            pg.draw.line(self.surface, camera_held, rects[quadindx], vec, self.size // 3)
+
+            pg.draw.circle(self.surface, camera_held, vec, self.size * 3, self.size // 3)
+
+        pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)

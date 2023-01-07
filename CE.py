@@ -3,6 +3,7 @@ import math
 from menuclass import *
 from lingotojson import *
 
+error = settings["global"]["snap_error"] # snap error
 
 class CE(menu_with_field):
     def __init__(self, surface: pg.surface.Surface, data):
@@ -11,6 +12,7 @@ class CE(menu_with_field):
 
         self.held = False
         self.heldindex = 0
+        self.drawcameras = True
         self.camoffset = pg.Vector2(0, 0)
 
         self.init()
@@ -19,10 +21,7 @@ class CE(menu_with_field):
         self.resize()
 
     def blit(self):
-        global mousp, mousp2, mousp1
-
         super().blit()
-        self.rendercameras()
         self.labels[0].set_text(self.labels[0].originaltext % len(self.data["CM"]["cameras"]))
 
         if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["CM"]["cameras"]) > 0:
@@ -37,20 +36,28 @@ class CE(menu_with_field):
                 val = list(self.camoffset + mpos)
                 val[0] = round(val[0], 4)
                 val[1] = round(val[1], 4)
+                for indx, camera in enumerate(self.data["CM"]["cameras"]):
+                    if indx == self.heldindex:
+                        continue
+                    xpos, ypos = toarr(camera, "point")
+                    valx, valy = val
+                    if xpos - error < valx < xpos + error:
+                        val[0] = xpos
+                    if ypos - error < valy < ypos + error:
+                        val[1] = ypos
                 val = makearr(val, "point")
                 self.data["CM"]["cameras"][self.heldindex] = val
 
-            if bp[0] == 1 and mousp and (mousp2 and mousp1):
-                mousp = False
+            if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = False
                 if not self.held:
                     self.pickupcamera()
                 else:
                     self.placecamera()
-
-            elif bp[0] == 1 and not mousp and (mousp2 and mousp1):
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 pass
-            elif bp[0] == 0 and not mousp and (mousp2 and mousp1):
-                mousp = True
+            elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.mousp = True
                 self.rfa()
 
             self.movemiddle(bp, pos)
@@ -67,71 +74,7 @@ class CE(menu_with_field):
         self.held = False
 
     def getcamerarect(self, cam):
-        pos = pg.Vector2(toarr(cam, "point"))
-        p = (pos / image1size) * self.size + self.field.rect.topleft + pg.Vector2(self.xoffset * self.size,
-                                                                                  self.yoffset * self.size)
-        return pg.Rect([p, [camw * self.size, camh * self.size]])
-
-    def rendercameras(self):
-        closest = self.closestcameraindex()
-        for indx, cam in enumerate(self.data["CM"]["cameras"]):
-
-            rect = self.getcamerarect(cam)
-            rect2 = pg.Rect(rect.x + self.size, rect.y + self.size, rect.w - self.size * 2, rect.h - self.size * 2)
-            rect3 = pg.Rect(rect2.x + self.size * 8, rect2.y, rect2.w - self.size * 16, rect2.h)
-            # print(camera_border, rect, self.size)
-            pg.draw.rect(self.surface, camera_border, rect, max(self.size // 3, 1))
-            pg.draw.rect(self.surface, camera_border, rect2, max(self.size // 4, 1))
-
-            pg.draw.rect(self.surface, red, rect3, max(self.size // 3, 1))
-
-            pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(self.size * 5, 0),
-                         pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0),
-                         self.size // 3)
-
-            pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(0, self.size * 5),
-                         pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5),
-                         self.size // 3)
-            pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3)
-
-
-            if "quads" not in self.data["CM"]:
-                self.data["CM"]["quads"] = []
-                for _ in self.data["CM"]["cameras"]:
-                    self.data["CM"]["quads"].append([[0, 0], [0, 0], [0, 0], [0, 0]])
-            col = camera_notheld
-            if indx == self.heldindex and self.held:
-                col = camera_held
-
-            quads = self.data["CM"]["quads"][indx]
-
-            newquads = quads.copy()
-
-            for i, q in enumerate(quads):
-                n = [0, 0]
-                nq = q[0] % 360
-                n[0] = math.sin(math.radians(nq)) * q[1] * self.size * 5
-                n[1] = -math.cos(math.radians(nq)) * q[1] * self.size * 5
-                newquads[i] = n
-
-            tl = pg.Vector2(rect.topleft) + pg.Vector2(newquads[0])
-            tr = pg.Vector2(rect.topright) + pg.Vector2(newquads[1])
-            br = pg.Vector2(rect.bottomright) + pg.Vector2(newquads[2])
-            bl = pg.Vector2(rect.bottomleft) + pg.Vector2(newquads[3])
-
-            if indx == closest and not self.held:
-                quadindx = self.getquad(closest)
-
-                vec = pg.Vector2([tl, tr, br, bl][quadindx])
-
-                pg.draw.line(self.surface, camera_notheld, rect.center, vec, self.size // 3)
-
-                rects = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
-                pg.draw.line(self.surface, camera_held, rects[quadindx], vec, self.size // 3)
-
-                pg.draw.circle(self.surface, camera_held, vec, self.size * 3, self.size // 3)
-
-            pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
+        return getcamerarect(self, cam)
 
     def deletecamera(self):
         if len(self.data["CM"]["cameras"]) > 0 and self.heldindex < len(self.data["CM"]["cameras"]) and self.held:
