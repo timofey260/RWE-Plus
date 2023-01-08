@@ -117,6 +117,7 @@ Generated using hotkeys to md converter
 * **Down** - down - Move camera down
 ### PE
 * **Escape** - /MN - Returns to menu
+* **X** - -togglesnap - Toggles snap of prop
 * **W** - -browse_prev - Previous prop
 * **A** - -cat_prev_propupdate - Previous category + update current prop
 * **S** - -browse_next - Next prop
