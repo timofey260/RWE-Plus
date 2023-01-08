@@ -71,10 +71,10 @@
 
 			
 			["Render", [90, 10, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
-			["Save", [90, 0, 10, 10], [90, 90, 90], "save", "non", "save as .wep project(<[save]>)"],
-			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "save as .wep project"],
-			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "save as official level editor file"],
-			["Next tip", [90, 76, 10, 10], [90, 90, 90], "nexttip", "non", "save as official level editor file"],
+			["Save", [90, 0, 10, 10], [90, 90, 90], "save", "non", "Save as .wep project(<[save]>)"],
+			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "Save as .wep project"],
+			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "Save as official level editor file"],
+			["Next tip", [90, 76, 10, 10], [90, 90, 90], "nexttip", "non", "Just next tip)"],
 			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)"],
 
 			["?", [68, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
@@ -105,7 +105,7 @@
 			["BM", [4, 24, 4, 6], [80, 80, 80], "s0", "beam", "Beam(<[-beam]>)", ["geometry.png", [2, 2]]],
 			["SC", [4, 30, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
 			["D", [4, 36, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
-			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>, <[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
+			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>,\n<[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
 			["FC", [4, 48, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
 			["SH", [4, 54, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
 			["W", [4, 60, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],

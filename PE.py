@@ -300,6 +300,7 @@ class PE(menu_with_field):
                     self.place()
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedprop["tp"] == "long":
+                    self.transform_reset()
                     p1 = pg.Vector2(self.rectdata[0])
                     p2 = pg.Vector2(posoffset)
                     vec = p2 - p1
@@ -327,7 +328,7 @@ class PE(menu_with_field):
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
-                if self.selectedprop["tp"] == "long":
+                if self.selectedprop["tp"] == "long" and not delmode and not copymode:
                     self.place((pg.Vector2(self.rectdata[0]) + posoffset) / 2)
                     self.transform_reset()
 
@@ -444,10 +445,12 @@ class PE(menu_with_field):
         self.setprop(self.buttonslist[self.itemindx].text)
 
     def cat_next(self):
+        self.itemindx = 0
         self.currentcategory = (self.currentcategory + 1) % len(self.props)
         self.rebuttons()
 
     def cat_prev(self):
+        self.itemindx = 0
         self.currentcategory -= 1
         if self.currentcategory < 0:
             self.currentcategory = len(self.props) - 1
