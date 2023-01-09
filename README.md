@@ -5,7 +5,7 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 
 ![icon](https://github.com/timofey260/RWE-Plus/blob/master/files/image.png?raw=true)
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1054412179786436728/image.png)
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1061979803886047322/image.png)
 
 
 ## Available Editors
