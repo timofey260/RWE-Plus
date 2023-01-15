@@ -1,0 +1,6 @@
+-["Long props", color(0, 255, 0)]
+[#nm:"Cabinet Clamp", #tp:"long", #depth:0, #tags:[], #notes:[]]
+[#nm:"Drill Suspender", #tp:"long", #depth:5, #tags:[], #notes:[]]
+[#nm:"Thick Chain", #tp:"long", #depth:0, #tags:[], #notes:[]]
+[#nm:"Drill", #tp:"long", #depth:10, #tags:[], #notes:[]]
+[#nm:"Piston", #tp:"long", #depth:4, #tags:[], #notes:[]]

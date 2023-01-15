@@ -1,0 +1,32 @@
+{
+	"patterns": [
+		{
+			"name": "SU Pattern box",
+			"tp": "pattern",
+			"category": "special",
+			"patcat": "SU patterns",
+			"color": [0, 220, 0],
+			"prefix": "SUPattern"
+		},
+		{
+			"name": "SU Grate box",
+			"tp": "pattern",
+			"category": "special",
+			"patcat": "SU grates",
+			"color": [0, 220, 0],
+			"prefix": "SUGrate"
+		}
+	],
+	"blocks": {
+		"cat": "SU patterns",
+		"N": "Block Edge N",
+		"E": "Block Edge E",
+		"S": "Block Edge S",
+		"W": "Block Edge W",
+
+		"NW": "Block Corner NW",
+		"NE": "Block Corner NE",
+		"SE": "Block Corner SE",
+		"SW": "Block Corner SW"
+	}
+}

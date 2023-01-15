@@ -4,11 +4,10 @@ import random
 
 
 class MN(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data, items):
-        super().__init__(surface, data, "MN")
+    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
+        super().__init__(surface, data, "MN", items, props, propcolors)
         tips = set(open(path + "tips.txt", "r").readlines())
         self.items = items
-        self.toggletiles = False
         self.tips = list(tips)
         self.mousp = True
         self.mousp1 = True
@@ -29,11 +28,8 @@ class MN(menu_with_field):
 
             self.movemiddle(bp, pos)
 
-    def rfa(self):
-        self.renderfield_all(True, self.toggletiles, self.items)
-
     def tiles(self):
-        self.toggletiles = not self.toggletiles
+        self.drawtiles = not self.drawtiles
         self.rfa()
 
     def GE(self):
@@ -67,13 +63,13 @@ class MN(menu_with_field):
         self.message = "HK"
 
     def save(self):
-        self.message = "save"
+        self.savef()
 
     def saveastxt(self):
-        self.message = "savetxt"
+        self.savef_txt()
 
     def saveas(self):
-        self.message = "saveas"
+        self.saveasf()
 
     def render(self):
         render(self.data)
@@ -82,4 +78,4 @@ class MN(menu_with_field):
         self.message = "quit"
 
     def nexttip(self):
-        self.labels[0].set_text(self.returnkeytext(random.choice(self.tips).replace("\n", "").replace("\\n", "\n"), True))
+        self.labels[0].set_text(self.returnkeytext(random.choice(self.tips).replace("\n", "").replace("\\n", "\n")))

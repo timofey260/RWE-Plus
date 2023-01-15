@@ -24,6 +24,11 @@ Generated using hotkeys to md converter
 * **O** - open - 
 * **ctrl + O** - open - 
 ### MN
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Q** - quit - 
 * **ctrl + R** - render - 
 * **G** - /GE - 
@@ -42,6 +47,11 @@ Generated using hotkeys to md converter
 * **Up** - up - 
 * **Down** - down - 
 ### GE
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - /MN - 
 * **L** - -swichlayers - 
 * **ctrl + L** - -swichlayers_back - 
@@ -81,6 +91,11 @@ Generated using hotkeys to md converter
 * **ctrl + Up** - mup - 
 * **ctrl + Down** - mdown - 
 ### TE
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - /MN - 
 * **L** - -swichlayers - 
 * **ctrl + L** - -swichlayers_back - 
@@ -89,6 +104,7 @@ Generated using hotkeys to md converter
 * **Up** - up - 
 * **Down** - down - 
 * **G** - force_geometry - 
+* **ctrl + Q** - -changematshow - 
 * **ctrl + Space** - -swichcameras - 
 * **D** - -rt - 
 * **A** - -lt - 
@@ -100,6 +116,11 @@ Generated using hotkeys to md converter
 * **Q** - -copytile - 
 * **Left Shift** - movepreview - 
 ### CE
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - /MN - 
 * **D** - -deletecamera - 
 * **Delete** - -deletecamera - 
@@ -116,6 +137,12 @@ Generated using hotkeys to md converter
 * **Up** - up - 
 * **Down** - down - 
 ### PE
+* **ctrl + Q** - -changematshow - 
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - /MN - 
 * **X** - -togglesnap - 
 * **W** - -browse_prev - 
@@ -155,6 +182,12 @@ Generated using hotkeys to md converter
 * **Down** - down - 
 * **ctrl + Space** - -swichcameras - 
 ### FE
+* **ctrl + Q** - -changematshow - 
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - /MN - 
 * **Space** - -addordeleteselectedeffect - 
 * **L** - -swichlayers - 
@@ -178,6 +211,11 @@ Generated using hotkeys to md converter
 * **Up** - up - 
 * **Down** - down - 
 ### EE
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - /MN - 
 * **Left** - left - 
 * **Right** - right - 
@@ -189,6 +227,11 @@ Generated using hotkeys to md converter
 * **F** - -swichlayers - 
 * **ctrl + Space** - -swichcameras - 
 ### LE
+* **ctrl + 1** - -togglegeo - 
+* **ctrl + 2** - -toggletiles - 
+* **ctrl + 3** - -swichcameras - 
+* **ctrl + 4** - -toggleprops - 
+* **ctrl + 5** - -toggleeffects - 
 * **Escape** - -save - 
 * **Escape** - /MN - 
 * **ctrl + Q** - -lightmod - 

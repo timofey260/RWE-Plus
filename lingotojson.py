@@ -106,6 +106,7 @@ def init_solve(file: str):
 
 
 def inittolist():
+    inv = settings["TE"]["LEtiles"]
     solved = init_solve(path2graphics + "init.txt")
     del solved['']
     solved_copy = solved.copy()
@@ -150,13 +151,15 @@ def inittolist():
             # img.set_colorkey(pg.Color(0, 0, 0))
             # srf.blit(img, [0, 0])
             # img.fill(colr)
-
-            # arr = pg.pixelarray.PixelArray(img)
-            # arr.replace(pg.Color(0, 0, 0), pg.color.Color(colr))
-            # img = arr.make_surface()
-            # print(colr, img.get_at([0, 0]))
-
-            img.set_colorkey(pg.color.Color(255, 255, 255))
+            if not inv:
+                img.set_colorkey(pg.color.Color(255, 255, 255))
+            if inv:
+                s = pg.Surface(img.get_size())
+                s.blit(img, [0, 0])
+                arr = pg.pixelarray.PixelArray(s.copy())
+                arr.replace(pg.Color(0, 0, 0), colr)
+                img = arr.make_surface()
+                img.set_colorkey(pg.Color(255, 255, 255))
 
             newitem = {
                 "name": item["nm"],
@@ -219,7 +222,7 @@ def getcolors():
 
 def getprops(tiles: dict):
     # turning tiles to props and then add them to all other props
-    solved = init_solve(path2props + "init.txt")
+    solved = {**init_solve(path2props + "init.txt"), **init_solve(path + "additionprops.txt")}
     del solved['']
     solved_copy = solved.copy()
     for catnum, catitem in enumerate(solved.items()):

@@ -5,9 +5,9 @@ from tkinter.filedialog import asksaveasfilename
 
 class LE(menu_with_field):
 
-    def __init__(self, surface: pg.surface.Surface, data):
+    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "LE"
-        super().__init__(surface, data, "LE")
+        super().__init__(surface, data, "LE", items, props, propcolors)
         self.field2 = widgets.window(self.surface, self.settings["d1"])
 
         self.ofstop = ofstop
@@ -24,6 +24,7 @@ class LE(menu_with_field):
         self.size = settings["TE"]["cellsize"]
 
         self.message = ''
+        self.n = 0
 
         self.imagerect = [375, 375]
         self.direction = 0
@@ -52,11 +53,11 @@ class LE(menu_with_field):
 
             self.images[False].append(img)
 
-        super().__init__(surface, data, "LE")
+        super().__init__(surface, data, "LE", items, props, propcolors)
         self.rs()
         self.retile()
         self.init()
-        self.renderfield_all()
+        self.rfa()
         self.blit()
         self.resize()
 
@@ -69,8 +70,8 @@ class LE(menu_with_field):
         yos = self.yoffset * self.size
 
         fieldpos = [xos - (self.ofsleft * self.size), yos - (self.ofstop * self.size)]
-        fieldpos2 = [fieldpos[0] + math.cos(math.radians(self.lightAngle)) * self.flatness * (self.size/10),
-                     fieldpos[1] + math.sin(math.radians(self.lightAngle)) * self.flatness * (self.size/10)]
+        fieldpos2 = [fieldpos[0] + math.sin(math.radians(self.lightAngle)) * self.flatness * (self.size),
+                     fieldpos[1] - math.cos(math.radians(self.lightAngle)) * self.flatness * (self.size)]
 
         self.field.field.blit(self.field3.field, fieldpos)
         if not pg.key.get_pressed()[pg.K_LSHIFT]:
@@ -98,7 +99,8 @@ class LE(menu_with_field):
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
-            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.n = 1
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1) and self.n == 1:
                 sizepr = self.map_to_field(self.tileimage.get_width(), self.tileimage.get_height())
                 self.field3.field.blit(self.tileimage, curpos_on_field)
                 self.fieldadd.blit(self.field3.field, fieldpos)
@@ -210,19 +212,19 @@ class LE(menu_with_field):
         self.retile()
 
     def fp(self):
-        self.flatness += 1
+        self.flatness = min(self.flatness + 1, 10)
         self.data[self.menu]["flatness"] = self.flatness
 
     def fm(self):
-        self.flatness -= 1
+        self.flatness = max(self.flatness - 1, 1)
         self.data[self.menu]["flatness"] = self.flatness
 
     def lp(self):
-        self.lightAngle += 1
+        self.lightAngle = min(self.lightAngle + 1, 180)
         self.data[self.menu]["lightAngle"] = self.lightAngle
 
     def lm(self):
-        self.lightAngle -= 1
+        self.lightAngle = max(self.lightAngle - 1, 90)
         self.data[self.menu]["lightAngle"] = self.lightAngle
 
     def lightmod(self):

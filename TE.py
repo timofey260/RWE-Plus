@@ -1,14 +1,47 @@
 from menuclass import *
 from lingotojson import *
+import random
 
+blocks = [
+    {"tiles": ["A"], "upper": "dense", "lower": "dense", "tall":1, "freq":5},
+    {"tiles": ["B1"], "upper": "espaced", "lower": "dense", "tall": 1, "freq": 5},
+    {"tiles": ["B2"], "upper": "dense", "lower": "espaced", "tall": 1, "freq": 5},
+    {"tiles": ["B3"], "upper": "ospaced", "lower": "dense", "tall": 1, "freq": 5},
+    {"tiles": ["B4"], "upper": "dense", "lower": "ospaced", "tall": 1, "freq": 5},
+    {"tiles": ["C1"], "upper": "espaced", "lower": "espaced", "tall": 1, "freq": 5},
+    {"tiles": ["C2"], "upper": "ospaced", "lower": "ospaced", "tall": 1, "freq": 5},
+    {"tiles": ["E1"], "upper": "ospaced", "lower": "espaced", "tall": 1, "freq": 5},
+    {"tiles": ["E2"], "upper": "espaced", "lower": "ospaced", "tall": 1, "freq": 5},
+    {"tiles": ["F1"], "upper": "dense", "lower": "dense", "tall": 2, "freq": 1},
+    {"tiles": ["F2"], "upper": "dense", "lower": "dense", "tall": 2, "freq": 1},
+    {"tiles": ["F1", "F2"], "upper": "dense", "lower": "dense", "tall": 2, "freq": 5},
+    {"tiles": ["F3"], "upper": "dense", "lower": "dense", "tall": 2, "freq": 5},
+    {"tiles": ["F4"], "upper": "dense", "lower": "dense", "tall": 2, "freq": 5},
+    {"tiles": ["G1", "G2"], "upper": "dense", "lower": "ospaced", "tall": 2, "freq": 5},
+    {"tiles": ["I"], "upper": "espaced", "lower": "dense", "tall": 1, "freq": 4},
+    {"tiles": ["J1"], "upper": "ospaced", "lower": "ospaced", "tall": 2, "freq": 1},
+    {"tiles": ["J2"], "upper": "ospaced", "lower": "ospaced", "tall": 2, "freq": 1},
+    {"tiles": ["J1", "J2"], "upper": "ospaced", "lower": "ospaced", "tall": 2, "freq": 2},
+    {"tiles": ["J3"], "upper": "espaced", "lower": "espaced", "tall": 2, "freq": 1},
+    {"tiles": ["J4"], "upper": "espaced", "lower": "espaced", "tall": 2, "freq": 1},
+    {"tiles": ["J3", "J4"], "upper": "espaced", "lower": "espaced", "tall": 2, "freq": 2},
+    {"tiles": ["B1", "I"], "upper": "espaced", "lower": "dense", "tall": 1, "freq": 2}
+]
 
 class TE(menu_with_field):
 
-    def __init__(self, surface: pg.surface.Surface, data, items):
+    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "TE"
         self.tool = False # 0  place, 1 - destroy
 
+        self.matshow = False
+
         self.items = items
+        p = json.load(open(path + "patterns.json", "r"))
+        self.items["special"] = p["patterns"]
+        for indx, pattern in enumerate(p["patterns"]):
+            self.items["special"][indx]["cat"] = [len(self.items), indx + 1]
+        self.blocks = p["blocks"]
         self.buttonslist = []
         self.currentcategory = 0
         self.toolindex = 0
@@ -20,8 +53,10 @@ class TE(menu_with_field):
 
         self.lastfg = False
 
-        super().__init__(surface, data, "TE")
+        super().__init__(surface, data, "TE", items, props, propcolors)
+        self.drawtiles = True
         self.set("material", "Standard")
+        self.currentcategory = len(items) - 1
         self.init()
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
         self.rebuttons()
@@ -29,14 +64,13 @@ class TE(menu_with_field):
         self.blit()
         self.resize()
 
-    def rfa(self):
-        self.renderfield_all(rendersecond=True, items=self.items)
-
     def blit(self):
-        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        for button in self.buttonslist:
+            button.blitshadow()
         for button in self.buttonslist[:-1]:
             button.blit(sum(pg.display.get_window_size()) // 120)
+        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         super().blit()
         cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
@@ -48,35 +82,35 @@ class TE(menu_with_field):
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            if self.tileimage["tp"] != "pattern":
+                cposx = pos2[0] - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
+                cposy = pos2[1] - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
 
-            cposx = pos2[0] - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
-            cposy = pos2[1] - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
+                cposxo = posoffset[0] - int((self.tileimage["size"][0] * .5) + .5) + 1
+                cposyo = posoffset[1] - int((self.tileimage["size"][1] * .5) + .5) + 1
 
-            cposxo = posoffset[0] - int((self.tileimage["size"][0] * .5) + .5) + 1
-            cposyo = posoffset[1] - int((self.tileimage["size"][1] * .5) + .5) + 1
+                fg = self.findparampressed("force_geometry")
+                if posoffset != self.mpos or self.lastfg != fg:
+                    self.cols = self.test_cols(cposxo, cposyo)
+                    self.mpos = posoffset
+                    self.lastfg = fg
+                    self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
+                    if self.canplaceit(posoffset[0], posoffset[1], cposxo, cposyo):
+                        self.labels[0].set_text(
+                            "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
 
-            fg = self.findparampressed("force_geometry")
-
-            if posoffset != self.mpos or self.lastfg != fg:
-                self.cols = self.test_cols(cposxo, cposyo)
-                self.mpos = posoffset
-                self.lastfg = fg
-                self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
-                if self.canplace(posoffset[0], posoffset[1], cposxo, cposyo):
-                    self.labels[0].set_text(
-                        "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
-            bord = 3
-            if self.cols and not self.tool:
-                pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
-                                                      [self.tileimage["image"].get_width() + bord * 2,
-                                                       self.tileimage["image"].get_height() + bord * 2]], bord)
-            else:
-                pg.draw.rect(self.surface, cannotplace, [[cposx - bord, cposy - bord],
-                                                         [self.tileimage["image"].get_width() + bord * 2,
-                                                          self.tileimage["image"].get_height() + bord * 2]], bord)
-            if not self.tool:
-                self.surface.blit(self.tileimage["image"], [cposx, cposy])
-                self.printcols(cposxo, cposyo, self.tileimage)
+                bord = 3
+                if self.cols and not self.tool:
+                    pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
+                                                          [self.tileimage["image"].get_width() + bord * 2,
+                                                           self.tileimage["image"].get_height() + bord * 2]], bord)
+                else:
+                    pg.draw.rect(self.surface, cannotplace, [[cposx - bord, cposy - bord],
+                                                             [self.tileimage["image"].get_width() + bord * 2,
+                                                              self.tileimage["image"].get_height() + bord * 2]], bord)
+                if not self.tool:
+                    self.surface.blit(self.tileimage["image"], [cposx, cposy])
+                    self.printcols(cposxo, cposyo, self.tileimage)
             bp = pg.mouse.get_pressed(3)
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
@@ -84,14 +118,15 @@ class TE(menu_with_field):
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
                     pass
-                if not self.tool:
-                    if self.cols:
-                        self.place(cposxo, cposyo)
-                        self.fieldadd.blit(self.tileimage["image"],
-                                           [cposxo * self.size, cposyo * self.size])
-                else:
-                    self.destroy(posoffset[0], posoffset[1])
-                    pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
+                if self.tileimage["tp"] != "pattern" or self.tool:
+                    if not self.tool:
+                        if self.cols:
+                            self.place(cposxo, cposyo)
+                            self.fieldadd.blit(self.tileimage["image"],
+                                               [cposxo * self.size, cposyo * self.size])
+                    else:
+                        self.destroy(posoffset[0], posoffset[1])
+                        pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
                 self.mousp = True
@@ -110,38 +145,128 @@ class TE(menu_with_field):
                 ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
-                for x in range(self.rectdata[1][0]):
+                if self.tileimage["tp"] != "pattern" or self.tool:
+                    for x in range(self.rectdata[1][0]):
+                        for y in range(self.rectdata[1][1]):
+                            if not self.tool:
+                                self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                            else:
+                                self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                else:
+                    saved = self.tileimage
+                    savedtool = saved["name"]
+                    savedcat = saved["category"]
+                    save = self.currentcategory
                     for y in range(self.rectdata[1][1]):
-                        if not self.tool:
+                        for x in range(self.rectdata[1][0]):
+                            if x == 0 and y == 0:
+                                self.set(self.blocks["cat"], self.blocks["NW"])
+                            elif x == self.rectdata[1][0] - 1 and y == 0:
+                                self.set(self.blocks["cat"], self.blocks["NE"])
+                            elif x == 0 and y == self.rectdata[1][1] - 1:
+                                self.set(self.blocks["cat"], self.blocks["SW"])
+                            elif x == self.rectdata[1][0] - 1 and y == self.rectdata[1][1] - 1:
+                                self.set(self.blocks["cat"], self.blocks["SE"])
+
+                            elif x == 0:
+                                self.set(self.blocks["cat"], self.blocks["W"])
+                            elif y == 0:
+                                self.set(self.blocks["cat"], self.blocks["N"])
+                            elif x == self.rectdata[1][0] - 1:
+                                self.set(self.blocks["cat"], self.blocks["E"])
+                            elif y == self.rectdata[1][1] - 1:
+                                self.set(self.blocks["cat"], self.blocks["S"])
+                            else:
+                                continue
                             self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
-                        else:
-                            self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                    skip = False
+                    lastch = random.choice(blocks)
+                    for y in range(1, self.rectdata[1][1] - 1):
+                        if skip:
+                            skip = False
+                            continue
+                        ch = random.choice(blocks)
+                        while ch["upper"] != lastch["lower"] or ch["tiles"] == lastch["tiles"]:
+                            ch = random.choice(blocks)
+                        if y == self.rectdata[1][1] - 2 and ch["tall"] == 2:
+                            while ch["upper"] != lastch["lower"] or ch["tall"] == 2 or ch["tiles"] == lastch["tiles"]:
+                                ch = random.choice(blocks)
+                        lastch = ch.copy()
+                        if ch["tall"] == 2:
+                            skip = True
+                        for x in range(1, self.rectdata[1][0] - 1):
+                            n = 0
+                            if len(ch["tiles"]) > 1:
+                                n = x % len(ch["tiles"]) - 1
+                            self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n])
+                            self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                    self.set(savedcat, savedtool)
+                    self.currentcategory = save
+                    self.rebuttons()
                 self.rfa()
                 self.mousp2 = True
         else:
-            for index, button in enumerate(self.buttonslist[:-1]):
-                if button.onmouseover():
-                    cat = list(self.items.keys())[self.currentcategory]
-                    item = self.items[cat][index]
-                    w, h = item["size"]
-                    w *= self.size
-                    h *= self.size
-                    pg.draw.rect(self.surface, item["color"], [self.field.rect.x, self.field.rect.y, w, h])
-                    self.surface.blit(pg.transform.scale(item["image"], [w, h]), [self.field.rect.x, self.field.rect.y])
-                    self.printcols(0, 0, item, True)
-                    break
+            if not self.matshow:
+                for index, button in enumerate(self.buttonslist[:-1]):
+                    if button.onmouseover():
+                        cat = list(self.items.keys())[self.currentcategory]
+                        item = self.items[cat][index]
+                        if item["tp"] == "pattern":
+                            break
+                        w, h = item["size"]
+                        w *= self.size
+                        h *= self.size
+                        if not settings["TE"]["LEtiles"]:
+                            pg.draw.rect(self.surface, item["color"], [self.field.rect.x, self.field.rect.y, w, h])
+                        self.surface.blit(pg.transform.scale(item["image"], [w, h]), [self.field.rect.x, self.field.rect.y])
+                        self.printcols(0, 0, item, True)
+                        break
+        for button in self.buttonslist:
+            button.blittooltip()
+
+    def cats(self):
+        self.buttonslist = []
+        self.matshow = True
+        btn2 = None
+        for count, item in enumerate(self.items.keys()):
+            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
+            # rect = pg.rect.Rect(0, 0, 100, 10)
+            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
+
+            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0],
+                                 count * self.settings["itemsize"] +
+                                 self.settings["buttons"][self.settings["itemsposindex"]][1][1] +
+                                 self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, 22,
+                                 self.settings["itemsize"]])
+            col = self.items[item][0]["color"]
+            if count == self.currentcategory:
+                col = darkgray
+            btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
+            self.buttonslist.append(btn)
+            count += 1
+        if btn2 is not None:
+            self.buttonslist.append(btn2)
+        self.resize()
+
+    def selectcat(self, name):
+        self.currentcategory = list(self.items.keys()).index(name)
+        self.toolindex = 0
+        self.rebuttons()
 
     def rebuttons(self):
         self.buttonslist = []
+        self.matshow = False
         btn2 = None
         for count, item in enumerate(self.items[list(self.items.keys())[self.currentcategory]]):
             # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
             cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], item["category"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], item["category"], onpress=self.changematshow,
+                                  tooltip="Select category")
 
             rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], count * self.settings["itemsize"] + self.settings["buttons"][self.settings["itemsposindex"]][1][1] + self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, 22, self.settings["itemsize"]])
-            if item["category"] == "material":
+            if item["category"] in ["material", "special"]:
                 btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getmaterial)
             else:
                 tooltip = "Size: " + str(item["size"])
@@ -165,7 +290,7 @@ class TE(menu_with_field):
                                            [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldadd.fill(white)
         super().renderfield()
-        if self.tileimage is not None:
+        if self.tileimage is not None and self.tileimage["tp"] != "pattern":
             self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"], [self.size * self.tileimage2["size"][0],
                                                                                 self.size * self.tileimage2["size"][1]])
             self.tileimage["image"].set_colorkey(None)
@@ -184,6 +309,11 @@ class TE(menu_with_field):
         self.rebuttons()
 
     def dt(self):
+        if self.matshow:
+            self.toolindex += 1
+            if self.toolindex >= len(self.items.keys()):
+                self.toolindex = 0
+            return
         for i in self.items[self.tileimage["category"]]:
             if i["cat"][1] == self.tileimage["cat"][1] + 1:
                 self.set(i["category"], i["name"])
@@ -191,11 +321,27 @@ class TE(menu_with_field):
         self.set(self.tileimage["category"], self.items[self.tileimage["category"]][0]["name"])
 
     def ut(self):
+        if self.matshow:
+            self.toolindex -= 1
+            if self.toolindex < 0:
+                self.toolindex = len(self.items.keys()) - 1
+            return
         for i in self.items[self.tileimage["category"]]:
             if i["cat"][1] == self.tileimage["cat"][1] - 1:
                 self.set(i["category"], i["name"])
                 return
         self.set(self.tileimage["category"], self.items[self.tileimage["category"]][-1]["name"])
+
+    def changematshow(self):
+        if self.matshow:
+            self.currentcategory = self.toolindex
+            self.toolindex = 0
+            cat = list(self.items.keys())[self.currentcategory]
+            self.set(cat, self.items[cat][0]["name"])
+            self.rebuttons()
+        else:
+            self.toolindex = self.currentcategory
+            self.cats()
 
     def getblock(self, text):
         cat = self.buttonslist[-1].text
@@ -205,19 +351,23 @@ class TE(menu_with_field):
         cat = self.buttonslist[-1].text
         self.set(cat, text)
 
-    def set(self, cat, name):
+    def set(self, cat, name, render=True):
         self.tool = 0
         for num, i in enumerate(self.items[cat]):
             if i["name"] == name:
                 self.toolindex = num
-                self.tileimage2 = i
-                self.tileimage2["image"].set_alpha(100)
-                self.tileimage = self.tileimage2.copy()
+                self.tileimage2 = i.copy()
+                if self.tileimage2["tp"] != "pattern" and render:
+                    self.tileimage2["image"] = i["image"].copy()
+                    self.tileimage2["image"].set_alpha(100)
+                    self.tileimage = self.tileimage2.copy()
 
-                self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"],
-                                                             [self.size * self.tileimage2["size"][0],
-                                                              self.size * self.tileimage2["size"][1]])
-                self.tileimage["image"].set_colorkey(None)
+                    self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"],
+                                                                 [self.size * self.tileimage2["size"][0],
+                                                                  self.size * self.tileimage2["size"][1]])
+                    self.tileimage["image"].set_colorkey(None)
+                else:
+                    self.tileimage = self.tileimage2.copy()
                 return
 
     def test_cols(self, x, y):
@@ -333,14 +483,8 @@ class TE(menu_with_field):
                         if fg:
                             self.data["GE"][xpos][ypos][self.layer + 1][0] = csp
         self.mpos = 1
-        if fg:
-            self.rfa()
-
-    def destroy(self, x, y):
-        destroy(self.data["TE"], x, y, self.items, self.layer)
-
-    def canplace(self, x, y, x2, y2):
-        return canplaceit(self.data["TE"], x, y, x2, y2)
+        #if fg:
+        #    self.rfa()
 
     def sad(self):
         if self.tileimage["category"] == "material":

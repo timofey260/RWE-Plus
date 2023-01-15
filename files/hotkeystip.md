@@ -24,6 +24,11 @@ Generated using hotkeys to md converter
 * **O** - open - Open file
 * **ctrl + O** - open - Open file
 ### MN
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Q** - quit - quits RWE+
 * **ctrl + R** - render - Renders file using Drizzle
 * **G** - /GE - Geometry Editor
@@ -36,12 +41,17 @@ Generated using hotkeys to md converter
 * **S** - /LS - Level Resizing
 * **Z** - /LP - Level Properties
 * **H** - /HK - Hotkeys
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
 ### GE
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
@@ -70,7 +80,7 @@ Generated using hotkeys to md converter
 * **K** - -wormgrass - Adds wormgrass to cell
 * **D** - -clearlayer - Removes only cell, leaves added cells
 * **O** - -clearblock - Removes only added cells, like beams and paths
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Space** - rotate - Rotate slopes and beams
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
@@ -81,6 +91,11 @@ Generated using hotkeys to md converter
 * **ctrl + Up** - mup - Move mirror up
 * **ctrl + Down** - mdown - Move mirror down
 ### TE
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
@@ -89,7 +104,8 @@ Generated using hotkeys to md converter
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
 * **G** - force_geometry - forces geometry to tile
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Q** - -changematshow - Shows list of categories
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **D** - -rt - Next category
 * **A** - -lt - Previous category
 * **W** - -ut - Previous tile
@@ -100,6 +116,11 @@ Generated using hotkeys to md converter
 * **Q** - -copytile - Copies tile in cursor
 * **Left Shift** - movepreview - Preview of prop specs on black square
 ### CE
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - /MN - Returns to menu
 * **D** - -deletecamera - Deletes the nearest placed camera
 * **Delete** - -deletecamera - Deletes the nearest placed camera
@@ -116,6 +137,12 @@ Generated using hotkeys to md converter
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
 ### PE
+* **ctrl + Q** - -changematshow - Shows list of categories
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - /MN - Returns to menu
 * **X** - -togglesnap - Toggles snap of prop
 * **W** - -browse_prev - Previous prop
@@ -153,8 +180,14 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 ### FE
+* **ctrl + Q** - -changematshow - Shows list of categories
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - /MN - Returns to menu
 * **Space** - -addordeleteselectedeffect - Adds or deletes selected effect
 * **L** - -swichlayers - Swiches layers up
@@ -170,7 +203,7 @@ Generated using hotkeys to md converter
 * **T** - str100 - increases brush fill to 100
 * **D** - -nextcat - Next category
 * **A** - -prevcat - Previous category
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect
 * **Left** - left - Move camera left
@@ -178,6 +211,11 @@ Generated using hotkeys to md converter
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
 ### EE
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - /MN - Returns to menu
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
@@ -187,8 +225,13 @@ Generated using hotkeys to md converter
 * **Delete** - -deletewater - Delets water from level
 * **W** - -addwater - Adds water to level
 * **F** - -swichlayers - Switch water layer
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 ### LE
+* **ctrl + 1** - -togglegeo - Toggles geometry
+* **ctrl + 2** - -toggletiles - Toggles tiles
+* **ctrl + 3** - -swichcameras - Toggles camera showing
+* **ctrl + 4** - -toggleprops - Toggles props
+* **ctrl + 5** - -toggleeffects - Shows effects
 * **Escape** - -save - Saves shadow
 * **Escape** - /MN - Returns to menu
 * **ctrl + Q** - -lightmod - Makes pixels white
@@ -213,7 +256,7 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
-* **ctrl + Space** - -swichcameras - toggles camera showing
+* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Return** - -save - Saves shadow
 ### LS
 * **Escape** - /MN - Returns to menu

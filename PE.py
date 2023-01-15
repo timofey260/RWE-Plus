@@ -1,6 +1,4 @@
 from menuclass import *
-import cv2
-import numpy as np
 import random as rnd
 
 values = {
@@ -26,62 +24,8 @@ values = {
 }
 
 
-def quadsize(quad):
-    mostleft = bignum
-    mostright = 0
-    mosttop = bignum
-    mostbottom = 0
-    for q in quad:
-        x, y = q
-        if x < mostleft:
-            mostleft = x
-        if x > mostright:
-            mostright = x
-
-        if y < mosttop:
-            mosttop = y
-        if y > mostbottom:
-            mostbottom = y
-    ww = round(mostright - mostleft)
-    wh = round(mostbottom - mosttop)
-    return ww, wh, [mostleft, mosttop, mostright, mostbottom]
-
-
-def quadtransform(quads, image: pg.Surface):
-    ww, wh, mosts = quadsize(quads)
-
-    colkey = image.get_colorkey()
-    view = pg.surfarray.array3d(image)
-    view = view.transpose([1, 0, 2])
-
-    img = cv2.cvtColor(view, cv2.COLOR_RGB2RGBA) # NOQA
-    ws, hs = img.shape[1::-1]
-    pts1 = np.float32([[0, 0], [ws, 0],
-                       [ws, hs], [0, hs]])
-    q2 = []
-    for q in quads:
-        q2.append([q[0] - mosts[0], q[1] - mosts[1]])
-
-    pts2 = np.float32(q2)
-    persp = cv2.getPerspectiveTransform(pts1, pts2) # NOQA
-    result = cv2.warpPerspective(img, persp, (ww, wh)) # NOQA
-
-    img = pg.image.frombuffer(result.tostring(), result.shape[1::-1], "RGBA")
-    img.set_colorkey(colkey)
-
-    return [img, mosts[0], mosts[1], ww, wh]
-
-
-def rotatepoint(point, angle):
-    px, py = point
-    angle = math.radians(angle)
-    qx = math.cos(angle) * px - math.sin(angle) * py
-    qy = math.sin(angle) * px + math.cos(angle) * py
-    return pg.Vector2([qx, qy])
-
-
 class PE(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data, props, propcolors):
+    def __init__(self, surface: pg.surface.Surface, data, tiles, props, propcolors):
         self.menu = "PE"
 
         self.props = props
@@ -91,9 +35,10 @@ class PE(menu_with_field):
 
         self.buttonslist = []
         self.settignslist = []
+        self.matshow = False
 
         self.currentcategory = 0
-        self.itemindx = 0
+        self.toolindex = 0
 
         self.depth = 0
 
@@ -111,7 +56,8 @@ class PE(menu_with_field):
         self.helppoins = pg.Vector2(0, 0)
         self.helppoins2 = pg.Vector2(0, 0)
 
-        super().__init__(surface, data, "PE")
+        super().__init__(surface, data, "PE", tiles, props, propcolors)
+        self.drawprops = True
         self.setprop(self.props[list(self.props.keys())[self.currentcategory]][0]["nm"])
         self.init()
         self.resize()
@@ -136,38 +82,59 @@ class PE(menu_with_field):
 
     def rebuttons(self):
         self.buttonslist = []
+        self.matshow = False
         btn2 = None
         itemcat = list(self.props.keys())[self.currentcategory]
         for count, item in enumerate(self.props[itemcat]):
-            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
-            # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], itemcat)
-            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0],
-                                 count * self.settings["itemsizey"] +
-                                 self.settings["buttons"][self.settings["itemsposindex"]][1][1] +
-                                 self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4,
-                                 self.settings["itemsizex"],
-                                 self.settings["itemsizey"]])
+            cat = pg.rect.Rect(self.settings["catpos"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
+                                  tooltip="Select category")
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, item["color"], item["nm"], onpress=self.setprop)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
-        if self.itemindx > len(self.props[itemcat]):
-            self.itemindx = 0
+        if self.toolindex > len(self.props[itemcat]):
+            self.toolindex = 0
         self.resize()
         self.settingsupdate()
+
+    def cats(self):
+        self.buttonslist = []
+        self.settignslist = []
+        self.matshow = True
+        btn2 = None
+        for count, item in enumerate(self.props.keys()):
+            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
+            # rect = pg.rect.Rect(0, 0, 100, 10)
+            cat = pg.rect.Rect(self.settings["catpos"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
+            col = self.props[item][0]["color"]
+            if col is None:
+                col = gray
+            if count == self.currentcategory:
+                col = darkgray
+            btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
+            self.buttonslist.append(btn)
+            count += 1
+        if btn2 is not None:
+            self.buttonslist.append(btn2)
+        self.resize()
+
+    def selectcat(self, name):
+        self.currentcategory = list(self.props.keys()).index(name)
+        self.toolindex = 0
+        self.rebuttons()
 
     def settingsupdate(self):
         self.settignslist = []
         for count, item in enumerate(self.prop_settings.items()):
             name, val = item
-            rect = pg.rect.Rect([self.settings["buttons"][self.settings["settingsposindex"]][1][0],
-                                 count * self.settings["settingssizey"] +
-                                 self.settings["buttons"][self.settings["settingsposindex"]][1][1] +
-                                 self.settings["buttons"][self.settings["settingsposindex"]][1][3],
-                                 self.settings["settingssizex"],
-                                 self.settings["settingssizey"]])
+            rect = pg.rect.Rect(self.settings["settingspos"])
+            rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, self.settings["settingscolor"], name, onpress=self.changesettings,
                                  tooltip=str(self.getval(name, val)))
             self.settignslist.append(btn)
@@ -188,11 +155,10 @@ class PE(menu_with_field):
                 case "color":
                     val = (self.prop_settings[name] + 1) % len(self.propcolors)
                 case _:
-                    print(f"value for {name} property({self.prop_settings[name]}):")
-                    val = input(">>> ")
+                    val = self.askint(f"value for {name} property({self.prop_settings[name]}):")
                     val = int(val)
             self.prop_settings[name] = val
-        except ValueError:
+        except (ValueError, TypeError):
             print("non-valid value!")
         self.settingsupdate()
 
@@ -225,20 +191,23 @@ class PE(menu_with_field):
     def blit(self):
         super().blit()
         if len(self.buttonslist) > 2:
-            self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
             pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+            for button in self.buttonslist:
+                button.blitshadow()
             for button in self.buttonslist[:-1]:
                 button.blit(sum(pg.display.get_window_size()) // 120)
+            self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
+
+            for button in self.settignslist:
+                button.blitshadow()
             for button in self.settignslist:
                 button.blit(sum(pg.display.get_window_size()) // 120)
-            for button in self.settignslist:
-                button.blittooltip()
 
         self.labels[2].set_text(self.labels[2].originaltext + str(self.prop_settings))
         self.labels[0].set_text(self.labels[0].originaltext + "\n".join(self.notes))
-        cir = [self.buttonslist[self.itemindx].rect.x + 3,
-               self.buttonslist[self.itemindx].rect.y + self.buttonslist[self.itemindx].rect.h / 2]
-        pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.itemindx].rect.h / 2)
+        cir = [self.buttonslist[self.toolindex].rect.x + 3,
+               self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
+        pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         if self.field.rect.collidepoint(pg.mouse.get_pos()) or any(self.helds):
             mpos = pg.Vector2(pg.mouse.get_pos())
 
@@ -369,6 +338,11 @@ class PE(menu_with_field):
                 pg.draw.line(self.surface, red, mpos, pos2, 10)
             self.movemiddle(bp, pos)
 
+        for button in self.buttonslist:
+            button.blittooltip()
+        for button in self.settignslist:
+            button.blittooltip()
+
     def find_nearest(self, x, y):
         mpos = pg.Vector2(x, y)
         near = pg.Vector2(bignum, bignum)
@@ -427,30 +401,42 @@ class PE(menu_with_field):
             self.updateproptransform()
 
     def browse_next(self):
-        self.itemindx = (self.itemindx + 1) % (len(self.buttonslist) - 1)
-        self.setprop(self.buttonslist[self.itemindx].text)
+        self.toolindex = (self.toolindex + 1) % (len(self.buttonslist) - 1)
+        if not self.matshow:
+            self.setprop(self.buttonslist[self.toolindex].text)
 
     def browse_prev(self):
-        self.itemindx -= 1
-        if self.itemindx < 0:
-            self.itemindx = len(self.buttonslist) - 2
-        self.setprop(self.buttonslist[self.itemindx].text)
+        self.toolindex -= 1
+        if self.toolindex < 0:
+            self.toolindex = len(self.buttonslist) - 2
+        if not self.matshow:
+            self.setprop(self.buttonslist[self.toolindex].text)
+
+    def changematshow(self):
+        if self.matshow:
+            self.currentcategory = self.toolindex
+            self.toolindex = 0
+            self.setprop(self.props[list(self.props.keys())[self.currentcategory]][0]["nm"])
+            self.rebuttons()
+        else:
+            self.toolindex = self.currentcategory
+            self.cats()
 
     def cat_next_propupdate(self):
         self.cat_next()
-        self.setprop(self.buttonslist[self.itemindx].text)
+        self.setprop(self.buttonslist[self.toolindex].text)
 
     def cat_prev_propupdate(self):
         self.cat_prev()
-        self.setprop(self.buttonslist[self.itemindx].text)
+        self.setprop(self.buttonslist[self.toolindex].text)
 
     def cat_next(self):
-        self.itemindx = 0
+        self.toolindex = 0
         self.currentcategory = (self.currentcategory + 1) % len(self.props)
         self.rebuttons()
 
     def cat_prev(self):
-        self.itemindx = 0
+        self.toolindex = 0
         self.currentcategory -= 1
         if self.currentcategory < 0:
             self.currentcategory = len(self.props) - 1
@@ -463,7 +449,7 @@ class PE(menu_with_field):
             return
         self.selectedprop = prop.copy()
         self.currentcategory = ci[0]
-        self.itemindx = ci[1]
+        self.toolindex = ci[1]
         self.snap = "snapToGrid" in self.selectedprop["tags"]
         self.add_warning()
         self.reset_settings()
@@ -474,42 +460,6 @@ class PE(menu_with_field):
 
     def togglesnap(self):
         self.snap = not self.snap
-
-    def rfa(self):
-        super().rfa()
-        for indx, prop in enumerate(self.data["PR"]["props"]):
-            var = 0
-            if prop[4]["settings"].get("variation") is not None:
-                var = prop[4]["settings"]["variation"] - 1
-            found, _ = self.findprop(prop[1])
-            if found is None:
-                print(f"Prop {prop[1]} not Found! image not loaded")
-            image = found["images"][var] # .save(path2hash + str(id(self.data["PR"]["props"][indx][1])) + ".png")
-            qd = prop[3]
-            quads = []
-            for q in qd:
-                quads.append(toarr(q, "point"))
-
-            # surf = pg.image.fromstring(string, [ws, hs], "RGBA")
-            surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
-            surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
-            surf.set_colorkey(white)
-            surf.set_alpha(100)
-            self.f.blit(surf, [mostleft / spritesize * image1size, mosttop / spritesize * image1size])
-            if prop[4].get("points") is not None: # rope showing for future
-                for point in prop[4]["points"]:
-                    px, py = toarr(point, "point")
-                    px = px / spritesize * image1size
-                    py = py / spritesize * image1size
-                    pg.draw.circle(self.f, rope, [px, py], 5)
-        self.renderfield()
-
-    def findprop(self, name):
-        for cati, cats in self.props.items():
-            for itemi, item in enumerate(cats):
-                if item["nm"] == name:
-                    return item, [list(self.props.keys()).index(cati), itemi]
-        return None, None
 
     def rotate(self, a):
         for indx, quad in enumerate(self.quads):
@@ -642,7 +592,7 @@ class PE(menu_with_field):
         if self.prop_settings.get("variation") is not None:
             if self.prop_settings["variation"] == 0: # random
                 newpropsettings["variation"] = rnd.randint(1, len(self.selectedprop["images"]))
-        prop = [-self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.itemindx + 1], "point"), quads2, {"settings": newpropsettings}]
+        prop = [-self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.toolindex + 1], "point"), quads2, {"settings": newpropsettings}]
         self.data["PR"]["props"].append(prop.copy())
         self.applytags()
         self.rfa()

@@ -1,6 +1,6 @@
 import pygame as pg
 import copy
-from files import settings, fs, path, map
+from files import settings, fs, path, map, allleters
 
 pg.font.init()
 
@@ -11,28 +11,22 @@ black = [0, 0, 0]
 white = [255, 255, 255]
 
 
-def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["global"]["fontsize"], centered=False, nocenter=False):
+def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["global"]["fontsize"], centered=False):
     if col is None:
         col = black
-    fontr: pg.font.Font = fs(fontsize)
+    fontr: pg.font.Font = fs(fontsize)[0]
     surf = fontr.render(text, True, col, None)
-    if centered:
-        window.blit(surf, [x - surf.get_width() / 2, y - surf.get_height() / 2])
-    else:
-        if x + surf.get_width() < window.get_width():
-            window.blit(surf, [x, y])
-        elif x - surf.get_width() > 0:
-            window.blit(surf, [x - surf.get_width(), y])
-        elif nocenter:
-            window.blit(surf, [x - surf.get_width() / 2, y - surf.get_height() / 2])
-        else:
-            window.blit(surf, [x, y])
+    textblit(window, surf, x, y, centered)
 
 def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
 
     if col is None:
         col = black
-    fontr: pg.font.Font = fs(fontsize)
+    fontr: pg.font.Font = fs(fontsize)[0]
+    sz: pg.font.Font = fs(fontsize)[1]
+    if text == "RWE+":
+        fontr: pg.font.Font = pg.font.Font(path + "\\" + settings["global"]["titlefont"], fontsize)
+        sz: pg.font.Font = fontr.size(allleters)[1]
     items = text.split("\n")
     rendered = []
     w = 0
@@ -46,7 +40,7 @@ def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
         if render.get_width() > w:
             w = render.get_width()
 
-    surf = pg.Surface([w, (fontsize - 2) * len(poses)])
+    surf = pg.Surface([w, (sz - 2) * len(poses)])
     surf = surf.convert_alpha(surf)
     surf.fill([0, 0, 0, 0])
 
@@ -55,16 +49,14 @@ def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
     return surf
 
 
-def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int | float, centered: bool=False, nocenter=True):
+def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int | float, centered: bool=False):
     if centered:
         window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
     else:
         if x + screen_text.get_width() < window.get_width():
             window.blit(screen_text, [x, y])
         elif x - screen_text.get_width() > 0:
-            window.blit(screen_text, [x - screen_text.get_width(), y])
-        elif nocenter:
-            window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
+            window.blit(screen_text, [window.get_width() - screen_text.get_width(), y])
         else:
             window.blit(screen_text, [x, y])
 
@@ -78,7 +70,7 @@ class button:
         self.col = pg.Color(col)
         self.col2 = pg.Color(abs(self.col.r - mul), abs(self.col.g - mul), abs(self.col.b - mul))
         self.glow = 0
-        self.fontsize = sum(pg.display.get_window_size()) // 70
+        self.fontsize = sum(pg.display.get_window_size()) // 74
 
         self.text = text
         self.originaltext = text
@@ -134,9 +126,12 @@ class button:
             textblit(self.surface, self.textimage, self.rect.center[0], self.rect.center[1], True)
             # mts(self.surface, self.text, self.rect.center[0], self.rect.center[1], black, centered=True, fontsize=fontsize)
         else:
-            self.icon.set_alpha(255)
+            g255 = int(self.glow / 100 * 255)
+            self.textimage.set_alpha(g255)
+            textblit(self.surface, self.textimage, self.rect.center[0], self.rect.center[1], True)
+            self.icon.set_alpha(255 - g255)
             if cp:
-                self.icon.set_alpha(255 - self.glow)
+                self.icon.set_alpha(255 - g255)
             px = self.rect.w / 2 - self.icon.get_width() / 2
             py = self.rect.h / 2 - self.icon.get_height() / 2
             pos = [px + self.rect.x, py + self.rect.y]
@@ -157,9 +152,10 @@ class button:
     def resize(self):
         x = self.lastrect.x / 100 * self.surface.get_width()
         y = self.lastrect.y / 100 * self.surface.get_height()
-        w = self.lastrect.w / 100 * self.surface.get_width()
-        h = self.lastrect.h / 100 * self.surface.get_height()
+        w = self.lastrect.w / 100 * self.surface.get_width() + 1
+        h = self.lastrect.h / 100 * self.surface.get_height() + 1
         self.rect.update(x, y, w, h)
+        self.set_text(self.text)
 
         if self.icon is not None:
             cut = [self.loadicon[1][0] * settings["global"]["size"], self.loadicon[1][1] * settings["global"]["size"],
@@ -178,11 +174,12 @@ class button:
         if text == self.text and self.fontsize == fontsize:
             return
         self.text = text
+        self.fontsize = sum(pg.display.get_window_size()) // 74
         if fontsize is not None:
             self.fontsize = fontsize
             self.textimage = mts(text, black, self.fontsize)
             return
-        self.textimage = mts(text, black, sum(pg.display.get_window_size()) // 70)
+        self.textimage = mts(text, black, sum(pg.display.get_window_size()) // 74)
 
     @property
     def xy(self):
@@ -236,14 +233,17 @@ class lable:
         self.fontsize = fontsize
 
     def blit(self):
-        textblit(self.surface, self.textimage, self.pos[0], self.pos[1], nocenter=False)
+        textblit(self.surface, self.textimage, self.pos[0], self.pos[1])
         # mts(self.surface, self.text, self.pos[0], self.pos[1], self.color, self.fontsize)
 
     def resize(self):
         self.pos[0] = self.posp[0] / 100 * self.surface.get_width()
         self.pos[1] = self.posp[1] / 100 * self.surface.get_height()
+        self.textimage = mts(self.text, self.color, self.fontsize)
 
-    def set_text(self, text):
+    def set_text(self, text=None):
+        if text is None:
+            text = self.text
         self.text = text
         self.textimage = mts(text, self.color, self.fontsize)
 

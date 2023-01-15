@@ -2,7 +2,7 @@ from menuclass import *
 
 
 class GE(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data):
+    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "GE"
         self.mapdata = data["GE"]
         self.state = 0
@@ -15,12 +15,12 @@ class GE(menu_with_field):
 
         self.tools.set_alpha(150)
         self.placetile = 0
-        self.area = []
+        self.area = [[1 for _ in range(len(self.mapdata[0]))] for _ in range(len(self.mapdata))]
 
         self.mirrorp = False
         self.mirrorpos = [0, 0]
 
-        super().__init__(surface, data, "GE")
+        super().__init__(surface, data, "GE", items, props, propcolors)
         self.air()
         self.init()
         self.rs()

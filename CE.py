@@ -1,14 +1,12 @@
-import math
-
 from menuclass import *
 from lingotojson import *
 
 error = settings["global"]["snap_error"] # snap error
 
 class CE(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data):
+    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "CE"
-        super().__init__(surface, data, "CE")
+        super().__init__(surface, data, "CE", items, props, propcolors)
 
         self.held = False
         self.heldindex = 0
@@ -54,8 +52,6 @@ class CE(menu_with_field):
                     self.pickupcamera()
                 else:
                     self.placecamera()
-            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
-                pass
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
                 self.rfa()
@@ -72,9 +68,6 @@ class CE(menu_with_field):
 
     def placecamera(self):
         self.held = False
-
-    def getcamerarect(self, cam):
-        return getcamerarect(self, cam)
 
     def deletecamera(self):
         if len(self.data["CM"]["cameras"]) > 0 and self.heldindex < len(self.data["CM"]["cameras"]) and self.held:

@@ -1,4 +1,6 @@
 import os, sys
+
+import files
 from widgets import *
 import copy
 from menus import *
@@ -15,7 +17,7 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
-version = "v1.7"
+version = "v1.8"
 
 
 def keypress(window, surf, file, file2, level):
@@ -46,7 +48,7 @@ def keypress(window, surf, file, file2, level):
         case "reload":
             surf.reload()
         case "save":
-            save(file)
+            surf.savef()
             file2 = copy.deepcopy(file)
         case "open":
             if surf.menu == "MN":
@@ -57,11 +59,11 @@ def keypress(window, surf, file, file2, level):
 
 
 def asktoexit(file, file2):
-    global run
+    global run, surf
     if file2 != file:
         ex = askyesnocancel("Exit from RWE+", "Do you want to save Changes?")
         if ex:
-            save(file)
+            surf.savef()
             sys.exit(0)
         elif ex is None:
             return
@@ -98,7 +100,8 @@ def launch(level):
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
     pg.display.set_icon(pg.image.load(path + "icon.png"))
-    surf = MN(window, file, items)
+    surf = MN(window, file, items, props, propcolors)
+    surf.savef()
     run = True
     while run:
         for event in pg.event.get():
@@ -108,8 +111,6 @@ def launch(level):
                 case pg.WINDOWRESIZED:
                     surf.resize()
                 case pg.KEYDOWN:
-                    # print(pg.key.name(event.key))
-                    # print(event.key not in [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT])
                     if event.key not in keys:
                         if bol:
                             bol = False
@@ -130,25 +131,25 @@ def launch(level):
                 case "quit":
                     asktoexit(file, file2)
                 case "MN":
-                    surf = MN(window, file, items)
+                    surf = MN(window, file, items, props, propcolors)
                 case "GE":
-                    surf = GE(window, file)
+                    surf = GE(window, file, items, props, propcolors)
                 case "TE":
-                    surf = TE(window, file, items)
+                    surf = TE(window, file, items, props, propcolors)
                 case "LE":
-                    surf = LE(window, file)
+                    surf = LE(window, file, items, props, propcolors)
                 case "LS":
                     surf = LS(window, file, items)
                 case "FE":
-                    surf = FE(window, file, items)
+                    surf = FE(window, file, items, props, propcolors)
                 case "CE":
-                    surf = CE(window, file)
+                    surf = CE(window, file, items, props, propcolors)
                 case "LP":
                     surf = LP(window, file)
                 case "EE":
-                    surf = EE(window, file)
+                    surf = EE(window, file, items, props, propcolors)
                 case "PE":
-                    surf = PE(window, file, props, propcolors)
+                    surf = PE(window, file, items, props, propcolors)
                 case "HK":
                     surf = HK(window, file)
                 case "fc":
@@ -157,13 +158,13 @@ def launch(level):
                     # pg.display.toggle_fullscreen()
                     surf.resize()
                 case "save":
-                    save(file)
+                    surf.savef()
                     file2 = copy.deepcopy(file)
                 case "saveas":
-                    saveas(file)
+                    surf.saveasf()
                     file2 = copy.deepcopy(file)
                 case "savetxt":
-                    save_txt(file)
+                    surf.savef_txt()
                     file2 = copy.deepcopy(file)
             surf.message = ""
 
@@ -180,29 +181,6 @@ def launch(level):
         pg.display.flip()
         pg.display.update()
 
-
-def save_txt(file):
-    savedest = asksaveasfilename(defaultextension="txt")
-    if savedest != "":
-        turntolingo(file, open(savedest, "w"))
-
-def save(file, saveas=False):
-    global surf
-    if file["path"] != "" and not saveas:
-        open(os.path.splitext(file["path"])[0] + ".wep", "w").write(json.dumps(file))
-        file["path"] = os.path.splitext(file["path"])[0] + ".wep"
-        print(os.path.splitext(file["path"])[0] + ".wep")
-    else:
-        savedest = asksaveasfilename(defaultextension="wep")
-        if savedest != "":
-            open(savedest, "w").write(json.dumps(file))
-            file["level"] = os.path.basename(savedest)
-            file["path"] = savedest
-            file["dir"] = os.path.abspath(savedest)
-    surf.recaption()
-
-def saveas(file):
-    save(file, True)
 
 def loadmenu():
     global surf

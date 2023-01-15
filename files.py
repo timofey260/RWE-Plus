@@ -10,7 +10,10 @@ if getattr(sys, 'frozen', False):
 else:
     application_path = os.path.dirname(__file__)
 
-path = application_path + r"\\files\\"
+allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+()[]{}#@"
+
+path = application_path + "\\files\\"
+path2ui = path + "ui\\"
 path2graphics = application_path + r"\\drizzle\\Data\\Graphics\\"
 path2cast = application_path + r"\\drizzle\\Data\\Cast\\"
 path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
@@ -18,8 +21,8 @@ path2props = application_path + r"\\drizzle\\Data\\Props\\"
 
 pg.font.init()
 
-settings = json.load(open(path + "settings.json", "r"))
 graphics = json.load(open(path + "graphics.json", "r"))
+settings = json.load(open(path2ui +  graphics["uifile"], "r"))
 hotkeys = json.load(open(path + "hotkeys.json", "r"))
 e = json.load(open(path + "effects.json", "r"))
 
@@ -29,8 +32,8 @@ toolmenu = pg.image.load(path + graphics["toolmenu"])
 
 mat = pg.image.load(path + graphics["materials"])
 
-ofstop = 11
-ofsleft = 11
+ofstop = 15
+ofsleft = 15
 
 image1size = 20
 spritesize = 16
@@ -46,21 +49,22 @@ bignum = 9999999
 inputpromtname = "RWE+ input"
 
 
-fonts: dict[pg.font.Font, ...] = {}
+fonts: dict[[pg.font.Font, int], ...] = {}
 
 
 def fs(sz):
     if sz in fonts.keys():
         return fonts[sz]
     else:
-        fonts[sz] = pg.font.Font(path + "\\" + settings["global"]["font"], sz)
+        f = pg.font.Font(path + "\\" + settings["global"]["font"], sz)
+        fonts[sz] = [f, f.size(allleters)[1]]
         return fonts[sz]
 
 
 def solveeffects(effects):
     ef = []
     for cat in effects["effects"]:
-        efcat = {"nm": cat["nm"], "efs": []}
+        efcat = {"nm": cat["nm"], "color": cat["color"], "efs": []}
         for effect in cat["efs"]:
             d = {**effects["defaultproperties"], **effect}
             if "options" not in d:

@@ -70,3 +70,6 @@ class HK(menu):
     def resize(self):
         super().resize()
         self.load_menu(self.m)
+
+    def goback(self):
+        self.message = self.m

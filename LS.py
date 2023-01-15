@@ -56,19 +56,19 @@ class LS(menu):
             getattr(self, message[1:])()
 
     def as_left(self):
-        val = askinteger(inputpromtname, "Enter number of tiles to be deleted/added: ")
+        val = self.askint("Enter number of tiles to be deleted/added: ")
         self.cuteverydata(val, 0, 0, 0)
 
     def as_top(self):
-        val = askinteger(inputpromtname, "Enter number of tiles to be deleted/added: ")
+        val = self.askint("Enter number of tiles to be deleted/added: ")
         self.cuteverydata(0, val, 0, 0)
 
     def set_width(self):
-        val = askinteger(inputpromtname, f"Enter width({self.gw}): ")
+        val = self.askint(f"Enter width({self.gw}): ")
         self.cuteverydata(0, 0, val, 0)
 
     def set_height(self):
-        val = askinteger(inputpromtname, f"Enter height({self.gh}): ")
+        val = self.askint(f"Enter height({self.gh}): ")
         self.cuteverydata(0, 0, 0, val)
 
     def cuteverydata(self, x, y, w, h):
@@ -147,10 +147,10 @@ class LS(menu):
 
     def bftileschange(self):
         try:
-            x = askinteger(inputpromtname, f"({self.btiles[0]})Left: ")
-            y = askinteger(inputpromtname, f"({self.btiles[1]})Top: ")
-            w = askinteger(inputpromtname, f"({self.btiles[2]})Right: ")
-            h = askinteger(inputpromtname, f"({self.btiles[3]})Bottom: ")
+            x = self.askint(f"({self.btiles[0]})Left: ")
+            y = self.askint(f"({self.btiles[1]})Top: ")
+            w = self.askint(f"({self.btiles[2]})Right: ")
+            h = self.askint(f"({self.btiles[3]})Bottom: ")
             self.data["EX2"]["extraTiles"] = [x, y, w, h]
             self.btiles = self.data["EX2"]["extraTiles"]
         except ValueError:

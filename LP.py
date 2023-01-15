@@ -33,7 +33,7 @@ class LP(menu):
 
     def chinput(self, cat, name, inputdesc):
         try:
-            i = askinteger(inputpromtname, f"{inputdesc}({self.data[cat][name]}): ")
+            i = self.askint(f"{inputdesc}({self.data[cat][name]}): ")
             self.data[cat][name] = i
         except ValueError:
             print("Invalid input!")

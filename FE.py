@@ -4,10 +4,9 @@ import random
 
 
 class FE(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data, items):
+    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "FE"
-        super().__init__(surface, data, "FE")
-        self.items = items
+        super().__init__(surface, data, "FE", items, props, propcolors)
 
         self.buttonslist = []
 
@@ -15,6 +14,8 @@ class FE(menu_with_field):
         self.currentindex = 0
         self.selectedeffect = 0
         self.paramindex = 0
+        
+        self.matshow = False
 
         self.mpos = [0, 0]
         self.mmove = False
@@ -34,35 +35,41 @@ class FE(menu_with_field):
         self.blit()
         self.resize()
 
-    def rfa(self):
-        self.renderfield_all(rendersecond=True, items=self.items)
-
     def blit(self):
-        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[:-1][0].xy,
                                                                              [self.buttonslist[:-1][0].rect.w,
                                                                               len(self.buttonslist[:-1]) *
                                                                               self.buttonslist[:-1][0].rect.h + 1]))
         ts = sum(pg.display.get_window_size()) // 120
         super().blit()
+        for i in self.buttonslist:
+            i.blitshadow()
+        for i in self.buttonslist2:
+            i.blitshadow()
+        for i in self.params:
+            i.blitshadow()
+        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
+
         for i in self.buttonslist[:-1]:
             i.blit(ts)
         for i in self.buttonslist2:
             i.blit(ts)
         for i in self.params:
             i.blit()
-        if len(self.buttonslist2) > 0:
-            cir = [self.buttonslist[self.currentindex].rect.x + 3,
-                   self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
 
+        cir = [self.buttonslist[self.currentindex].rect.x + 3,
+               self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
+        if self.innew:
+            pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.currentindex].rect.h / 2)
+        else:
+            pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
+        if len(self.buttonslist2) > 0:
             cir2 = [self.buttonslist2[self.selectedeffect].rect.x + 3,
                     self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
 
             if self.innew:
-                pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.currentindex].rect.h / 2)
                 pg.draw.circle(self.surface, cursor2, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
             else:
-                pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
                 pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
 
         pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
@@ -101,17 +108,24 @@ class FE(menu_with_field):
                 self.renderfield()
 
         self.movemiddle(bp, pos)
+        for i in self.buttonslist:
+            i.blittooltip()
+        for i in self.buttonslist2:
+            i.blittooltip()
         for i in self.buttons:
             i.blittooltip()
 
     def rebuttons(self):
         self.buttonslist = []
+        self.matshow = False
         btn2 = None
         for count, item in enumerate(effects[self.currentcategory]["efs"]):
-            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"])
+            cat = pg.rect.Rect(self.settings["catpos"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"], onpress=self.cats,
+                                  tooltip="Select category")
 
-            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], count * self.settings["itemsizey"] + self.settings["buttons"][self.settings["itemsposindex"]][1][1] + self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, self.settings["itemsizex"], self.settings["itemsizey"]])
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.addeffect)
             self.buttonslist.append(btn)
             count += 1
@@ -120,15 +134,54 @@ class FE(menu_with_field):
 
         self.buttonslist2 = []
         for count, item in enumerate(self.data["FE"]["effects"]):
-            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
-            # rect = pg.rect.Rect(0, 0, 100, 10)
-
-            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex2"]][1][0], count * self.settings["itemsizey"] + self.settings["buttons"][self.settings["itemsposindex2"]][1][1] + self.settings["buttons"][self.settings["itemsposindex2"]][1][3], self.settings["itemsizex"], self.settings["itemsizey"]])
+            rect = pg.rect.Rect(self.settings["itempos2"])
+            rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.selectmouseeffect)
             self.buttonslist2.append(btn)
             count += 1
         self.resize()
         self.chtext()
+
+    def cats(self):
+        self.buttonslist = []
+        self.settignslist = []
+        self.matshow = True
+        btn2 = None
+        for count, item in enumerate(effects):
+            cat = pg.rect.Rect(self.settings["catpos"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories",
+                                  onpress=self.changematshow)
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
+            col = item["color"]
+            if col is None:
+                col = gray
+            if count == self.currentcategory:
+                col = darkgray
+            btn = widgets.button(self.surface, rect, col, item["nm"], onpress=self.selectcat)
+            self.buttonslist.append(btn)
+            count += 1
+        if btn2 is not None:
+            self.buttonslist.append(btn2)
+        self.resize()
+
+    def changematshow(self):
+        if self.matshow:
+            self.currentcategory = self.currentindex
+            self.currentindex = 0
+            self.rebuttons()
+        else:
+            self.currentindex = self.currentcategory
+            self.innew = True
+            self.cats()
+
+    def selectcat(self, name):
+        for indx, effect in enumerate(effects):
+            if effect["nm"] == name:
+                self.currentcategory = indx
+                self.currentindex = 0
+                self.rebuttons()
+                return
 
     def makeparams(self):
         self.params = []
@@ -148,7 +201,7 @@ class FE(menu_with_field):
             return
 
         for c, i in enumerate(self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][1]):
-            w, h = fs(sum(pg.display.get_window_size()) // 70).size(i)
+            w, h = fs(sum(pg.display.get_window_size()) // 70)[0].size(i)
             try:
                 rect = pg.Rect(self.params[-1].rect.topright[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
             except IndexError:
@@ -195,7 +248,7 @@ class FE(menu_with_field):
 
     def changeseed(self):
         try:
-            seed = askinteger(inputpromtname, "Enter seed: ")
+            seed = self.askint("Enter seed: ")
             if seed == -1:
                 self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
             if 0 <= seed <= 500:
@@ -254,11 +307,17 @@ class FE(menu_with_field):
 
     def rf3(self):
         if len(self.data["FE"]["effects"]) > 0:
-            renderfield3(self.fieldmap, self.size, self.data["FE"]["effects"][self.selectedeffect]["mtrx"])
+            fillcol = mixcol_empty
+            if self.draweffects != 0:
+                fillcol = pg.Color(mixcol_empty.r, mixcol_empty.g, mixcol_empty.b, 0)
+            self.rendermatrix(self.fieldmap, self.size, self.data["FE"]["effects"][self.selectedeffect]["mtrx"], fillcol)
 
     def deleteeffect(self):
         try:
             self.data["FE"]["effects"].pop(self.selectedeffect)
+            if self.draweffects > len(self.data['FE']['effects']):
+                self.draweffects = 0
+                self.rfa()
         except IndexError:
             print("No elements in list!")
         self.selectedeffect = 0

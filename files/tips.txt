@@ -14,6 +14,7 @@ Move camera around with <[up]>, <[left]>, <[right]> and <[down]> keys
 Save level before rendering it(<[save]>)
 Switch layers with <[-swichlayers]> key
 Use <[-swichcameras]> to enable camera showing on editor\nMight be helpful btw
+you can show any data in any editor by pressing\n<[-togglegeo]>, <[-toggletiles]>, <[-toggleprops]> and <[-toggleeffects]> buttons
 
 Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
 Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
