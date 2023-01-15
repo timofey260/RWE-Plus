@@ -664,7 +664,11 @@ class menu_with_field(menu):
                 elif datcell == "tileBody":
                     pass
 
-    def findprop(self, name):
+    def findprop(self, name, cat=None):
+        if cat is not None:
+            for itemi, item in enumerate(self.props[cat]):
+                if item["nm"] == name:
+                    return item, [list(self.props.keys()).index(cat), itemi]
         for cati, cats in self.props.items():
             for itemi, item in enumerate(cats):
                 if item["nm"] == name:

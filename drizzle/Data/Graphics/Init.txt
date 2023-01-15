@@ -461,7 +461,6 @@
 -["Special Pipes", color(255, 255, 0)]
 [#nm:"insidePipeHorizontal", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[3,2,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"insidePipeVertical", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[3,2,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
-[#nm:"insidePipeHorizontal", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[3,2,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"insidePipeLU", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[3,2,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"insidePipeRU", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[3,2,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"insidePipeRD", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[3,2,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]

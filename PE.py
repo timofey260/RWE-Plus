@@ -58,7 +58,8 @@ class PE(menu_with_field):
 
         super().__init__(surface, data, "PE", tiles, props, propcolors)
         self.drawprops = True
-        self.setprop(self.props[list(self.props.keys())[self.currentcategory]][0]["nm"])
+        cat = list(self.props.keys())[self.currentcategory]
+        self.setprop(self.props[cat][0]["nm"], cat)
         self.init()
         self.resize()
         self.rebuttons()
@@ -242,25 +243,27 @@ class PE(menu_with_field):
                     self.change_variation_up()
                     self.settingsupdate()
                 elif delmode:
-                    *_, near = self.find_nearest(*posoffset)
-                    self.data["PR"]["props"].pop(near)
-                    self.rfa()
+                    if len(self.data["PR"]["props"]) > 0:
+                        *_, near = self.find_nearest(*posoffset)
+                        self.data["PR"]["props"].pop(near)
+                        self.rfa()
                 elif copymode:
-                    name, _, near = self.find_nearest(*posoffset)
-                    self.setprop(name[1])
-                    self.depth = -name[0]
-                    quad = []
-                    for q in name[3]:
-                        quad.append(pg.Vector2(toarr(q, "point")))
-                    quads2 = quad.copy()
-                    qv = sum(quad, start=pg.Vector2(0, 0)) / 4
-                    for i, q in enumerate(quad):
-                        vec = pg.Vector2(q) - qv
-                        vec = [round(vec.x, 4), round(vec.y, 4)]
-                        quads2[i] = vec
-                    self.quads = quads2
-                    self.prop_settings = name[4]["settings"]
-                    self.updateproptransform()
+                    if len(self.data["PR"]["props"]) > 0:
+                        name, _, near = self.find_nearest(*posoffset)
+                        self.setprop(name[1])
+                        self.depth = -name[0]
+                        quad = []
+                        for q in name[3]:
+                            quad.append(pg.Vector2(toarr(q, "point")))
+                        quads2 = quad.copy()
+                        qv = sum(quad, start=pg.Vector2(0, 0)) / 4
+                        for i, q in enumerate(quad):
+                            vec = pg.Vector2(q) - qv
+                            vec = [round(vec.x, 4), round(vec.y, 4)]
+                            quads2[i] = vec
+                        self.quads = quads2
+                        self.prop_settings = name[4]["settings"]
+                        self.updateproptransform()
                 elif self.selectedprop["tp"] == "long":
                     self.rectdata[0] = posoffset
                     self.rectdata[1] = mpos
@@ -337,6 +340,15 @@ class PE(menu_with_field):
                 pos2 = (near / spritesize + ofc) * self.size + self.field.rect.topleft
                 pg.draw.line(self.surface, red, mpos, pos2, 10)
             self.movemiddle(bp, pos)
+        else:
+            if not self.matshow:
+                for index, button in enumerate(self.buttonslist[:-1]):
+                    if button.onmouseover():
+                        cat = list(self.props.keys())[self.currentcategory]
+                        item = self.props[cat][index]
+                        w, h = item["images"][0].get_size()
+                        self.surface.blit(pg.transform.scale(item["images"][0], [w, h]), [self.field.rect.x, self.field.rect.y])
+                        break
 
         for button in self.buttonslist:
             button.blittooltip()
@@ -416,7 +428,8 @@ class PE(menu_with_field):
         if self.matshow:
             self.currentcategory = self.toolindex
             self.toolindex = 0
-            self.setprop(self.props[list(self.props.keys())[self.currentcategory]][0]["nm"])
+            cat = list(self.props.keys())[self.currentcategory]
+            self.setprop(self.props[cat][0]["nm"], cat)
             self.rebuttons()
         else:
             self.toolindex = self.currentcategory
@@ -442,8 +455,8 @@ class PE(menu_with_field):
             self.currentcategory = len(self.props) - 1
         self.rebuttons()
 
-    def setprop(self, name):
-        prop, ci = self.findprop(name)
+    def setprop(self, name, cat=None):
+        prop, ci = self.findprop(name, cat)
         if prop is None:
             print("Prop not found in memory! Try relaunch the app")
             return
@@ -553,6 +566,7 @@ class PE(menu_with_field):
         self.selectedimage = quadtransform(self.quads, self.selectedimage)[0]
         self.selectedimage = pg.transform.scale(self.selectedimage, pg.Vector2(self.selectedimage.get_size()) / spritesize * self.size)
         self.selectedimage.set_colorkey(white)
+        self.selectedimage.set_alpha(190)
 
     def loadimage(self):
         var = rnd.randint(0, len(self.selectedprop["images"]) - 1)

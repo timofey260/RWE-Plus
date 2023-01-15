@@ -309,28 +309,20 @@ class TE(menu_with_field):
         self.rebuttons()
 
     def dt(self):
-        if self.matshow:
-            self.toolindex += 1
-            if self.toolindex >= len(self.items.keys()):
-                self.toolindex = 0
-            return
-        for i in self.items[self.tileimage["category"]]:
-            if i["cat"][1] == self.tileimage["cat"][1] + 1:
-                self.set(i["category"], i["name"])
-                return
-        self.set(self.tileimage["category"], self.items[self.tileimage["category"]][0]["name"])
+        self.toolindex += 1
+        if self.toolindex > len(self.buttonslist) - 2:
+            self.toolindex = 0
+        if not self.matshow:
+            cat = list(self.items.keys())[self.currentcategory]
+            self.set(cat, self.items[cat][self.toolindex]["name"])
 
     def ut(self):
-        if self.matshow:
-            self.toolindex -= 1
-            if self.toolindex < 0:
-                self.toolindex = len(self.items.keys()) - 1
-            return
-        for i in self.items[self.tileimage["category"]]:
-            if i["cat"][1] == self.tileimage["cat"][1] - 1:
-                self.set(i["category"], i["name"])
-                return
-        self.set(self.tileimage["category"], self.items[self.tileimage["category"]][-1]["name"])
+        self.toolindex -= 1
+        if self.toolindex < 0:
+            self.toolindex = len(self.buttonslist) - 2
+        if not self.matshow:
+            cat = list(self.items.keys())[self.currentcategory]
+            self.set(cat, self.items[cat][self.toolindex]["name"])
 
     def changematshow(self):
         if self.matshow:
