@@ -5,7 +5,19 @@ uses [drizzle](https://github.com/PJB3005/Drizzle) ro render levels
 
 ![icon](https://github.com/timofey260/RWE-Plus/blob/master/files/image.png?raw=true)
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1061979803886047322/image.png)
+#UI's
+
+##Classic
+
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1064520226504462416/image.png)
+
+##Classic_noicons
+
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1064520768966365214/image.png)
+
+##official
+
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1064520605745037403/image.png)
 
 # RWE+ features
 1. New UI with clickable buttons
