@@ -107,7 +107,7 @@ class FE(menu_with_field):
                 self.mousp2 = True
                 self.renderfield()
 
-        self.movemiddle(bp, pos)
+            self.movemiddle(bp, pos)
         for i in self.buttonslist:
             i.blittooltip()
         for i in self.buttonslist2:
@@ -122,7 +122,7 @@ class FE(menu_with_field):
         for count, item in enumerate(effects[self.currentcategory]["efs"]):
             cat = pg.rect.Rect(self.settings["catpos"])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"], onpress=self.cats,
-                                  tooltip="Select category")
+                                  tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
 
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
@@ -335,7 +335,7 @@ class FE(menu_with_field):
         for cat in effects:
             for effect in cat["efs"]:
                 if effect["nm"] == text:
-                    ef = effect.copy()
+                    ef = copy.deepcopy(effect)
                     mtrx = [[0 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
                     ef["mtrx"] = mtrx
                     for n, i in enumerate(ef["options"]):

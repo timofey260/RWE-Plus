@@ -1,5 +1,6 @@
 from lingotojson import *
 from menuclass import *
+import copy
 
 
 class LS(menu):
@@ -75,7 +76,7 @@ class LS(menu):
         if x is None or y is None or w is None or h is None:
             print("Not changed")
             return
-        self.data["GE"] = self.cutdata(x, y, w, h, self.data["GE"], [[0, []], [0, []], [0, []]])
+        self.data["GE"] = self.cutdata(x, y, w, h, self.data["GE"], [[1, []], [1, []], [1, []]])
         self.cuttiles(x, y, w, h)
         for num, effect in enumerate(self.data["FE"]["effects"]):
             self.data["FE"]["effects"][num]["mtrx"] = self.cutdata(x, y, w, h, effect["mtrx"], 0)
@@ -89,7 +90,7 @@ class LS(menu):
         arr = array
         if x >= 0:
             for _ in range(x):
-                arr.insert(0, [default_instance for _ in range(len(arr[0]))])
+                arr.insert(0, [copy.deepcopy(default_instance) for _ in range(len(arr[0]))])
         else:
             arr = arr[-x:]
 
@@ -98,12 +99,12 @@ class LS(menu):
                 arr = arr[:w]
             else:
                 for _ in range(w - self.gw):
-                    arr.append([default_instance for _ in range(len(arr[0]))])
+                    arr.append([copy.deepcopy(default_instance) for _ in range(len(arr[0]))])
 
         if y >= 0:
             for i in range(len(arr)):
                 for _ in range(y):
-                    arr[i].insert(0, default_instance)
+                    arr[i].insert(0, copy.deepcopy(default_instance))
         else:
             for i in range(len(arr)):
                 arr[i] = arr[i][-y:]
@@ -114,7 +115,7 @@ class LS(menu):
                     arr[i] = arr[i][:h]
                 else:
                     for _ in range(h - self.gh):
-                        arr[i].append(default_instance)
+                        arr[i].append(copy.deepcopy(default_instance))
         return arr
 
     def cuttiles(self, x, y, w, h):

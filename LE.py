@@ -108,6 +108,7 @@ class LE(menu_with_field):
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
                 self.mousp = True
+                self.save()
                 self.renderfield()
             self.movemiddle(bp, pos)
 

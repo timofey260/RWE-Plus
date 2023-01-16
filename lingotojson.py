@@ -203,7 +203,7 @@ def render(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)
-    os.system(application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render " + fl)
+    os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     print(path2renderedlevels)
     os.system("explorer " + path2renderedlevels)
 

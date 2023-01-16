@@ -231,14 +231,11 @@ class TE(menu_with_field):
         for count, item in enumerate(self.items.keys()):
             # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
+            cat = pg.rect.Rect(self.settings["catpos"])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
 
-            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0],
-                                 count * self.settings["itemsize"] +
-                                 self.settings["buttons"][self.settings["itemsposindex"]][1][1] +
-                                 self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, 22,
-                                 self.settings["itemsize"]])
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
             col = self.items[item][0]["color"]
             if count == self.currentcategory:
                 col = darkgray
@@ -261,11 +258,12 @@ class TE(menu_with_field):
         for count, item in enumerate(self.items[list(self.items.keys())[self.currentcategory]]):
             # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], 6, 22, 4])
+            cat = pg.rect.Rect(self.settings["catpos"])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], item["category"], onpress=self.changematshow,
-                                  tooltip="Select category")
+                                  tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
 
-            rect = pg.rect.Rect([self.settings["buttons"][self.settings["itemsposindex"]][1][0], count * self.settings["itemsize"] + self.settings["buttons"][self.settings["itemsposindex"]][1][1] + self.settings["buttons"][self.settings["itemsposindex"]][1][3] + 4, 22, self.settings["itemsize"]])
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
             if item["category"] in ["material", "special"]:
                 btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getmaterial)
             else:
@@ -426,7 +424,12 @@ class TE(menu_with_field):
         if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]):
             return
         if self.findparampressed("movepreview"):
-            pg.draw.rect(self.surface, black, [(x + self.xoffset) * self.size + self.field.rect.x, (y + self.yoffset) * self.size + self.field.rect.y, w * self.size, h * self.size])
+            if prev:
+                pg.draw.rect(self.surface, black, [self.field.rect.x, self.field.rect.y, w * self.size, h * self.size], 0)
+            else:
+                px = (x + self.xoffset) * self.size + self.field.rect.x
+                py = (y + self.yoffset) * self.size + self.field.rect.y
+                pg.draw.rect(self.surface, black, [px, py, w * self.size, h * self.size], 0)
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
@@ -493,7 +496,7 @@ class TE(menu_with_field):
         pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
         posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
-        if not 0 < posoffset[0] < len(self.data["GE"]) or not 0 < posoffset[1] < len(self.data["GE"][0]):
+        if not 0 <= posoffset[0] < len(self.data["GE"]) or not 0 <= posoffset[1] < len(self.data["GE"][0]):
             return
         tile = self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]
         cat = "material"
@@ -523,6 +526,6 @@ class TE(menu_with_field):
                         return
                 i += 1
 
-        self.currentcategory = len(self.items) - 1
+        self.currentcategory = list(self.items.keys()).index(cat)
         self.rebuttons()
         self.set(cat, name)

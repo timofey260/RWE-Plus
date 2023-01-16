@@ -387,6 +387,16 @@ class menu_with_field(menu):
             self.rendercameras()
         if self.draweffects != 0 and self.draweffects <= len(self.data['FE']['effects']):
             widgets.fastmts(self.surface, f"Effect({self.draweffects}): {self.data['FE']['effects'][self.draweffects - 1]['nm']}", *self.field.rect.topleft, white)
+        mpos = pg.mouse.get_pos()
+        if self.drawgrid and self.field.rect.collidepoint(mpos):
+            pos = [math.floor((mpos[0] - self.field.rect.x) / self.size) + 0.5,
+                   math.floor((mpos[1] - self.field.rect.y) / self.size) + 0.5]
+            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
+            pg.draw.line(self.surface, cursor2, [self.field.rect.left, pos2[1]],
+                         [self.field.rect.right, pos2[1]])
+            pg.draw.line(self.surface, cursor2, [pos2[0], self.field.rect.top],
+                         [pos2[0], self.field.rect.bottom])
+
         super().blit()
 
     def swichcameras(self):

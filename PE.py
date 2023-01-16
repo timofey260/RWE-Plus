@@ -89,7 +89,7 @@ class PE(menu_with_field):
         for count, item in enumerate(self.props[itemcat]):
             cat = pg.rect.Rect(self.settings["catpos"])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
-                                  tooltip="Select category")
+                                  tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, item["color"], item["nm"], onpress=self.setprop)
@@ -191,7 +191,7 @@ class PE(menu_with_field):
 
     def blit(self):
         super().blit()
-        if len(self.buttonslist) > 2:
+        if len(self.buttonslist) > 1:
             pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
             for button in self.buttonslist:
                 button.blitshadow()
@@ -209,8 +209,8 @@ class PE(menu_with_field):
         cir = [self.buttonslist[self.toolindex].rect.x + 3,
                self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
-        if self.field.rect.collidepoint(pg.mouse.get_pos()) or any(self.helds):
-            mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(pg.mouse.get_pos())
+        if self.field.rect.collidepoint(mpos.xy) or any(self.helds):
 
             pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
                    math.floor((mpos.y - self.field.rect.y) / self.size)]

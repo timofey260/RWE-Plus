@@ -29,6 +29,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Q** - quit - 
 * **ctrl + R** - render - 
 * **G** - /GE - 
@@ -52,6 +53,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
 * **L** - -swichlayers - 
 * **ctrl + L** - -swichlayers_back - 
@@ -96,6 +98,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
 * **L** - -swichlayers - 
 * **ctrl + L** - -swichlayers_back - 
@@ -121,6 +124,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
 * **D** - -deletecamera - 
 * **Delete** - -deletecamera - 
@@ -143,6 +147,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
 * **X** - -togglesnap - 
 * **W** - -browse_prev - 
@@ -188,6 +193,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
 * **Space** - -addordeleteselectedeffect - 
 * **L** - -swichlayers - 
@@ -216,6 +222,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
 * **Left** - left - 
 * **Right** - right - 
@@ -232,6 +239,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - 
 * **ctrl + 4** - -toggleprops - 
 * **ctrl + 5** - -toggleeffects - 
+* **ctrl + 6** - -togglegrid - 
 * **Escape** - -save - 
 * **Escape** - /MN - 
 * **ctrl + Q** - -lightmod - 

@@ -19,8 +19,8 @@ class MN(menu_with_field):
 
     def blit(self):
         super().blit()
-        if self.field.rect.collidepoint(pg.mouse.get_pos()):
-            mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(pg.mouse.get_pos())
+        if self.field.rect.collidepoint(mpos.xy):
 
             pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
                    math.floor((mpos.y - self.field.rect.y) / self.size)]
@@ -72,6 +72,7 @@ class MN(menu_with_field):
         self.saveasf()
 
     def render(self):
+        self.savef()
         render(self.data)
 
     def quit(self):

@@ -29,6 +29,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Q** - quit - quits RWE+
 * **ctrl + R** - render - Renders file using Drizzle
 * **G** - /GE - Geometry Editor
@@ -52,6 +53,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
@@ -96,6 +98,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
 * **L** - -swichlayers - Swiches layers up
 * **ctrl + L** - -swichlayers_back - Swiches layers down
@@ -121,6 +124,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
 * **D** - -deletecamera - Deletes the nearest placed camera
 * **Delete** - -deletecamera - Deletes the nearest placed camera
@@ -143,6 +147,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
 * **X** - -togglesnap - Toggles snap of prop
 * **W** - -browse_prev - Previous prop
@@ -188,6 +193,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
 * **Space** - -addordeleteselectedeffect - Adds or deletes selected effect
 * **L** - -swichlayers - Swiches layers up
@@ -216,6 +222,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
@@ -232,6 +239,7 @@ Generated using hotkeys to md converter
 * **ctrl + 3** - -swichcameras - Toggles camera showing
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
+* **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - -save - Saves shadow
 * **Escape** - /MN - Returns to menu
 * **ctrl + Q** - -lightmod - Makes pixels white
