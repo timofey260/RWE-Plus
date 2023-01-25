@@ -1,6 +1,4 @@
 from menuclass import *
-from tkinter import messagebox
-
 
 class load(menu):
     def __init__(self, surface: pg.surface.Surface, data):

@@ -6,6 +6,7 @@ class EE(menu_with_field):
         super().__init__(surface, data, "EE", items, props, propcolors)
         self.layer = 1 - self.data["WL"]["waterInFront"]
         self.wateroffset = 0
+        self.count = False
 
         self.init()
         self.rfa()
@@ -45,9 +46,10 @@ class EE(menu_with_field):
             bp = pg.mouse.get_pressed()
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
+                self.count = True
                 self.mousp = False
                 self.wateroffset = self.data["WL"]["waterLevel"] + posoffset[1]
-            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1) and self.count:
                 self.data["WL"]["waterLevel"] = max(self.wateroffset - posoffset[1], 0)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True

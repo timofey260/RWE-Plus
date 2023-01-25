@@ -156,7 +156,7 @@ class PE(menu_with_field):
                 case "color":
                     val = (self.prop_settings[name] + 1) % len(self.propcolors)
                 case _:
-                    val = self.askint(f"value for {name} property({self.prop_settings[name]}):")
+                    val = self.askint(f"value for {name} property({self.prop_settings[name]})")
                     val = int(val)
             self.prop_settings[name] = val
         except (ValueError, TypeError):

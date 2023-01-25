@@ -3,7 +3,10 @@ from lingotojson import *
 from files import *
 import cv2
 import numpy as np
-from tkinter.filedialog import asksaveasfilename
+from pathlib import Path
+
+inputfile = ''
+filepath = path2levels
 
 colors = settings["global"]["colors"] # NOQA
 
@@ -108,6 +111,11 @@ def rotatepoint(point, angle):
     return pg.Vector2([qx, qy])
 
 
+def setasname(name):
+    global inputfile
+    inputfile = name
+
+
 class menu():
     def __init__(self, surface: pg.surface.Surface, data, name):
         self.surface = surface
@@ -176,20 +184,133 @@ class menu():
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
             print(os.path.splitext(self.data["path"])[0] + ".wep")
         else:
-            savedest = asksaveasfilename(defaultextension="wep")
+            savedest = self.asksaveasfilename()
             if savedest != "":
                 open(savedest, "w").write(json.dumps(self.data))
                 self.data["level"] = os.path.basename(savedest)
                 self.data["path"] = savedest
                 self.data["dir"] = os.path.abspath(savedest)
+        print("Level saved!")
         self.recaption()
+
+    def addfolder(self, folder):
+        global filepath
+        filepath += "\\" + folder + "\\"
+        self.message = "ab"
+
+    def goback(self):
+        global filepath
+        p = Path(filepath)
+        filepath = str(p.parent.absolute())
+        self.message = "ab"
+
+    def asksaveasfilename(self, defaultextension=[".wep"]):
+        global inputfile, filepath
+        filepath = path2levels
+        buttons = []
+        slider = 0
+        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue", [50, 0], black, 30)
+        label.resize()
+        def appendbuttons():
+            global filepath
+            f = os.listdir(filepath)
+            f.reverse()
+            buttons.clear()
+            buttons.append(widgets.button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback, tooltip="Go back"))
+            count = 1
+            for file in f:
+                y = 5 * count - slider * 5
+                if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
+                    if y > 0:
+                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=setasname, tooltip="File"))
+                    count += 1
+                elif os.path.isdir(os.path.join(filepath, file)):
+                    if y > 0:
+                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=self.addfolder, tooltip="Folder"))
+                    count += 1
+            for button in buttons:
+                button.resize()
+        inputfile = ''
+        r = True
+        appendbuttons()
+        while r:
+            self.surface.fill(color)
+            for button in buttons:
+                button.blitshadow()
+            for button in buttons:
+                button.blit()
+            for button in buttons:
+                button.blittooltip()
+            label.blit()
+            widgets.fastmts(self.surface, "file name:", 0, 0, fontsize=50)
+
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
+                    if pg.key.name(event.key) in allleters:
+                        inputfile += pg.key.name(event.key)
+                    elif event.key == pg.K_BACKSPACE:
+                        inputfile = inputfile[:-1]
+                    elif event.key == pg.K_RETURN:
+                        r = False
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if event.button == 4:
+                        slider = max(slider - 1, 0)
+                        appendbuttons()
+                    elif event.button == 5:
+                        slider += 1
+                        appendbuttons()
+                if event.type == pg.WINDOWRESIZED:
+                    self.resize()
+                    label.resize()
+            if self.message == "ab":
+                slider = 0
+                self.message = ''
+                appendbuttons()
+            widgets.fastmts(self.surface, inputfile, 0, 50, fontsize=50)
+            pg.display.flip()
+            pg.display.update()
+        # i = input(q + "(leave blank for cancel): ")
+        if inputfile == "":
+            return None
+        try:
+            if os.path.splitext(inputfile)[1] == "" and len(defaultextension) == 1:
+                return f"{filepath}{inputfile}{defaultextension[0]}"
+            else:
+                return f"{filepath}{inputfile}"
+        except ValueError:
+            print("it's not a string")
+            return None
 
     def askint(self, q):
         self.savef()
-        return askinteger(inputpromtname, q)
+        i = ''
+        nums = "0123456789"
+        r = True
+        while r:
+            self.surface.fill(color)
+            widgets.fastmts(self.surface, q + "(level was saved):", 0, 0, fontsize=50)
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
+                    if pg.key.name(event.key) in nums:
+                        i += pg.key.name(event.key)
+                    elif event.key == pg.K_BACKSPACE:
+                        i = i[:-1]
+                    elif event.key == pg.K_RETURN:
+                        r = False
+            widgets.fastmts(self.surface, i, 0, 50, fontsize=50)
+            pg.display.flip()
+            pg.display.update()
+        # i = input(q + "(leave blank for cancel): ")
+        if i == "":
+            return None
+        try:
+            return int(i)
+        except ValueError:
+            print("it's not a number")
+            return None
 
     def savef_txt(self):
-        savedest = asksaveasfilename(defaultextension="txt")
+        savedest = self.asksaveasfilename(defaultextension=[".txt"])
         if savedest != "":
             turntolingo(self.data, open(savedest, "w"))
 

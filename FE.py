@@ -248,7 +248,7 @@ class FE(menu_with_field):
 
     def changeseed(self):
         try:
-            seed = self.askint("Enter seed: ")
+            seed = self.askint("Enter seed")
             if seed == -1:
                 self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
             if 0 <= seed <= 500:

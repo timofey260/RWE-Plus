@@ -369,7 +369,8 @@
 		"rotate_speed": 0.1,
 		"rotate_speedup": 1,
 		"stretch_speed": 0.3
-	},	"EE":{
+	},	
+	"EE":{
 		"buttons": [
 			["AW", [2, 2, 4, 6], [100, 100, 100], "water", "non", "Adds water to the level(w)"],
 			["RW", [2, 8, 4, 6], [100, 100, 100], "nowater", "non", "Delete water from level(d, delete)"],

@@ -1,11 +1,5 @@
-import os, sys
-
-import files
-from widgets import *
-import copy
 from menus import *
-from tkinter.filedialog import askopenfilename, asksaveasfilename
-from tkinter.messagebox import *
+from tkinter.messagebox import askyesnocancel
 import argparse
 
 from lingotojson import *
@@ -17,11 +11,11 @@ keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 
-version = "v1.8"
+version = "v1.9"
 
 
-def keypress(window, surf, file, file2, level):
-    global run
+def keypress(window, surf, file):
+    global run, file2
     pressed = ""
     ctrl = pg.key.get_pressed()[pg.K_LCTRL]
     # shift = pg.key.get_pressed()[pg.K_LSHIFT]
@@ -50,10 +44,6 @@ def keypress(window, surf, file, file2, level):
         case "save":
             surf.savef()
             file2 = copy.deepcopy(file)
-        case "open":
-            if surf.menu == "MN":
-                launch(askopenfilename(defaultextension="txt",
-                                       initialdir=os.path.dirname(os.path.abspath(__file__)) + "\LevelEditorProjects"))
         case "new":
             run = False
 
@@ -114,7 +104,7 @@ def launch(level):
                     if event.key not in keys:
                         if bol:
                             bol = False
-                            keypress(window, surf, file, file2, level)
+                            keypress(window, surf, file)
                 case pg.KEYUP:
                     if event.key not in keys:
                         if not bol:
@@ -171,7 +161,7 @@ def launch(level):
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:
                 if pg.key.get_pressed()[i]:
-                    keypress(window, surf, file, file2, level)
+                    keypress(window, surf, file)
 
         if settings[surf.menu].get("menucolor") is not None:
             window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
@@ -185,8 +175,8 @@ def launch(level):
 def loadmenu():
     global surf
     run = True
-    width = 400
-    height = 200
+    width = 1280
+    height = 720
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
     surf = load(window, {"path": ""})
     pg.display.set_icon(pg.image.load(path + "icon.png"))
@@ -201,8 +191,11 @@ def loadmenu():
             case "new":
                 launch(-1)
             case "open":
-                return
-        keypress(window, surf, "", "", -1)
+                file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                print(file)
+                if os.path.exists(file):
+                    launch(file)
+        keypress(window, surf, "")
         window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
         pg.display.flip()
@@ -213,8 +206,6 @@ def loadmenu():
 
 def new():
     loadmenu()
-    launch(askopenfilename(defaultextension="txt",
-                           initialdir=application_path + "\\LevelEditorProjects"))
 
 
 if __name__ == "__main__":

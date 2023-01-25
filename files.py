@@ -2,7 +2,6 @@ import json
 import pygame as pg
 import os
 import sys
-from tkinter.simpledialog import *
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
@@ -14,10 +13,11 @@ allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =
 
 path = application_path + "\\files\\"
 path2ui = path + "ui\\"
-path2graphics = application_path + r"\\drizzle\\Data\\Graphics\\"
-path2cast = application_path + r"\\drizzle\\Data\\Cast\\"
+path2graphics = application_path + "\\drizzle\\Data\\Graphics\\"
+path2cast = application_path + "\\drizzle\\Data\\Cast\\"
 path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
-path2props = application_path + r"\\drizzle\\Data\\Props\\"
+path2props = application_path + "\\drizzle\\Data\\Props\\"
+path2levels = application_path + "\\LevelEditorProjects\\"
 
 pg.font.init()
 
