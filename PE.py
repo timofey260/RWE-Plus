@@ -1,6 +1,6 @@
 from menuclass import *
 import random as rnd
-from rope import RopeModel
+# from rope import RopeModel
 
 values = {
     "release": {

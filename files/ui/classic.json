@@ -111,9 +111,9 @@
 			["BM", [4, 24, 4, 6], [80, 80, 80], "s0", "beam", "Beam(<[-beam]>)", ["geometry.png", [2, 2]]],
 			["GL", [0, 30, 4, 6], [80, 80, 80], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
 			["SC", [4, 30, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
-			["SE", [0, 36, 4, 6], [70, 70, 200], "s0", "shortcutenterance", "Shortcut Enterance(<[-shortcutenterance]>)", ["geometry.png", [0, 3]]],
+			["SE", [0, 36, 4, 6], [70, 70, 200], "s0", "shortcutentrance", "Shortcut Entrance(<[-shortcutentrance]>)", ["geometry.png", [0, 3]]],
 			["D", [4, 36, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
-			["E", [0, 42, 4, 6], [50, 50, 180], "s0", "enterance", "Enterance(<[-enterance]>)", ["geometry.png", [3, 3]]],
+			["E", [0, 42, 4, 6], [50, 50, 180], "s0", "entrance", "Entrance(<[-entrance]>)", ["geometry.png", [3, 3]]],
 			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>,\n<[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
 			["CA", [0, 48, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
 			["FC", [4, 48, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
@@ -145,7 +145,7 @@
 			"4": "Slope SE",
 			"5": "Slope SW",
 			"6": "Platform",
-			"7": "Shortcut Enterance",
+			"7": "Shortcut entrance",
 			"9": "Glass"
 		}
 	}, 

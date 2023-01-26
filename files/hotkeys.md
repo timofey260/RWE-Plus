@@ -68,10 +68,10 @@ Generated using hotkeys to md converter
 * **C** - -crack - 
 * **B** - -beam - 
 * **G** - -glass - 
-* **X** - -shortcutenterance - 
+* **X** - -shortcutentrance - 
 * **Z** - -shortcut - 
 * **T** - -dragonden - 
-* **E** - -enterance - 
+* **E** - -entrance - 
 * **M** - -mirror - 
 * **Tab** - -clearall - 
 * **Y** - -flychains - 

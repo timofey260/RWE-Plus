@@ -68,10 +68,10 @@ Generated using hotkeys to md converter
 * **C** - -crack - Adds crack to cell
 * **B** - -beam - Adds beam to cell. can be rotated
 * **G** - -glass - Unbreakable invisible wall
-* **X** - -shortcutenterance - Enterance, where monsters can come in
-* **Z** - -shortcut - Needs to be connected to enterance
+* **X** - -shortcutentrance - entrance, where monsters can come in
+* **Z** - -shortcut - Needs to be connected to entrance
 * **T** - -dragonden - Spawns dragon. Needs to be connected to shortcut
-* **E** - -enterance - Enterance, where entites can come and leave
+* **E** - -entrance - entrance, where entites can come and leave
 * **M** - -mirror - Activates mirror. Horizontal or vertical. position can be changed
 * **Tab** - -clearall - Clears all data from cell
 * **Y** - -flychains - Adds Fly Chains to cell

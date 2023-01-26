@@ -271,7 +271,7 @@ class GE(menu_with_field):
         self.placetile = 9
         self.mx = 0
 
-    def shortcutenterance(self):
+    def shortcutentrance(self):
         self.selectedtool = "SE"
         self.placetile = 0.4
         self.mx = 0
@@ -286,7 +286,7 @@ class GE(menu_with_field):
         self.placetile = -7
         self.mx = 0
 
-    def enterance(self):
+    def entrance(self):
         self.selectedtool = "E"
         self.placetile = -6
         self.mx = 0
@@ -356,7 +356,7 @@ class GE(menu_with_field):
                     self.mapdata[x][y][self.layer][0] = self.reverseslope(self.mapdata[x][y][self.layer][0])
             elif self.placetile == 0.3:  # clear all
                 self.mapdata[x][y] = [[0, []], [0, []], [0, []]]
-            elif self.placetile == 0.4:  # shortcut enterance
+            elif self.placetile == 0.4:  # shortcut entrance
                 self.mapdata[x][y][self.layer][0] = 7
                 if 4 not in self.mapdata[x][y][self.layer][1]:
                     self.mapdata[x][y][self.layer][1].append(4)

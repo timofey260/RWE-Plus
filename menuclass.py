@@ -209,7 +209,7 @@ class menu():
         filepath = path2levels
         buttons = []
         slider = 0
-        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue", [50, 0], black, 30)
+        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue\nType to search", [50, 0], black, 30)
         label.resize()
         def appendbuttons():
             global filepath
@@ -219,15 +219,16 @@ class menu():
             buttons.append(widgets.button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback, tooltip="Go back"))
             count = 1
             for file in f:
-                y = 5 * count - slider * 5
-                if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
-                    if y > 0:
-                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=setasname, tooltip="File"))
-                    count += 1
-                elif os.path.isdir(os.path.join(filepath, file)):
-                    if y > 0:
-                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=self.addfolder, tooltip="Folder"))
-                    count += 1
+                if inputfile.lower() in file.lower():
+                    y = 5 * count - slider * 5
+                    if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
+                        if y > 0:
+                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=setasname, tooltip="File"))
+                        count += 1
+                    elif os.path.isdir(os.path.join(filepath, file)):
+                        if y > 0:
+                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=self.addfolder, tooltip="Folder"))
+                        count += 1
             for button in buttons:
                 button.resize()
         inputfile = ''
@@ -252,6 +253,8 @@ class menu():
                         inputfile = inputfile[:-1]
                     elif event.key == pg.K_RETURN:
                         r = False
+                    appendbuttons()
+                    slider = 0
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if event.button == 4:
                         slider = max(slider - 1, 0)
@@ -712,7 +715,7 @@ class menu_with_field(menu):
                                         pos = graphics["crackv"]
                                 if pos != -1:
                                     curtool = [pos[0] * image1size, pos[1] * image1size]
-                            if adds == 4: # shortcut enterance validation
+                            if adds == 4: # shortcut entrance validation
                                 # checklist
                                 foundair = False
                                 foundwire = False
@@ -730,13 +733,13 @@ class menu_with_field(menu):
                                             foundwire = True
                                             match tile:
                                                 case [0, 1]:  # N
-                                                    pos = graphics["shortcutenterancetexture"]["N"]
+                                                    pos = graphics["shortcutentrancetexture"]["N"]
                                                 case [0, -1]:  # S
-                                                    pos = graphics["shortcutenterancetexture"]["S"]
+                                                    pos = graphics["shortcutentrancetexture"]["S"]
                                                 case [-1, 0]:  # E
-                                                    pos = graphics["shortcutenterancetexture"]["E"]
+                                                    pos = graphics["shortcutentrancetexture"]["E"]
                                                 case [1, 0]:  # W
-                                                    pos = graphics["shortcutenterancetexture"]["W"]
+                                                    pos = graphics["shortcutentrancetexture"]["W"]
                                         else:
                                             break
                                     if 5 in curhover and tile in col4: # if wire in 4 places near

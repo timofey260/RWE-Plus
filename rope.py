@@ -154,18 +154,20 @@ class RopeModel:
         self.segments[A]["vel"] = p["Frc"]
 
         gridPos = self.giveGridPos(self.segments[A]["pos"])
-        for dir in [Vector2(0, 0), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1)]:
-            midPos = self.giveMiddleOfTile(gridPos + dir)
-            terrainPos = Vector2(restrict(self.segments[A]["pos"].x, midPos.x - 10, midPos.x + 10),
-                                 restrict(self.segments[A]["pos"].y, midPos.y - 10, midPos.y + 10))
-            terrainPos = ((terrainPos * 10) + midPos) / 11
+        for dir in [Vector2(0, 0), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
+                    Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1)]:
+            if self.afaMvLvlEdit(gridPos + dir, self.layer) == 1:
+                midPos = self.giveMiddleOfTile(gridPos + dir)
+                terrainPos = Vector2(restrict(self.segments[A]["pos"].x, midPos.x - 10, midPos.x + 10),
+                                     restrict(self.segments[A]["pos"].y, midPos.y - 10, midPos.y + 10))
+                terrainPos = ((terrainPos * 10) + midPos) / 11
 
-            dir = MoveToPoint(self.segments[A]["pos"], terrainPos, 1)
-            dist = Diag(self.segments[A]["pos"], terrainPos)
-            if dist < self.segRad:
-                mov = dir * (dist - self.segRad)
-                self.segments[A]["pos"] += mov
-                self.segments[A]["vel"] += mov
+                dir = MoveToPoint(self.segments[A]["pos"], terrainPos, 1)
+                dist = Diag(self.segments[A]["pos"], terrainPos)
+                if dist < self.segRad:
+                    mov = dir * (dist - self.segRad)
+                    self.segments[A]["pos"] += mov
+                    self.segments[A]["vel"] += mov
 
     def giveMiddleOfTile(self, pos):
         return Vector2((pos.x * 20) - 10, (pos.y * 20) - 10)
@@ -212,24 +214,21 @@ class RopeModel:
         return Vector2(int((pos.x / 20) + 0.4999), int((pos.y / 20) + 0.4999))
 
     def afaMvLvlEdit(self, pos: Vector2, layer):
-        #if pos.y > 250:
-        #    return 1
-        return 0
         if Rect(1, 1, len(self.data["GE"]), len(self.data["GE"])).collidepoint(pos):
             return self.data["GE"][round(pos.x)][round(pos.y)][layer][1]
         return 1
 
 def demo():
-    #rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
-    #                 {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
-    #                  "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,
-    #                  "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 5, "rigid": 1.6, "selfPush": 0,
-    #                  "sourcePush": 0}, 1, 1, 0)
     rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
-                     {"nm": "Wire", "tp": "rope", "depth": 0, "tags": [], "notes": [], "segmentLength": 3,
-                      "collisionDepth": 0, "segRad": 1, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 0,
-                      "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 0, "rigid": 0, "selfPush": 0,
-                      "sourcePush": 0}, 1.2, 1, 0)
+                     {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
+                      "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,
+                      "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 5, "rigid": 1.6, "selfPush": 0,
+                      "sourcePush": 0}, 1, 1, 0)
+    #rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
+    #                 {"nm": "Wire", "tp": "rope", "depth": 0, "tags": [], "notes": [], "segmentLength": 3,
+    #                  "collisionDepth": 0, "segRad": 1, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 0,
+    #                  "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 0, "rigid": 0, "selfPush": 0,
+    #                  "sourcePush": 0}, 1.2, 1, 0)
     timer = pg.time.Clock()
     run = True
     width = 1280
@@ -251,5 +250,3 @@ def demo():
         timer.tick(20)
     pg.quit()
     exit(0)
-
-demo()

@@ -119,8 +119,8 @@
 			["SP", [4, 12, 4, 6], [100, 100, 100], "s0", "spear", "Spear(<[-spear]>)", ["geometry.png", [3, 1]]],
 			["CR", [8, 12, 4, 6], [80, 80, 80], "s0", "crack", "Crack(<[-crack]>)", ["geometry.png", [0, 2]]],
 			["GL", [8, 18, 4, 6], [80, 80, 80], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
-			["SE", [0, 24, 4, 6], [70, 70, 200], "s0", "shortcutenterance", "Shortcut Enterance(<[-shortcutenterance]>)", ["geometry.png", [0, 3]]],
-			["E", [12, 24, 4, 6], [50, 50, 180], "s0", "enterance", "Enterance(<[-enterance]>)", ["geometry.png", [3, 3]]],
+			["SE", [0, 24, 4, 6], [70, 70, 200], "s0", "shortcutentrance", "Shortcut Entrance(<[-shortcutentrance]>)", ["geometry.png", [0, 3]]],
+			["E", [12, 24, 4, 6], [50, 50, 180], "s0", "entrance", "Entrance(<[-entrance]>)", ["geometry.png", [3, 3]]],
 			["CA", [4, 42, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
 			["HV", [8, 30, 4, 6], [100, 100, 100], "s0", "flyhive", "Fly Hive(<[-flyhive]>)", ["geometry.png", [1, 4]]],
 			["GWD", [8, 36, 4, 6], [70, 70, 200], "s0", "garbagewormden", "Garbage Worm Den(<[-garbagewormden]>)", ["geometry.png", [2, 5]]],
@@ -147,7 +147,7 @@
 			"4": "Slope SE",
 			"5": "Slope SW",
 			"6": "Platform",
-			"7": "Shortcut Enterance",
+			"7": "Shortcut entrance",
 			"9": "Glass"
 		}
 	}, 
