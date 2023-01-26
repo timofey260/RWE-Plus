@@ -21,7 +21,7 @@ class LE(menu_with_field):
             self.field2.field = pg.surface.Surface(sc)
             self.field2.field.fill(white)
 
-        self.size = settings["TE"]["cellsize"]
+        self.size = image1size
 
         self.message = ''
         self.n = 0

@@ -7,7 +7,7 @@
 		"fullscreen": false,
 		"fontsize": 30,
 		"colormul": 10,
-		"size": 30,
+		"size": 100,
 		"font": "defaultfont.ttf",
 		"titlefont": "Rodondo.otf",
 		"roundbuttons": 10,
@@ -99,32 +99,31 @@
 		"buttons":[
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
 
-			["AR", [4, 0, 4, 6], [120, 120, 120], "s0", "air", "Air(<[-air]>)", ["geometry.png", [2, 0]]],
-			["SL", [4, 6, 4, 6], [100, 100, 100], "s0", "slope", "Slope(<[-slope]>)", ["geometry.png", [3, 0]]],
-			["RK", [4, 12, 4, 6], [100, 100, 100], "s0", "rock", "Rock(<[-rock]>)", ["geometry.png", [2, 1]]],
-			["MV", [4, 18, 4, 6], [100, 100, 100], "s0", "move", "Move(<[-move]>)", ["geometry.png", [1, 1]]],
-			["BM", [4, 24, 4, 6], [80, 80, 80], "s0", "beam", "Beam(<[-beam]>)", ["geometry.png", [2, 2]]],
-			["SC", [4, 30, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
-			["D", [4, 36, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
-			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>,\n<[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
-			["FC", [4, 48, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
-			["SH", [4, 54, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
-			["W", [4, 60, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
-			["CL", [4, 66, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
-
-
 			["WL", [0, 0, 4, 6], [120, 120, 120], "s0", "walls", "Walls(<[-walls]>)", ["geometry.png", [1, 0]]],
+			["AR", [4, 0, 4, 6], [120, 120, 120], "s0", "air", "Air(<[-air]>)", ["geometry.png", [2, 0]]],
 			["IN", [0, 6, 4, 6], [120, 120, 120], "s0", "inverse", "Inverse(<[-inverse]>)", ["geometry.png", [0, 0]]],
+			["SL", [4, 6, 4, 6], [100, 100, 100], "s0", "slope", "Slope(<[-slope]>)", ["geometry.png", [3, 0]]],
 			["FL", [0, 12, 4, 6], [100, 100, 100], "s0", "floor", "Floor(<[-floor]>)", ["geometry.png", [0, 1]]],
+			["RK", [4, 12, 4, 6], [100, 100, 100], "s0", "rock", "Rock(<[-rock]>)", ["geometry.png", [2, 1]]],
 			["SP", [0, 18, 4, 6], [100, 100, 100], "s0", "spear", "Spear(<[-spear]>)", ["geometry.png", [3, 1]]],
+			["MV", [4, 18, 4, 6], [100, 100, 100], "s0", "move", "Move(<[-move]>)", ["geometry.png", [1, 1]]],
 			["CR", [0, 24, 4, 6], [80, 80, 80], "s0", "crack", "Crack(<[-crack]>)", ["geometry.png", [0, 2]]],
+			["BM", [4, 24, 4, 6], [80, 80, 80], "s0", "beam", "Beam(<[-beam]>)", ["geometry.png", [2, 2]]],
 			["GL", [0, 30, 4, 6], [80, 80, 80], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
+			["SC", [4, 30, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
 			["SE", [0, 36, 4, 6], [70, 70, 200], "s0", "shortcutenterance", "Shortcut Enterance(<[-shortcutenterance]>)", ["geometry.png", [0, 3]]],
+			["D", [4, 36, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
 			["E", [0, 42, 4, 6], [50, 50, 180], "s0", "enterance", "Enterance(<[-enterance]>)", ["geometry.png", [3, 3]]],
+			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>,\n<[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
 			["CA", [0, 48, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
+			["FC", [4, 48, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
 			["HV", [0, 54, 4, 6], [100, 100, 100], "s0", "flyhive", "Fly Hive(<[-flyhive]>)", ["geometry.png", [1, 4]]],
+			["SH", [4, 54, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
 			["GWD", [0, 60, 4, 6], [70, 70, 200], "s0", "garbagewormden", "Garbage Worm Den(<[-garbagewormden]>)", ["geometry.png", [2, 5]]],
+			["W", [4, 60, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
 			["WG", [0, 66, 4, 6], [100, 100, 100], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
+			["WMH", [4, 66, 4, 6], [100, 100, 100], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
+			["CL", [4, 72, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
 			["CB", [0, 72, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"]
 		],
 		"d1":
@@ -137,7 +136,7 @@
 			["Tile: ", [0, 79], [255, 255, 255], 30],
 			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25]
 		],
-		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WG":0},
+		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WMH": 0, "WG":0},
 		"names": {
 			"0": "Air",
 			"1": "Solid",
@@ -148,8 +147,7 @@
 			"6": "Platform",
 			"7": "Shortcut Enterance",
 			"9": "Glass"
-		},
-		"cellsize": 10
+		}
 	}, 
 	"TE":
 	{
@@ -175,7 +173,6 @@
 			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25],
 			["Default material: ", [0, 90], [0, 0, 0], 25]
 		],
-		"cellsize": 10,
 		"itemsize": 2,
 		"menucolor": [120, 120, 120]
 	},
@@ -282,7 +279,6 @@
 			["%1s: %10s", [32, 64], [255, 255, 255], 25],
 			["Selected effect: ", [0, 97], [255, 255, 255], 25]
 		],
-		"cellsize": 10,
 		"menucolor": [120, 120, 120]
 	},
 	"CE":{
@@ -360,7 +356,6 @@
 			["Warning: ", [0, 94], [255, 50, 50], 25],
 			["Prop settings: ", [0, 97], [255, 255, 255], 25]
 		],
-		"cellsize": 10,
 		"menucolor": [120, 120, 120],
 
 		"elements_as_tiles_count": 21,

@@ -319,6 +319,11 @@ class GE(menu_with_field):
         self.placetile = -13
         self.mx = 0
 
+    def whack_a_mole_hole(self):
+        self.selectedtool = "WMH"
+        self.placetile = -19
+        self.mx = 0
+
     def waterfall(self):
         self.selectedtool = "W"
         self.placetile = -18

@@ -54,7 +54,7 @@ class RopeModel:
 
         numberOfSegments = int(max((Diag(pA, pB) / self.segmentLength) * lengthFac, 3))
         step = Diag(pA, pB) / numberOfSegments
-        for i in range(numberOfSegments):
+        for i in range(1, numberOfSegments):
             self.segments.append({"pos": pA + MoveToPoint(pA, pB, (i - 0.5) * step),
                                   "lastPos": pA + MoveToPoint(pA, pB, (i - 0.5) * step),
                                   "vel": Vector2(0, 0)
@@ -65,19 +65,19 @@ class RopeModel:
             dir = MoveToPoint(self.posA, self.posB, 1)
             if self.release > -1:
                 for A in range(int(len(self.segments) / 2)):
-                    fac = pow(1 - ((A-1)/(len(self.segments)/2)), 2)
+                    fac = pow(1 - ((A - 1) / (len(self.segments) / 2)), 2)
                     self.segments[A]["vel"] += dir * fac * self.edgeDirection
                 idealFirstPos = self.posA + dir * self.segmentLength
                 self.segments[0]["pos"] = Vector2(
                     lerp(self.segments[0]["pos"].x, idealFirstPos.x, self.edgeDirection),
                     lerp(self.segments[0]["pos"].y, idealFirstPos.y, self.edgeDirection))
             if self.release < 1:
-                for A1 in range(int(len(self.segments) / 2)):
+                for A1 in range(1, int(len(self.segments) / 2)):
                     fac = pow(1 - ((A1 - 1) / (len(self.segments) / 2)), 2)
-                    A = len(self.segments) - A1 - 1
-                    self.segments[A]["vel"] += dir * fac * self.edgeDirection
-                idealFirstPos = self.posB + dir * self.segmentLength
-                self.segments[len(self.segments) - 1]["pos"] = Vector2(
+                    A = len(self.segments) - A1
+                    self.segments[A]["vel"] -= dir * fac * self.edgeDirection
+                idealFirstPos = self.posB - dir * self.segmentLength
+                self.segments[-1]["pos"] = Vector2(
                     lerp(self.segments[-1]["pos"].x, idealFirstPos.x, self.edgeDirection),
                     lerp(self.segments[-1]["pos"].y, idealFirstPos.y, self.edgeDirection))
         if self.release > -1:
@@ -90,7 +90,7 @@ class RopeModel:
             self.segments[i]["lastPos"] = self.segments[i]["pos"]
             self.segments[i]["pos"] += self.segments[i]["vel"]
             self.segments[i]["vel"] *= self.airFric
-            self.segments[i]["vel"].y = self.segments[i]["vel"].y + self.grav
+            self.segments[i]["vel"].y += self.grav
 
         for i in range(1, len(self.segments)):
             self.ConnectRopePoints(i, i-1)
@@ -157,7 +157,7 @@ class RopeModel:
         for dir in [Vector2(0, 0), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1)]:
             midPos = self.giveMiddleOfTile(gridPos + dir)
             terrainPos = Vector2(restrict(self.segments[A]["pos"].x, midPos.x - 10, midPos.x + 10),
-                                    restrict(self.segments[A]["pos"].y, midPos.y - 10, midPos.y + 10))
+                                 restrict(self.segments[A]["pos"].y, midPos.y - 10, midPos.y + 10))
             terrainPos = ((terrainPos * 10) + midPos) / 11
 
             dir = MoveToPoint(self.segments[A]["pos"], terrainPos, 1)
@@ -169,6 +169,7 @@ class RopeModel:
 
     def giveMiddleOfTile(self, pos):
         return Vector2((pos.x * 20) - 10, (pos.y * 20) - 10)
+
     def sharedCheckVCollision(self, p, friction, layer):
         bounce = 0
 
@@ -188,7 +189,7 @@ class RopeModel:
                             p["Frc"].x *= friction
                             p["Frc"].y = -p["Frc"].y * bounce
                             return p
-        else:
+        elif p["Frc"].y < 0:
             lastGridPos = self.giveGridPos(p["LastLoc"])
             headPos = self.giveGridPos(p["Loc"] - Vector2(0, p["SizePnt"].y + 0.01))
             lastHeadPos = self.giveGridPos(p["LastLoc"] - Vector2(0, p["SizePnt"].y))
@@ -208,20 +209,27 @@ class RopeModel:
         return p
 
     def giveGridPos(self, pos: Vector2):
-        return Vector2(int(pos.x / 20 + 0.4999), int(pos.y / 20 + 0.4999))
+        return Vector2(int((pos.x / 20) + 0.4999), int((pos.y / 20) + 0.4999))
 
     def afaMvLvlEdit(self, pos: Vector2, layer):
+        #if pos.y > 250:
+        #    return 1
+        return 0
         if Rect(1, 1, len(self.data["GE"]), len(self.data["GE"])).collidepoint(pos):
-            return 0
             return self.data["GE"][round(pos.x)][round(pos.y)][layer][1]
         return 1
 
 def demo():
+    #rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
+    #                 {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
+    #                  "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,
+    #                  "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 5, "rigid": 1.6, "selfPush": 0,
+    #                  "sourcePush": 0}, 1, 1, 0)
     rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
-                     {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
-                      "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,
-                      "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 5, "rigid": 1.6, "selfPush": 0,
-                      "sourcePush": 0}, 1, 1, 0)
+                     {"nm": "Wire", "tp": "rope", "depth": 0, "tags": [], "notes": [], "segmentLength": 3,
+                      "collisionDepth": 0, "segRad": 1, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 0,
+                      "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 0, "rigid": 0, "selfPush": 0,
+                      "sourcePush": 0}, 1.2, 1, 0)
     timer = pg.time.Clock()
     run = True
     width = 1280

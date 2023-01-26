@@ -95,6 +95,7 @@
     	"K_k": "-wormgrass",
     	"K_d": "-clearlayer",
     	"K_o": "-clearblock",
+    	"K_p": "-whack_a_mole_hole",
 
     	"K_SPACE+": "-swichcameras",
 
