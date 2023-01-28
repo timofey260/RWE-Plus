@@ -131,10 +131,7 @@ class menu():
 
         self.size = image1size
         self.message = ''
-        print("\n\n\n\n")
-        for key, val in self.hotkeys.items():
-            print(f"{key} - {val}")
-
+        print("Entered " + self.menu)
         self.init()
 
     def unlock_keys(self):
@@ -452,7 +449,7 @@ class menu_with_field(menu):
 
     def movemiddle(self, bp, pos):
         if bp[1] == 1 and self.mousp1 and (self.mousp2 and self.mousp):
-            self.rectdata[0] = pos
+            self.rectdata[0] = pos.copy()
             self.rectdata[1] = [self.xoffset, self.yoffset]
             self.mousp1 = False
         elif bp[1] == 1 and not self.mousp1 and (self.mousp2 and self.mousp):
@@ -828,12 +825,11 @@ class menu_with_field(menu):
             surf.set_colorkey(white)
             surf.set_alpha(100)
             self.f.blit(surf, [mostleft / spritesize * image1size, mosttop / spritesize * image1size])
-            if prop[4].get("points") is not None: # rope showing for future
+            if prop[4].get("points") is not None:
+                propcolor = toarr(self.findprop(prop[1])[0]["previewColor"], "color")
                 for point in prop[4]["points"]:
                     px, py = toarr(point, "point")
-                    px = px / spritesize * image1size
-                    py = py / spritesize * image1size
-                    pg.draw.circle(self.f, rope, [px, py], 5)
+                    pg.draw.circle(self.f, propcolor, [px, py], 5)
 
 
     def rendermatrix(self, field, size, matrix, mix=mixcol_empty):

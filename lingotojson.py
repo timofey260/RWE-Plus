@@ -38,6 +38,7 @@ def tojson(string: str):
 def turntoproject(string: str):
     proj = {}
     lines = string.split("\n")
+    print("Loading level...")
     proj["GE"] = eval(lines[0])  # geometry
     proj["TE"] = tojson(lines[1])  # tile editor and his settings
     proj["FE"] = tojson(lines[2])  # effect editor params

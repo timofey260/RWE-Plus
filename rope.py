@@ -1,19 +1,15 @@
 import math
 from pygame import Vector2, Rect
-import lingotojson
-import pygame as pg
-
-data = lingotojson.turntoproject(open("LevelEditorProjects\\HI_C15.txt", "r").read())
 
 def Diag(point1, point2):
-    RectHeight = abs(point1.x - point2.x)
-    RectWidth = abs(point1.y - point2.y)
+    RectHeight = abs(point1.y - point2.y)
+    RectWidth = abs(point1.x - point2.x)
     diagonal = math.sqrt((RectHeight * RectHeight) + (RectWidth * RectWidth))
     return diagonal
 
 def DiagWI(point1, point2, dig):
-    RectHeight = abs(point1.x - point2.x)
-    RectWidth = abs(point1.y - point2.y)
+    RectHeight = abs(point1.y - point2.y)
+    RectWidth = abs(point1.x - point2.x)
     return (RectHeight * RectHeight) + (RectWidth * RectWidth) < dig*dig
 
 
@@ -36,16 +32,19 @@ def restrict(a, minimum, maximum):
 class RopeModel:
     def __init__(self, data, pA, pB, prop, lengthFac, lr, rel):
         self.data = data
+        self.prop = prop.copy()
+        self.lengthFac = lengthFac
+        self.release = rel
+        self.layer = lr
+
         self.posA: Vector2 = pA
         self.posB: Vector2 = pB
         self.segmentLength: int = prop["segmentLength"]
         self.grav = prop["grav"]
         self.stiff = prop["stiff"]
-        self.release = rel
         self.segments = []
         self.friction = prop["friction"]
         self.airFric = prop["airFric"]
-        self.layer = lr
         self.segRad = prop["segRad"]
         self.rigid = prop["rigid"]
         self.edgeDirection = prop["edgeDirection"]
@@ -143,15 +142,15 @@ class RopeModel:
 
     def PushRopePointOutOfTerrain(self, A):
         p = {
-            "Loc": self.segments[A]["pos"],
-            "LastLoc": self.segments[A]["lastPos"],
-            "Frc": self.segments[A]["vel"],
-            "SizePnt": Vector2(self.segRad, self.segRad)
+            "Loc": self.segments[A]["pos"].copy(),
+            "LastLoc": self.segments[A]["lastPos"].copy(),
+            "Frc": self.segments[A]["vel"].copy(),
+            "SizePnt": Vector2(self.segRad, self.segRad).copy()
         }
         p = self.sharedCheckVCollision(p, self.friction, self.layer)
 
-        self.segments[A]["pos"] = p["Loc"]
-        self.segments[A]["vel"] = p["Frc"]
+        self.segments[A]["pos"] = p["Loc"].copy()
+        self.segments[A]["vel"] = p["Frc"].copy()
 
         gridPos = self.giveGridPos(self.segments[A]["pos"])
         for dir in [Vector2(0, 0), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
@@ -163,11 +162,11 @@ class RopeModel:
                 terrainPos = ((terrainPos * 10) + midPos) / 11
 
                 dir = MoveToPoint(self.segments[A]["pos"], terrainPos, 1)
-                dist = Diag(self.segments[A]["pos"], terrainPos)
+                dist = Diag(self.segments[A]["pos"], terrainPos) - 1
                 if dist < self.segRad:
-                    mov = dir * (dist - self.segRad)
+                    mov = dir * (dist - self.segRad) * 2
                     self.segments[A]["pos"] += mov
-                    self.segments[A]["vel"] += mov
+                    self.segments[A]["vel"] = Vector2(0, 0) # not a total fix
 
     def giveMiddleOfTile(self, pos):
         return Vector2((pos.x * 20) - 10, (pos.y * 20) - 10)
@@ -181,8 +180,8 @@ class RopeModel:
             lastFeetPos = self.giveGridPos(p["LastLoc"] + Vector2(0, p["SizePnt"].y))
             leftPos = self.giveGridPos(p["Loc"] + Vector2(-p["SizePnt"].x + 1, p["SizePnt"].y + 0.01))
             rightPos = self.giveGridPos(p["Loc"] + Vector2(p["SizePnt"].x - 1, p["SizePnt"].y + 0.01))
-            for q in range(int(lastFeetPos.y), int(feetPos.y)):
-                for c in range(int(leftPos.x), int(rightPos.x)):
+            for q in range(int(lastFeetPos.y), int(feetPos.y) + 1):
+                for c in range(int(leftPos.x), int(rightPos.x) + 1):
                     if self.afaMvLvlEdit(Vector2(c, q), layer) == 1 and self.afaMvLvlEdit(Vector2(c, q-1), layer) != 1:
                         if lastGridPos.y >= q and self.afaMvLvlEdit(lastGridPos, layer) == 1:
                             pass
@@ -197,9 +196,9 @@ class RopeModel:
             lastHeadPos = self.giveGridPos(p["LastLoc"] - Vector2(0, p["SizePnt"].y))
             leftPos = self.giveGridPos(p["Loc"] + Vector2(-p["SizePnt"].x + 1, p["SizePnt"].y + 0.01))
             rightPos = self.giveGridPos(p["Loc"] + Vector2(p["SizePnt"].x - 1, p["SizePnt"].y + 0.01))
-            for d in range(int(lastHeadPos.y), int(headPos.y)):
+            for d in range(int(lastHeadPos.y), int(headPos.y) + 1):
                 q = (lastHeadPos.y) - (d - headPos.y)
-                for c in range(int(leftPos.x), int(rightPos.x)):
+                for c in range(int(leftPos.x), int(rightPos.x) + 1):
                     if self.afaMvLvlEdit(Vector2(c, q), layer) == 1 and self.afaMvLvlEdit(Vector2(c, q+1), layer) != 1:
                         if lastGridPos.y <= q and self.afaMvLvlEdit(lastGridPos, layer) != 1:
                             pass
@@ -214,21 +213,29 @@ class RopeModel:
         return Vector2(int((pos.x / 20) + 0.4999), int((pos.y / 20) + 0.4999))
 
     def afaMvLvlEdit(self, pos: Vector2, layer):
-        if Rect(1, 1, len(self.data["GE"]), len(self.data["GE"])).collidepoint(pos):
-            return self.data["GE"][round(pos.x)][round(pos.y)][layer][1]
+        if __name__ == "__main__":
+            if pos.y > 11:
+                return 1
+            return 0
+        if Rect(0, 0, len(self.data["GE"]), len(self.data["GE"][0])).collidepoint(pos - Vector2(1, 1)):
+            return self.data["GE"][int(pos.x - 1)][int(pos.y - 1)][layer][0]
         return 1
 
-def demo():
-    rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
-                     {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
-                      "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,
-                      "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 5, "rigid": 1.6, "selfPush": 0,
-                      "sourcePush": 0}, 1, 1, 0)
+if __name__ == "__main__":
+    import lingotojson
+    import pygame as pg
+
+    data = lingotojson.turntoproject(open("LevelEditorProjects\\HI_C15.txt", "r").read())
     #rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
-    #                 {"nm": "Wire", "tp": "rope", "depth": 0, "tags": [], "notes": [], "segmentLength": 3,
-    #                  "collisionDepth": 0, "segRad": 1, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 0,
-    #                  "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 0, "rigid": 0, "selfPush": 0,
-    #                  "sourcePush": 0}, 1.2, 1, 0)
+    #                 {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
+    #                  "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,
+    #                  "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 5, "rigid": 1.6, "selfPush": 0,
+    #                  "sourcePush": 0}, 1, 1, 0)
+    rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
+                     {"nm": "Wire", "tp": "rope", "depth": 0, "tags": [], "notes": [], "segmentLength": 3,
+                      "collisionDepth": 0, "segRad": 1, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 0,
+                      "previewColor": [255, 0, 0], "previewEvery": 4, "edgeDirection": 0, "rigid": 0, "selfPush": 0,
+                      "sourcePush": 0}, 1, 1, 0)
     timer = pg.time.Clock()
     run = True
     width = 1280
@@ -245,6 +252,7 @@ def demo():
         for segment in rope.segments:
             pg.draw.circle(window, [255, 0, 0], segment["pos"], 3)
         pg.draw.line(window, [0, 255, 0], rope.posA, rope.posB)
+        pg.draw.line(window, [0, 0, 255], [0, 11*20], [width, 11*20])
         pg.display.flip()
         pg.display.update()
         timer.tick(20)

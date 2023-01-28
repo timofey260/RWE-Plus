@@ -7,6 +7,8 @@ FE: To fill areas faster, press <[str100]>
 
 GE: Press <[rotate]> to rotate beams and slopes
 
+You can see tiles and props by hovering their buttons with mouse
+You can open categories list by pressing <[-changematshow]>,\nor clicking category button itself
 You can easily read all hotkeys in hotkeys tab(<[/HK]>)
 Use Middle mouse button(MMB) to navigate on level
 Every menu can return you to menu with <[/MN]> button
@@ -19,10 +21,12 @@ you can show any data in any editor by pressing\n<[-togglegeo]>, <[-toggletiles]
 Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
 Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
 Tile editor is my best and i hate Prop editor
+Prop editor ropes are here! 0w0
 
 bruh
 Welcome to RWE+
 Pizza time!
 Stop listing this tips, time to make a level now!
 Press it again)------->
+Have fun here!
 https://www.youtube.com/watch?v=dQw4w9WgXcQ

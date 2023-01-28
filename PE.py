@@ -1,6 +1,6 @@
 from menuclass import *
 import random as rnd
-# from rope import RopeModel
+from rope import RopeModel
 
 values = {
     "release": {
@@ -43,13 +43,17 @@ class PE(menu_with_field):
 
         self.depth = 0
 
+        self.normheight = 0
+
         self.selectedprop = self.props[list(self.props.keys())[self.currentcategory]][0]
         self.selectedimage: pg.Surface = self.selectedprop["images"][0]
+        self.ropeobject = None
         self.snap = False
         self.notes = []
 
         self.quads = [[0, 0], [0, 0], [0, 0], [0, 0]]
         self.quadsnor = self.quads.copy() # quad's default position
+        self.lastpos = pg.Vector2(0, 0)
 
         self.prop_settings = {}
 
@@ -149,9 +153,13 @@ class PE(menu_with_field):
                     val = (self.prop_settings[name] + 2) % 3 - 1
                 case "renderTime":
                     val = (self.prop_settings[name] + 1) % 2
+                case "customDepth":
+                    val = self.prop_settings[name] % 30 + 1
                 case "variation":
                     val = (self.prop_settings[name] + 1) % len(self.selectedprop["images"])
                     self.updateproptransform()
+                case "thickness":
+                    val = self.prop_settings[name] % 5 + 1
                 case "applyColor":
                     val = (self.prop_settings[name] + 1) % 2
                 case "color":
@@ -223,6 +231,24 @@ class PE(menu_with_field):
             delmode = self.findparampressed("delete_mode")
             copymode = self.findparampressed("copy_mode")
             render = not delmode and not copymode
+            if self.lastpos != mpos and self.selectedprop["tp"] == "rope":
+                self.lastpos = mpos.copy()
+                ropepos = (mpos - pg.Vector2(self.field.rect.topleft)) / self.size * image1size - pg.Vector2(self.xoffset, self.yoffset) * image1size
+                pA = pg.Vector2((self.quads[0][0] + self.quads[3][0]) / 2,
+                                (self.quads[0][1] + self.quads[3][1]) / 2) + ropepos
+                pB = pg.Vector2((self.quads[1][0] + self.quads[2][0]) / 2,
+                                (self.quads[1][1] + self.quads[2][1]) / 2) + ropepos
+                collDep = ((self.layer - 1) * 10) + self.depth + self.selectedprop["collisionDepth"]
+                if collDep < 10:
+                    cd = 0
+                elif collDep < 20:
+                    cd = 1
+                else:
+                    cd = 2
+                fac = (pg.Vector2(self.quads[0]).distance_to(pg.Vector2(self.quads[3]))) / self.normheight
+                self.ropeobject = RopeModel(self.data, pA, pB, self.selectedprop, fac, cd,
+                                            self.prop_settings["release"])
+
             # pg.draw.circle(self.fieldmap, red, pg.Vector2(posoffset) / image1size * self.size, 20)
 
             s = [self.findparampressed("stretch_topleft"),
@@ -266,8 +292,8 @@ class PE(menu_with_field):
                         self.prop_settings = name[4]["settings"]
                         self.updateproptransform()
                 elif self.selectedprop["tp"] == "long":
-                    self.rectdata[0] = posoffset
-                    self.rectdata[1] = mpos
+                    self.rectdata[0] = posoffset.copy()
+                    self.rectdata[1] = mpos.copy()
                     self.transform_reset()
                 else:
                     self.place()
@@ -326,6 +352,13 @@ class PE(menu_with_field):
                 else:
                     q2s = pg.Vector2(mosts[0], mosts[1])
                     self.surface.blit(self.selectedimage, self.helppoins + q2s)
+                if self.selectedprop["tp"] == "rope":
+                    if not self.findparampressed("pauseropephysics"):
+                        self.ropeobject.modelRopeUpdate()
+                    color = toarr(self.ropeobject.prop["previewColor"], "color")
+                    for segment in self.ropeobject.segments:
+                        posofwire = ((pg.Vector2(self.xoffset, self.yoffset) + (segment["pos"]) / image1size) * self.size) + pg.Vector2(self.field.rect.topleft)
+                        pg.draw.circle(self.surface, color, posofwire, 5)
             depthpos = [mpos[0] + 20, mpos[1]]
             if self.findparampressed("propvariation_change"):
                 varpos = [mpos[0] + 20, mpos[1] + 20]
@@ -461,14 +494,15 @@ class PE(menu_with_field):
         if prop is None:
             print("Prop not found in memory! Try relaunch the app")
             return
+        self.lastpos = 0
         self.selectedprop = prop.copy()
         self.currentcategory = ci[0]
         self.toolindex = ci[1]
         self.snap = "snapToGrid" in self.selectedprop["tags"]
         self.add_warning()
         self.reset_settings()
-        self.transform_reset()
         self.applysettings()
+        self.transform_reset()
         self.applytags()
         self.rebuttons()
 
@@ -538,13 +572,12 @@ class PE(menu_with_field):
                 notes.append("The highlights and shadows on this prop are generated by code,\nso it can be rotated to any degree and they will remain correct.\n")
             else:
                 notes.append("Be aware that shadows and highlights will not rotate with the prop,\nso extreme rotations may cause incorrect shading.\n")
-        match self.selectedprop["nm"]:
-            case "wire", "Zero-G Wire":
-                self.prop_settings["thickness"] = 2
-                notes.append("The thickness of the wire can be set in settings.\n")
-            case "Zero-G Tube":
-                self.prop_settings["applyColor"] = 0
-                notes.append("The tube can be colored white through the settings.\n")
+        if self.selectedprop["nm"].lower() in ["wire", "zero-g wire"]:
+            self.prop_settings["thickness"] = 2
+            notes.append("The thickness of the wire can be set in settings.\n")
+        elif self.selectedprop["nm"].lower() in ["zero-g tube"]:
+            self.prop_settings["applyColor"] = 0
+            notes.append("The tube can be colored white through the settings.\n")
         for tag in self.selectedprop["tags"]:
             match tag:
                 case "customColor":
@@ -581,6 +614,7 @@ class PE(menu_with_field):
         w, h = self.selectedimage.get_size()
         wd, hd = w / 2, h / 2
         self.quads = [[-wd, -hd], [wd, -hd], [wd, hd], [-wd, hd]]
+        self.normheight = pg.Vector2(self.quads[0]).distance_to(pg.Vector2(self.quads[3]))
         self.quadsnor = self.quads.copy()
         self.updateproptransform()
 
@@ -608,6 +642,13 @@ class PE(menu_with_field):
             if self.prop_settings["variation"] == 0: # random
                 newpropsettings["variation"] = rnd.randint(1, len(self.selectedprop["images"]))
         prop = [-self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.toolindex + 1], "point"), quads2, {"settings": newpropsettings}]
+        if self.selectedprop["tp"] == "rope":
+            points = []
+            for segment in self.ropeobject.segments:
+                point = [segment["pos"].x, segment["pos"].y]
+                point = makearr([round(point[0], 4), round(point[1], 4)], "point")
+                points.append(point)
+        prop[4]["points"] = points
         self.data["PR"]["props"].append(prop.copy())
         self.applytags()
         self.rfa()

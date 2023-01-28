@@ -236,6 +236,8 @@
 		"K_l": "-swichlayers",
     	"K_l+": "-swichlayers_back",
 
+    	"K_x": "pauseropephysics",
+
     	"K_SPACE@@": "cursor_propdepth_inverse",
 
 		"K_LEFT": "left",
