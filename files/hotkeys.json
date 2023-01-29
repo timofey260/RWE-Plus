@@ -312,9 +312,9 @@
     	"K_UP": "up",
     	"K_DOWN": "down",
 
-    	"K_d": "-deletewater",
-    	"K_DELETE": "-deletewater",
-    	"K_w": "-addwater",
+    	"K_d": "-nowater",
+    	"K_DELETE": "-nowater",
+    	"K_w": "-water",
 
     	"K_f": "-swichlayers",
     	"K_SPACE+": "-swichcameras"

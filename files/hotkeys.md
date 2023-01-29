@@ -82,6 +82,7 @@ Generated using hotkeys to md converter
 * **K** - -wormgrass - 
 * **D** - -clearlayer - 
 * **O** - -clearblock - 
+* **P** - -whack_a_mole_hole - 
 * **ctrl + Space** - -swichcameras - 
 * **Space** - rotate - 
 * **Left** - left - 
@@ -149,7 +150,7 @@ Generated using hotkeys to md converter
 * **ctrl + 5** - -toggleeffects - 
 * **ctrl + 6** - -togglegrid - 
 * **Escape** - /MN - 
-* **X** - -togglesnap - 
+* **X** - pauseropephysics - 
 * **W** - -browse_prev - 
 * **A** - -cat_prev_propupdate - 
 * **S** - -browse_next - 
@@ -228,9 +229,9 @@ Generated using hotkeys to md converter
 * **Right** - right - 
 * **Up** - up - 
 * **Down** - down - 
-* **D** - -deletewater - 
-* **Delete** - -deletewater - 
-* **W** - -addwater - 
+* **D** - -nowater - 
+* **Delete** - -nowater - 
+* **W** - -water - 
 * **F** - -swichlayers - 
 * **ctrl + Space** - -swichcameras - 
 ### LE

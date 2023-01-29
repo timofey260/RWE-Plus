@@ -30,7 +30,7 @@ Generated using hotkeys to md converter
 * **ctrl + 4** - -toggleprops - Toggles props
 * **ctrl + 5** - -toggleeffects - Shows effects
 * **ctrl + 6** - -togglegrid - Toggles grid
-* **Q** - quit - quits RWE+
+* **Q** - quit - Quits RWE+
 * **ctrl + R** - render - Renders file using Drizzle
 * **G** - /GE - Geometry Editor
 * **T** - /TE - Tile Editor
@@ -82,6 +82,7 @@ Generated using hotkeys to md converter
 * **K** - -wormgrass - Adds wormgrass to cell
 * **D** - -clearlayer - Removes only cell, leaves added cells
 * **O** - -clearblock - Removes only added cells, like beams and paths
+* **P** - -whack_a_mole_hole - Adds Whack-a-Mole-Hole. it is portal between other Whack-a-Mole-Holes for lizards
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Space** - rotate - Rotate slopes and beams
 * **Left** - left - Move camera left
@@ -149,7 +150,7 @@ Generated using hotkeys to md converter
 * **ctrl + 5** - -toggleeffects - Shows effects
 * **ctrl + 6** - -togglegrid - Toggles grid
 * **Escape** - /MN - Returns to menu
-* **X** - -togglesnap - Toggles snap of prop
+* **X** - pauseropephysics - Pauses rope physics
 * **W** - -browse_prev - Previous prop
 * **A** - -cat_prev_propupdate - Previous category + update current prop
 * **S** - -browse_next - Next prop
@@ -228,9 +229,9 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
-* **D** - -deletewater - Delets water from level
-* **Delete** - -deletewater - Delets water from level
-* **W** - -addwater - Adds water to level
+* **D** - -nowater - Removes water from level
+* **Delete** - -nowater - Removes water from level
+* **W** - -water - Adds water to level
 * **F** - -swichlayers - Switch water layer
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 ### LE

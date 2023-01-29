@@ -305,8 +305,8 @@
 	},
 	"LP": {
 		"buttons": [
-			["Change Border", [2, 2, 20, 14], [100, 100, 100], "changeborder", "non", "Change border settings(changeborder)"],
-			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(changelight)"],
+						["Change Border", [2, 2, 20, 14], [100, 100, 100], "changeborder", "non", "Change border settings(<[-changeborder]>)"],
+			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(<[-changelight]>)"],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],

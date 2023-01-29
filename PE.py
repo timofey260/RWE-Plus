@@ -648,7 +648,7 @@ class PE(menu_with_field):
                 point = [segment["pos"].x, segment["pos"].y]
                 point = makearr([round(point[0], 4), round(point[1], 4)], "point")
                 points.append(point)
-        prop[4]["points"] = points
+            prop[4]["points"] = points
         self.data["PR"]["props"].append(prop.copy())
         self.applytags()
         self.rfa()

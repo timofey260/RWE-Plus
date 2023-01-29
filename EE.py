@@ -31,9 +31,13 @@ class EE(menu_with_field):
 
             h = height - top
 
-            rect = pg.Rect(0, top, width, h)
-            pg.draw.rect(self.fieldadd, blue, rect)
-
+            #rect = pg.Rect(self.xoffset * self.size, self.yoffset * self.size + top, width, h)
+            s = pg.Surface([width, h])
+            s.fill(blue)
+            s.set_alpha(100)
+            self.field.field.blit(s, [self.xoffset * self.size, self.yoffset * self.size + top])
+        self.field.blit()
+        super().blit(False)
         self.labels[0].set_text(self.labels[0].originaltext % self.data["WL"]["waterLevel"])
         self.labels[1].set_text(self.labels[1].originaltext % (1 - self.data["WL"]["waterInFront"] + 1))
 
