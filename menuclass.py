@@ -116,13 +116,15 @@ def setasname(name):
     inputfile = name
 
 
-class menu():
+class menu:
     def __init__(self, surface: pg.surface.Surface, data, name):
         self.surface = surface
         self.menu = name
         self.data = data
+        self.datalast = copy.deepcopy(data)
         self.settings = settings[self.menu]
         self.hotkeys = hotkeys[name]
+        self.historybuffer = []
         self.uc = []
 
         self.mousp = False
@@ -324,6 +326,13 @@ class menu():
             i.blit(fontsize)
         for i in self.buttons:
             i.blittooltip()
+
+    def updatehistory(self, menu):
+        if self.data[menu] != self.datalast[menu]:
+            if type(self.data[menu]) is dict:
+                pass
+
+
 
     def non(self):
         pass

@@ -15,7 +15,9 @@
   	  	"K_s+": "save",
   	  	"K_o+": "open",
   	  	"K_n+": "new",
-  	  	"K_F11": "/fc"
+  	  	"K_F11": "/fc",
+  	  	"K_z+": "undo",
+  	  	"K_y+": "redo"
   	},
   	"LD": {
   		"unlock_keys": [],

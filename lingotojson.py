@@ -135,7 +135,7 @@ def inittolist():
             elif ((ln * sz[1] + (item["bfTiles"] * 2 * ln)) * 20 + 1) > img.get_height():
                 rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
             else:
-                size = (sz[1] + (item["bfTiles"] * 2)) * ln * 20 + 1
+                size = (sz[1] + (item["bfTiles"] * 2)) * ln * 20
                 rect = pg.rect.Rect([0, size, sz[0] * 16, sz[1] * 16])
 
             try:

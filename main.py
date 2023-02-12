@@ -1,7 +1,7 @@
 from menus import *
 from tkinter.messagebox import askyesnocancel
 import argparse
-
+from path_dict import PathDict
 from lingotojson import *
 from files import settings, hotkeys, path, application_path
 
@@ -10,12 +10,16 @@ run = True
 keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
+file = ""
+file2 = ""
+undobuffer = [[[["GE", 0, 0, 0], [[0, []], [0, [1]]]]]]
+redobuffer = []
 
-version = "v1.9"
+version = "v2.0"
 
 
-def keypress(window, surf, file):
-    global run, file2
+def keypress(window, surf):
+    global run, file, file2, redobuffer, undobuffer
     pressed = ""
     ctrl = pg.key.get_pressed()[pg.K_LCTRL]
     # shift = pg.key.get_pressed()[pg.K_LSHIFT]
@@ -37,6 +41,8 @@ def keypress(window, surf, file):
     if len(pressed) > 0 and pressed[0] == "/" and surf.menu != "LD":
         surf.message = pressed[1:]
     match pressed.lower():
+        case "undo":
+            undohistory(surf)
         case "quit":
             asktoexit(file, file2)
         case "reload":
@@ -46,6 +52,19 @@ def keypress(window, surf, file):
             file2 = copy.deepcopy(file)
         case "new":
             run = False
+
+def undohistory(surf: menu | menu_with_field):
+    global undobuffer, redobuffer, file
+    if len(undobuffer) == 0:
+        return
+    historyelem = undobuffer[-1]
+    for i in historyelem:
+        path = PathDict(surf.data)
+        path[*i[0]] = i[1][1]
+        surf.data = path.data
+        redobuffer.append(undobuffer.pop())
+    if menu_with_field in type(surf).__bases__:
+        surf.rfa()
 
 
 def asktoexit(file, file2):
@@ -64,7 +83,7 @@ def asktoexit(file, file2):
 
 
 def launch(level):
-    global bol, surf, fullscreen
+    global bol, surf, fullscreen, undobuffer, redobuffer, file, file2
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
         file["level"] = ""
@@ -86,6 +105,8 @@ def launch(level):
     propcolors = getcolors()
     props = getprops(items)
     file2 = copy.deepcopy(file)
+    # undobuffer = []
+    # redobuffer = []
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
@@ -104,7 +125,7 @@ def launch(level):
                     if event.key not in keys:
                         if bol:
                             bol = False
-                            keypress(window, surf, file)
+                            keypress(window, surf)
                 case pg.KEYUP:
                     if event.key not in keys:
                         if not bol:
@@ -161,7 +182,7 @@ def launch(level):
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:
                 if pg.key.get_pressed()[i]:
-                    keypress(window, surf, file)
+                    keypress(window, surf)
 
         if settings[surf.menu].get("menucolor") is not None:
             window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
@@ -195,7 +216,7 @@ def loadmenu():
                 print(file)
                 if os.path.exists(file):
                     launch(file)
-        keypress(window, surf, "")
+        keypress(window, surf)
         window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
         pg.display.flip()
