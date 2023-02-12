@@ -21,7 +21,7 @@ and a lot more!
 
 ### Classic
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1064520226504462416/image.png)
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1069136276818763796/image.png)
 
 ### Classic_noicons
 
