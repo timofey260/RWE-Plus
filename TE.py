@@ -82,6 +82,7 @@ class TE(menu_with_field):
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            fg = self.findparampressed("force_geometry")
             if self.tileimage["tp"] != "pattern":
                 cposx = pos2[0] - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
                 cposy = pos2[1] - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
@@ -89,7 +90,6 @@ class TE(menu_with_field):
                 cposxo = posoffset[0] - int((self.tileimage["size"][0] * .5) + .5) + 1
                 cposyo = posoffset[1] - int((self.tileimage["size"][1] * .5) + .5) + 1
 
-                fg = self.findparampressed("force_geometry")
                 if posoffset != self.mpos or self.lastfg != fg:
                     self.cols = self.test_cols(cposxo, cposyo)
                     self.mpos = posoffset
@@ -128,6 +128,9 @@ class TE(menu_with_field):
                         self.destroy(posoffset[0], posoffset[1])
                         pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.detecthistory(["TE", "tlMatrix"])
+                if fg:
+                    self.detecthistory(["GE"])
                 self.fieldadd.fill(white)
                 self.mousp = True
                 self.rfa()
@@ -203,6 +206,9 @@ class TE(menu_with_field):
                     self.set(savedcat, savedtool)
                     self.currentcategory = save
                     self.rebuttons()
+                self.detecthistory(["TE", "tlMatrix"])
+                if fg:
+                    self.detecthistory(["GE"])
                 self.rfa()
                 self.mousp2 = True
         else:

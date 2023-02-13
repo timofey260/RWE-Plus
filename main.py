@@ -1,3 +1,5 @@
+import copy
+
 from menus import *
 from tkinter.messagebox import askyesnocancel
 import argparse
@@ -12,7 +14,7 @@ movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 file = ""
 file2 = ""
-undobuffer = [[[["GE", 0, 0, 0], [[0, []], [0, [1]]]]]]
+undobuffer = []
 redobuffer = []
 
 version = "v2.0"
@@ -43,6 +45,8 @@ def keypress(window, surf):
     match pressed.lower():
         case "undo":
             undohistory(surf)
+        case "redo":
+            redohistory(surf)
         case "quit":
             asktoexit(file, file2)
         case "reload":
@@ -55,14 +59,31 @@ def keypress(window, surf):
 
 def undohistory(surf: menu | menu_with_field):
     global undobuffer, redobuffer, file
+    print("undo")
     if len(undobuffer) == 0:
         return
     historyelem = undobuffer[-1]
+    pathdict = PathDict(surf.data)
     for i in historyelem:
-        path = PathDict(surf.data)
-        path[*i[0]] = i[1][1]
-        surf.data = path.data
-        redobuffer.append(undobuffer.pop())
+        pathdict[*i[0]] = i[1][1]
+    file = copy.deepcopy(pathdict.data)
+    surf.datalast = copy.deepcopy(pathdict.data)
+    print(id(surf.data), id(surf.datalast))
+    redobuffer.append(undobuffer.pop(-1))
+    if menu_with_field in type(surf).__bases__:
+        surf.rfa()
+
+def redohistory(surf: menu | menu_with_field):
+    global undobuffer, redobuffer, file
+    if len(redobuffer) == 0:
+        return
+    historyelem = redobuffer[-1]
+    pathdict = PathDict(surf.data)
+    for i in historyelem:
+        pathdict[*i[0]] = i[1][0]
+    file = copy.deepcopy(pathdict.data)
+    surf.datalast = copy.deepcopy(pathdict.data)
+    undobuffer.append(redobuffer.pop(-1))
     if menu_with_field in type(surf).__bases__:
         surf.rfa()
 
@@ -105,8 +126,8 @@ def launch(level):
     propcolors = getcolors()
     props = getprops(items)
     file2 = copy.deepcopy(file)
-    # undobuffer = []
-    # redobuffer = []
+    undobuffer = []
+    redobuffer = []
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
@@ -178,6 +199,15 @@ def launch(level):
                     surf.savef_txt()
                     file2 = copy.deepcopy(file)
             surf.message = ""
+        if len(surf.historybuffer) > 0:
+            surf.historybuffer.reverse()
+            for actionindx in surf.historybuffer:
+                undobuffer.append(actionindx)
+            surf.historybuffer = []
+            redobuffer = []
+            file = surf.data
+            undobuffer = undobuffer[-graphics["historylimit"]:]
+
 
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:

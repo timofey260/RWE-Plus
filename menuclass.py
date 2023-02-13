@@ -1,8 +1,10 @@
+import copy
 import widgets
 from lingotojson import *
 from files import *
 import cv2
 import numpy as np
+from path_dict import PathDict
 from pathlib import Path
 
 inputfile = ''
@@ -327,10 +329,29 @@ class menu:
         for i in self.buttons:
             i.blittooltip()
 
-    def updatehistory(self, menu):
-        if self.data[menu] != self.datalast[menu]:
-            if type(self.data[menu]) is dict:
-                pass
+    def updatehistory(self, paths):
+        if self.data != self.datalast:
+            h = []
+            for historypath in paths:
+                ch = PathDict(self.data)[*historypath]
+                lastch = PathDict(self.datalast)[*historypath]
+                if ch != lastch:
+                    h.append([historypath, [ch, lastch]])
+            if len(h) > 0:
+                self.historybuffer.append(copy.deepcopy(h))
+            self.datalast = copy.deepcopy(self.data)
+
+    def detecthistory(self, path):
+        if self.data != self.datalast:
+            pth = PathDict(self.data)[*path]
+            pthlast = PathDict(self.datalast)[*path]
+            history = []
+            for xindx, x in enumerate(pth):
+                if x != pthlast[xindx]:
+                    history.append([[*path, xindx], [x, pthlast[xindx]]])
+            if len(history) > 0:
+                self.historybuffer.append(copy.deepcopy(history))
+            self.datalast = copy.deepcopy(self.data)
 
 
 

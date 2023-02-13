@@ -169,8 +169,21 @@ class GE(menu_with_field):
                                     py *= self.size
                                     self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                print(self.datalast == self.data)
                 self.fieldadd.fill(white)
                 self.mousp = True
+                paths = []
+                count = 0
+                for xindex, xpos in enumerate(self.area):
+                    for yindex, ypos in enumerate(xpos):
+                        if ypos == 0:
+                            paths.append(["GE", xindex, yindex, self.layer])
+                            count += 1
+                if len(paths) > 0:
+                    if count < 20: # if we changed more than 20 pixels, changing history save method
+                        self.updatehistory(paths)
+                    else:
+                        self.detecthistory(["GE"])
                 self.rfa()
 
             self.movemiddle(bp, pos)
@@ -189,6 +202,7 @@ class GE(menu_with_field):
                 for x in range(self.rectdata[1][0]):
                     for y in range(self.rectdata[1][1]):
                         self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
+                self.detecthistory(["GE"])
                 self.rfa()
                 self.mousp2 = True
             # aaah math
