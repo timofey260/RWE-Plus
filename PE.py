@@ -274,6 +274,7 @@ class PE(menu_with_field):
                         *_, near = self.find_nearest(*posoffset)
                         self.data["PR"]["props"].pop(near)
                         self.rfa()
+                        self.updatehistory([["PR", "props"]])
                 elif copymode:
                     if len(self.data["PR"]["props"]) > 0:
                         name, _, near = self.find_nearest(*posoffset)
@@ -652,6 +653,7 @@ class PE(menu_with_field):
         self.data["PR"]["props"].append(prop.copy())
         self.applytags()
         self.rfa()
+        self.updatehistory([["PR", "props"]])
 
     def rotate_right(self):
         if self.findparampressed("rotate_speedup"):

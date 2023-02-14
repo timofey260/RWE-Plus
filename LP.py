@@ -30,6 +30,7 @@ class LP(menu):
 
     def chparam(self, cat, name):
         self.data[cat][name] = 1 - self.data[cat][name]
+        self.updatehistory([[cat, name]])
 
     def chinput(self, cat, name, inputdesc):
         try:

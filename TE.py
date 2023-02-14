@@ -128,7 +128,7 @@ class TE(menu_with_field):
                         self.destroy(posoffset[0], posoffset[1])
                         pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
-                self.detecthistory(["TE", "tlMatrix"])
+                self.detecthistory(["TE", "tlMatrix"], not fg)
                 if fg:
                     self.detecthistory(["GE"])
                 self.fieldadd.fill(white)

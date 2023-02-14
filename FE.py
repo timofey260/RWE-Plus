@@ -93,6 +93,8 @@ class FE(menu_with_field):
                     self.paint(posoffset[0], posoffset[1], 1)
                     self.mmove = False
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.updatehistory([["FE"]])
+                #self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
                 self.mousp = True
                 self.renderfield()
 
@@ -230,6 +232,7 @@ class FE(menu_with_field):
                 if se < 0:
                     se = 0
                 self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
+                self.updatehistory([["FE"]])
                 self.selectedeffect = se
                 self.rebuttons()
                 self.makeparams()
@@ -238,12 +241,14 @@ class FE(menu_with_field):
                 se = self.selectedeffect + 1
                 if se < len(self.data["FE"]["effects"]):
                     self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
+                    self.updatehistory([["FE"]])
                     self.selectedeffect = se
                     self.rebuttons()
                     self.makeparams()
                 return
 
         self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = text
+        self.updatehistory([["FE", "effects", self.selectedeffect, "options", self.paramindex, 2]])
         self.chtext()
 
     def changeseed(self):
@@ -254,6 +259,7 @@ class FE(menu_with_field):
             if 0 <= seed <= 500:
                 print("Seed changed!")
             self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = seed
+            self.updatehistory([["FE", "effects", self.selectedeffect, "options", self.paramindex, 2]])
             self.makeparams()
             return
         except ValueError:
@@ -321,6 +327,7 @@ class FE(menu_with_field):
         except IndexError:
             print("No elements in list!")
         self.selectedeffect = 0
+        self.updatehistory([["FE"]])
         self.rebuttons()
         self.makeparams()
 
@@ -344,8 +351,11 @@ class FE(menu_with_field):
                     self.data["FE"]["effects"].append(ef.copy())
                     self.innew = False
                     self.selectedeffect = len(self.data["FE"]["effects"]) - 1
+                    self.updatehistory([["FE"]])
                     self.renderfield()
                     self.rebuttons()
+                    return
+
 
     def selectmouseeffect(self):
         self.innew = False

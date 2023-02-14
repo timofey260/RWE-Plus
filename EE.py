@@ -16,9 +16,11 @@ class EE(menu_with_field):
 
     def water(self):
         self.data["WL"]["waterLevel"] = toarr(self.data["EX2"]["size"], "point")[1] // 2
+        self.updatehistory([["WL", "waterLevel"]])
 
     def nowater(self):
         self.data["WL"]["waterLevel"] = -1
+        self.updatehistory([["WL", "waterLevel"]])
 
     def blit(self):
         super().blit()
@@ -56,6 +58,7 @@ class EE(menu_with_field):
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1) and self.count:
                 self.data["WL"]["waterLevel"] = max(self.wateroffset - posoffset[1], 0)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.updatehistory([["WL", "waterLevel"]])
                 self.mousp = True
                 self.rfa()
 
@@ -64,4 +67,5 @@ class EE(menu_with_field):
     def swichlayers(self):
         self.layer = 1 - self.layer
         self.data["WL"]["waterInFront"] = 1 - self.layer
+        self.updatehistory([["WL", "waterInFront"]])
         self.rfa()

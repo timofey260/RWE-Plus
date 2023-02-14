@@ -288,7 +288,7 @@ class menu:
     def askint(self, q):
         self.savef()
         i = ''
-        nums = "0123456789"
+        nums = "0123456789-"
         r = True
         while r:
             self.surface.fill(color)
@@ -341,7 +341,7 @@ class menu:
                 self.historybuffer.append(copy.deepcopy(h))
             self.datalast = copy.deepcopy(self.data)
 
-    def detecthistory(self, path):
+    def detecthistory(self, path, savedata=True):
         if self.data != self.datalast:
             pth = PathDict(self.data)[*path]
             pthlast = PathDict(self.datalast)[*path]
@@ -351,7 +351,8 @@ class menu:
                     history.append([[*path, xindx], [x, pthlast[xindx]]])
             if len(history) > 0:
                 self.historybuffer.append(copy.deepcopy(history))
-            self.datalast = copy.deepcopy(self.data)
+            if savedata:
+                self.datalast = copy.deepcopy(self.data)
 
 
 

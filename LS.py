@@ -81,10 +81,12 @@ class LS(menu):
         for num, effect in enumerate(self.data["FE"]["effects"]):
             self.data["FE"]["effects"][num]["mtrx"] = self.cutdata(x, y, w, h, effect["mtrx"], 0)
         self.recount()
+        self.resizeprops(x, y)
         self.resizeimage(x, y, w, h)
         self.recount_image()
         self.data["EX2"]["size"] = makearr([len(self.data["GE"]), len(self.data["GE"][0])], "point")
         print("done")
+        self.updatehistory([[]])
 
     def cutdata(self, x, y, w, h, array, default_instance):
         arr = array
@@ -175,3 +177,23 @@ class LS(menu):
 
     def mswich(self):
         self.shadowmode = not self.shadowmode
+
+    def resizeprops(self, x, y):
+        for indx, prop in enumerate(self.data["PR"]["props"]):
+            quads = prop[3]
+            newq = []
+            for quad in quads:
+                pos = toarr(quad, "point")
+                pos[0] += x * spritesize
+                pos[1] += y * spritesize
+                newq.append(makearr(pos, "point"))
+            if prop[4].get("points") is not None:
+                newp = []
+                for points in prop[4]["points"]:
+                    p = toarr(points, "point")
+                    p[0] += x * image1size
+                    p[1] += y * image1size
+                    newp.append(makearr(p, "point"))
+                self.data["PR"]["props"][indx][4]["points"] = newp
+            self.data["PR"]["props"][indx][3] = newq
+

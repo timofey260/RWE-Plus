@@ -68,12 +68,14 @@ class CE(menu_with_field):
 
     def placecamera(self):
         self.held = False
+        self.updatehistory([["CM"]])
 
     def deletecamera(self):
         if len(self.data["CM"]["cameras"]) > 0 and self.heldindex < len(self.data["CM"]["cameras"]) and self.held:
             self.data["CM"]["cameras"].pop(self.heldindex)
             self.data["CM"]["quads"].pop(self.heldindex)
             self.held = False
+            self.updatehistory([["CM"]])
 
     def addcamera(self):
         self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
@@ -81,6 +83,7 @@ class CE(menu_with_field):
         self.heldindex = len(self.data["CM"]["cameras"]) - 1
         self.held = True
         self.camoffset = pg.Vector2(0, 0)
+        self.updatehistory([["CM"]])
 
     def closestcameraindex(self):
         mpos = pg.Vector2(pg.mouse.get_pos())
@@ -115,25 +118,25 @@ class CE(menu_with_field):
     def addup(self):
         if not self.held:
             cam = self.closestcameraindex()
-            quadindx = self.getquad(self.closestcameraindex())
+            quadindx = self.getquad(cam)
             self.data["CM"]["quads"][cam][quadindx][1] = round(min(self.data["CM"]["quads"][cam][quadindx][1] + self.settings["addspeed"], 1), 4)
 
     def adddown(self): #ddddddddddd
         if not self.held:
             cam = self.closestcameraindex()
-            quadindx = self.getquad(self.closestcameraindex())
+            quadindx = self.getquad(cam)
             self.data["CM"]["quads"][cam][quadindx][1] = round(
                 max(self.data["CM"]["quads"][cam][quadindx][1] - self.settings["addspeed"], 0), 4)
 
     def addleft(self):
         if not self.held:
             cam = self.closestcameraindex()
-            quadindx = self.getquad(self.closestcameraindex())
+            quadindx = self.getquad(cam)
             self.data["CM"]["quads"][cam][quadindx][0] = math.floor(self.data["CM"]["quads"][cam][quadindx][0] -
                                                           self.settings["rotatespeed"]) % 360
 
     def addright(self):
         if not self.held:
             cam = self.closestcameraindex()
-            quadindx = self.getquad(self.closestcameraindex())
+            quadindx = self.getquad(cam)
             self.data["CM"]["quads"][cam][quadindx][0] = math.ceil(self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360

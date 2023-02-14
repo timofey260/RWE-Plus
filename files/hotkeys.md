@@ -18,6 +18,8 @@ Generated using hotkeys to md converter
 * **ctrl + O** - open - 
 * **ctrl + N** - new - 
 * **F11** - /fc - 
+* **ctrl + Z** - undo - 
+* **ctrl + Y** - redo - 
 ### LD
 * **N** - new - 
 * **ctrl + N** - new - 
@@ -167,11 +169,8 @@ Generated using hotkeys to md converter
 * **G** - -stretchx_down - 
 * **H** - -stretchy_down - 
 * **J** - -stretchx_up - 
-* **ctrl + Y** - -flipy - 
-* **ctrl + G** - -flipx - 
 * **ctrl + H** - -flipy - 
 * **ctrl + J** - -flipx - 
-* **Space** - stretch_flip - 
 * **V** - delete_mode - 
 * **B** - copy_mode - 
 * **F** - propvariation_change - 

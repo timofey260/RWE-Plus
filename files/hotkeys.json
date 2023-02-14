@@ -219,11 +219,8 @@
 		"K_h": "-stretchy_down",
 		"K_j": "-stretchx_up",
 
-		"K_y+": "-flipy",
-		"K_g+": "-flipx",
 		"K_h+": "-flipy",
 		"K_j+": "-flipx",
-		"K_SPACE": "stretch_flip",
 
 		"K_v": "delete_mode",
 		"K_b": "copy_mode",

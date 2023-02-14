@@ -28,6 +28,7 @@ class HK(menu):
                 tx = line[:ft] + "\n"
                 tx2 = line[ft:]
                 text += tx.replace("*", "").replace("###", "")
+                tx2 = tx2[tx2.rfind(" - "):]
                 text2 += tx2.replace("*", "").replace("###", "")
                 count += 1
 

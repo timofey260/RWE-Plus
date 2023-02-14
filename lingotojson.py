@@ -53,9 +53,8 @@ def turntoproject(string: str):
 
 def tolingo(string: dict):
     s = json.dumps(string)
-    t = s.replace("\"point(", "point(").replace("\"rect(", "rect(").replace("\"color(", "color(").replace(")\"",
-                                                                                                          ")").replace(
-        "{", "[").replace("}", "]").replace("'", "")
+    t = s.replace("\"point(", "point(").replace("\"rect(", "rect(").replace("\"color(", "color(")\
+        .replace(")\"", ")").replace("{", "[").replace("}", "]").replace("'", "")
     t = re.sub(r"\"([a-zA-Z]+[0-9]*)\":", r"#\1:", t)
     #print(t)
     return t

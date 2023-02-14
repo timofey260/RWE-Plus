@@ -18,6 +18,8 @@ Generated using hotkeys to md converter
 * **ctrl + O** - open - Opens file
 * **ctrl + N** - new - Makes new file
 * **F11** - /fc - Fullscreen
+* **ctrl + Z** - undo - 
+* **ctrl + Y** - redo - 
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -167,11 +169,8 @@ Generated using hotkeys to md converter
 * **G** - -stretchx_down - Streches width down
 * **H** - -stretchy_down - Streches height down
 * **J** - -stretchx_up - Streches width up
-* **ctrl + Y** - -flipy - Flips prop by y axis
-* **ctrl + G** - -flipx - Flips prop by x axis
 * **ctrl + H** - -flipy - Flips prop by y axis
 * **ctrl + J** - -flipx - Flips prop by x axis
-* **Space** - stretch_flip - If pressed, turns strech keys to flip keys
 * **V** - delete_mode - Deletes props
 * **B** - copy_mode - Copies props
 * **F** - propvariation_change - While pressed, press mouse buttons to change variation

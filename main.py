@@ -59,19 +59,20 @@ def keypress(window, surf):
 
 def undohistory(surf: menu | menu_with_field):
     global undobuffer, redobuffer, file
-    print("undo")
     if len(undobuffer) == 0:
         return
+    print("undo")
     historyelem = undobuffer[-1]
     pathdict = PathDict(surf.data)
     for i in historyelem:
         pathdict[*i[0]] = i[1][1]
     file = copy.deepcopy(pathdict.data)
     surf.datalast = copy.deepcopy(pathdict.data)
-    print(id(surf.data), id(surf.datalast))
     redobuffer.append(undobuffer.pop(-1))
     if menu_with_field in type(surf).__bases__:
         surf.rfa()
+        if hasattr(surf, "rebuttons"):
+            surf.rebuttons()
 
 def redohistory(surf: menu | menu_with_field):
     global undobuffer, redobuffer, file

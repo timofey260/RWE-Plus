@@ -142,34 +142,31 @@ class GE(menu_with_field):
                 if self.selectedtool == "MV":
                     self.xoffset = self.rectdata[1][0] - (self.rectdata[0][0] - pos[0])
                     self.yoffset = self.rectdata[1][1] - (self.rectdata[0][1] - pos[1])
-                else:
-                    if (0 <= posoffset[0] < len(self.mapdata)) and (0 <= posoffset[1] < len(self.mapdata[0])):
-                        if self.area[posoffset[0]][posoffset[1]] == 1:
-                            self.place(posoffset[0], posoffset[1], False)
-                            self.area[posoffset[0]][posoffset[1]] = 0
-                            if type(self.placetile) == int:
-                                if self.settings["codes"][self.selectedtool] == 1:
-                                    curtool = [
-                                        graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
-                                        graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
-                                else:
-                                    curtool = [
-                                        graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
-                                        graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
-                                rect = [posoffset[0] * self.size, posoffset[1] * self.size]
-                                self.fieldadd.blit(self.toolrender, rect, [curtool, cellsize2])
-                                if self.mirrorp:
-                                    px = posoffset[0]
-                                    py = posoffset[1]
-                                    if self.mirrorpos[1] == 0:
-                                        px = self.mirrorpos[0] * 2 + (-px - 1)
-                                    else:
-                                        py = self.mirrorpos[0] * 2 + (-py - 1)
-                                    px *= self.size
-                                    py *= self.size
-                                    self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
+                elif (0 <= posoffset[0] < len(self.mapdata)) and (0 <= posoffset[1] < len(self.mapdata[0])) and self.area[posoffset[0]][posoffset[1]] == 1:
+                    self.place(posoffset[0], posoffset[1], False)
+                    self.area[posoffset[0]][posoffset[1]] = 0
+                    if type(self.placetile) == int:
+                        if self.settings["codes"][self.selectedtool] == 1:
+                            curtool = [
+                                graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                                graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                        else:
+                            curtool = [
+                                graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                                graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                        rect = [posoffset[0] * self.size, posoffset[1] * self.size]
+                        self.fieldadd.blit(self.toolrender, rect, [curtool, cellsize2])
+                        if self.mirrorp:
+                            px = posoffset[0]
+                            py = posoffset[1]
+                            if self.mirrorpos[1] == 0:
+                                px = self.mirrorpos[0] * 2 + (-px - 1)
+                            else:
+                                py = self.mirrorpos[0] * 2 + (-py - 1)
+                            px *= self.size
+                            py *= self.size
+                            self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
-                print(self.datalast == self.data)
                 self.fieldadd.fill(white)
                 self.mousp = True
                 paths = []
