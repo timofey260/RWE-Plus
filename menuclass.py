@@ -331,7 +331,7 @@ class menu:
 
     def updatehistory(self, paths):
         if self.data != self.datalast:
-            h = []
+            h = [[]]
             for historypath in paths:
                 ch = PathDict(self.data)[*historypath]
                 lastch = PathDict(self.datalast)[*historypath]
@@ -345,10 +345,10 @@ class menu:
         if self.data != self.datalast:
             pth = PathDict(self.data)[*path]
             pthlast = PathDict(self.datalast)[*path]
-            history = []
+            history = [path]
             for xindx, x in enumerate(pth):
                 if x != pthlast[xindx]:
-                    history.append([[*path, xindx], [x, pthlast[xindx]]])
+                    history.append([[xindx], [x, pthlast[xindx]]])
             if len(history) > 0:
                 self.historybuffer.append(copy.deepcopy(history))
             if savedata:

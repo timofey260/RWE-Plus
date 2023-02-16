@@ -1,5 +1,5 @@
 import copy
-
+import requests
 from menus import *
 from tkinter.messagebox import askyesnocancel
 import argparse
@@ -17,7 +17,11 @@ file2 = ""
 undobuffer = []
 redobuffer = []
 
-version = "v2.0"
+tag = "2.0"
+version = "version: " + tag
+
+a = [[69], [[[[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[0, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]]],
+            [[[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[0, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]]]]]
 
 
 def keypress(window, surf):
@@ -64,11 +68,11 @@ def undohistory(surf: menu | menu_with_field):
     print("undo")
     historyelem = undobuffer[-1]
     pathdict = PathDict(surf.data)
-    for i in historyelem:
-        pathdict[*i[0]] = i[1][1]
+    for i in historyelem[1:]:
+        pathdict[*historyelem[0], *i[0]] = i[1][1]
     file = copy.deepcopy(pathdict.data)
     surf.datalast = copy.deepcopy(pathdict.data)
-    redobuffer.append(undobuffer.pop(-1))
+    redobuffer.append(copy.deepcopy(undobuffer.pop()))
     if menu_with_field in type(surf).__bases__:
         surf.rfa()
         if hasattr(surf, "rebuttons"):
@@ -80,13 +84,15 @@ def redohistory(surf: menu | menu_with_field):
         return
     historyelem = redobuffer[-1]
     pathdict = PathDict(surf.data)
-    for i in historyelem:
-        pathdict[*i[0]] = i[1][0]
+    for i in historyelem[1:]:
+        pathdict[*historyelem[0], *i[0]] = i[1][0]
     file = copy.deepcopy(pathdict.data)
     surf.datalast = copy.deepcopy(pathdict.data)
-    undobuffer.append(redobuffer.pop(-1))
+    undobuffer.append(copy.deepcopy(redobuffer.pop()))
     if menu_with_field in type(surf).__bases__:
         surf.rfa()
+        if hasattr(surf, "rebuttons"):
+            surf.rebuttons()
 
 
 def asktoexit(file, file2):
@@ -135,6 +141,17 @@ def launch(level):
     pg.display.set_icon(pg.image.load(path + "icon.png"))
     surf = MN(window, file, items, props, propcolors)
     surf.savef()
+    os.system("cls")
+    try:
+        request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest")
+        if request.status_code == 200:
+            gittag = request.json()["tag_name"]
+            if tag != gittag:
+                print("A new version of RWE+ is available!")
+                print(f"Current Version: {tag}, latest: {gittag}")
+                print("https://github.com/timofey260/RWE-Plus/releases/latest")
+    except requests.exceptions.ConnectionError:
+        print("Cannot find new RWE+ versions")
     run = True
     while run:
         for event in pg.event.get():
@@ -206,7 +223,6 @@ def launch(level):
                 undobuffer.append(actionindx)
             surf.historybuffer = []
             redobuffer = []
-            file = surf.data
             undobuffer = undobuffer[-graphics["historylimit"]:]
 
 
@@ -269,7 +285,6 @@ if __name__ == "__main__":
     parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str, help="renders levels with drizzle.")
     parser.parse_args()
     args = parser.parse_args()
-
     if args.new:
         new()
     if args.renderfiles is not None:

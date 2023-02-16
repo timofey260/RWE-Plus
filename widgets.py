@@ -199,8 +199,11 @@ class window:
     def blit(self, draw=True):
         if draw:
             pg.draw.rect(self.surface, self.color, self.rect)
-            pg.draw.rect(self.surface, self.border, self.rect, 6)
         self.surface.blit(self.field, self.rect.topleft)
+        w = 6
+        b = pg.Rect(self.rect)
+        b.update(b.x - w, b.y - w, b.w + w + w, b.h + w + w)
+        pg.draw.rect(self.surface, self.border, b, 6, 6)
 
     def resize(self):
         self.field = pg.surface.Surface(

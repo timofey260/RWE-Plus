@@ -21,6 +21,10 @@ class LE(menu_with_field):
             self.field2.field = pg.surface.Surface(sc)
             self.field2.field.fill(white)
 
+        self.shadowhistory = []
+        self.redohistory = []
+        self.oldshadow = self.field2.field.copy()
+
         self.size = image1size
 
         self.message = ''
@@ -108,9 +112,38 @@ class LE(menu_with_field):
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
                 self.mousp = True
+                self.updatehistory()
                 self.save()
                 self.renderfield()
             self.movemiddle(bp, pos)
+
+    def updatehistory(self):
+        if self.oldshadow != self.field2.field:
+            self.shadowhistory.append([self.field2.field.copy(), self.oldshadow.copy()])
+            self.oldshadow = self.field2.field.copy()
+            self.redohistory = []
+
+
+    def undoshadow(self):
+        if len(self.shadowhistory) == 0:
+            return
+        f = self.shadowhistory.pop()
+        self.field2.field = f[1].copy()
+        self.oldshadow = self.field2.field.copy()
+        self.redohistory.append([f[0].copy(), f[1].copy()])
+        self.renderfield()
+        self.save()
+
+    def redoshadow(self):
+        if len(self.redohistory) == 0:
+            return
+        f = self.redohistory.pop()
+        self.field2.field = f[0].copy()
+        self.oldshadow = self.field2.field.copy()
+        self.shadowhistory.append([f[0].copy(), f[1].copy()])
+        self.renderfield()
+        self.save()
+
 
     def map_to_field(self, x, y):
         return [x / ((len(self.data["GE"]) + self.ofsleft) * self.size) * self.field2.field.get_width(),

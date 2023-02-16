@@ -356,6 +356,9 @@
   		"K_TAB": "-inverse",
   		"K_SPACE": "-inverse",
 
+  		"K_z+": "-undoshadow",
+  		"K_y+": "-redoshadow",
+
   		"K_LEFT": "left",
     	"K_RIGHT": "right",
     	"K_UP": "up",
