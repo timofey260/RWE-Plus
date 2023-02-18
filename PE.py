@@ -57,7 +57,7 @@ class PE(menu_with_field):
 
         self.prop_settings = {}
 
-        self.helds = [False, False, False, False]
+        self.helds = [False] * 4
         self.helppoins = pg.Vector2(0, 0)
         self.helppoins2 = pg.Vector2(0, 0)
 

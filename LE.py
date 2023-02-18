@@ -1,4 +1,3 @@
-from lingotojson import *
 from menuclass import *
 from tkinter.filedialog import asksaveasfilename
 
@@ -37,8 +36,7 @@ class LE(menu_with_field):
         self.tileimage = None
         self.tileimage2 = None
 
-        self.lightAngle = self.data[self.menu]["lightAngle"]
-        self.flatness = self.data[self.menu]["flatness"]
+        self.pressed = [False] * 4
 
         self.images = {True: [], False: []}
 
@@ -74,19 +72,19 @@ class LE(menu_with_field):
         yos = self.yoffset * self.size
 
         fieldpos = [xos - (self.ofsleft * self.size), yos - (self.ofstop * self.size)]
-        fieldpos2 = [fieldpos[0] + math.sin(math.radians(self.lightAngle)) * self.flatness * (self.size),
-                     fieldpos[1] - math.cos(math.radians(self.lightAngle)) * self.flatness * (self.size)]
+        fieldpos2 = [fieldpos[0] + math.sin(math.radians(self.data[self.menu]["lightAngle"])) * self.data[self.menu]["flatness"] * (self.size),
+                     fieldpos[1] - math.cos(math.radians(self.data[self.menu]["lightAngle"])) * self.data[self.menu]["flatness"] * (self.size)]
 
         self.field.field.blit(self.field3.field, fieldpos)
         if not pg.key.get_pressed()[pg.K_LSHIFT]:
             self.field.field.blit(self.field3.field, fieldpos2)
         self.field.blit(False)
         super().blit(False)
-        if self.field.rect.collidepoint(pg.mouse.get_pos()):
+        mouspos = pg.mouse.get_pos()
+        if self.field.rect.collidepoint(mouspos):
             pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
             #  pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
-            mouspos = pg.mouse.get_pos()
             mouspos_onfield = [mouspos[0] - self.field.rect.x - fieldpos[0], mouspos[1] - self.field.rect.y - fieldpos[1]]
             curpos = [mouspos[0] - self.tileimage.get_width() / 2, mouspos[1] - self.tileimage.get_height() / 2]
 
@@ -94,6 +92,16 @@ class LE(menu_with_field):
                                mouspos_onfield[1] - self.tileimage.get_height() / 2]
 
             curpos_on_field2 = self.map_to_field(curpos_on_field[0], curpos_on_field[1])
+
+            s = [self.findparampressed("-fp"),
+                 self.findparampressed("-fm"),
+                 self.findparampressed("-lp"),
+                 self.findparampressed("-lm")]
+
+            self.if_set(s[0], 0)
+            self.if_set(s[1], 1)
+            self.if_set(s[2], 2)
+            self.if_set(s[3], 3)
 
             self.labels[0].set_text("Image: " + self.settings["images"][self.selectedimage])
             self.labels[1].set_text(f"X: {curpos_on_field[0]}, Y: {curpos_on_field[1]}")
@@ -112,12 +120,21 @@ class LE(menu_with_field):
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
                 self.mousp = True
-                self.updatehistory()
+                self.updateshadowhistory()
                 self.save()
                 self.renderfield()
             self.movemiddle(bp, pos)
 
-    def updatehistory(self):
+    def if_set(self, pressed, indx):
+        if pressed and not self.pressed[indx]:
+            self.pressed[indx] = True
+        elif pressed and self.pressed[indx]:
+            pass
+        elif not pressed and self.pressed[indx]:
+            self.pressed[indx] = False
+            self.updatehistory([[self.menu]])
+
+    def updateshadowhistory(self):
         if self.oldshadow != self.field2.field:
             self.shadowhistory.append([self.field2.field.copy(), self.oldshadow.copy()])
             self.oldshadow = self.field2.field.copy()
@@ -246,20 +263,16 @@ class LE(menu_with_field):
         self.retile()
 
     def fp(self):
-        self.flatness = min(self.flatness + 1, 10)
-        self.data[self.menu]["flatness"] = self.flatness
+        self.data[self.menu]["flatness"] = min(self.data[self.menu]["flatness"] + 1, 10)
 
     def fm(self):
-        self.flatness = max(self.flatness - 1, 1)
-        self.data[self.menu]["flatness"] = self.flatness
+        self.data[self.menu]["flatness"] = max(self.data[self.menu]["flatness"] - 1, 1)
 
     def lp(self):
-        self.lightAngle = min(self.lightAngle + 1, 180)
-        self.data[self.menu]["lightAngle"] = self.lightAngle
+        self.data[self.menu]["lightAngle"] = min(self.data[self.menu]["lightAngle"] + 1, 180)
 
     def lm(self):
-        self.lightAngle = max(self.lightAngle - 1, 90)
-        self.data[self.menu]["lightAngle"] = self.lightAngle
+        self.data[self.menu]["lightAngle"] = max(self.data[self.menu]["lightAngle"] - 1, 90)
 
     def lightmod(self):
         if self.mode:

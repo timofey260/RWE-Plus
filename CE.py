@@ -12,6 +12,7 @@ class CE(menu_with_field):
         self.heldindex = 0
         self.drawcameras = True
         self.camoffset = pg.Vector2(0, 0)
+        self.pressed = [False] * 4
 
         self.init()
         self.rfa()
@@ -28,7 +29,15 @@ class CE(menu_with_field):
                    math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
 
             bp = pg.mouse.get_pressed(3)
+            s = [self.findparampressed("-addup"),
+                 self.findparampressed("-adddown"),
+                 self.findparampressed("-addleft"),
+                 self.findparampressed("-addright")]
 
+            self.if_set(s[0], 0)
+            self.if_set(s[1], 1)
+            self.if_set(s[2], 2)
+            self.if_set(s[3], 3)
             mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size
             if self.held and self.heldindex < len(self.data["CM"]["cameras"]):
                 val = list(self.camoffset + mpos)
@@ -57,6 +66,16 @@ class CE(menu_with_field):
                 self.rfa()
 
             self.movemiddle(bp, pos)
+
+    def if_set(self, pressed, indx):
+        if pressed and not self.pressed[indx]:
+            self.pressed[indx] = True
+        elif pressed and self.pressed[indx]:
+            pass
+        elif not pressed and self.pressed[indx]:
+            self.pressed[indx] = False
+            i = self.closestcameraindex()
+            self.updatehistory([["CM", "quads", i]])
 
     def pickupcamera(self):
         mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size

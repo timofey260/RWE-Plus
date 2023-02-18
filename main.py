@@ -176,6 +176,10 @@ def launch(level):
                         surf.send("SD")
         if surf.message != "":
             match surf.message:
+                case "undo":
+                    undohistory(surf)
+                case "redo":
+                    redohistory(surf)
                 case "%":
                     surf = HK(window, file, surf.menu)
                 case "quit":
