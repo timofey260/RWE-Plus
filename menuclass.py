@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from path_dict import PathDict
 from pathlib import Path
+import pyperclip
 
 inputfile = ''
 filepath = path2levels

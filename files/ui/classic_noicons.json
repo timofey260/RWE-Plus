@@ -39,7 +39,10 @@
 			"slidebar": [150, 0, 0],
 			"rope": [255, 0, 0],
 
-			"grid": [160, 0, 0]
+			"grid": [160, 0, 0],
+
+			"tooltip": [255, 255, 255],
+			"buttontext": [0, 0, 0]
 		}
 	},
 	"LD":
@@ -224,10 +227,10 @@
 
 		],
 		"tm1": "Cut",
-		"tt1": "Cut shadows(q)",
+		"tt1": "Cut shadows(<[-mswich]>)",
 
 		"tm2": "Strech",
-		"tt2": "Scale shadows to a geometry(q)",
+		"tt2": "Scale shadows to a geometry(<[-mswich]>)",
 		"labels": [
 			["Image sizes: %3d, %3d(%3d, %3d)", [0, 89], [255, 255, 255], 25],
 			["Geometry sizes: %3d, %3d", [0, 93], [255, 255, 255], 25],
@@ -387,10 +390,12 @@
 	"HK": {
 		"buttons": 
 		[
-			["Level\nSizing", [10, 0, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[/LS]>)"],
-			["Level\nProperties", [10, 14, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)"],
-			["Hotkeys", [10, 28, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)"],
-			["Menu", [10, 42, 10, 14], [90, 90, 90], "MN", "non", "MN(<[/MN]>)"],
+			["Level\nSizing", [10, 0, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[-LS]>)"],
+			["Level\nProperties", [10, 14, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[-LP]>)"],
+			["Hotkeys", [10, 28, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[-HK]>)"],
+			["Menu", [10, 42, 10, 14], [90, 90, 90], "MN", "non", "MN(<[-MN]>)"],
+			["Global", [10, 56, 10, 14], [90, 90, 90], "globalkeys", "non", "Global(<[-globalkeys]>)"],
+
 			["Geometry\nEditor", [0, 0, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)"],
 			["Tile\nEditor", [0, 14, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)"],
 			["Camera\nEditor", [0, 28, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)"],

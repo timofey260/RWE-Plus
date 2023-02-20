@@ -43,6 +43,7 @@ class LS(menu):
         mt = self.settings["tm" + str(int(self.shadowmode) + 1)]
         tt = self.settings["tt" + str(int(self.shadowmode) + 1)]
         self.buttons[0].set_text(self.buttons[0].originaltext + mt)
+        self.buttons[0].set_tooltip(self.returnkeytext(tt))
 
         self.labels[1].set_text(self.labels[1].originaltext % (self.gw, self.gh))
         self.labels[2].set_text(self.labels[2].originaltext % (self.tw, self.th))

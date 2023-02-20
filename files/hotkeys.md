@@ -85,6 +85,8 @@ Generated using hotkeys to md converter
 * **D** - -clearlayer - 
 * **O** - -clearblock - 
 * **P** - -whack_a_mole_hole - 
+* **ctrl + C** - -copylayer - 
+* **ctrl + V** - -pastegeo - 
 * **ctrl + Space** - -swichcameras - 
 * **Space** - rotate - 
 * **Left** - left - 
@@ -110,6 +112,7 @@ Generated using hotkeys to md converter
 * **Up** - up - 
 * **Down** - down - 
 * **G** - force_geometry - 
+* **F** - force_place - 
 * **ctrl + Q** - -changematshow - 
 * **ctrl + Space** - -swichcameras - 
 * **D** - -rt - 
@@ -260,6 +263,8 @@ Generated using hotkeys to md converter
 * **Z** - -inverse - 
 * **Tab** - -inverse - 
 * **Space** - -inverse - 
+* **ctrl + A** - -undoshadow - 
+* **ctrl + S** - -redoshadow - 
 * **Left** - left - 
 * **Right** - right - 
 * **Up** - up - 
@@ -290,3 +295,5 @@ Generated using hotkeys to md converter
 * **S** - -LS - 
 * **Z** - -LP - 
 * **H** - -HK - 
+* **M** - -MN - 
+* **R** - -globalkeys - 

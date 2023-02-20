@@ -18,8 +18,8 @@ Generated using hotkeys to md converter
 * **ctrl + O** - open - Opens file
 * **ctrl + N** - new - Makes new file
 * **F11** - /fc - Fullscreen
-* **ctrl + Z** - undo - 
-* **ctrl + Y** - redo - 
+* **ctrl + Z** - undo - Undo
+* **ctrl + Y** - redo - Redo
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -85,6 +85,8 @@ Generated using hotkeys to md converter
 * **D** - -clearlayer - Removes only cell, leaves added cells
 * **O** - -clearblock - Removes only added cells, like beams and paths
 * **P** - -whack_a_mole_hole - Adds Whack-a-Mole-Hole. it is portal between other Whack-a-Mole-Holes for lizards
+* **ctrl + C** - -copylayer - Copy tool
+* **ctrl + V** - -pastegeo - Paste clipboard pattern
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Space** - rotate - Rotate slopes and beams
 * **Left** - left - Move camera left
@@ -109,7 +111,8 @@ Generated using hotkeys to md converter
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
-* **G** - force_geometry - forces geometry to tile
+* **G** - force_geometry - Forces geometry to tile
+* **F** - force_place - Places tile without checking it's collisions
 * **ctrl + Q** - -changematshow - Shows list of categories
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 * **D** - -rt - Next category
@@ -260,6 +263,8 @@ Generated using hotkeys to md converter
 * **Z** - -inverse - Turns white image to black and vise versa
 * **Tab** - -inverse - Turns white image to black and vise versa
 * **Space** - -inverse - Turns white image to black and vise versa
+* **ctrl + A** - -undoshadow - Undo shadow image
+* **ctrl + S** - -redoshadow - Redo shadow image
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up
@@ -290,3 +295,5 @@ Generated using hotkeys to md converter
 * **S** - -LS - Level Resizing hotkeys
 * **Z** - -LP - Level Properties hotkeys
 * **H** - -HK - Hotkeys hotkeys
+* **M** - -MN - Menu hotkeys
+* **R** - -globalkeys - Global keys

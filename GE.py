@@ -1,6 +1,5 @@
 from menuclass import *
 
-
 class GE(menu_with_field):
     def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "GE"
@@ -19,6 +18,8 @@ class GE(menu_with_field):
 
         self.mirrorp = False
         self.mirrorpos = [0, 0]
+
+        self.replaceair = False
 
         super().__init__(surface, data, "GE", items, props, propcolors)
         self.air()
@@ -97,15 +98,16 @@ class GE(menu_with_field):
     def blit(self):
         cellsize2 = [self.size, self.size]
         super().blit()
-        if self.field.rect.collidepoint(pg.mouse.get_pos()):
+        mpos = pg.mouse.get_pos()
+        if self.field.rect.collidepoint(mpos):
             curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
                        graphics["tools"][self.selectedtool][1] * graphics["tilesize"][1]]
-            self.surface.blit(self.tools, pg.mouse.get_pos(), [curtool, graphics["tilesize"]])
+            self.surface.blit(self.tools, mpos, [curtool, graphics["tilesize"]])
 
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
-            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
+            pos = [math.floor((mpos[0] - self.field.rect.x) / self.size),
+                   math.floor((mpos[1] - self.field.rect.y) / self.size)]
             pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
@@ -163,6 +165,7 @@ class GE(menu_with_field):
                                 px = self.mirrorpos[0] * 2 + (-px - 1)
                             else:
                                 py = self.mirrorpos[0] * 2 + (-py - 1)
+                            self.area[px][py] = 0
                             px *= self.size
                             py *= self.size
                             self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
@@ -190,18 +193,25 @@ class GE(menu_with_field):
                 self.rectdata = [posoffset, [0, 0], pos2]
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
-                # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
-                rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
+                rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
+                tx = f"{int(rect.w / image1size)}, {int(rect.h / image1size)}"
+                widgets.fastmts(self.surface, tx, *mpos, white)
                 pg.draw.rect(self.surface, select, rect, 5)
-                ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
-                # self.rectdata = [self.rectdata[0], posoffset]
-                for x in range(self.rectdata[1][0]):
-                    for y in range(self.rectdata[1][1]):
-                        self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
-                self.detecthistory(["GE"])
-                self.rfa()
+                if self.selectedtool == "CP":
+                    data1 = self.mapdata[self.rectdata[0][0]:posoffset[0]]
+                    data1 = [i[self.rectdata[0][1]:posoffset[1]] for i in data1]
+                    data1 = [[y[self.layer] for y in x] for x in data1]
+                    pyperclip.copy(str(data1))
+                    print("Copied!")
+                else:
+                    for x in range(self.rectdata[1][0]):
+                        for y in range(self.rectdata[1][1]):
+                            self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
+                    self.detecthistory(["GE"])
+                    self.rfa()
                 self.mousp2 = True
+
             # aaah math
             if self.mirrorp:
                 px = pos[0]
@@ -223,6 +233,21 @@ class GE(menu_with_field):
                 pg.draw.rect(self.surface, mirror, [px, self.field.rect.y, 3, self.field.field.get_height()])
             else:
                 pg.draw.rect(self.surface, mirror, [self.field.rect.x, py, self.field.field.get_width(), 3])
+
+
+    def pastegeo(self):
+        try:
+            geodata = eval(pyperclip.paste())
+            if type(geodata) != list:
+                return
+            for xi, x in enumerate(geodata):
+                for yi, y in enumerate(x):
+                    if self.replaceair and y[0] == 0:
+                        continue
+                    self.data["GE"][-self.xoffset + xi][-self.yoffset + yi][self.layer] = y
+            self.rfa()
+        except SyntaxError:
+            pass
 
     def s0(self):
         self.state = 0
@@ -353,6 +378,11 @@ class GE(menu_with_field):
     def clearblock(self):
         self.selectedtool = "CB"
         self.placetile = 0.6
+        self.mx = 0
+
+    def copylayer(self):
+        self.selectedtool = "CP"
+        self.placetile = 0.1
         self.mx = 0
 
     def place(self, x, y, render=True):

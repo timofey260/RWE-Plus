@@ -9,6 +9,12 @@ bol = True
 mul = settings["global"]["colormul"]
 black = [0, 0, 0]
 white = [255, 255, 255]
+try:
+    tooltipcolor = settings["global"]["colors"]["tooltip"]
+    buttontextcolor = settings["global"]["colors"]["buttontext"]
+except KeyError:
+    tooltipcolor = white
+    buttontextcolor = black
 
 
 def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["global"]["fontsize"], centered=False):
@@ -74,9 +80,9 @@ class button:
 
         self.text = text
         self.originaltext = text
-        self.textimage = mts(self.originaltext, black, self.fontsize)
+        self.textimage = mts(self.originaltext, buttontextcolor, self.fontsize)
         self.tooltip = tooltip
-        self.tooltipimage = mts(self.tooltip, white, self.fontsize)
+        self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
 
         self.icon = None
         self.loadicon = icon
@@ -96,7 +102,7 @@ class button:
         global bol
         if fontsize is not None and fontsize != self.fontsize:
             self.set_text(self.text, fontsize)
-            self.tooltipimage = mts(self.tooltip, white, self.fontsize)
+            self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
         cp = False
         if self.onmouseover():
             cp = True
@@ -170,6 +176,15 @@ class button:
     def onmouseover(self):
         return self.rect.collidepoint(pg.mouse.get_pos())
 
+    def set_tooltip(self, text, fontsize=None):
+        if text == self.tooltip:
+            return
+        self.tooltip = text
+        if fontsize is not None:
+            self.tooltipimage = mts(text, tooltipcolor, self.fontsize)
+            return
+        self.tooltipimage = mts(text, tooltipcolor, sum(pg.display.get_window_size()) // 74)
+
     def set_text(self, text, fontsize=None):
         if text == self.text and self.fontsize == fontsize:
             return
@@ -177,9 +192,9 @@ class button:
         self.fontsize = sum(pg.display.get_window_size()) // 74
         if fontsize is not None:
             self.fontsize = fontsize
-            self.textimage = mts(text, black, self.fontsize)
+            self.textimage = mts(text, buttontextcolor, self.fontsize)
             return
-        self.textimage = mts(text, black, sum(pg.display.get_window_size()) // 74)
+        self.textimage = mts(text, buttontextcolor, sum(pg.display.get_window_size()) // 74)
 
     @property
     def xy(self):
@@ -255,7 +270,7 @@ class slider:
         self.surface = surface
         self.text = text
         self.originaltext = text
-        self.textimage = mts(text, black)
+        self.textimage = mts(text, buttontextcolor)
         self.pos = pg.Vector2(copy.deepcopy(pos)) / 100 * pg.display.get_window_size()[0]
         self.posp = pg.Vector2(copy.deepcopy(pos))
 
@@ -277,7 +292,7 @@ class slider:
         sliderpos = self.pos.lerp(self.pos + pg.Vector2(self.len, 0), map(self.value, self.min, self.max, 0, 1))
         pos2 = self.pos + pg.Vector2(self.len, 0)
 
-        pg.draw.line(self.surface, black, self.pos, pos2, 5)
+        pg.draw.line(self.surface, buttontextcolor, self.pos, pos2, 5)
         pg.draw.circle(self.surface, pg.Color(settings["global"]["colors"]["slidebar"]), sliderpos, s)
         textblit(self.surface, self.textimage, self.pos.x, self.pos.y)
 
@@ -302,4 +317,4 @@ class slider:
 
     def set_text(self, text):
         self.text = text
-        self.textimage = mts(text, black)
+        self.textimage = mts(text, buttontextcolor)

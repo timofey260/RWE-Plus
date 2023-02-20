@@ -74,7 +74,8 @@ class TE(menu_with_field):
         super().blit()
         cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
-        if self.field.rect.collidepoint(pg.mouse.get_pos()) and self.tileimage is not None:
+        mpos = pg.mouse.get_pos()
+        if self.field.rect.collidepoint(mpos) and self.tileimage is not None:
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
 
@@ -142,10 +143,10 @@ class TE(menu_with_field):
                 self.rectdata = [posoffset, [0, 0], pos2]
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
-                # rect = [[(self.rectdata[0][0] + self.xoffset) * self.size + self.field.rect.x, (self.rectdata[0][1] + self.yoffset) * self.size + self.field.rect.y], [(self.rectdata[1][0] + self.xoffset) * self.size, (self.rectdata[1][1] + self.yoffset) * self.size]]
-                rect = [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]]
+                rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
+                tx = f"{int(rect.w / image1size)}, {int(rect.h / image1size)}"
+                widgets.fastmts(self.surface, tx, *mpos, white)
                 pg.draw.rect(self.surface, select, rect, 5)
-                ##pg.draw.polygon(self.surface, red, [pos2, [pos2[0], self.rectdata[1][1]], self.rectdata[1], [self.rectdata[1][0], pos2[1]]], 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
                 if self.tileimage["tp"] != "pattern" or self.tool:
@@ -367,7 +368,7 @@ class TE(menu_with_field):
                 return
 
     def test_cols(self, x, y):
-        force_geo = self.findparampressed("force_geometry")
+        force_geo = self.findparampressed("force_geometry") or self.findparampressed("force_place")
         w, h = self.tileimage["size"]
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]

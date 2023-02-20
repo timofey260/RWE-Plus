@@ -24,11 +24,11 @@ class HK(menu):
                 if name in line:
                     sw = True
             if sw:
-                ft = line.find("-")
+                ft = line.find(" - ")
                 tx = line[:ft] + "\n"
                 tx2 = line[ft:]
                 text += tx.replace("*", "").replace("###", "")
-                tx2 = tx2[tx2.rfind(" - "):]
+                tx2 = tx2[tx2.rfind(" - ") + 2:]
                 text2 += tx2.replace("*", "").replace("###", "")
                 count += 1
 
@@ -67,6 +67,9 @@ class HK(menu):
 
     def LP(self):
         self.load_menu("LP")
+
+    def globalkeys(self):
+        self.load_menu("global")
 
     def resize(self):
         super().resize()

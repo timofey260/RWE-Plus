@@ -98,6 +98,8 @@
     	"K_d": "-clearlayer",
     	"K_o": "-clearblock",
     	"K_p": "-whack_a_mole_hole",
+    	"K_c+": "-copylayer",
+    	"K_v+": "-pastegeo",
 
     	"K_SPACE+": "-swichcameras",
 
@@ -134,6 +136,7 @@
     	"K_DOWN": "down",
 
     	"K_g": "force_geometry",
+    	"K_f": "force_place",
 
     	"K_q+": "-changematshow",
 
@@ -398,6 +401,8 @@
   	  	"K_p": "-PE",
   	  	"K_s": "-LS",
   	  	"K_z": "-LP",
-  	  	"K_h": "-HK"
+  	  	"K_h": "-HK",
+  	  	"K_m": "-MN",
+  	  	"K_r": "-globalkeys"
 	}
 }
