@@ -109,7 +109,7 @@
 			["BM", [0, 18, 4, 6], [80, 80, 80], "s0", "beam", "Beam(<[-beam]>)", ["geometry.png", [2, 2]]],
 			["SC", [4, 24, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
 			["D", [8, 24, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
-			["MR", [8, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>,\n<[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
+			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[mup]>, <[mleft]>,\n<[mdown]>, <[mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
 			["FC", [0, 30, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
 			["SH", [0, 36, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
 			["W", [12, 30, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
@@ -124,12 +124,15 @@
 			["GL", [8, 18, 4, 6], [80, 80, 80], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
 			["SE", [0, 24, 4, 6], [70, 70, 200], "s0", "shortcutentrance", "Shortcut Entrance(<[-shortcutentrance]>)", ["geometry.png", [0, 3]]],
 			["E", [12, 24, 4, 6], [50, 50, 180], "s0", "entrance", "Entrance(<[-entrance]>)", ["geometry.png", [3, 3]]],
-			["CA", [4, 42, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
+			["CA", [0, 42, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
 			["HV", [8, 30, 4, 6], [100, 100, 100], "s0", "flyhive", "Fly Hive(<[-flyhive]>)", ["geometry.png", [1, 4]]],
 			["GWD", [8, 36, 4, 6], [70, 70, 200], "s0", "garbagewormden", "Garbage Worm Den(<[-garbagewormden]>)", ["geometry.png", [2, 5]]],
 			["WG", [12, 36, 4, 6], [100, 100, 100], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
 			["WMH", [4, 36, 4, 6], [100, 100, 100], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
-			["CB", [4, 6, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"]
+			["CB", [4, 6, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"],
+
+			["CP", [8, 42, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
+			["PS", [12, 42, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]]
 		],
 		"d1":
 		{
@@ -158,25 +161,27 @@
 	{
 		"LEtiles": true,
 		"buttons": [
-			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(<[-rt]>)", ["arrows.png", [0, 0]]],
-			["Set as default", [8, 2, 14, 4], [100, 100, 100], "sad", "non", "Set material as default(<[-sad]>)"],
-			["<", [4, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(<[-lt]>)", ["arrows.png", [3, 0]]],
-			["CT", [0, 2, 4, 4], [100, 100, 100], "cleartool", "non", "Clear tool(<[-cleartool]>)"],
-			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"],
+			[">", [92, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(<[-rt]>)", ["arrows.png", [0, 0]]],
+			["Set as default", [77, 2, 15, 4], [100, 100, 100], "sad", "non", "Set material as default(<[-sad]>)"],
+			["<", [73, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(<[-lt]>)", ["arrows.png", [3, 0]]],
+			["CT", [96, 2, 4, 4], [100, 100, 100], "cleartool", "non", "Clear tool(<[-cleartool]>)"],
+			["TS", [96, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"],
+			["CT", [96, 10, 4, 4], [100, 100, 100], "copytool", "non", "Copy tool(<[-copytool]>)", ["geometry.png", [1, 2]]],
+			["PS", [96, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
-		"catpos": [4, 6, 22, 4],
-		"itempos": [4, 10, 22, 2],
+		"catpos": [73, 6, 23, 4],
+		"itempos": [73, 10, 23, 2],
 		"d1":{
-			"rect": [28, 2, 70, 96],
+			"rect": [2, 2, 70, 96],
 			"color": [90, 90, 90],
 			"border": [150, 150, 150]
 		},
 		"labels": [
-			["Tile: ", [0, 93], [255, 255, 255], 25],
-			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25],
-			["Default material: ", [0, 90], [0, 0, 0], 25]
+			["Tile: ", [2, 90], [255, 255, 255], 25],
+			["X: 0, Y: 0", [2, 93], [255, 255, 255], 25],
+			["Default material: ", [2, 87], [255, 255, 255], 25]
 		],
 		"itemsize": 2,
 		"menucolor": [120, 120, 120]

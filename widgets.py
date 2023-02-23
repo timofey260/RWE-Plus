@@ -66,6 +66,9 @@ def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int
         else:
             window.blit(screen_text, [x, y])
 
+def resetpresses():
+    global bol
+    bol = True
 
 class button:
     def __init__(self, surface: pg.surface.Surface, rect: pg.rect.Rect, col, text: str, icon=None, onpress=None,
@@ -107,7 +110,7 @@ class button:
         if self.onmouseover():
             cp = True
             self.glow = min(self.glow + 1, 100)
-            if pg.mouse.get_pressed(3)[0] == 1 and bol:
+            if pg.mouse.get_pressed(3)[0] and bol:
                 self.bol = False
                 bol = False
                 if self.onpress is not None:
@@ -115,7 +118,7 @@ class button:
                         self.onpress(self.text)
                     except TypeError:
                         self.onpress()
-            elif pg.mouse.get_pressed(3)[0] == 0 and not bol:
+            elif not pg.mouse.get_pressed(3)[0] and not bol:
                 self.bol = True
                 bol = True
                 if self.onrelease is not None:
@@ -124,6 +127,9 @@ class button:
                     except TypeError:
                         self.onrelease()
         else:
+            if not self.bol:
+                bol = True
+                self.bol = True
             self.glow = max(0, self.glow - 1)
         paintcol = self.col.lerp(self.col2, self.glow / 100)
 

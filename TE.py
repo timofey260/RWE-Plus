@@ -32,7 +32,7 @@ class TE(menu_with_field):
 
     def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "TE"
-        self.tool = False # 0  place, 1 - destroy
+        self.tool = 0 # 0 - place, 1 - destroy, 2 - copy
 
         self.matshow = False
 
@@ -101,15 +101,19 @@ class TE(menu_with_field):
                             "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
 
                 bord = 3
-                if self.cols and not self.tool:
+                if self.cols and self.tool == 0:
                     pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
                                                           [self.tileimage["image"].get_width() + bord * 2,
                                                            self.tileimage["image"].get_height() + bord * 2]], bord)
+                elif self.tool == 2:
+                    pg.draw.rect(self.surface, blue, [[cposx - bord, cposy - bord],
+                                                             [self.tileimage["image"].get_width() + bord * 2,
+                                                              self.tileimage["image"].get_height() + bord * 2]], bord)
                 else:
                     pg.draw.rect(self.surface, cannotplace, [[cposx - bord, cposy - bord],
                                                              [self.tileimage["image"].get_width() + bord * 2,
                                                               self.tileimage["image"].get_height() + bord * 2]], bord)
-                if not self.tool:
+                if self.tool == 0:
                     self.surface.blit(self.tileimage["image"], [cposx, cposy])
                     self.printcols(cposxo, cposyo, self.tileimage)
             bp = pg.mouse.get_pressed(3)
@@ -119,13 +123,13 @@ class TE(menu_with_field):
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
                     pass
-                if self.tileimage["tp"] != "pattern" or self.tool:
-                    if not self.tool:
+                if self.tileimage["tp"] != "pattern" or self.tool == 0:
+                    if self.tool == 0:
                         if self.cols:
                             self.place(cposxo, cposyo)
                             self.fieldadd.blit(self.tileimage["image"],
                                                [cposxo * self.size, cposyo * self.size])
-                    else:
+                    elif self.tool == 1:
                         self.destroy(posoffset[0], posoffset[1])
                         pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
@@ -149,14 +153,23 @@ class TE(menu_with_field):
                 pg.draw.rect(self.surface, select, rect, 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
-                if self.tileimage["tp"] != "pattern" or self.tool:
+                if self.tileimage["tp"] != "pattern" and self.tool != 2:
                     for x in range(self.rectdata[1][0]):
                         for y in range(self.rectdata[1][1]):
-                            if not self.tool:
+                            if self.tool == 0:
                                 self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
-                            else:
+                            elif self.tool == 1:
                                 self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
-                else:
+                elif self.tool == 2:
+                    history = []
+                    for x in range(self.rectdata[1][0]):
+                        for y in range(self.rectdata[1][1]):
+                            xpos, ypos = x + self.rectdata[0][0], y + self.rectdata[0][1]
+                            block = self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]
+                            if block["tp"] == "material" or block["tp"] == "tileHead":
+                                history.append([x, y, block])
+                    pyperclip.copy(str(history))
+                elif self.tool == 0 and self.tileimage["tp"] == "pattern":
                     saved = self.tileimage
                     savedtool = saved["name"]
                     savedcat = saved["category"]
@@ -252,6 +265,40 @@ class TE(menu_with_field):
         if btn2 is not None:
             self.buttonslist.append(btn2)
         self.resize()
+
+    def pastedata(self):
+        try:
+            geodata = eval(pyperclip.paste())
+            if type(geodata) != list or len(pyperclip.paste()) <= 2:
+                return
+            for block in geodata:
+                blockx, blocky, data = block
+                if data["tp"] == "material":
+                    name = data["data"]
+                else:
+                    name = data["data"][1]
+                cat = self.findcat(name)
+                self.set(cat, name, False)
+                # w, h = self.tileimage["size"]
+                # px = blockx - int((w * .5) + .5) - 1
+                # py = blocky - int((h * .5) + .5) - 1
+                self.place(blockx - self.xoffset, blocky - self.yoffset)
+            else:
+                self.selectcat(cat)
+            self.detecthistory(["TE", "tlMatrix"])
+            self.rfa()
+        except:
+            print("Error pasting data!")
+
+    def findcat(self, itemname):
+        for name, listdata in self.items.items():
+            for bl in listdata:
+                if bl["name"] == itemname:
+                    return name
+        return None
+
+    def copytool(self):
+        self.tool = 2
 
     def selectcat(self, name):
         self.currentcategory = list(self.items.keys()).index(name)
@@ -451,7 +498,7 @@ class TE(menu_with_field):
     def place(self, x, y):
         fg = self.findparampressed("force_geometry")
         w, h = self.tileimage["size"]
-        px = x + int((w * .5) + .5) - 1
+        px = x + int((w * .5) + .5) - 1 # center coordinates
         py = y + int((h * .5) + .5) - 1
         p = makearr(self.tileimage["cat"], "point")
         sp = self.tileimage["cols"][0]
@@ -494,10 +541,10 @@ class TE(menu_with_field):
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
     def cleartool(self):
-        self.tool = True
+        self.tool = 1
 
     def changetools(self):
-        self.tool = not self.tool
+        self.tool = abs(1 - self.tool)
 
     def copytile(self):
         pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),

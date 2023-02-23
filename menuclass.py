@@ -137,6 +137,7 @@ class menu:
         self.size = image1size
         self.message = ''
         print("Entered " + self.menu)
+        widgets.resetpresses()
         self.init()
 
     def unlock_keys(self):

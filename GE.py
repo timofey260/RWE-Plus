@@ -245,9 +245,10 @@ class GE(menu_with_field):
                     if self.replaceair and y[0] == 0:
                         continue
                     self.data["GE"][-self.xoffset + xi][-self.yoffset + yi][self.layer] = y
+            self.detecthistory(["GE"])
             self.rfa()
-        except SyntaxError:
-            pass
+        except:
+            print("Error pasting data!")
 
     def s0(self):
         self.state = 0

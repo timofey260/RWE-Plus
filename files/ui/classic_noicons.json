@@ -127,7 +127,9 @@
 			["WG", [0, 66, 4, 6], [100, 100, 100], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
 			["WMH", [4, 66, 4, 6], [100, 100, 100], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
 			["CL", [4, 72, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
-			["CB", [0, 72, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"]
+			["CB", [0, 72, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"],
+			["CP", [0, 78, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
+			["PS", [4, 78, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]]
 		],
 		"d1":
 		{
@@ -161,6 +163,8 @@
 			["<", [4, 2, 4, 4], [100, 100, 100], "lt", "non", "Previous category(<[-lt]>)", ["arrows.png", [3, 0]]],
 			["CT", [0, 2, 4, 4], [100, 100, 100], "cleartool", "non", "Clear tool(<[-cleartool]>)"],
 			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"],
+			["CT", [0, 10, 4, 4], [100, 100, 100], "copytool", "non", "Copy tool(<[-copytool]>)", ["geometry.png", [1, 2]]],
+			["PS", [0, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
