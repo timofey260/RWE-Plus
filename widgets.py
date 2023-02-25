@@ -101,6 +101,10 @@ class button:
         self.onrelease = onrelease
         self.bol = True
 
+    def set_color(self, color):
+        self.col = pg.Color(color)
+        self.col2 = pg.Color(abs(self.col.r - mul), abs(self.col.g - mul), abs(self.col.b - mul))
+
     def blit(self, fontsize=None):
         global bol
         if fontsize is not None and fontsize != self.fontsize:

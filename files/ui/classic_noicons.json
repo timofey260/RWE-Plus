@@ -129,7 +129,8 @@
 			["CL", [4, 72, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
 			["CB", [0, 72, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"],
 			["CP", [0, 78, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
-			["PS", [4, 78, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]]
+			["PS", [4, 78, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]],
+			["RA", [0, 84, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"]
 		],
 		"d1":
 		{
@@ -138,8 +139,9 @@
 			"border": [150, 150, 150]
 		}, 
 		"labels":[
-			["Tile: ", [0, 79], [255, 255, 255], 30],
-			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25]
+			["Tile: ", [0, 91], [255, 255, 255], 25],
+			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25],
+			["Replace air: ", [0, 94], [255, 255, 255], 25]
 		],
 		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WMH": 0, "WG":0},
 		"names": {
@@ -261,6 +263,8 @@
 			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
 			["0", [28, 70, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
 			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
+			["CT", [28, 82, 4, 6], [100, 100, 100], "copytool", "non", "Copy effect zone(<[-copytool]>)", ["geometry.png", [1, 2]]],
+			["PS", [28, 88, 4, 6], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 			
 		],
@@ -292,6 +296,8 @@
 		"buttons": [
 			["New", [2, 2, 4, 4], [100, 100, 100], "addcamera", "non", "Add new camera to level(<[-addcamera]>)", ["icons.png", [3, 0]]],
 			["Delete", [2, 6, 4, 4], [100, 100, 100], "deletecamera", "non", "Delete camera from level(<[-deletecamera]>)", ["icons.png", [0, 0]]],
+			["Copy", [2, 10, 4, 4], [100, 100, 100], "copycamera", "non", "Copy held camera(<[-copycamera]>)", ["geometry.png", [1, 2]]],
+			["Paste", [2, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste camera(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],

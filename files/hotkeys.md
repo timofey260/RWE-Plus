@@ -87,6 +87,7 @@ Generated using hotkeys to md converter
 * **P** - -whack_a_mole_hole - 
 * **ctrl + C** - -copylayer - 
 * **ctrl + V** - -pastegeo - 
+* **ctrl + R** - -replacestate - 
 * **ctrl + Space** - -swichcameras - 
 * **Space** - rotate - 
 * **Left** - left - 
@@ -113,6 +114,8 @@ Generated using hotkeys to md converter
 * **Down** - down - 
 * **G** - force_geometry - 
 * **F** - force_place - 
+* **ctrl + C** - -copytool - 
+* **ctrl + V** - -pastedata - 
 * **ctrl + Q** - -changematshow - 
 * **ctrl + Space** - -swichcameras - 
 * **D** - -rt - 
@@ -138,6 +141,8 @@ Generated using hotkeys to md converter
 * **E** - -pickupcamera - 
 * **P** - -placecamera - 
 * **Space** - -placecamera - 
+* **ctrl + C** - -copycamera - 
+* **ctrl + V** - -pastedata - 
 * **I** - -addup - 
 * **K** - -adddown - 
 * **J** - -addleft - 
@@ -212,6 +217,8 @@ Generated using hotkeys to md converter
 * **T** - str100 - 
 * **D** - -nextcat - 
 * **A** - -prevcat - 
+* **ctrl + C** - -copytool - 
+* **ctrl + V** - -pastedata - 
 * **ctrl + Space** - -swichcameras - 
 * **X** - -deleteeffect - 
 * **Delete** - -deleteeffect - 

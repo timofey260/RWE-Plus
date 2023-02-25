@@ -28,6 +28,8 @@ class FE(menu_with_field):
 
         self.brushsize = 5
 
+        self.copymode = False
+
         self.init()
         self.makeparams()
         self.rfa()
@@ -77,9 +79,11 @@ class FE(menu_with_field):
         bp = pg.mouse.get_pressed(3)
 
         if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["FE"]["effects"]) > 0:
-            pg.draw.circle(self.surface, cursor, pg.mouse.get_pos(), self.brushsize * self.size, 4)
+            if not self.copymode:
+                pg.draw.circle(self.surface, cursor, pg.mouse.get_pos(), self.brushsize * self.size, 4)
 
             posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
 
             if posoffset != self.mpos:
                 self.mpos = posoffset
@@ -88,12 +92,22 @@ class FE(menu_with_field):
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
                 self.mmove = True
+                self.rectdata = [posoffset, [0, 0], pos2]
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
+                rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
+                pg.draw.rect(self.surface, blue, rect, 5)
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
-                    self.paint(posoffset[0], posoffset[1], 1)
+                    if not self.copymode:
+                        self.paint(posoffset[0], posoffset[1], 1)
                     self.mmove = False
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
-                self.updatehistory([["FE"]])
+                if self.copymode:
+                    data1 = self.data["FE"]["effects"][self.selectedeffect]["mtrx"][self.rectdata[0][0]:posoffset[0]]
+                    data1 = [i[self.rectdata[0][1]:posoffset[1]] for i in data1]
+                    pyperclip.copy(str(data1))
+                    print("Copied!")
+                self.updatehistory([["FE", "effects", self.selectedeffect, "mtrx"]])
                 #self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
                 self.mousp = True
                 self.renderfield()
@@ -103,8 +117,9 @@ class FE(menu_with_field):
                 self.mmove = True
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
-                    self.paint(posoffset[0], posoffset[1], -1)
-                    self.mmove = False
+                    if not self.copymode:
+                        self.paint(posoffset[0], posoffset[1], -1)
+                        self.mmove = False
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = True
                 self.renderfield()
@@ -143,6 +158,26 @@ class FE(menu_with_field):
             count += 1
         self.resize()
         self.chtext()
+
+    def copytool(self):
+        self.copymode = not self.copymode
+
+    def pastedata(self):
+        try:
+            geodata = eval(pyperclip.paste())
+            if type(geodata) != list:
+                return
+            for xi, x in enumerate(geodata):
+                for yi, y in enumerate(x):
+                    xpos = -self.xoffset + xi
+                    ypos = -self.yoffset + yi
+                    if not self.canplaceit(xpos, ypos, xpos, ypos):
+                        continue
+                    self.data["FE"]["effects"][self.selectedeffect]["mtrx"][xpos][ypos] = y
+            self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
+            self.rfa()
+        except:
+            print("Error pasting data!")
 
     def cats(self):
         self.buttonslist = []

@@ -132,7 +132,8 @@
 			["CB", [4, 6, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"],
 
 			["CP", [8, 42, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
-			["PS", [12, 42, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]]
+			["PS", [12, 42, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]],
+			["RA", [4, 30, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"]
 		],
 		"d1":
 		{
@@ -142,7 +143,8 @@
 		}, 
 		"labels":[
 			["Tile: ", [0, 79], [255, 255, 255], 30],
-			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25]
+			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25],
+			["Replace air: ", [0, 94], [255, 255, 255], 25]
 		],
 		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WMH": 0, "WG":0},
 		"names": {
@@ -249,44 +251,46 @@
 	},
 	"FE":{
 		"buttons": [
-			["v", [20, 2, 4, 4], [100, 100, 100], "scrl_down_new", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
-			["^", [16, 2, 4, 4], [100, 100, 100], "scrl_up_new", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
-			[">", [12, 2, 4, 4], [100, 100, 100], "nextcat", "non", "Next category(<[-nextcat]>)", ["arrows.png", [0, 0]]],
-			["Add", [6, 2, 6, 4], [100, 100, 100], "innewtab", "addordeleteselectedeffect", "Add effect to project(<[-innewtab]>)", ["icons.png", [3, 0]]],
-			["<", [2, 2, 4, 4], [100, 100, 100], "prevcat", "non", "Previous category(<[-prevcat]>)", ["arrows.png", [3, 0]]],
+			["v", [92, 2, 4, 4], [100, 100, 100], "scrl_down_new", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
+			["^", [88, 2, 4, 4], [100, 100, 100], "scrl_up_new", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
+			[">", [84, 2, 4, 4], [100, 100, 100], "nextcat", "non", "Next category(<[-nextcat]>)", ["arrows.png", [0, 0]]],
+			["Add", [78, 2, 6, 4], [100, 100, 100], "innewtab", "addordeleteselectedeffect", "Add effect to project(<[-innewtab]>)", ["icons.png", [3, 0]]],
+			["<", [74, 2, 4, 4], [100, 100, 100], "prevcat", "non", "Previous category(<[-prevcat]>)", ["arrows.png", [3, 0]]],
 
 
-			["v", [12, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
-			["Delete", [6, 60, 6, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(<[-notinnewtab]>)", ["icons.png", [0, 0]]],
-			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
+			["v", [92, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
+			["Delete", [78, 60, 14, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(<[-notinnewtab]>)", ["icons.png", [0, 0]]],
+			["^", [74, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
 
 
-			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
-			["0", [28, 70, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
-			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
+			["^", [2, 65, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
+			["0", [2, 71, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
+			["v", [2, 77, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
+			["CT", [2, 83, 4, 6], [100, 100, 100], "copytool", "non", "Copy effect zone(<[-copytool]>)", ["geometry.png", [1, 2]]],
+			["PS", [2, 89, 4, 6], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 			
 		],
 
-		"catpos": [2, 6, 22, 4],
-		"itempos": [2, 10, 22, 2],
+		"catpos": [74, 6, 22, 4],
+		"itempos": [74, 10, 22, 2],
 
-		"itempos2": [2, 64, 22, 2],
+		"itempos2": [74, 64, 22, 2],
 
 		"currentparamindex": 9,
 
-		"paramspos": [32, 68],
+		"paramspos": [7, 68],
 		"seedchange_size": [10, 10],
 
 		"additionspace": 5,
 
 		"d1":{
-			"rect": [28, 2, 70, 62],
+			"rect": [2, 2, 70, 62],
 			"color": [90, 90, 90],
 			"border": [150, 150, 150]
 		},
 		"labels": [
-			["%1s: %10s", [32, 64], [255, 255, 255], 25],
+			["%1s: %10s", [7, 64], [255, 255, 255], 25],
 			["Selected effect: ", [0, 97], [255, 255, 255], 25]
 		],
 		"menucolor": [120, 120, 120]
@@ -295,6 +299,8 @@
 		"buttons": [
 			["New", [2, 2, 4, 4], [100, 100, 100], "addcamera", "non", "Add new camera to level(<[-addcamera]>)", ["icons.png", [3, 0]]],
 			["Delete", [2, 6, 4, 4], [100, 100, 100], "deletecamera", "non", "Delete camera from level(<[-deletecamera]>)", ["icons.png", [0, 0]]],
+			["Copy", [2, 10, 4, 4], [100, 100, 100], "copycamera", "non", "Copy held camera(<[-copycamera]>)", ["geometry.png", [1, 2]]],
+			["Paste", [2, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste camera(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
 			
 		],
@@ -306,7 +312,7 @@
 		"labels": [
 			["Total cameras: %2d", [0, 97], [255, 255, 255], 25]
 		],
-		"menucolor": [120, 120, 120],
+		"menucolor": [100, 0, 0],
 		"addspeed": 0.01,
 		"rotatespeed": 0.03
 
@@ -335,34 +341,34 @@
 	},
 	"PE":{
 		"buttons": [
-			["v", [20, 2, 4, 4], [100, 100, 100], "browse_next", "non", "Next prop(s)", ["arrows.png", [2, 0]]],
-			["^", [16, 2, 4, 4], [100, 100, 100], "browse_prev", "non", "Previous prop(w)", ["arrows.png", [1, 0]]],
-			[">", [12, 2, 4, 4], [100, 100, 100], "cat_next", "non", "Next category(d)", ["arrows.png", [0, 0]]],
-			["Add", [6, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(space)", ["icons.png", [3, 0]]],
-			["<", [2, 2, 4, 4], [100, 100, 100], "cat_prev", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
+			["v", [92, 2, 4, 4], [100, 100, 100], "browse_next", "non", "Next prop(s)", ["arrows.png", [2, 0]]],
+			["^", [88, 2, 4, 4], [100, 100, 100], "browse_prev", "non", "Previous prop(w)", ["arrows.png", [1, 0]]],
+			[">", [84, 2, 4, 4], [100, 100, 100], "cat_next", "non", "Next category(d)", ["arrows.png", [0, 0]]],
+			["Add", [78, 2, 6, 4], [100, 100, 100], "non", "non", "Add effect to project(space)", ["icons.png", [3, 0]]],
+			["<", [74, 2, 4, 4], [100, 100, 100], "cat_prev", "non", "Previous category(a)", ["arrows.png", [3, 0]]],
 
-			["Settings", [2, 60, 22, 4], [100, 100, 100], "non", "non", "Prop settings"],
+			["Settings", [74, 64, 22, 4], [100, 100, 100], "non", "non", "Prop settings"],
 			["Snap to grid", [80, 93, 20, 7], [100, 100, 100], "togglesnap", "non", "change snapping"],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 			
 		],
 
-		"catpos": [2, 6, 22, 4],
-		"itempos": [2, 10, 22, 2],
+		"catpos": [74, 6, 22, 4],
+		"itempos": [74, 10, 22, 2],
 
-		"settingspos": [2, 64, 22, 2],
+		"settingspos": [74, 68, 22, 2],
 		"settingscolor": [90, 90, 90],
 
-		"paramspos": [32, 68],
+		"paramspos": [72, 68],
 		"seedchange_size": [10, 10],
 
 		"d1":{
-			"rect": [28, 2, 70, 62],
+			"rect": [2, 2, 70, 62],
 			"color": [90, 90, 90],
 			"border": [150, 150, 150]
 		},
 		"labels": [
-			["Notes:\n", [28, 64], [255, 255, 255], 25],
+			["Notes:\n", [2, 64], [255, 255, 255], 25],
 			["Warning: ", [0, 94], [255, 50, 50], 25],
 			["Prop settings: ", [0, 97], [255, 255, 255], 25]
 		],

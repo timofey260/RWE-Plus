@@ -51,6 +51,7 @@ black = pg.Color([0, 0, 0])
 white = pg.Color([255, 255, 255])
 gray = pg.Color([110, 110, 110])
 darkgray = pg.Color([80, 80, 80])
+purple = pg.Color([255, 0, 255])
 alpha = dc
 
 col8 = [
@@ -372,8 +373,8 @@ class menu:
 
     def reload(self):
         global settings
-        settings = json.load(open(path + graphics["uifile"], "r"))
-        self.init()
+        settings = json.load(open(path2ui +  graphics["uifile"], "r"))
+        self.__init__(self.surface, self.data, self.menu)
 
     def send(self, message):
         if message[0] == "-":
@@ -479,6 +480,11 @@ class menu_with_field(menu):
         self.size = image1size
         self.rectdata = [[0, 0], [0, 0], [0, 0]]
         self.layer = 0
+
+    def reload(self):
+        global settings
+        settings = json.load(open(path2ui +  graphics["uifile"], "r"))
+        self.__init__(self.surface, self.data, self.items, self.props, self.propcolors)
 
     def movemiddle(self, bp, pos):
         if bp[1] == 1 and self.mousp1 and (self.mousp2 and self.mousp):

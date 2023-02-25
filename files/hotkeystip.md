@@ -87,6 +87,7 @@ Generated using hotkeys to md converter
 * **P** - -whack_a_mole_hole - Adds Whack-a-Mole-Hole. it is portal between other Whack-a-Mole-Holes for lizards
 * **ctrl + C** - -copylayer - Copy tool
 * **ctrl + V** - -pastegeo - Paste clipboard pattern
+* **ctrl + R** - -replacestate - Not replaces air after pasting data.
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Space** - rotate - Rotate slopes and beams
 * **Left** - left - Move camera left
@@ -112,7 +113,9 @@ Generated using hotkeys to md converter
 * **Up** - up - Move camera up
 * **Down** - down - Move camera down
 * **G** - force_geometry - Forces geometry to tile
-* **F** - force_place - Places tile without checking it's collisions
+* **F** - force_place - Places tile without checking it
+* **ctrl + C** - -copytool - Copy Tool
+* **ctrl + V** - -pastedata - Paste tiles
 * **ctrl + Q** - -changematshow - Shows list of categories
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 * **D** - -rt - Next category
@@ -138,6 +141,8 @@ Generated using hotkeys to md converter
 * **E** - -pickupcamera - Pick up nearest camera
 * **P** - -placecamera - Place picked camera
 * **Space** - -placecamera - Place picked camera
+* **ctrl + C** - -copycamera - Copy held camera
+* **ctrl + V** - -pastedata - Paste camera
 * **I** - -addup - Moves nearest edge of nearest camera out of original position
 * **K** - -adddown - Moves nearest edge of nearest camera to original position
 * **J** - -addleft - Rotates nearest edge of nearest camera counter-clockwise
@@ -212,6 +217,8 @@ Generated using hotkeys to md converter
 * **T** - str100 - increases brush fill to 100
 * **D** - -nextcat - Next category
 * **A** - -prevcat - Previous category
+* **ctrl + C** - -copytool - Copy tool
+* **ctrl + V** - -pastedata - Paste effect area
 * **ctrl + Space** - -swichcameras - Toggles camera showing
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect

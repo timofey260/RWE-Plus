@@ -98,8 +98,10 @@
     	"K_d": "-clearlayer",
     	"K_o": "-clearblock",
     	"K_p": "-whack_a_mole_hole",
+
     	"K_c+": "-copylayer",
     	"K_v+": "-pastegeo",
+    	"K_r+": "-replacestate",
 
     	"K_SPACE+": "-swichcameras",
 
@@ -176,6 +178,9 @@
 
 		"K_p": "-placecamera",
 		"K_SPACE": "-placecamera",
+
+		"K_c+": "-copycamera",
+		"K_v+": "-pastedata",
 
 		"K_i": "-addup",
 		"K_k": "-adddown",
@@ -287,6 +292,9 @@
 
 		"K_d": "-nextcat",
 		"K_a": "-prevcat",
+
+		"K_c+": "-copytool",
+		"K_v+": "-pastedata",
 
 		"K_SPACE+": "-swichcameras",
 

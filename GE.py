@@ -19,12 +19,13 @@ class GE(menu_with_field):
         self.mirrorp = False
         self.mirrorpos = [0, 0]
 
-        self.replaceair = False
+        self.replaceair = True
 
         super().__init__(surface, data, "GE", items, props, propcolors)
         self.air()
         self.init()
         self.rs()
+        self.replacestate()
         self.rfa()
 
     def resize(self):
@@ -234,6 +235,9 @@ class GE(menu_with_field):
             else:
                 pg.draw.rect(self.surface, mirror, [self.field.rect.x, py, self.field.field.get_width(), 3])
 
+    def replacestate(self):
+        self.replaceair = not self.replaceair
+        self.labels[2].set_text(self.labels[2].originaltext + str(self.replaceair))
 
     def pastegeo(self):
         try:
@@ -242,7 +246,9 @@ class GE(menu_with_field):
                 return
             for xi, x in enumerate(geodata):
                 for yi, y in enumerate(x):
-                    if self.replaceair and y[0] == 0:
+                    xpos = -self.xoffset + xi
+                    ypos = -self.yoffset + yi
+                    if (self.replaceair and y[0] == 0) or not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
                     self.data["GE"][-self.xoffset + xi][-self.yoffset + yi][self.layer] = y
             self.detecthistory(["GE"])

@@ -48,10 +48,18 @@ class CE(menu_with_field):
                         continue
                     xpos, ypos = toarr(camera, "point")
                     valx, valy = val
+                    s = False
                     if xpos - error < valx < xpos + error:
                         val[0] = xpos
+                        s = True
                     if ypos - error < valy < ypos + error:
                         val[1] = ypos
+                        s = True
+                    if s:
+                        v = pg.Vector2(self.field.rect.topleft) + (pg.Vector2(camw / 2, camh / 2) * self.size)
+                        startpos = pg.Vector2(val) / image1size * self.size + v
+                        endpos = pg.Vector2(xpos, ypos) / image1size * self.size + v
+                        pg.draw.line(self.surface, purple, startpos, endpos, 3)
                 val = makearr(val, "point")
                 self.data["CM"]["cameras"][self.heldindex] = val
 
@@ -66,6 +74,25 @@ class CE(menu_with_field):
                 self.rfa()
 
             self.movemiddle(bp, pos)
+
+    def copycamera(self):
+        if self.held:
+            pyperclip.copy(str(self.data["CM"]["quads"][self.heldindex]))
+
+    def pastedata(self):
+        if not self.held:
+            try:
+                geodata = eval(pyperclip.paste())
+                if type(geodata) != list or len(pyperclip.paste()) <= 2:
+                    return
+                self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
+                self.data["CM"]["quads"].append(geodata)
+                self.held = True
+                self.heldindex = len(self.data["CM"]["cameras"]) - 1
+                self.detecthistory(["CM"])
+                self.rfa()
+            except:
+                print("Error pasting data!")
 
     def if_set(self, pressed, indx):
         if pressed and not self.pressed[indx]:

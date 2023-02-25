@@ -15,7 +15,7 @@ class HK(menu):
         self.m = name
         sw = False
         text = ""
-        text2 = ""
+        text2 = "\n"
         count = 0
         for line in self.keys:
             if "###" in line:
