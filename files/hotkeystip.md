@@ -210,6 +210,7 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -nextparam - Next effect parameter
 * **R** - -bsup - Increases brush size
 * **F** - -bsdown - Decreases brush size
+* **ctrl + D** - -dublicate - 
 * **E** - -notinnewtab - Switches to effects tab
 * **N** - -innewtab - Switches to new effects tab
 * **W** - -scrl_up - Previous effect
@@ -271,7 +272,7 @@ Generated using hotkeys to md converter
 * **Tab** - -inverse - Turns white image to black and vise versa
 * **Space** - -inverse - Turns white image to black and vise versa
 * **ctrl + A** - -undoshadow - Undo shadow image
-* **ctrl + S** - -redoshadow - Redo shadow image
+* **ctrl + D** - -redoshadow - Redo shadow image
 * **Left** - left - Move camera left
 * **Right** - right - Move camera right
 * **Up** - up - Move camera up

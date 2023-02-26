@@ -59,6 +59,12 @@ def keypress(window, surf):
             surf.savef()
             file2 = copy.deepcopy(file)
         case "new":
+            print("New")
+            surf.savef()
+            run = False
+        case "open":
+            print("Open")
+            surf.savef()
             run = False
 
 def undohistory(surf: menu | menu_with_field):
@@ -111,7 +117,7 @@ def asktoexit(file, file2):
 
 
 def launch(level):
-    global bol, surf, fullscreen, undobuffer, redobuffer, file, file2
+    global bol, surf, fullscreen, undobuffer, redobuffer, file, file2, run
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
         file["level"] = ""
@@ -140,7 +146,6 @@ def launch(level):
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
     pg.display.set_icon(pg.image.load(path + "icon.png"))
     surf = MN(window, file, items, props, propcolors)
-    surf.savef()
     os.system("cls")
     try:
         request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest")
@@ -223,8 +228,7 @@ def launch(level):
             surf.message = ""
         if len(surf.historybuffer) > 0:
             surf.historybuffer.reverse()
-            for actionindx in surf.historybuffer:
-                undobuffer.append(actionindx)
+            undobuffer.extend(surf.historybuffer)
             surf.historybuffer = []
             redobuffer = []
             undobuffer = undobuffer[-graphics["historylimit"]:]
@@ -261,12 +265,19 @@ def loadmenu():
                     surf.resize()
         match surf.message:
             case "new":
-                launch(-1)
+                filepath = surf.asksaveasfilename(defaultextension=[".wep"])
+                print(filepath)
+                if filepath is not None:
+                    open(filepath, "w+").write(json.dumps(turntoproject(open(path + "default.txt", "r").read())))
+                    launch(filepath)
+                    surf = load(window, {"path": ""})
+                surf.message = ""
             case "open":
                 file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
-                print(file)
-                if os.path.exists(file):
+                if file is not None and os.path.exists(file):
                     launch(file)
+                    surf = load(window, {"path": ""})
+                surf.message = ""
         keypress(window, surf)
         window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()

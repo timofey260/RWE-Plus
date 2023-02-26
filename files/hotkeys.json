@@ -282,6 +282,7 @@
 		"K_r": "-bsup",
 		"K_f": "-bsdown",
 
+		"K_d+": "-dublicate",
 		"K_e": "-notinnewtab",
 		"K_n": "-innewtab",
 
@@ -370,7 +371,7 @@
   		"K_SPACE": "-inverse",
 
   		"K_a+": "-undoshadow",
-  		"K_s+": "-redoshadow",
+  		"K_d+": "-redoshadow",
 
   		"K_LEFT": "left",
     	"K_RIGHT": "right",

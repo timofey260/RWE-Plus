@@ -12,9 +12,11 @@ white = [255, 255, 255]
 try:
     tooltipcolor = settings["global"]["colors"]["tooltip"]
     buttontextcolor = settings["global"]["colors"]["buttontext"]
+    buttontextcolorlight = settings["global"]["colors"]["buttontextlight"]
 except KeyError:
     tooltipcolor = white
     buttontextcolor = black
+    buttontextcolorlight = white
 
 
 def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["global"]["fontsize"], centered=False):
@@ -100,6 +102,7 @@ class button:
         self.onpress = onpress
         self.onrelease = onrelease
         self.bol = True
+        self.set_text(self.text)
 
     def set_color(self, color):
         self.col = pg.Color(color)
@@ -200,11 +203,13 @@ class button:
             return
         self.text = text
         self.fontsize = sum(pg.display.get_window_size()) // 74
+        luma = ((self.col.r * 229) + (self.col.g * 587) + (self.col.b * 114)) / 1000 < 40
+        bc = buttontextcolorlight if luma else buttontextcolor
         if fontsize is not None:
             self.fontsize = fontsize
-            self.textimage = mts(text, buttontextcolor, self.fontsize)
+            self.textimage = mts(text, bc, self.fontsize)
             return
-        self.textimage = mts(text, buttontextcolor, sum(pg.display.get_window_size()) // 74)
+        self.textimage = mts(text, bc, sum(pg.display.get_window_size()) // 74)
 
     @property
     def xy(self):

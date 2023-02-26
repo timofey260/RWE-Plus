@@ -42,7 +42,8 @@
 			"grid": [160, 0, 0],
 
 			"tooltip": [255, 255, 255],
-			"buttontext": [0, 0, 0]
+			"buttontext": [0, 0, 0],
+			"buttontextlight": [255, 255, 255]
 		}
 	},
 	"LD":
@@ -255,8 +256,9 @@
 			["<", [2, 2, 4, 4], [100, 100, 100], "prevcat", "non", "Previous category(<[-prevcat]>)", ["arrows.png", [3, 0]]],
 
 
-			["v", [12, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
-			["Delete", [6, 60, 6, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(<[-notinnewtab]>)", ["icons.png", [0, 0]]],
+			["v", [20, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
+			["Delete", [6, 60, 14, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(<[-notinnewtab]>)", ["icons.png", [0, 0]]],
+			["Dublicate", [2, 56, 22, 4], [100, 100, 100], "notinnewtab", "dublicate", "Dublicate selected effect(<[-dublicate]>)"],
 			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
 
 
@@ -274,7 +276,7 @@
 
 		"itempos2": [2, 64, 22, 2],
 
-		"currentparamindex": 9,
+		"currentparamindex": 10,
 
 		"paramspos": [32, 68],
 		"seedchange_size": [10, 10],

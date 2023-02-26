@@ -213,7 +213,7 @@ class menu:
         filepath = path2levels
         buttons = []
         slider = 0
-        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue\nType to search", [50, 0], black, 30)
+        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit", [50, 0], black, 30)
         label.resize()
         def appendbuttons():
             global filepath
@@ -251,14 +251,18 @@ class menu:
 
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
-                    if pg.key.name(event.key) in allleters:
-                        inputfile += pg.key.name(event.key)
+                    if event.unicode in allleters:
+                        inputfile += event.unicode
                     elif event.key == pg.K_BACKSPACE:
                         inputfile = inputfile[:-1]
                     elif event.key == pg.K_RETURN:
                         r = False
+                    elif event.key == pg.K_ESCAPE:
+                        return None
                     appendbuttons()
                     slider = 0
+                if event.type == pg.QUIT:
+                    return None
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if event.button == 4:
                         slider = max(slider - 1, 0)
@@ -280,7 +284,8 @@ class menu:
         if inputfile == "":
             return None
         try:
-            if os.path.splitext(inputfile)[1] == "" and len(defaultextension) == 1:
+            print(os.path.splitext(inputfile))
+            if len(defaultextension) == 1 and os.path.splitext(inputfile)[1] != defaultextension[0]:
                 return f"{filepath}{inputfile}{defaultextension[0]}"
             else:
                 return f"{filepath}{inputfile}"
@@ -297,13 +302,17 @@ class menu:
             self.surface.fill(color)
             widgets.fastmts(self.surface, q + "(level was saved):", 0, 0, fontsize=50)
             for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return None
                 if event.type == pg.KEYDOWN:
-                    if pg.key.name(event.key) in nums:
-                        i += pg.key.name(event.key)
+                    if event.unicode in nums:
+                        i += event.unicode
                     elif event.key == pg.K_BACKSPACE:
                         i = i[:-1]
                     elif event.key == pg.K_RETURN:
                         r = False
+                    elif event.key == pg.K_ESCAPE:
+                        return None
             widgets.fastmts(self.surface, i, 0, 50, fontsize=50)
             pg.display.flip()
             pg.display.update()

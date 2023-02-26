@@ -210,6 +210,7 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -nextparam - 
 * **R** - -bsup - 
 * **F** - -bsdown - 
+* **ctrl + D** - -dublicate - 
 * **E** - -notinnewtab - 
 * **N** - -innewtab - 
 * **W** - -scrl_up - 
@@ -271,7 +272,7 @@ Generated using hotkeys to md converter
 * **Tab** - -inverse - 
 * **Space** - -inverse - 
 * **ctrl + A** - -undoshadow - 
-* **ctrl + S** - -redoshadow - 
+* **ctrl + D** - -redoshadow - 
 * **Left** - left - 
 * **Right** - right - 
 * **Up** - up - 
