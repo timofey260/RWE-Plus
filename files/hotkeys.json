@@ -282,7 +282,7 @@
 		"K_r": "-bsup",
 		"K_f": "-bsdown",
 
-		"K_d+": "-dublicate",
+		"K_d+": "-duplicate",
 		"K_e": "-notinnewtab",
 		"K_n": "-innewtab",
 

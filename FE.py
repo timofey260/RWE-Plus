@@ -163,7 +163,7 @@ class FE(menu_with_field):
         self.resize()
         self.chtext()
 
-    def dublicate(self):
+    def duplicate(self):
         self.data["FE"]["effects"].append(copy.deepcopy(self.data["FE"]["effects"][self.selectedeffect]))
         self.updatehistory([["FE", "effects"]])
         self.rebuttons()

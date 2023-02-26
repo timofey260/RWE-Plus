@@ -210,7 +210,7 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -nextparam - Next effect parameter
 * **R** - -bsup - Increases brush size
 * **F** - -bsdown - Decreases brush size
-* **ctrl + D** - -dublicate - 
+* **ctrl + D** - -duplicate - Duplicates effect
 * **E** - -notinnewtab - Switches to effects tab
 * **N** - -innewtab - Switches to new effects tab
 * **W** - -scrl_up - Previous effect

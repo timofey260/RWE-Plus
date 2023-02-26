@@ -258,7 +258,7 @@
 
 			["v", [20, 60, 4, 4], [100, 100, 100], "scrl_down_menu", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
 			["Delete", [6, 60, 14, 4], [100, 100, 100], "notinnewtab", "addordeleteselectedeffect", "Delete effect from project(<[-notinnewtab]>)", ["icons.png", [0, 0]]],
-			["Dublicate", [2, 56, 22, 4], [100, 100, 100], "notinnewtab", "dublicate", "Dublicate selected effect(<[-dublicate]>)"],
+			["Duplicate", [2, 56, 22, 4], [100, 100, 100], "notinnewtab", "duplicate", "Duplicate selected effect(<[-duplicate]>)"],
 			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
 
 

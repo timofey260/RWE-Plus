@@ -210,7 +210,7 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -nextparam - 
 * **R** - -bsup - 
 * **F** - -bsdown - 
-* **ctrl + D** - -dublicate - 
+* **ctrl + D** - -duplicate - 
 * **E** - -notinnewtab - 
 * **N** - -innewtab - 
 * **W** - -scrl_up - 
