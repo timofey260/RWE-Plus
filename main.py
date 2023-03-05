@@ -16,16 +16,17 @@ file = ""
 file2 = ""
 undobuffer = []
 redobuffer = []
+surf: menu | menu_with_field = None
 
-tag = "2.0"
+tag = "2.0.1"
 version = "version: " + tag
 
 a = [[69], [[[[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[0, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]]],
             [[[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[0, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]]]]]
 
 
-def keypress(window, surf):
-    global run, file, file2, redobuffer, undobuffer
+def keypress(window):
+    global run, file, file2, redobuffer, undobuffer, surf
     pressed = ""
     ctrl = pg.key.get_pressed()[pg.K_LCTRL]
     # shift = pg.key.get_pressed()[pg.K_LSHIFT]
@@ -48,9 +49,9 @@ def keypress(window, surf):
         surf.message = pressed[1:]
     match pressed.lower():
         case "undo":
-            undohistory(surf)
+            undohistory()
         case "redo":
-            redohistory(surf)
+            redohistory()
         case "quit":
             asktoexit(file, file2)
         case "reload":
@@ -67,8 +68,9 @@ def keypress(window, surf):
             surf.savef()
             run = False
 
-def undohistory(surf: menu | menu_with_field):
-    global undobuffer, redobuffer, file
+
+def undohistory():
+    global undobuffer, redobuffer, file, surf
     if len(undobuffer) == 0:
         return
     print("undo")
@@ -76,7 +78,8 @@ def undohistory(surf: menu | menu_with_field):
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
         pathdict[*historyelem[0], *i[0]] = i[1][1]
-    file = copy.deepcopy(pathdict.data)
+    surf.data = copy.deepcopy(pathdict.data)
+    file = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
     redobuffer.append(copy.deepcopy(undobuffer.pop()))
     if menu_with_field in type(surf).__bases__:
@@ -84,15 +87,17 @@ def undohistory(surf: menu | menu_with_field):
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
-def redohistory(surf: menu | menu_with_field):
-    global undobuffer, redobuffer, file
+
+def redohistory():
+    global undobuffer, redobuffer, file, surf
     if len(redobuffer) == 0:
         return
     historyelem = redobuffer[-1]
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
         pathdict[*historyelem[0], *i[0]] = i[1][0]
-    file = copy.deepcopy(pathdict.data)
+    surf.data = copy.deepcopy(pathdict.data)
+    file = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
     undobuffer.append(copy.deepcopy(redobuffer.pop()))
     if menu_with_field in type(surf).__bases__:
@@ -169,7 +174,7 @@ def launch(level):
                     if event.key not in keys:
                         if bol:
                             bol = False
-                            keypress(window, surf)
+                            keypress(window)
                 case pg.KEYUP:
                     if event.key not in keys:
                         if not bol:
@@ -182,9 +187,9 @@ def launch(level):
         if surf.message != "":
             match surf.message:
                 case "undo":
-                    undohistory(surf)
+                    undohistory()
                 case "redo":
-                    redohistory(surf)
+                    redohistory()
                 case "%":
                     surf = HK(window, file, surf.menu)
                 case "quit":
@@ -237,7 +242,7 @@ def launch(level):
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:
                 if pg.key.get_pressed()[i]:
-                    keypress(window, surf)
+                    keypress(window)
 
         if settings[surf.menu].get("menucolor") is not None:
             window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
@@ -278,7 +283,7 @@ def loadmenu():
                     launch(file)
                     surf = load(window, {"path": ""})
                 surf.message = ""
-        keypress(window, surf)
+        keypress(window)
         window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
         pg.display.flip()

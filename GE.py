@@ -180,6 +180,7 @@ class GE(menu_with_field):
                         if ypos == 0:
                             paths.append(["GE", xindex, yindex, self.layer])
                             count += 1
+                self.data["GE"] = self.mapdata
                 if len(paths) > 0:
                     if count < 20: # if we changed more than 20 pixels, changing history save method
                         self.updatehistory(paths)
@@ -209,6 +210,7 @@ class GE(menu_with_field):
                     for x in range(self.rectdata[1][0]):
                         for y in range(self.rectdata[1][1]):
                             self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
+                    self.data["GE"] =  self.mapdata
                     self.detecthistory(["GE"])
                     self.rfa()
                 self.mousp2 = True
