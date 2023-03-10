@@ -65,7 +65,6 @@ class PE(menu_with_field):
         self.drawprops = True
         cat = list(self.props.keys())[self.currentcategory]
         self.setprop(self.props[cat][0]["nm"], cat)
-        self.init()
         self.resize()
         self.rebuttons()
         self.rfa()

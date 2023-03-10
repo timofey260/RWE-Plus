@@ -7,7 +7,6 @@ class HK(menu):
         self.keys = open(path + "hotkeystip.md").readlines()
 
         super().__init__(surface, data, "HK")
-        self.init()
         self.fontsize = self.labels[0].fontsize
         self.load_menu(openmenu)
 

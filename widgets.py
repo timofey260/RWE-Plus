@@ -4,7 +4,7 @@ from files import settings, fs, path, map, allleters
 
 pg.font.init()
 
-
+enablebuttons = True
 bol = True
 mul = settings["global"]["colormul"]
 black = [0, 0, 0]
@@ -117,7 +117,7 @@ class button:
         if self.onmouseover():
             cp = True
             self.glow = min(self.glow + 1, 100)
-            if pg.mouse.get_pressed(3)[0] and bol:
+            if pg.mouse.get_pressed(3)[0] and bol and enablebuttons:
                 self.bol = False
                 bol = False
                 if self.onpress is not None:
@@ -125,7 +125,7 @@ class button:
                         self.onpress(self.text)
                     except TypeError:
                         self.onpress()
-            elif not pg.mouse.get_pressed(3)[0] and not bol:
+            elif not pg.mouse.get_pressed(3)[0] and not bol and enablebuttons:
                 self.bol = True
                 bol = True
                 if self.onrelease is not None:
@@ -134,9 +134,9 @@ class button:
                     except TypeError:
                         self.onrelease()
         else:
-            if not self.bol:
-                bol = True
-                self.bol = True
+            #if not self.bol:
+            #    bol = True
+            #    self.bol = True
             self.glow = max(0, self.glow - 1)
         paintcol = self.col.lerp(self.col2, self.glow / 100)
 

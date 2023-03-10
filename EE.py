@@ -8,7 +8,6 @@ class EE(menu_with_field):
         self.wateroffset = 0
         self.count = False
 
-        self.init()
         self.rfa()
         self.blit()
         self.resize()

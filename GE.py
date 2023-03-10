@@ -23,10 +23,11 @@ class GE(menu_with_field):
 
         super().__init__(surface, data, "GE", items, props, propcolors)
         self.air()
-        self.init()
         self.rs()
         self.replacestate()
         self.rfa()
+        self.blit()
+        self.resize()
 
     def resize(self):
         super().resize()
@@ -196,7 +197,7 @@ class GE(menu_with_field):
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
                 rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
-                tx = f"{int(rect.w / image1size)}, {int(rect.h / image1size)}"
+                tx = f"{int(rect.w / self.size)}, {int(rect.h / self.size)}"
                 widgets.fastmts(self.surface, tx, *mpos, white)
                 pg.draw.rect(self.surface, select, rect, 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):

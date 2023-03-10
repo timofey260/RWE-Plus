@@ -30,7 +30,6 @@ class FE(menu_with_field):
 
         self.copymode = False
 
-        self.init()
         self.makeparams()
         self.rfa()
         self.rebuttons()
@@ -102,7 +101,7 @@ class FE(menu_with_field):
                 if self.copymode:
                     rect = pg.Rect(
                         [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
-                    tx = f"{int(rect.w / image1size)}, {int(rect.h / image1size)}"
+                    tx = f"{int(rect.w / self.size)}, {int(rect.h / self.size)}"
                     widgets.fastmts(self.surface, tx, *mpos, white)
                     pg.draw.rect(self.surface, blue, rect, 5)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):

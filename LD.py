@@ -3,7 +3,6 @@ from menuclass import *
 class load(menu):
     def __init__(self, surface: pg.surface.Surface, data):
         super().__init__(surface, data, "LD")
-        self.init()
 
     def send(self, message):
         self.message = message

@@ -22,7 +22,6 @@ class LS(menu):
 
         super().__init__(surface, data, "LS")
         self.recount()
-        self.init()
         self.blit()
         self.resize()
 

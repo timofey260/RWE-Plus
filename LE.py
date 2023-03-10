@@ -58,7 +58,6 @@ class LE(menu_with_field):
         super().__init__(surface, data, "LE", items, props, propcolors)
         self.rs()
         self.retile()
-        self.init()
         self.rfa()
         self.blit()
         self.resize()

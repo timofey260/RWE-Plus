@@ -139,6 +139,7 @@ class menu:
         self.message = ''
         print("Entered " + self.menu)
         widgets.resetpresses()
+        widgets.enablebuttons = False
         self.init()
 
     def unlock_keys(self):
@@ -340,6 +341,8 @@ class menu:
             i.blit(fontsize)
         for i in self.buttons:
             i.blittooltip()
+        if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
+            widgets.enablebuttons = True
 
     def updatehistory(self, paths):
         if self.data != self.datalast:

@@ -14,7 +14,6 @@ class CE(menu_with_field):
         self.camoffset = pg.Vector2(0, 0)
         self.pressed = [False] * 4
 
-        self.init()
         self.rfa()
         self.blit()
         self.resize()
