@@ -11,6 +11,21 @@ import pyperclip
 inputfile = ''
 filepath = path2levels
 
+notfound = pg.image.load(path + "notfound.png")
+notfoundtile = {
+    "name": "unloaded tile",
+    "tp": "notfound",
+    "repeatL": [1],
+    "bfTiles": 0,
+    "image": notfound,
+    "size": [2, 2],
+    "category": "material",
+    "color": pg.Color(255, 255, 255),
+    "cols": [[-1], 0],
+    "cat": [1, 1],
+    "tags": [""]
+}
+
 colors = settings["global"]["colors"] # NOQA
 
 color = pg.Color(settings["global"]["color"])
@@ -799,7 +814,6 @@ class menu_with_field(menu):
                                         curtool = [pos[0] * image1size, pos[1] * image1size]
                         f.blit(renderedimage, [xp * image1size, yp * image1size], [curtool, cellsize2])
 
-
     def rendertiles(self):
         global mat
         material = pg.transform.scale(mat, [mat.get_width() / 16 * image1size, mat.get_height() / 16 * image1size])
@@ -837,6 +851,8 @@ class menu_with_field(menu):
                                     break
                             if it is not None:
                                 break
+                    if it is None:
+                        it = notfoundtile
                     cposx = posx - int((it["size"][0] * .5) + .5) * image1size + image1size
                     cposy = posy - int((it["size"][1] * .5) + .5) * image1size + image1size
                     siz = pg.rect.Rect([cposx, cposy, it["size"][0] * image1size, it["size"][1] * image1size])
@@ -855,7 +871,20 @@ class menu_with_field(menu):
             for itemi, item in enumerate(cats):
                 if item["nm"] == name:
                     return item, [list(self.props.keys()).index(cati), itemi]
-        return None, None
+        item = {
+            "nm": "notfound",
+            "tp": "standard",
+            "colorTreatment": "bevel",
+            "bevel": 3,
+            "sz": "point(2, 2)",
+            "repeatL": [1],
+            "tags": ["randomRotat"],
+            "layerExceptions": [],
+            "color": white,
+            "images": [notfound],
+            "notes": []
+        }
+        return item, [0, 0]
     def renderprops(self):
         for indx, prop in enumerate(self.data["PR"]["props"]):
             var = 0
@@ -915,6 +944,9 @@ class menu_with_field(menu):
                         break
                 if itm is not None:
                     break
+            if itm is None:
+                self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
+                return
             backx = mx - int((itm["size"][0] * .5) + .5) + 1
             backy = my - int((itm["size"][1] * .5) + .5) + 1
             if backx + itm["size"][0] > len(self.data["TE"]["tlMatrix"]) or backy + itm["size"][1] > len(self.data["TE"]["tlMatrix"][0]):
@@ -923,7 +955,6 @@ class menu_with_field(menu):
             sp = itm["cols"][0]
             sp2 = itm["cols"][1]
             w, h = itm["size"]
-            self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
             for x2 in range(w):
                 for y2 in range(h):
                     posx = backx + x2
