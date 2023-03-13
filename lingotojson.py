@@ -315,7 +315,7 @@ def getprops(tiles: dict):
                     "notes": ["Tile as prop"]
                 })
                 count -= 1
-
+    solved_copy[title] = itemlist
     return solved_copy
 
 

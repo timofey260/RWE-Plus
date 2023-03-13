@@ -373,7 +373,7 @@
 		],
 		"menucolor": [120, 120, 120],
 
-		"elements_as_tiles_count": 21,
+		"elements_as_tiles_count": 20,
 		"elements_as_tiles_color": [110, 110, 110],
 
 		"rotate_speed": 0.1,
