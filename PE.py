@@ -25,7 +25,7 @@ values = {
 }
 
 
-class PE(menu_with_field):
+class PE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, data, tiles, props, propcolors):
         self.menu = "PE"
 

@@ -28,15 +28,15 @@ blocks = [
     {"tiles": ["B1", "I"], "upper": "espaced", "lower": "dense", "tall": 1, "freq": 2}
 ]
 
-class TE(menu_with_field):
+class TE(MenuWithField):
 
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
+    def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
         self.menu = "TE"
         self.tool = 0 # 0 - place, 1 - destroy, 2 - copy
 
         self.matshow = False
 
-        self.items = items
+        self.items = renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
         self.items["special"] = p["patterns"]
         for indx, pattern in enumerate(p["patterns"]):
@@ -53,10 +53,10 @@ class TE(menu_with_field):
 
         self.lastfg = False
 
-        super().__init__(surface, data, "TE", items, props, propcolors)
+        super().__init__(surface, "TE", renderer)
         self.drawtiles = True
         self.set("material", "Standard")
-        self.currentcategory = len(items) - 1
+        self.currentcategory = len(self.items) - 1
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
         self.rebuttons()
         self.rfa()

@@ -199,7 +199,7 @@ def inittolist():
     return solved_copy
 
 
-def render(data):
+def renderlevel(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)

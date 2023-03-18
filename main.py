@@ -1,5 +1,7 @@
 import copy
 import requests
+
+import menuclass
 from menus import *
 from tkinter.messagebox import askyesnocancel
 import argparse
@@ -16,7 +18,7 @@ file = ""
 file2 = ""
 undobuffer = []
 redobuffer = []
-surf: menu | menu_with_field = None
+surf: menu | MenuWithField = None
 
 tag = "2.1"
 version = "version: " + tag
@@ -81,8 +83,9 @@ def undohistory():
     surf.data = copy.deepcopy(pathdict.data)
     file = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
+    menuclass.renderer.data = surf.data
     redobuffer.append(copy.deepcopy(undobuffer.pop()))
-    if menu_with_field in type(surf).__bases__:
+    if MenuWithField in type(surf).__bases__:
         surf.rfa()
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
@@ -92,6 +95,7 @@ def redohistory():
     global undobuffer, redobuffer, file, surf
     if len(redobuffer) == 0:
         return
+    print("redo")
     historyelem = redobuffer[-1]
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
@@ -99,8 +103,9 @@ def redohistory():
     surf.data = copy.deepcopy(pathdict.data)
     file = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
+    menuclass.renderer.data = surf.data
     undobuffer.append(copy.deepcopy(redobuffer.pop()))
-    if menu_with_field in type(surf).__bases__:
+    if MenuWithField in type(surf).__bases__:
         surf.rfa()
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
@@ -150,7 +155,8 @@ def launch(level):
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
     pg.display.set_icon(pg.image.load(path + "icon.png"))
-    surf = MN(window, file, items, props, propcolors)
+    renderer = Renderer(file, items, props, propcolors)
+    surf = MN(window, renderer)
     os.system("cls")
     try:
         request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest")
@@ -195,11 +201,11 @@ def launch(level):
                 case "quit":
                     asktoexit(file, file2)
                 case "MN":
-                    surf = MN(window, file, items, props, propcolors)
+                    surf = MN(window, renderer)
                 case "GE":
-                    surf = GE(window, file, items, props, propcolors)
+                    surf = GE(window, renderer)
                 case "TE":
-                    surf = TE(window, file, items, props, propcolors)
+                    surf = TE(window, renderer)
                 case "LE":
                     surf = LE(window, file, items, props, propcolors)
                 case "LS":

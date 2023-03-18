@@ -3,7 +3,7 @@ from lingotojson import *
 import random
 
 
-class FE(menu_with_field):
+class FE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "FE"
         super().__init__(surface, data, "FE", items, props, propcolors)

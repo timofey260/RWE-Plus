@@ -1,13 +1,14 @@
+import menuclass
 from lingotojson import turntolingo
 from menuclass import *
 import random
 
 
-class MN(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
-        super().__init__(surface, data, "MN", items, props, propcolors)
+class MN(MenuWithField):
+    def __init__(self, surface: pg.surface.Surface, renderer: menuclass.Renderer):
+        super().__init__(surface, "MN", renderer)
         tips = set(open(path + "tips.txt", "r").readlines())
-        self.items = items
+        self.items = renderer.tiles
         self.tips = list(tips)
         self.mousp = True
         self.mousp1 = True
@@ -73,7 +74,7 @@ class MN(menu_with_field):
 
     def render(self):
         self.savef()
-        render(self.data)
+        renderlevel(self.data)
 
     def quit(self):
         self.message = "quit"

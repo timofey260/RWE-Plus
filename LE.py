@@ -2,7 +2,7 @@ from menuclass import *
 from tkinter.filedialog import asksaveasfilename
 
 
-class LE(menu_with_field):
+class LE(MenuWithField):
 
     def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
         self.menu = "LE"

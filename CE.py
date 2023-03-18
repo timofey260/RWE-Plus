@@ -1,12 +1,13 @@
+import render
 from menuclass import *
 from lingotojson import *
 
 error = settings["global"]["snap_error"] # snap error
 
-class CE(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
+class CE(MenuWithField):
+    def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer, propcolors):
         self.menu = "CE"
-        super().__init__(surface, data, "CE", items, props, propcolors)
+        super().__init__(surface, "CE", renderer)
 
         self.held = False
         self.heldindex = 0

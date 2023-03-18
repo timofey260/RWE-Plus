@@ -1,4 +1,6 @@
 import copy
+
+import render
 import widgets
 from lingotojson import *
 from files import *
@@ -7,6 +9,7 @@ import numpy as np
 from path_dict import PathDict
 from pathlib import Path
 import pyperclip
+from render import Renderer
 
 inputfile = ''
 filepath = path2levels
@@ -474,13 +477,14 @@ class menu:
         return string
 
 
-class menu_with_field(menu):
-    def __init__(self, surface: pg.Surface, data, name, tiles, props, propcolors):
-        super(menu_with_field, self).__init__(surface, data, name)
+class MenuWithField(menu):
+    def __init__(self, surface: pg.Surface, name, renderer: render.Renderer):
+        super(MenuWithField, self).__init__(surface, renderer.data, name)
 
-        self.items = tiles
-        self.props = props
-        self.propcolors = propcolors
+        self.renderer = renderer
+        self.items = renderer.tiles
+        self.props = renderer.props
+        self.propcolors = renderer.propcolors
 
         self.menu = name
 
@@ -495,7 +499,7 @@ class menu_with_field(menu):
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
 
         self.field = widgets.window(self.surface, self.settings["d1"])
-        self.btiles = data["EX2"]["extraTiles"]
+        self.btiles = renderer.data["EX2"]["extraTiles"]
         self.fieldmap = self.field.field
 
         self.fieldadd = self.fieldmap
@@ -511,7 +515,7 @@ class menu_with_field(menu):
     def reload(self):
         global settings
         settings = json.load(open(path2ui +  graphics["uifile"], "r"))
-        self.__init__(self.surface, self.data, self.items, self.props, self.propcolors)
+        self.__init__(self.surface, self.menu, self.renderer)
 
     def movemiddle(self, bp, pos):
         if bp[1] == 1 and self.mousp1 and (self.mousp2 and self.mousp):
@@ -550,9 +554,11 @@ class menu_with_field(menu):
     def rfa(self):
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
         if self.drawgeo:
-            self.rendergeo()
+            self.renderer.geo_full_render(self.layer)
+            self.f.blit(self.renderer.surf_geo, [0, 0])
         if self.drawtiles:
-            self.rendertiles()
+            self.renderer.tiles_full_render(self.layer)
+            self.f.blit(self.renderer.surf_tiles, [0, 0])
         if self.drawprops:
             self.renderprops()
         if self.drawgrid:

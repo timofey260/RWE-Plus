@@ -1,9 +1,9 @@
 from menuclass import *
 
-class GE(menu_with_field):
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
+class GE(MenuWithField):
+    def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "GE"
-        self.mapdata = data["GE"]
+        self.mapdata = renderer.data["GE"]
         self.state = 0
         self.mx = 0
 
@@ -21,7 +21,8 @@ class GE(menu_with_field):
 
         self.replaceair = True
 
-        super().__init__(surface, data, "GE", items, props, propcolors)
+        super().__init__(surface, "GE", renderer)
+        self.renderer.geo_full_render(self.layer)
         self.air()
         self.rs()
         self.replacestate()
@@ -187,7 +188,9 @@ class GE(menu_with_field):
                         self.updatehistory(paths)
                     else:
                         self.detecthistory(["GE"])
-                self.rfa()
+                self.renderer.geo_render_area(self.area, self.layer)
+                self.f.blit(self.renderer.surf_geo, [0, 0])
+                self.renderfield()
 
             self.movemiddle(bp, pos)
 
