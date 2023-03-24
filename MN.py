@@ -8,20 +8,18 @@ class MN(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer: menuclass.Renderer):
         super().__init__(surface, "MN", renderer)
         tips = set(open(path + "tips.txt", "r").readlines())
-        self.items = renderer.tiles
         self.tips = list(tips)
         self.mousp = True
         self.mousp1 = True
         self.mousp2 = True
         self.tips.remove("\n")
         self.nexttip()
-        self.rfa()
         self.resize()
 
     def blit(self):
         super().blit()
         mpos = pg.Vector2(pg.mouse.get_pos())
-        if self.field.rect.collidepoint(mpos.xy):
+        if self.field.rect.collidepoint(mpos):
 
             pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
                    math.floor((mpos.y - self.field.rect.y) / self.size)]

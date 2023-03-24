@@ -69,8 +69,9 @@ def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int
             window.blit(screen_text, [x, y])
 
 def resetpresses():
-    global bol
+    global bol, enablebuttons
     bol = True
+    enablebuttons = False
 
 class button:
     def __init__(self, surface: pg.surface.Surface, rect: pg.rect.Rect, col, text: str, icon=None, onpress=None,

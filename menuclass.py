@@ -149,32 +149,20 @@ class menu:
         self.historybuffer = []
         self.uc = []
 
+        self.recaption()
+        print("Entered " + self.menu)
+
         self.mousp = False
         self.mousp1 = True
         self.mousp2 = True
 
         self.size = image1size
-        self.message = ''
-        print("Entered " + self.menu)
-        widgets.resetpresses()
-        widgets.enablebuttons = False
-        self.init()
-
-    def unlock_keys(self):
-        self.uc = []
-        for i in self.hotkeys["unlock_keys"]:
-            self.uc.append(getattr(pg, i))
-
-    def watch_keys(self):
-        self.message = "%"
-
-    def recaption(self):
-        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | by Timofey")
-
-    def init(self):
-        self.recaption()
         self.message = ""
         self.buttons: list[widgets.button, ...] = []
+        self.labels: list[widgets.lable, ...] = []
+
+        widgets.resetpresses()
+
         for i in self.settings["buttons"]:
             try:
                 f = getattr(self, i[3])
@@ -192,14 +180,25 @@ class menu:
                 self.buttons.append(
                     widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
                                    onrelease=f2, tooltip=self.returnkeytext(i[5]), icon=i[6]))
-        self.labels: list[widgets.lable, ...] = []
         for i in self.settings["labels"]:
             if len(i) == 3:
                 self.labels.append(widgets.lable(self.surface, i[0], i[1], i[2]))
             elif len(i) == 4:
                 self.labels.append(widgets.lable(self.surface, i[0], i[1], i[2], i[3]))
+
         self.unlock_keys()
         self.resize()
+
+    def unlock_keys(self):
+        self.uc = []
+        for i in self.hotkeys["unlock_keys"]:
+            self.uc.append(getattr(pg, i))
+
+    def watch_keys(self):
+        self.message = "%"
+
+    def recaption(self):
+        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | by Timofey")
 
     def savef(self, saveas=False):
         if self.data["path"] != "" and not saveas:
@@ -387,8 +386,6 @@ class menu:
             if savedata:
                 self.datalast = copy.deepcopy(self.data)
 
-
-
     def non(self):
         pass
 
@@ -499,7 +496,7 @@ class MenuWithField(menu):
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
 
         self.field = widgets.window(self.surface, self.settings["d1"])
-        self.btiles = renderer.data["EX2"]["extraTiles"]
+        self.btiles = self.data["EX2"]["extraTiles"]
         self.fieldmap = self.field.field
 
         self.fieldadd = self.fieldmap
@@ -511,6 +508,8 @@ class MenuWithField(menu):
         self.size = image1size
         self.rectdata = [[0, 0], [0, 0], [0, 0]]
         self.layer = 0
+        self.emptyarea()
+        self.rfa()
 
     def reload(self):
         global settings
@@ -551,13 +550,16 @@ class MenuWithField(menu):
         self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size, self.f.get_height() / image1size * self.size]), [0, 0])
 
+    def emptyarea(self):
+        self.area = [[1 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+
     def rfa(self):
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
         if self.drawgeo:
-            self.renderer.geo_full_render(self.layer)
+            # self.renderer.geo_full_render(self.layer)
             self.f.blit(self.renderer.surf_geo, [0, 0])
         if self.drawtiles:
-            self.renderer.tiles_full_render(self.layer)
+            # self.renderer.tiles_full_render(self.layer)
             self.f.blit(self.renderer.surf_tiles, [0, 0])
         if self.drawprops:
             self.renderprops()
@@ -625,6 +627,24 @@ class MenuWithField(menu):
                 self.yoffset += 1
             case "down":
                 self.yoffset -= 1
+
+    def detecthistory(self, path, savedata=True):
+        super().detecthistory(path, savedata)
+        self.renderer.data = self.data
+
+    def updatehistory(self, paths):
+        super().updatehistory(paths)
+        self.renderer.data = self.data
+
+    def render_geo_area(self):
+        self.renderer.geo_render_area(self.area, self.layer)
+        self.f.blit(self.renderer.surf_geo, [0, 0])
+        self.renderfield()
+
+    def render_geo_full(self):
+        self.renderer.geo_full_render(self.layer)
+        self.f.blit(self.renderer.surf_geo, [0, 0])
+        self.renderfield()
 
     def togglegeo(self):
         self.drawgeo = not self.drawgeo
@@ -709,164 +729,6 @@ class MenuWithField(menu):
                 pg.draw.circle(self.surface, camera_held, vec, self.size * 3, self.size // 3)
 
             pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
-
-
-    def rendergeo(self):
-        def incorner(x, y):
-            try:
-                return self.data["GE"][x][y][i][1]
-            except IndexError:
-                return []
-        def incornerblock(x, y):
-            try:
-                return self.data["GE"][x][y][i][0]
-            except IndexError:
-                return 0
-        global tooltiles
-        f: pg.Surface = self.f
-        f.fill(color2)
-        renderedimage = pg.transform.scale(tooltiles, [
-            (tooltiles.get_width() / graphics["tilesize"][0]) * image1size,
-            (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
-        cellsize2 = [image1size, image1size]
-        for i in range(2, -1, -1):
-            renderedimage.set_alpha(settings["global"]["secondarylayeralpha"])
-            if i == self.layer:
-                renderedimage.set_alpha(settings["global"]["primarylayeralpha"])
-            for xp, x in enumerate(self.data["GE"]):
-                for yp, y in enumerate(x):
-                    self.data["GE"][xp][yp][i][1] = list(set(self.data["GE"][xp][yp][i][1]))
-                    cell = y[i][0]
-                    over: list = self.data["GE"][xp][yp][i][1]
-                    if cell == 7 and 4 not in over:
-                        self.data["GE"][xp][yp][i][0] = 0
-                        cell = self.data["GE"][xp][yp][i][0]
-                    curtool = [graphics["shows"][str(cell)][0] * image1size,
-                               graphics["shows"][str(cell)][1] * image1size]
-                    f.blit(renderedimage, [xp * image1size, yp * image1size], [curtool, cellsize2])
-                    if 4 in over and self.data["GE"][xp][yp][i][0] != 7:
-                        self.data["GE"][xp][yp][i][1].remove(4)
-                    if 11 in over and over.index(11) != 0:
-                        over.remove(11)
-                        over.insert(0, 11)
-                    for addsindx, adds in enumerate(over):
-                        curtool = [graphics["shows2"][str(adds)][0] * image1size,
-                                   graphics["shows2"][str(adds)][1] * image1size]
-                        bufftiles = self.data["EX2"]["extraTiles"]
-                        bufftiles = pg.Rect(bufftiles[0], bufftiles[1],
-                                            len(self.data["GE"]) - bufftiles[0] - bufftiles[2],
-                                            len(self.data["GE"][0]) - bufftiles[1] - bufftiles[3])
-                        if bufftiles.collidepoint(xp, yp):
-                            if adds == 11: # cracked terrain search
-                                inputs = 0
-                                pos = -1
-                                for tile in col4:
-                                    curhover = incorner(xp + tile[0], yp + tile[1])
-                                    if 11 in curhover:
-                                        inputs += 1
-                                        if inputs == 1:
-                                            match tile:
-                                                case [0, 1]:  # N
-                                                    pos = graphics["crackv"]
-                                                case [0, -1]:  # S
-                                                    pos = graphics["crackv"]
-                                                case [-1, 0]:  # E
-                                                    pos = graphics["crackh"]
-                                                case [1, 0]:  # W
-                                                    pos = graphics["crackh"]
-                                        elif inputs > 1:
-                                            pos = -1
-                                if inputs == 2:
-                                    pos = -1
-                                    if 11 in incorner(xp + 1, yp) and 11 in incorner(xp - 1, yp):
-                                        pos = graphics["crackh"]
-                                    elif 11 in incorner(xp, yp + 1) and 11 in incorner(xp, yp - 1):
-                                        pos = graphics["crackv"]
-                                if pos != -1:
-                                    curtool = [pos[0] * image1size, pos[1] * image1size]
-                            if adds == 4: # shortcut entrance validation
-                                # checklist
-                                foundair = False
-                                foundwire = False
-                                tilecounter = 0
-                                pathcount = 0
-                                pos = -1
-                                for tile in col8:
-                                    curtile = incornerblock(xp + tile[0], yp + tile[1])
-                                    curhover = incorner(xp + tile[0], yp + tile[1])
-                                    if curtile == 1:
-                                        tilecounter += 1
-                                    if curtile in [0, 6] and tile in col4: # if we found air in 4 places near
-                                        foundair = True
-                                        if 5 in incorner(xp - tile[0], yp - tile[1]): # if opposite of air is wire
-                                            foundwire = True
-                                            match tile:
-                                                case [0, 1]:  # N
-                                                    pos = graphics["shortcutentrancetexture"]["N"]
-                                                case [0, -1]:  # S
-                                                    pos = graphics["shortcutentrancetexture"]["S"]
-                                                case [-1, 0]:  # E
-                                                    pos = graphics["shortcutentrancetexture"]["E"]
-                                                case [1, 0]:  # W
-                                                    pos = graphics["shortcutentrancetexture"]["W"]
-                                        else:
-                                            break
-                                    if 5 in curhover and tile in col4: # if wire in 4 places near
-                                        pathcount += 1
-                                        if pathcount > 1:
-                                            break
-                                else: # if no breaks
-                                    if tilecounter == 7 and foundwire and foundair and pos != -1: # if we found the right one
-                                        curtool = [pos[0] * image1size, pos[1] * image1size]
-                        f.blit(renderedimage, [xp * image1size, yp * image1size], [curtool, cellsize2])
-
-    def rendertiles(self):
-        global mat
-        material = pg.transform.scale(mat, [mat.get_width() / 16 * image1size, mat.get_height() / 16 * image1size])
-        images = {}
-        data = self.data["TE"]["tlMatrix"]
-        f: pg.Surface = self.f
-        for xp, x in enumerate(data):
-            for yp, y in enumerate(x):
-                cell = y[self.layer]
-                posx = xp * image1size
-                posy = yp * image1size
-
-                datcell = cell["tp"]
-                datdata = cell["data"]
-
-                if datcell == "default":
-                    #pg.draw.rect(field.field, red, [posx, posy, size, size], 3)
-                    pass
-                elif datcell == "material":
-                    if self.data["GE"][xp][yp][self.layer][0] != 0:
-                        area = pg.rect.Rect([graphics["matposes"].index(datdata) * image1size, 0, image1size, image1size])
-                        f.blit(material, [posx, posy], area)
-                elif datcell == "tileHead":
-                    it = None
-                    if datdata[1] in images.keys():
-                        it = images[datdata[1]]
-                    else:
-                        for i in self.items.keys():
-                            for i2 in self.items[i]:
-                                if i2["name"] == datdata[1]:
-                                    img = i2.copy()
-                                    img["image"] = pg.transform.scale(img["image"], [img["image"].get_width() / 16 * image1size, img["image"].get_height() / 16 * image1size])
-                                    images[datdata[1]] = img
-                                    it = img
-                                    break
-                            if it is not None:
-                                break
-                    if it is None:
-                        it = notfoundtile
-                    cposx = posx - int((it["size"][0] * .5) + .5) * image1size + image1size
-                    cposy = posy - int((it["size"][1] * .5) + .5) * image1size + image1size
-                    siz = pg.rect.Rect([cposx, cposy, it["size"][0] * image1size, it["size"][1] * image1size])
-                    if not settings["TE"]["LEtiles"]:
-                        pg.draw.rect(f, it["color"], siz, 0)
-                    f.blit(it["image"], [cposx, cposy])
-                elif datcell == "tileBody":
-                    pass
 
     def findprop(self, name, cat=None):
         if cat is not None:

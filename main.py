@@ -23,9 +23,6 @@ surf: menu | MenuWithField = None
 tag = "2.1"
 version = "version: " + tag
 
-a = [[69], [[[[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[0, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]]],
-            [[[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[0, []], [1, []], [0, []]], [[1, []], [1, []], [0, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [0, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[0, []], [1, []], [1, []]], [[0, []], [0, []], [1, []]], [[0, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [1, []], [1, []]], [[1, []], [0, []], [1, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]], [[1, []], [0, []], [0, []]]]]]
-
 
 def keypress(window):
     global run, file, file2, redobuffer, undobuffer, surf
@@ -83,10 +80,12 @@ def undohistory():
     surf.data = copy.deepcopy(pathdict.data)
     file = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
-    menuclass.renderer.data = surf.data
     redobuffer.append(copy.deepcopy(undobuffer.pop()))
     if MenuWithField in type(surf).__bases__:
-        surf.rfa()
+        surf.renderer.data = surf.data
+        if "GE" in historyelem[1][0] or "GE" in historyelem[0]:
+            print("render")
+            surf.render_geo_full()
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
@@ -103,10 +102,11 @@ def redohistory():
     surf.data = copy.deepcopy(pathdict.data)
     file = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
-    menuclass.renderer.data = surf.data
     undobuffer.append(copy.deepcopy(redobuffer.pop()))
     if MenuWithField in type(surf).__bases__:
-        surf.rfa()
+        surf.renderer.data = surf.data
+        if "GE" in historyelem[1][0] or "GE" in historyelem[0]:
+            surf.render_geo_full()
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
@@ -156,10 +156,11 @@ def launch(level):
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
     pg.display.set_icon(pg.image.load(path + "icon.png"))
     renderer = Renderer(file, items, props, propcolors)
+    renderer.render_all(0)
     surf = MN(window, renderer)
     os.system("cls")
     try:
-        request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest")
+        request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest", timeout=5)
         if request.status_code == 200:
             gittag = request.json()["tag_name"]
             if tag != gittag:
@@ -213,7 +214,7 @@ def launch(level):
                 case "FE":
                     surf = FE(window, file, items, props, propcolors)
                 case "CE":
-                    surf = CE(window, file, items, props, propcolors)
+                    surf = CE(window, renderer)
                 case "LP":
                     surf = LP(window, file)
                 case "EE":

@@ -36,12 +36,13 @@ renderedimage = pg.transform.scale(tooltiles, [
             (tooltiles.get_width() / graphics["tilesize"][0]) * image1size,
             (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
 
+
 class Renderer:
     def __init__(self, data, tiles, props, propcolors):
-        self.data = data
         self.tiles = tiles
         self.props = props
         self.propcolors = propcolors
+        self.data = data
 
         size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
         self.surf_geo = pg.Surface(size)
@@ -69,9 +70,9 @@ class Renderer:
     def render_tile_pixel(self, xp, yp, layer):
         material = pg.transform.scale(mat, [mat.get_width() / 16 * image1size, mat.get_height() / 16 * image1size])
         images = {}
-        data = self.data["TE"]["tlMatrix"]
+        tiledata = self.data["TE"]["tlMatrix"]
 
-        cell = data[xp][yp][layer]
+        cell = tiledata[xp][yp][layer]
         posx = xp * image1size
         posy = yp * image1size
 
@@ -124,7 +125,18 @@ class Renderer:
             for yp, y in enumerate(x):
                 if y == 1:
                     continue
+                for i in col8:
+                    try:
+                        if area[xp + i[0]][yp + i[1]] == 0:
+                            continue
+                        self.surf_geo.blit(self.render_geo_pixel(xp + i[0], yp + i[1], layer), [(xp + i[0]) * image1size, (yp + i[1]) * image1size])
+                    except IndexError:
+                        continue
                 self.surf_geo.blit(self.render_geo_pixel(xp, yp, layer), [xp * image1size, yp * image1size])
+
+    def render_all(self, layer):
+        self.geo_full_render(layer)
+        self.tiles_full_render(layer)
 
     def render_geo_pixel(self, xp, yp, layer):
         def incorner(x, y):
