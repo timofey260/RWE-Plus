@@ -6,14 +6,6 @@ from pathlib import Path
 from lingotojson import *
 import pygame as pg
 
-col8 = [
-    [-1, -1], [0, -1], [1, -1],
-    [-1, 0],           [1, 0],
-    [-1, 1],  [0, 1],  [1, 1]
-]
-
-col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
-
 notfound = pg.image.load(path + "notfound.png")
 notfoundtile = {
     "name": "unloaded tile",
