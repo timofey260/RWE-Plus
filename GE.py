@@ -184,7 +184,8 @@ class GE(MenuWithField):
                         self.updatehistory(paths)
                     else:
                         self.detecthistory(["GE"])
-                self.render_geo_area()
+                self.renderer.geo_render_area(self.area, self.layer)
+                self.rfa()
 
             self.movemiddle(bp, pos)
 
@@ -211,7 +212,8 @@ class GE(MenuWithField):
                             self.place(x + self.rectdata[0][0], y + self.rectdata[0][1], False)
                     self.data["GE"] =  self.data["GE"]
                     self.detecthistory(["GE"])
-                    self.render_geo_area()
+                    self.renderer.geo_render_area(self.area, self.layer)
+                    self.rfa()
                 self.mousp2 = True
 
             # aaah math
@@ -242,6 +244,7 @@ class GE(MenuWithField):
 
     def pastegeo(self):
         try:
+            self.emptyarea()
             geodata = eval(pyperclip.paste())
             if type(geodata) != list:
                 return
@@ -252,8 +255,9 @@ class GE(MenuWithField):
                     if (self.replaceair and y[0] == 0) or not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
                     self.data["GE"][-self.xoffset + xi][-self.yoffset + yi][self.layer] = y
+                    self.area[-self.xoffset + xi][-self.yoffset + yi] = 0
             self.detecthistory(["GE"])
-            self.render_geo_area()
+            self.rfa()
         except:
             print("Error pasting data!")
 
@@ -423,7 +427,8 @@ class GE(MenuWithField):
             else:
                 self.data["GE"][x][y][self.layer][0] = self.placetile
         if render:
-            self.render_geo_area()
+            self.renderer.geo_render_area(self.area, self.layer)
+            self.rfa()
 
     def mirrorplace(self, xm, ym, render=False):
         if not self.mirrorp:
@@ -462,7 +467,8 @@ class GE(MenuWithField):
             else:
                 self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.placetile)
         if render:
-            self.render_geo_area()
+            self.renderer.geo_render_area(self.area, self.layer)
+            self.rfa()
 
     def reverseslope(self, slope):
         if slope in [2, 3, 4, 5]:

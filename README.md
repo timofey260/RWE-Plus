@@ -12,6 +12,8 @@ Maybe better version of official rain world editor
 8. Camera snap as in community editor
 9. Much faster than community and official editors
 10. [Drizzle](https://github.com/PJB3005/Drizzle) rendering
+11. Undo ability
+12. Copy-Paste data from clipboard
 
 and a lot more!
 

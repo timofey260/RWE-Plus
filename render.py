@@ -28,6 +28,14 @@ renderedimage = pg.transform.scale(tooltiles, [
             (tooltiles.get_width() / graphics["tilesize"][0]) * image1size,
             (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
 
+col8 = [
+    [-1, -1], [0, -1], [1, -1],
+    [-1, 0],           [1, 0],
+    [-1, 1],  [0, 1],  [1, 1]
+]
+
+col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
+
 
 class Renderer:
     def __init__(self, data, tiles, props, propcolors):
