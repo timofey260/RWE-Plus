@@ -26,11 +26,11 @@ values = {
 
 
 class PE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, data, tiles, props, propcolors):
+    def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "PE"
 
-        self.props = props
-        self.propcolors = propcolors
+        self.props = renderer.props
+        self.propcolors = renderer.propcolors
 
         self.reset_settings()
 
@@ -61,7 +61,7 @@ class PE(MenuWithField):
         self.helppoins = pg.Vector2(0, 0)
         self.helppoins2 = pg.Vector2(0, 0)
 
-        super().__init__(surface, data, "PE", tiles, props, propcolors)
+        super().__init__(surface, "PE", renderer)
         self.drawprops = True
         cat = list(self.props.keys())[self.currentcategory]
         self.setprop(self.props[cat][0]["nm"], cat)
@@ -272,6 +272,7 @@ class PE(MenuWithField):
                     if len(self.data["PR"]["props"]) > 0:
                         *_, near = self.find_nearest(*posoffset)
                         self.data["PR"]["props"].pop(near)
+                        self.renderer.props_full_render()
                         self.rfa()
                         self.updatehistory([["PR", "props"]])
                 elif copymode:
@@ -381,7 +382,7 @@ class PE(MenuWithField):
                         cat = list(self.props.keys())[self.currentcategory]
                         item = self.props[cat][index]
                         w, h = item["images"][0].get_size()
-                        self.surface.blit(pg.transform.scale(item["images"][0], [w, h]), [self.field.rect.x, self.field.rect.y])
+                        self.surface.blit(pg.transform.scale(item["images"][0], [w, h]), button.rect.topright)
                         break
 
         for button in self.buttonslist:
@@ -634,12 +635,12 @@ class PE(MenuWithField):
         for i, q in enumerate(quads):
             vec = pg.Vector2(q) - qv * 2 + posonfield
             if longpos:
-                vec = pg.Vector2(q) - qv + longpos # I literally have no idea how this works
+                vec = pg.Vector2(q) - qv + longpos  # I literally have no idea how this works
             vec = [round(vec.x, 4), round(vec.y, 4)]
             quads2[i] = makearr(vec, "point")
         newpropsettings = self.prop_settings.copy()
         if self.prop_settings.get("variation") is not None:
-            if self.prop_settings["variation"] == 0: # random
+            if self.prop_settings["variation"] == 0:  # random
                 newpropsettings["variation"] = rnd.randint(1, len(self.selectedprop["images"]))
         prop = [-self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.toolindex + 1], "point"), quads2, {"settings": newpropsettings}]
         if self.selectedprop["tp"] == "rope":
@@ -651,6 +652,7 @@ class PE(MenuWithField):
             prop[4]["points"] = points
         self.data["PR"]["props"].append(prop.copy())
         self.applytags()
+        self.renderer.props_full_render()
         self.rfa()
         self.updatehistory([["PR", "props"]])
 

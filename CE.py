@@ -5,9 +5,9 @@ from lingotojson import *
 error = settings["global"]["snap_error"] # snap error
 
 class CE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer, propcolors):
+    def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
         self.menu = "CE"
-        super().__init__(surface, "CE", renderer)
+        super().__init__(surface, "CE", renderer, renderall=False)
 
         self.held = False
         self.heldindex = 0

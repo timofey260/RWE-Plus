@@ -3,13 +3,12 @@ from menuclass import *
 import copy
 
 
-class LS(menu):
+class LS(Menu):
 
-    def __init__(self, surface: pg.surface.Surface, data, items):
+    def __init__(self, surface: pg.surface.Surface, renderer):
+        super().__init__(surface, renderer, "LS")
         self.menu = "LS"
-        self.btiles = data["EX2"]["extraTiles"]
-
-        self.items = items
+        self.btiles = self.data["EX2"]["extraTiles"]
 
         self.message = ''
 
@@ -20,7 +19,6 @@ class LS(menu):
 
         self.shadowmode = True
 
-        super().__init__(surface, data, "LS")
         self.recount()
         self.blit()
         self.resize()
@@ -87,6 +85,7 @@ class LS(menu):
         self.data["EX2"]["size"] = makearr([len(self.data["GE"]), len(self.data["GE"][0])], "point")
         print("done")
         self.updatehistory([[]])
+        self.renderer.render_all(0)
 
     def cutdata(self, x, y, w, h, array, default_instance):
         arr = array

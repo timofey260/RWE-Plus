@@ -2,7 +2,7 @@ import widgets
 from menuclass import *
 
 
-class LP(menu):
+class LP(Menu):
     def __init__(self, surface: pg.surface.Surface, data):
         self.menu = "LP"
         self.sliders = []

@@ -18,7 +18,7 @@ file = ""
 file2 = ""
 undobuffer = []
 redobuffer = []
-surf: menu | MenuWithField = None
+surf: Menu | MenuWithField = None
 
 tag = "2.1"
 version = "version: " + tag
@@ -160,7 +160,7 @@ def launch(level):
     surf = MN(window, renderer)
     os.system("cls")
     try:
-        request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest", timeout=5)
+        request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest", timeout=2)
         if request.status_code == 200:
             gittag = request.json()["tag_name"]
             if tag != gittag:
@@ -198,31 +198,9 @@ def launch(level):
                 case "redo":
                     redohistory()
                 case "%":
-                    surf = HK(window, file, surf.menu)
+                    surf = HK(window, renderer, surf.menu)
                 case "quit":
                     asktoexit(file, file2)
-                case "MN":
-                    surf = MN(window, renderer)
-                case "GE":
-                    surf = GE(window, renderer)
-                case "TE":
-                    surf = TE(window, renderer)
-                case "LE":
-                    surf = LE(window, file, items, props, propcolors)
-                case "LS":
-                    surf = LS(window, file, items)
-                case "FE":
-                    surf = FE(window, file, items, props, propcolors)
-                case "CE":
-                    surf = CE(window, renderer)
-                case "LP":
-                    surf = LP(window, file)
-                case "EE":
-                    surf = EE(window, file, items, props, propcolors)
-                case "PE":
-                    surf = PE(window, file, items, props, propcolors)
-                case "HK":
-                    surf = HK(window, file)
                 case "fc":
                     fullscreen = not fullscreen
                     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
@@ -237,6 +215,9 @@ def launch(level):
                 case "savetxt":
                     surf.savef_txt()
                     file2 = copy.deepcopy(file)
+                case _:
+                    if surf.message in menulist:
+                        surf = getattr(sys.modules[__name__], surf.message)(window, renderer)
             surf.message = ""
         if len(surf.historybuffer) > 0:
             surf.historybuffer.reverse()
@@ -299,10 +280,6 @@ def loadmenu():
     exit(0)
 
 
-def new():
-    loadmenu()
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="RWE+ console", description="maybe a better, than official LE.")
     parser.version = version
@@ -310,10 +287,10 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--new", help="opens new file", dest="new", action="store_true")
     parser.add_argument("-v", "--version", help="shows current version and exits", action="version")
     parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str, help="renders levels with drizzle.")
-    parser.parse_args()
+    # parser.parse_args()
     args = parser.parse_args()
     if args.new:
-        new()
+        loadmenu()
     if args.renderfiles is not None:
         s = application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render "
         for i in args.renderfiles:
@@ -327,4 +304,4 @@ if __name__ == "__main__":
         except FileNotFoundError:
             print("File not found!")
     else:
-        new()
+        loadmenu()

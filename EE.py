@@ -2,8 +2,8 @@ from menuclass import *
 
 
 class EE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
-        super().__init__(surface, data, "EE", items, props, propcolors)
+    def __init__(self, surface: pg.surface.Surface, renderer):
+        super().__init__(surface, "EE", renderer)
         self.layer = 1 - self.data["WL"]["waterInFront"]
         self.wateroffset = 0
         self.count = False

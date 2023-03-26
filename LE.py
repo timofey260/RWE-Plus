@@ -4,17 +4,18 @@ from tkinter.filedialog import asksaveasfilename
 
 class LE(MenuWithField):
 
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
+    def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "LE"
-        super().__init__(surface, data, "LE", items, props, propcolors)
+        super().__init__(surface, "LE", renderer)
         self.field2 = widgets.window(self.surface, self.settings["d1"])
+        self.field3 = self.field2.copy()
 
         self.ofstop = ofstop
         self.ofsleft = ofsleft
 
         sc = [(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size]
         try:
-            lev = os.path.splitext(data["path"])[0] + ".png"
+            lev = os.path.splitext(self.data["path"])[0] + ".png"
             self.field2.field = pg.transform.scale(pg.image.load(lev), sc)
         except FileNotFoundError:
             self.field2.field = pg.surface.Surface(sc)
@@ -54,13 +55,11 @@ class LE(MenuWithField):
             img.set_colorkey(black)
 
             self.images[False].append(img)
-
-        super().__init__(surface, data, "LE", items, props, propcolors)
         self.rs()
         self.retile()
-        self.rfa()
         self.blit()
         self.resize()
+        self.renderfield()
 
     def blit(self): # NOQA
         self.fieldadd.fill(white)
@@ -166,6 +165,8 @@ class LE(MenuWithField):
                 y / ((len(self.data["GE"][0]) + self.ofstop) * self.size) * self.field2.field.get_height()]
 
     def rs(self):
+        if not hasattr(self, "field2"):
+            return
         self.field3 = self.field2.copy()
         self.field3.field = pg.transform.scale(self.field2.field,
                                                [(len(self.data["GE"]) + self.ofsleft) * self.size,

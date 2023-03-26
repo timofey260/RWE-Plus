@@ -28,6 +28,7 @@ blocks = [
     {"tiles": ["B1", "I"], "upper": "espaced", "lower": "dense", "tall": 1, "freq": 2}
 ]
 
+
 class TE(MenuWithField):
 
     def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
@@ -53,13 +54,13 @@ class TE(MenuWithField):
 
         self.lastfg = False
 
-        super().__init__(surface, "TE", renderer)
+        super().__init__(surface, "TE", renderer, False)
         self.drawtiles = True
         self.set("material", "Standard")
         self.currentcategory = len(self.items) - 1
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
-        self.rebuttons()
         self.rfa()
+        self.rebuttons()
         self.blit()
         self.resize()
 
@@ -99,7 +100,7 @@ class TE(MenuWithField):
                         self.labels[0].set_text(
                             "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
 
-                bord = 3
+                bord = self.size // image1size
                 if self.cols and self.tool == 0:
                     pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
                                                           [self.tileimage["image"].get_width() + bord * 2,
@@ -119,6 +120,7 @@ class TE(MenuWithField):
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
+                self.emptyarea()
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
                     pass
@@ -137,6 +139,7 @@ class TE(MenuWithField):
                     self.detecthistory(["GE"])
                 self.fieldadd.fill(white)
                 self.mousp = True
+                self.renderer.tiles_render_area(self.area, self.layer)
                 self.rfa()
 
             self.movemiddle(bp, pos)
@@ -144,6 +147,7 @@ class TE(MenuWithField):
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False
                 self.rectdata = [posoffset, [0, 0], pos2]
+                self.emptyarea()
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
                 rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
@@ -222,6 +226,7 @@ class TE(MenuWithField):
                 self.detecthistory(["TE", "tlMatrix"])
                 if fg:
                     self.detecthistory(["GE"])
+                self.renderer.tiles_render_area(self.area, self.layer)
                 self.rfa()
                 self.mousp2 = True
         else:
@@ -270,6 +275,7 @@ class TE(MenuWithField):
             geodata = eval(pyperclip.paste())
             if type(geodata) != list or len(pyperclip.paste()) <= 2:
                 return
+            self.emptyarea()
             for block in geodata:
                 blockx, blocky, data = block
                 if data["tp"] == "material":
@@ -285,6 +291,7 @@ class TE(MenuWithField):
             else:
                 self.selectcat(cat)
             self.detecthistory(["TE", "tlMatrix"])
+            self.renderer.tiles_render_area(self.area, self.layer)
             self.rfa()
         except:
             print("Error pasting data!")
@@ -473,7 +480,7 @@ class TE(MenuWithField):
         w, h = tile["size"]
         sp = tile["cols"][0]
         sp2 = tile["cols"][1]
-        shift = self.size // 10
+        shift = self.size // image1size
         if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]):
             return
         if self.findparampressed("movepreview"):
@@ -510,16 +517,20 @@ class TE(MenuWithField):
                 xpos = x + x2
                 ypos = y + y2
                 if self.tileimage["category"] == "material":
+                    self.area[xpos][ypos] = 0
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
                                                                            "data": self.tileimage["name"]}
                 elif xpos == px and ypos == py:
+                    self.area[xpos][ypos] = 0
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
                                                                            "data": [p, self.tileimage["name"]]}
                 elif csp != -1:
                     p = makearr([px + 1, py + 1], "point")
+                    # self.area[xpos][ypos] = 0
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
                                                                            "data": [p, self.layer + 1]}
                 if fg and csp != -1:
+                    self.area[xpos][ypos] = 0
                     self.data["GE"][xpos][ypos][self.layer][0] = csp
 
                 if sp2 != 0:

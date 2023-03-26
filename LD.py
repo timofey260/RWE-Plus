@@ -1,6 +1,6 @@
 from menuclass import *
 
-class load(menu):
+class load(Menu):
     def __init__(self, surface: pg.surface.Surface, data):
         super().__init__(surface, data, "LD")
 

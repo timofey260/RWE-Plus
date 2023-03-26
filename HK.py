@@ -1,19 +1,22 @@
 from menuclass import *
 
-class HK(menu):
-    def __init__(self, surface: pg.surface.Surface, data, openmenu="MN"):
+class HK(Menu):
+    def __init__(self, surface: pg.surface.Surface, renderer, openmenu="MN"):
         self.menu = "HK"
         self.m = openmenu
         self.keys = open(path + "hotkeystip.md").readlines()
+        self.scroll = 0
 
-        super().__init__(surface, data, "HK")
+        super().__init__(surface, renderer, "HK")
         self.fontsize = self.labels[0].fontsize
         self.load_menu(openmenu)
 
     def load_menu(self, name):
-        self.m = name
+        if name != self.m:
+            self.m = name
+            self.scroll = 0
         sw = False
-        text = ""
+        text = self.m + "\n"
         text2 = "\n"
         count = 0
         for line in self.keys:
@@ -22,7 +25,11 @@ class HK(menu):
                     break
                 if name in line:
                     sw = True
+                    continue
             if sw:
+                if self.scroll > count:
+                    count += 1
+                    continue
                 ft = line.find(" - ")
                 tx = line[:ft] + "\n"
                 tx2 = line[ft:]
@@ -33,6 +40,18 @@ class HK(menu):
 
         self.labels[0].set_text(text)
         self.labels[1].set_text(text2)
+
+    def send(self, message):
+        super().send(message)
+        match message:
+            case "SD":
+                if self.scroll + 1 <= self.labels[1].text.count("\n"):
+                    self.scroll += 1
+                self.load_menu(self.m)
+            case "SU":
+                if self.scroll - 1 > -1:
+                    self.scroll -= 1
+                self.load_menu(self.m)
 
     def MN(self):
         self.load_menu("MN")

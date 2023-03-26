@@ -1,129 +1,12 @@
 import copy
-
 import render
 import widgets
-from lingotojson import *
-from files import *
-import cv2
-import numpy as np
-from path_dict import PathDict
-from pathlib import Path
 import pyperclip
-from render import Renderer
+from render import *
 
 inputfile = ''
 filepath = path2levels
 
-notfound = pg.image.load(path + "notfound.png")
-notfoundtile = {
-    "name": "unloaded tile",
-    "tp": "notfound",
-    "repeatL": [1],
-    "bfTiles": 0,
-    "image": notfound,
-    "size": [2, 2],
-    "category": "material",
-    "color": pg.Color(255, 255, 255),
-    "cols": [[-1], 0],
-    "cat": [1, 1],
-    "tags": [""]
-}
-
-colors = settings["global"]["colors"] # NOQA
-
-color = pg.Color(settings["global"]["color"])
-color2 = pg.Color(settings["global"]["color2"])
-
-dc = pg.Color(0, 0, 0, 0)
-
-cursor = dc
-cursor2 = dc
-mirror = dc
-bftiles = dc
-border = dc
-canplace = dc
-cannotplace = dc
-select = dc
-layer1 = dc
-layer2 = dc
-mixcol_empty = dc
-mixcol_fill = dc
-
-camera_border = dc
-camera_held = dc
-camera_notheld = dc
-
-slidebar = dc
-rope = dc
-
-grid = dc
-
-for key, value in colors.items():
-    exec(f"{key} = pg.Color({value})")
-
-red = pg.Color([255, 0, 0])
-darkred = pg.Color([100, 0, 0])
-blue = pg.Color([50, 0, 255])
-green = pg.Color([0, 255, 0])
-black = pg.Color([0, 0, 0])
-white = pg.Color([255, 255, 255])
-gray = pg.Color([110, 110, 110])
-darkgray = pg.Color([80, 80, 80])
-purple = pg.Color([255, 0, 255])
-alpha = dc
-
-col8 = [
-    [-1, -1], [0, -1], [1, -1],
-    [-1, 0],           [1, 0],
-    [-1, 1],  [0, 1],  [1, 1]
-]
-
-col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
-
-def quadsize(quad):
-    mostleft = bignum
-    mostright = 0
-    mosttop = bignum
-    mostbottom = 0
-    for q in quad:
-        x, y = q
-        if x < mostleft:
-            mostleft = x
-        if x > mostright:
-            mostright = x
-
-        if y < mosttop:
-            mosttop = y
-        if y > mostbottom:
-            mostbottom = y
-    ww = round(mostright - mostleft)
-    wh = round(mostbottom - mosttop)
-    return ww, wh, [mostleft, mosttop, mostright, mostbottom]
-
-
-def quadtransform(quads, image: pg.Surface):
-    ww, wh, mosts = quadsize(quads)
-
-    colkey = image.get_colorkey()
-    view = pg.surfarray.array3d(image)
-    view = view.transpose([1, 0, 2])
-
-    img = cv2.cvtColor(view, cv2.COLOR_RGB2RGBA) # NOQA
-    ws, hs = img.shape[1::-1]
-    pts1 = np.float32([[0, 0], [ws, 0],
-                       [ws, hs], [0, hs]])
-    q2 = []
-    for q in quads:
-        q2.append([q[0] - mosts[0], q[1] - mosts[1]])
-
-    pts2 = np.float32(q2)
-    persp = cv2.getPerspectiveTransform(pts1, pts2) # NOQA
-    result = cv2.warpPerspective(img, persp, (ww, wh)) # NOQA
-
-    img = pg.image.frombuffer(result.tostring(), result.shape[1::-1], "RGBA")
-    img.set_colorkey(colkey)
-
-    return [img, mosts[0], mosts[1], ww, wh]
 
 def rotatepoint(point, angle):
     px, py = point
@@ -138,12 +21,13 @@ def setasname(name):
     inputfile = name
 
 
-class menu:
-    def __init__(self, surface: pg.surface.Surface, data, name):
+class Menu:
+    def __init__(self, surface: pg.surface.Surface, renderer, name):
         self.surface = surface
         self.menu = name
-        self.data = data
-        self.datalast = copy.deepcopy(data)
+        self.renderer = renderer
+        self.data = renderer.data
+        self.datalast = copy.deepcopy(renderer.data)
         self.settings = settings[self.menu]
         self.hotkeys = hotkeys[name]
         self.historybuffer = []
@@ -231,28 +115,34 @@ class menu:
         filepath = path2levels
         buttons = []
         slider = 0
-        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit", [50, 0], black, 30)
+        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit",
+                              [50, 0], black, 30)
         label.resize()
+
         def appendbuttons():
             global filepath
             f = os.listdir(filepath)
             f.reverse()
             buttons.clear()
-            buttons.append(widgets.button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback, tooltip="Go back"))
+            buttons.append(widgets.button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback,
+                                          tooltip="Go back"))
             count = 1
             for file in f:
                 if inputfile.lower() in file.lower():
                     y = 5 * count - slider * 5
                     if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
                         if y > 0:
-                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=setasname, tooltip="File"))
+                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
+                                                          onpress=setasname, tooltip="File"))
                         count += 1
                     elif os.path.isdir(os.path.join(filepath, file)):
                         if y > 0:
-                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file, onpress=self.addfolder, tooltip="Folder"))
+                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
+                                                          onpress=self.addfolder, tooltip="Folder"))
                         count += 1
             for button in buttons:
                 button.resize()
+
         inputfile = ''
         r = True
         appendbuttons()
@@ -400,7 +290,7 @@ class menu:
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui +  graphics["uifile"], "r"))
+        settings = json.load(open(path2ui + graphics["uifile"], "r"))
         self.__init__(self.surface, self.data, self.menu)
 
     def send(self, message):
@@ -466,7 +356,8 @@ class menu:
                     groups[-1][i] = "ctrl + " + pg.key.name(getattr(pg, k))
                 else:
                     groups[-1][i] = pg.key.name(getattr(pg, k))
-            rep = str(groups[-1]).replace("[", "").replace("]", "").replace("'", "").replace(" ", "").replace("+", " + ")
+            rep = str(groups[-1]).replace("[", "").replace("]", "").replace("'", "").replace(" ", "").replace("+",
+                                                                                                              " + ")
             rep = " or ".join(rep.rsplit(",", 1))
             rep = rep.replace(",", ", ")
             string = string.replace(fgroup[0], rep)
@@ -474,9 +365,9 @@ class menu:
         return string
 
 
-class MenuWithField(menu):
-    def __init__(self, surface: pg.Surface, name, renderer: render.Renderer):
-        super(MenuWithField, self).__init__(surface, renderer.data, name)
+class MenuWithField(Menu):
+    def __init__(self, surface: pg.Surface, name, renderer: render.Renderer, renderall=True):
+        super(MenuWithField, self).__init__(surface, renderer, name)
 
         self.renderer = renderer
         self.items = renderer.tiles
@@ -509,11 +400,12 @@ class MenuWithField(menu):
         self.rectdata = [[0, 0], [0, 0], [0, 0]]
         self.layer = 0
         self.emptyarea()
-        self.rfa()
+        if renderall:
+            self.rfa()
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui +  graphics["uifile"], "r"))
+        settings = json.load(open(path2ui + graphics["uifile"], "r"))
         self.__init__(self.surface, self.menu, self.renderer)
 
     def movemiddle(self, bp, pos):
@@ -548,7 +440,8 @@ class MenuWithField(menu):
 
     def renderfield(self):
         self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
-        self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size, self.f.get_height() / image1size * self.size]), [0, 0])
+        self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size,
+                                                       self.f.get_height() / image1size * self.size]), [0, 0])
 
     def emptyarea(self):
         self.area = [[1 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
@@ -562,11 +455,13 @@ class MenuWithField(menu):
             # self.renderer.tiles_full_render(self.layer)
             self.f.blit(self.renderer.surf_tiles, [0, 0])
         if self.drawprops:
-            self.renderprops()
+            # self.renderer.props_full_render()
+            self.f.blit(self.renderer.surf_props, [0, 0])
         if self.drawgrid:
             self.rendergrid()
         if self.draweffects != 0 and self.draweffects <= len(self.data['FE']['effects']):
-            self.rendermatrix(self.f, image1size, self.data["FE"]["effects"][self.draweffects - 1]["mtrx"])
+            self.f.blit(self.renderer.surf_effect, [0, 0])
+            # self.rendermatrix(self.f, image1size, self.data["FE"]["effects"][self.draweffects - 1]["mtrx"])
         self.renderfield()
 
     def resize(self):
@@ -581,7 +476,9 @@ class MenuWithField(menu):
         if self.drawcameras:
             self.rendercameras()
         if self.draweffects != 0 and self.draweffects <= len(self.data['FE']['effects']):
-            widgets.fastmts(self.surface, f"Effect({self.draweffects}): {self.data['FE']['effects'][self.draweffects - 1]['nm']}", *self.field.rect.topleft, white)
+            widgets.fastmts(self.surface,
+                            f"Effect({self.draweffects}): {self.data['FE']['effects'][self.draweffects - 1]['nm']}",
+                            *self.field.rect.topleft, white)
         mpos = pg.mouse.get_pos()
         if self.drawgrid and self.field.rect.collidepoint(mpos):
             pos = [math.floor((mpos[0] - self.field.rect.x) / self.size) + 0.5,
@@ -600,6 +497,7 @@ class MenuWithField(menu):
     def swichlayers(self):
         self.layer = (self.layer + 1) % 3
         self.mpos = 1
+        self.renderer.render_all(self.layer)
         self.rfa()
 
     def swichlayers_back(self):
@@ -607,6 +505,7 @@ class MenuWithField(menu):
         if self.layer < 0:
             self.layer = 2
         self.mpos = 1
+        self.renderer.render_all(self.layer)
         self.rfa()
 
     def send(self, message):
@@ -616,7 +515,7 @@ class MenuWithField(menu):
                 self.size += 1
                 self.renderfield()
             case "SD":
-                if self.size - 1 != 0:
+                if self.size - 1 > 0:
                     self.size -= 1
                     self.renderfield()
             case "left":
@@ -658,6 +557,8 @@ class MenuWithField(menu):
         self.draweffects += 1
         if self.draweffects > len(self.data["FE"]["effects"]):
             self.draweffects = 0
+        if self.draweffects != 0:
+            self.renderer.rendermatrix(self.data["FE"]["effects"][self.draweffects - 1]["mtrx"])
         self.rfa()
 
     def toggleprops(self):
@@ -730,6 +631,93 @@ class MenuWithField(menu):
 
             pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
 
+    def saveasf(self):
+        self.savef(True)
+
+    def canplaceit(self, x, y, x2, y2):
+        return (0 <= x2 and x < len(self.data["GE"])) and (0 <= y2 and y < len(self.data["GE"][0]))
+
+    def rendermatrix(self, field, size, matrix, mix=mixcol_empty):
+        f = field
+        for xp, x in enumerate(matrix):
+            for yp, cell in enumerate(x):
+                surf = pg.surface.Surface([size, size])
+                col = mix.lerp(mixcol_fill, cell / 100)
+                surf.set_alpha(col.a)
+                surf.fill(col)
+                f.blit(surf, [xp * size, yp * size])
+                # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
+
+    def destroy(self, x, y):
+        def clearitem(mx, my, layer):
+            val = self.data["TE"]["tlMatrix"][mx][my][layer]
+            if val["data"] == 0:
+                return
+            name = val["data"][1]
+            itm = None
+            for i in self.items.keys():
+                for i2 in self.items[i]:
+                    if i2["name"] == name:
+                        itm = i2
+                        break
+                if itm is not None:
+                    break
+            if itm is None:
+                self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
+                return
+            backx = mx - int((itm["size"][0] * .5) + .5) + 1
+            backy = my - int((itm["size"][1] * .5) + .5) + 1
+            if backx + itm["size"][0] > len(self.data["TE"]["tlMatrix"]) or backy + itm["size"][1] > len(
+                    self.data["TE"]["tlMatrix"][0]):
+                return
+            # startcell = self.data["TE"]["tlMatrix"][backx][backy][layer]
+            sp = itm["cols"][0]
+            sp2 = itm["cols"][1]
+            w, h = itm["size"]
+            for x2 in range(w):
+                for y2 in range(h):
+                    posx = backx + x2
+                    posy = backy + y2
+                    csp = sp[x2 * h + y2]
+                    self.area[posx][posy] = 0
+                    if csp != -1:
+                        self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
+                    if sp2 != 0:
+                        try:
+                            csp = sp2[x2 * h + y2]
+                        except IndexError:
+                            csp = -1
+                        if csp != -1 and layer + 1 <= 2:
+                            self.data["TE"]["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
+
+        if not self.canplaceit(x, y, x, y):
+            return
+        tile = self.data["TE"]["tlMatrix"][x][y][self.layer]
+        if tile["tp"] != "default":
+            match tile["tp"]:
+                case "tileBody":
+                    posx, posy = toarr(tile["data"][0], "point")
+                    clearitem(posx - 1, posy - 1, tile["data"][1] - 1)
+                case "tileHead":
+                    clearitem(x, y, self.layer)
+                case "material":
+                    self.area[x][y] = 0
+                    self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
+        self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
+
+    def getcamerarect(self, cam):
+        pos = pg.Vector2(toarr(cam, "point"))
+        p = (pos / image1size) * self.size + self.field.rect.topleft + pg.Vector2(self.xoffset * self.size,
+                                                                                  self.yoffset * self.size)
+        return pg.Rect([p, [camw * self.size, camh * self.size]])
+
+    def rendergrid(self):
+        w, h = self.f.get_size()
+        for x in range(0, w, image1size):
+            pg.draw.line(self.f, grid, [x, 0], [x, h])
+        for y in range(0, h, image1size):
+            pg.draw.line(self.f, grid, [0, y], [w, y])
+
     def findprop(self, name, cat=None):
         if cat is not None:
             for itemi, item in enumerate(self.props[cat]):
@@ -753,115 +741,3 @@ class MenuWithField(menu):
             "notes": []
         }
         return item, [0, 0]
-    def renderprops(self):
-        for indx, prop in enumerate(self.data["PR"]["props"]):
-            var = 0
-            if prop[4]["settings"].get("variation") is not None:
-                var = prop[4]["settings"]["variation"] - 1
-            found, _ = self.findprop(prop[1])
-            if found is None:
-                print(f"Prop {prop[1]} not Found! image not loaded")
-            image = found["images"][var] # .save(path2hash + str(id(self.data["PR"]["props"][indx][1])) + ".png")
-            qd = prop[3]
-            quads = []
-            for q in qd:
-                quads.append(toarr(q, "point"))
-
-            # surf = pg.image.fromstring(string, [ws, hs], "RGBA")
-            surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
-            surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
-            surf.set_colorkey(white)
-            surf.set_alpha(100)
-            self.f.blit(surf, [mostleft / spritesize * image1size, mosttop / spritesize * image1size])
-            if prop[4].get("points") is not None:
-                propcolor = toarr(self.findprop(prop[1])[0]["previewColor"], "color")
-                for point in prop[4]["points"]:
-                    px, py = toarr(point, "point")
-                    pg.draw.circle(self.f, propcolor, [px, py], 5)
-
-
-    def rendermatrix(self, field, size, matrix, mix=mixcol_empty):
-        f = field
-        for xp, x in enumerate(matrix):
-            for yp, cell in enumerate(x):
-                surf = pg.surface.Surface([size, size])
-                col = mix.lerp(mixcol_fill, cell / 100)
-                surf.set_alpha(col.a)
-                surf.fill(col)
-                f.blit(surf, [xp * size, yp * size])
-                # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
-
-    def saveasf(self):
-        self.savef(True)
-
-    def canplaceit(self, x, y, x2, y2):
-        return (0 <= x2 and x < len(self.data["GE"])) and (0 <= y2 and y < len(self.data["GE"][0]))
-
-
-    def destroy(self, x, y):
-        def clearitem(mx, my, layer):
-            val = self.data["TE"]["tlMatrix"][mx][my][layer]
-            if val["data"] == 0:
-                return
-            name = val["data"][1]
-            itm = None
-            for i in self.items.keys():
-                for i2 in self.items[i]:
-                    if i2["name"] == name:
-                        itm = i2
-                        break
-                if itm is not None:
-                    break
-            if itm is None:
-                self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
-                return
-            backx = mx - int((itm["size"][0] * .5) + .5) + 1
-            backy = my - int((itm["size"][1] * .5) + .5) + 1
-            if backx + itm["size"][0] > len(self.data["TE"]["tlMatrix"]) or backy + itm["size"][1] > len(self.data["TE"]["tlMatrix"][0]):
-                return
-            # startcell = self.data["TE"]["tlMatrix"][backx][backy][layer]
-            sp = itm["cols"][0]
-            sp2 = itm["cols"][1]
-            w, h = itm["size"]
-            for x2 in range(w):
-                for y2 in range(h):
-                    posx = backx + x2
-                    posy = backy + y2
-                    csp = sp[x2 * h + y2]
-                    if csp != -1:
-                        self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
-                    if sp2 != 0:
-                        try:
-                            csp = sp2[x2 * h + y2]
-                        except IndexError:
-                            csp = -1
-                        if csp != -1 and layer + 1 <= 2:
-                            self.data["TE"]["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
-
-        if not self.canplaceit(x, y, x, y):
-            return
-        tile = self.data["TE"]["tlMatrix"][x][y][self.layer]
-        if tile["tp"] != "default":
-            match tile["tp"]:
-                case "tileBody":
-                    posx, posy = toarr(tile["data"][0], "point")
-                    clearitem(posx - 1, posy - 1, tile["data"][1] - 1)
-                case "tileHead":
-                    clearitem(x, y, self.layer)
-                case "material":
-                    self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
-        self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
-
-
-    def getcamerarect(self, cam):
-        pos = pg.Vector2(toarr(cam, "point"))
-        p = (pos / image1size) * self.size + self.field.rect.topleft + pg.Vector2(self.xoffset * self.size,
-                                                                                  self.yoffset * self.size)
-        return pg.Rect([p, [camw * self.size, camh * self.size]])
-
-    def rendergrid(self):
-        w, h = self.f.get_size()
-        for x in range(0, w, image1size):
-            pg.draw.line(self.f, grid, [x, 0], [x, h])
-        for y in range(0, h, image1size):
-            pg.draw.line(self.f, grid, [0, y], [w, y])

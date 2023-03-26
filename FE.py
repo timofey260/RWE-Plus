@@ -4,9 +4,8 @@ import random
 
 
 class FE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, data, items, props, propcolors):
+    def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "FE"
-        super().__init__(surface, data, "FE", items, props, propcolors)
 
         self.buttonslist = []
 
@@ -14,7 +13,7 @@ class FE(MenuWithField):
         self.currentindex = 0
         self.selectedeffect = 0
         self.paramindex = 0
-        
+
         self.matshow = False
 
         self.mpos = [0, 0]
@@ -30,6 +29,7 @@ class FE(MenuWithField):
 
         self.copymode = False
 
+        super().__init__(surface, "FE", renderer)
         self.makeparams()
         self.rfa()
         self.rebuttons()

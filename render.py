@@ -6,6 +6,57 @@ from pathlib import Path
 from lingotojson import *
 import pygame as pg
 
+colors = settings["global"]["colors"]  # NOQA
+
+color = pg.Color(settings["global"]["color"])
+color2 = pg.Color(settings["global"]["color2"])
+
+dc = pg.Color(0, 0, 0, 0)
+
+cursor = dc
+cursor2 = dc
+mirror = dc
+bftiles = dc
+border = dc
+canplace = dc
+cannotplace = dc
+select = dc
+layer1 = dc
+layer2 = dc
+mixcol_empty = dc
+mixcol_fill = dc
+
+camera_border = dc
+camera_held = dc
+camera_notheld = dc
+
+slidebar = dc
+rope = dc
+
+grid = dc
+
+for key, value in colors.items():
+    exec(f"{key} = pg.Color({value})")
+
+red = pg.Color([255, 0, 0])
+darkred = pg.Color([100, 0, 0])
+blue = pg.Color([50, 0, 255])
+green = pg.Color([0, 255, 0])
+black = pg.Color([0, 0, 0])
+white = pg.Color([255, 255, 255])
+gray = pg.Color([110, 110, 110])
+darkgray = pg.Color([80, 80, 80])
+purple = pg.Color([255, 0, 255])
+alpha = dc
+
+col8 = [
+    [-1, -1], [0, -1], [1, -1],
+    [-1, 0], [1, 0],
+    [-1, 1], [0, 1], [1, 1]
+]
+
+col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
+
 notfound = pg.image.load(path + "notfound.png")
 notfoundtile = {
     "name": "unloaded tile",
@@ -28,13 +79,53 @@ renderedimage = pg.transform.scale(tooltiles, [
             (tooltiles.get_width() / graphics["tilesize"][0]) * image1size,
             (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
 
-col8 = [
-    [-1, -1], [0, -1], [1, -1],
-    [-1, 0],           [1, 0],
-    [-1, 1],  [0, 1],  [1, 1]
-]
+material = pg.transform.scale(mat, [mat.get_width() / 16 * image1size, mat.get_height() / 16 * image1size])
 
-col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
+
+def quadsize(quad):
+    mostleft = bignum
+    mostright = 0
+    mosttop = bignum
+    mostbottom = 0
+    for q in quad:
+        x, y = q
+        if x < mostleft:
+            mostleft = x
+        if x > mostright:
+            mostright = x
+
+        if y < mosttop:
+            mosttop = y
+        if y > mostbottom:
+            mostbottom = y
+    ww = round(mostright - mostleft)
+    wh = round(mostbottom - mosttop)
+    return ww, wh, [mostleft, mosttop, mostright, mostbottom]
+
+
+def quadtransform(quads, image: pg.Surface):
+    ww, wh, mosts = quadsize(quads)
+
+    colkey = image.get_colorkey()
+    view = pg.surfarray.array3d(image)
+    view = view.transpose([1, 0, 2])
+
+    img = cv2.cvtColor(view, cv2.COLOR_RGB2RGBA) # NOQA
+    ws, hs = img.shape[1::-1]
+    pts1 = np.float32([[0, 0], [ws, 0],
+                       [ws, hs], [0, hs]])
+    q2 = []
+    for q in quads:
+        q2.append([q[0] - mosts[0], q[1] - mosts[1]])
+
+    pts2 = np.float32(q2)
+    persp = cv2.getPerspectiveTransform(pts1, pts2) # NOQA
+    result = cv2.warpPerspective(img, persp, (ww, wh)) # NOQA
+
+    img = pg.image.frombuffer(result.tostring(), result.shape[1::-1], "RGBA")
+    img.set_colorkey(colkey)
+
+    return [img, mosts[0], mosts[1], ww, wh]
 
 
 class Renderer:
@@ -49,14 +140,21 @@ class Renderer:
         self.surf_tiles = pg.Surface(size)
         self.surf_tiles = self.surf_tiles.convert_alpha()
         self.surf_props = pg.Surface(size)
+        self.surf_props = self.surf_props.convert_alpha()
+        self.surf_effect = pg.Surface(size)
+        self.surf_effect.set_alpha(190)
 
     def set_surface(self, size):
         self.surf_geo = pg.Surface(size)
         self.surf_tiles = pg.Surface(size)
+        self.surf_tiles = self.surf_tiles.convert_alpha()
         self.surf_props = pg.Surface(size)
+        self.surf_props = self.surf_props.convert_alpha()
+        self.surf_effect = pg.Surface(size)
+        self.surf_effect.set_alpha(190)
 
     def tiles_full_render(self, layer):
-        self.surf_tiles.fill(pg.Color(0, 0, 0, 0))
+        self.surf_tiles.fill(dc)
         area = [[0 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
         self.tiles_render_area(area, layer)
 
@@ -68,7 +166,6 @@ class Renderer:
                 self.render_tile_pixel(xp, yp, layer)
 
     def render_tile_pixel(self, xp, yp, layer):
-        material = pg.transform.scale(mat, [mat.get_width() / 16 * image1size, mat.get_height() / 16 * image1size])
         images = {}
         tiledata = self.data["TE"]["tlMatrix"]
 
@@ -80,11 +177,13 @@ class Renderer:
         datdata = cell["data"]
 
         if datcell == "default":
+            self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
             # pg.draw.rect(field.field, red, [posx, posy, size, size], 3)
             pass
         elif datcell == "material":
             if self.data["GE"][xp][yp][layer][0] != 0:
                 area = pg.rect.Rect([graphics["matposes"].index(datdata) * image1size, 0, image1size, image1size])
+                self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
                 self.surf_tiles.blit(material, [posx, posy], area)
         elif datcell == "tileHead":
             it = None
@@ -109,7 +208,11 @@ class Renderer:
             siz = pg.rect.Rect([cposx, cposy, it["size"][0] * image1size, it["size"][1] * image1size])
             if not settings["TE"]["LEtiles"]:
                 pg.draw.rect(self.surf_tiles, it["color"], siz, 0)
-            self.surf_tiles.fill(pg.Color(0, 0, 0, 0), siz)
+            #for xpos in range(0, it["size"][0]):
+            #    for ypos in range(0, it["size"][1]):
+            #        #if it["cols"][0][xpos * it["size"][1] + ypos] == -1:
+            #        self.surf_tiles.fill(dc, [(cposx + xpos) * image1size, (cposy + ypos) * image1size, image1size, image1size])
+            # self.surf_tiles.fill(dc, siz)
             self.surf_tiles.blit(it["image"], [cposx, cposy])
         elif datcell == "tileBody":
             pass
@@ -137,6 +240,9 @@ class Renderer:
     def render_all(self, layer):
         self.geo_full_render(layer)
         self.tiles_full_render(layer)
+        self.props_full_render()
+        if len(self.data["FE"]["effects"]):
+            self.rendermatrix(self.data["FE"]["effects"][0]["mtrx"])
 
     def render_geo_pixel(self, xp, yp, layer):
         def incorner(x, y):
@@ -241,3 +347,65 @@ class Renderer:
                                 curtool = [pos[0] * image1size, pos[1] * image1size]
                 pixel.blit(renderedimage, [0, 0], [curtool, cellsize2])
         return pixel
+
+    def findprop(self, name, cat=None):
+        if cat is not None:
+            for itemi, item in enumerate(self.props[cat]):
+                if item["nm"] == name:
+                    return item, [list(self.props.keys()).index(cat), itemi]
+        for cati, cats in self.props.items():
+            for itemi, item in enumerate(cats):
+                if item["nm"] == name:
+                    return item, [list(self.props.keys()).index(cati), itemi]
+        item = {
+            "nm": "notfound",
+            "tp": "standard",
+            "colorTreatment": "bevel",
+            "bevel": 3,
+            "sz": "point(2, 2)",
+            "repeatL": [1],
+            "tags": ["randomRotat"],
+            "layerExceptions": [],
+            "color": white,
+            "images": [notfound],
+            "notes": []
+        }
+        return item, [0, 0]
+
+    def props_full_render(self):
+        self.surf_props.fill(dc)
+        for indx, prop in enumerate(self.data["PR"]["props"]):
+            var = 0
+            if prop[4]["settings"].get("variation") is not None:
+                var = prop[4]["settings"]["variation"] - 1
+            found, _ = self.findprop(prop[1])
+            if found is None:
+                print(f"Prop {prop[1]} not Found! image not loaded")
+            image = found["images"][var] # .save(path2hash + str(id(self.data["PR"]["props"][indx][1])) + ".png")
+            qd = prop[3]
+            quads = []
+            for q in qd:
+                quads.append(toarr(q, "point"))
+
+            # surf = pg.image.fromstring(string, [ws, hs], "RGBA")
+            surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
+            surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
+            surf.set_colorkey(white)
+            surf.set_alpha(190)
+            self.surf_props.blit(surf, [mostleft / spritesize * image1size, mosttop / spritesize * image1size])
+            if prop[4].get("points") is not None:
+                propcolor = toarr(self.findprop(prop[1])[0]["previewColor"], "color")  # wires
+                for point in prop[4]["points"]:
+                    px, py = toarr(point, "point")
+                    pg.draw.circle(self.surf_props, propcolor, [px, py], 5)
+
+    def rendermatrix(self, matrix, mix=mixcol_empty):
+        for xp, x in enumerate(matrix):
+            for yp, cell in enumerate(x):
+                #surf = pg.surface.Surface([size, size])
+                col = mix.lerp(mixcol_fill, cell / 100)
+                #surf.set_alpha(col.a)
+                #surf.fill(col)
+                #self.surf_effect.blit(surf, [xp * size, yp * size])
+                self.surf_effect.fill(col, [xp * image1size, yp * image1size, image1size, image1size])
+                # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
