@@ -100,7 +100,7 @@ class TE(MenuWithField):
                         self.labels[0].set_text(
                             "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
 
-                bord = self.size // image1size
+                bord = self.size // image1size + 1
                 if self.cols and self.tool == 0:
                     pg.draw.rect(self.surface, canplace, [[cposx - bord, cposy - bord],
                                                           [self.tileimage["image"].get_width() + bord * 2,
@@ -274,6 +274,7 @@ class TE(MenuWithField):
         try:
             geodata = eval(pyperclip.paste())
             if type(geodata) != list or len(pyperclip.paste()) <= 2:
+                print("Error pasting data!")
                 return
             self.emptyarea()
             for block in geodata:
@@ -480,7 +481,7 @@ class TE(MenuWithField):
         w, h = tile["size"]
         sp = tile["cols"][0]
         sp2 = tile["cols"][1]
-        shift = self.size // image1size
+        shift = self.size // image1size + 1
         if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]):
             return
         if self.findparampressed("movepreview"):

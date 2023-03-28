@@ -299,7 +299,7 @@ class PE(MenuWithField):
                 else:
                     self.place()
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
-                if self.selectedprop["tp"] == "long":
+                if self.selectedprop["tp"] == "long" and render:
                     self.transform_reset()
                     p1 = pg.Vector2(self.rectdata[0])
                     p2 = pg.Vector2(posoffset)
@@ -325,10 +325,9 @@ class PE(MenuWithField):
                     i.set_colorkey(white)
                     self.surface.blit(i, (pg.Vector2(self.rectdata[1]) + mpos) / 2 - pg.Vector2(i.get_size()) / 2)
 
-
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
-                if self.selectedprop["tp"] == "long" and not delmode and not copymode:
+                if self.selectedprop["tp"] == "long" and render:
                     self.place((pg.Vector2(self.rectdata[0]) + posoffset) / 2)
                     self.transform_reset()
 
@@ -370,10 +369,13 @@ class PE(MenuWithField):
             rl = sum(self.selectedprop["repeatL"]) if self.selectedprop.get("repeatL") else self.selectedprop["depth"]
             widgets.fastmts(self.surface, f"Depth: {self.depth} to {rl + self.depth}", *depthpos, white)
             if copymode or delmode:
-                _, near, _ = self.find_nearest(*posoffset)
-                ofc = pg.Vector2(self.xoffset, self.yoffset)
-                pos2 = (near / spritesize + ofc) * self.size + self.field.rect.topleft
-                pg.draw.line(self.surface, red, mpos, pos2, 10)
+                _, _, indx = self.find_nearest(*posoffset)
+                if indx != -1:
+                    for nearp in self.data["PR"]["props"][indx][3]:
+                        near = pg.Vector2(toarr(nearp, "point"))
+                        ofc = pg.Vector2(self.xoffset, self.yoffset)
+                        pos2 = (near / spritesize + ofc) * self.size + self.field.rect.topleft
+                        pg.draw.line(self.surface, red, mpos, pos2, 10)
             self.movemiddle(bp, pos)
         else:
             if not self.matshow:
@@ -394,9 +396,12 @@ class PE(MenuWithField):
         mpos = pg.Vector2(x, y)
         near = pg.Vector2(bignum, bignum)
         propnear = []
-        nindx = 0
+        nindx = -1
         for indx, prop in enumerate(self.data["PR"]["props"]):
-            vec = pg.Vector2(toarr(prop[3][0], "point"))
+            vec = pg.Vector2(0, 0)
+            for point in prop[3]:
+                vec += pg.Vector2(toarr(point, "point"))
+            vec /= 4
             if vec.distance_to(mpos) < near.distance_to(mpos):
                 near = vec
                 nindx = indx

@@ -129,22 +129,25 @@ def quadtransform(quads, image: pg.Surface):
 
 
 class Renderer:
-    def __init__(self, data, tiles, props, propcolors):
+    def __init__(self, data, tiles, props, propcolors, render=True):
         self.tiles = tiles
         self.props = props
         self.propcolors = propcolors
         self.data = data
 
-        size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
-        self.surf_geo = pg.Surface(size)
-        self.surf_tiles = pg.Surface(size)
-        self.surf_tiles = self.surf_tiles.convert_alpha()
-        self.surf_props = pg.Surface(size)
-        self.surf_props = self.surf_props.convert_alpha()
-        self.surf_effect = pg.Surface(size)
-        self.surf_effect.set_alpha(190)
+        if render:
+            size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
+            self.surf_geo = pg.Surface(size)
+            self.surf_tiles = pg.Surface(size)
+            self.surf_tiles = self.surf_tiles.convert_alpha()
+            self.surf_props = pg.Surface(size)
+            self.surf_props = self.surf_props.convert_alpha()
+            self.surf_effect = pg.Surface(size)
+            self.surf_effect.set_alpha(190)
 
-    def set_surface(self, size):
+    def set_surface(self, size=None):
+        if size is None:  # auto
+            size = [len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size]
         self.surf_geo = pg.Surface(size)
         self.surf_tiles = pg.Surface(size)
         self.surf_tiles = self.surf_tiles.convert_alpha()

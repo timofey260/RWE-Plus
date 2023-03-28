@@ -125,7 +125,7 @@ class GE(MenuWithField):
                     self.surface.blit(self.toolrender, pos2, [curtool, cellsize2])
             rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
                     len(self.data["GE"][0]) * self.size]
-            pg.draw.rect(self.field.field, border, rect, self.size // image1size)
+            pg.draw.rect(self.field.field, border, rect, self.size // image1size + 1)
             if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
                 tilename = settings["GE"]["names"][str(self.data["GE"][posoffset[0]][posoffset[1]][self.layer][0])]
                 self.labels[0].set_text(f"Tile: {tilename} {self.data['GE'][posoffset[0]][posoffset[1]][self.layer]}")
@@ -257,6 +257,7 @@ class GE(MenuWithField):
                     self.data["GE"][-self.xoffset + xi][-self.yoffset + yi][self.layer] = y
                     self.area[-self.xoffset + xi][-self.yoffset + yi] = 0
             self.detecthistory(["GE"])
+            self.renderer.geo_render_area(self.area, self.layer)
             self.rfa()
         except:
             print("Error pasting data!")

@@ -73,7 +73,7 @@ def toarr(col: str, mark):
     return a
 
 
-def makearr(col: list, mark):
+def makearr(col: list | pg.Vector2, mark):
     return f"{mark}({col[0]}, {col[1]})"
 
 

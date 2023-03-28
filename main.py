@@ -63,9 +63,19 @@ def keypress(window):
             surf.savef()
             run = False
         case "open":
-            print("Open")
             surf.savef()
-            run = False
+            file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
+            if file is not None and os.path.exists(file):
+                launchload(file)
+                undobuffer = []
+                redobuffer = []
+                surf.renderer.data = file
+                surf.data = file
+                surf.renderer.set_surface()
+                surf.renderer.render_all(0)
+                surf = MN(window, surf.renderer)
+                os.system("cls")
+            print("Open")
 
 
 def undohistory():
@@ -125,8 +135,7 @@ def asktoexit(file, file2):
     else:
         sys.exit(0)
 
-
-def launch(level):
+def launchload(level):
     global bol, surf, fullscreen, undobuffer, redobuffer, file, file2, run
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
@@ -145,16 +154,21 @@ def launch(level):
         file["level"] = os.path.basename(level)
         file["path"] = level
         file["dir"] = os.path.abspath(level)
+    undobuffer = []
+    redobuffer = []
+
+
+def launch(level):
+    global bol, surf, fullscreen, undobuffer, redobuffer, file, file2, run
+    launchload(level)
     items = inittolist()
     propcolors = getcolors()
     props = getprops(items)
     file2 = copy.deepcopy(file)
-    undobuffer = []
-    redobuffer = []
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
-    pg.display.set_icon(pg.image.load(path + "icon.png"))
+    # pg.display.set_icon(pg.image.load(path + "icon.png"))
     renderer = Renderer(file, items, props, propcolors)
     renderer.render_all(0)
     surf = MN(window, renderer)
@@ -247,7 +261,8 @@ def loadmenu():
     width = 1280
     height = 720
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
-    surf = load(window, {"path": ""})
+    renderer = Renderer({"path": ""}, None, None, None, False)
+    surf = load(window, renderer)
     pg.display.set_icon(pg.image.load(path + "icon.png"))
     while run:
         for event in pg.event.get():
@@ -258,18 +273,13 @@ def loadmenu():
                     surf.resize()
         match surf.message:
             case "new":
-                filepath = surf.asksaveasfilename(defaultextension=[".wep"])
-                print(filepath)
-                if filepath is not None:
-                    open(filepath, "w+").write(json.dumps(turntoproject(open(path + "default.txt", "r").read())))
-                    launch(filepath)
-                    surf = load(window, {"path": ""})
+                launch(-1)
                 surf.message = ""
             case "open":
                 file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
                 if file is not None and os.path.exists(file):
                     launch(file)
-                    surf = load(window, {"path": ""})
+                    surf = load(window, renderer)
                 surf.message = ""
         keypress(window)
         window.fill(pg.color.Color(settings["global"]["color"]))
