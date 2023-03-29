@@ -674,6 +674,11 @@ class MenuWithField(Menu):
             sp = itm["cols"][0]
             sp2 = itm["cols"][1]
             w, h = itm["size"]
+
+            ofs = pg.Vector2(self.xoffset, self.yoffset)
+            pg.draw.rect(self.fieldadd, red, [backx * self.size,
+                                              backy * self.size,
+                                              w * self.size, h * self.size])
             for x2 in range(w):
                 for y2 in range(h):
                     posx = backx + x2
@@ -681,6 +686,7 @@ class MenuWithField(Menu):
                     csp = sp[x2 * h + y2]
                     self.area[posx][posy] = 0
                     if csp != -1:
+                        # pg.draw.rect(self.fieldadd, red, [posx * self.size, posy * self.size, self.size, self.size])
                         self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
                     if sp2 != 0:
                         try:

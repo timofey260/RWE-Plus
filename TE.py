@@ -122,8 +122,8 @@ class TE(MenuWithField):
                 self.mousp = False
                 self.emptyarea()
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
-                if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
-                    pass
+                # if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
+                #     pass
                 if self.tileimage["tp"] != "pattern" or self.tool == 0:
                     if self.tool == 0:
                         if self.cols:
@@ -445,7 +445,7 @@ class TE(MenuWithField):
                         if csp2 != -1:
                             if self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer + 1]["tp"] != "default":
                                 return False
-                            if self.data["GE"][x + x2][y + y2][self.layer + 1][0] != csp and not force_geo:
+                            if self.data["GE"][x + x2][y + y2][self.layer + 1][0] != csp2 and not force_geo:
                                 return False
 
         return True
