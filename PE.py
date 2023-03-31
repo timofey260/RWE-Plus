@@ -61,6 +61,11 @@ class PE(MenuWithField):
         self.helppoins = pg.Vector2(0, 0)
         self.helppoins2 = pg.Vector2(0, 0)
 
+        self.delmode = False
+        self.copymode = False
+        self.renderprop = True
+        self.modpress = False
+
         super().__init__(surface, "PE", renderer)
         self.drawprops = True
         cat = list(self.props.keys())[self.currentcategory]
@@ -227,9 +232,9 @@ class PE(MenuWithField):
 
             posoffset = [(pos[0] - self.xoffset) * spritesize, (pos[1] - self.yoffset) * spritesize]
             bp = pg.mouse.get_pressed(3)
-            delmode = self.findparampressed("delete_mode")
-            copymode = self.findparampressed("copy_mode")
-            render = not delmode and not copymode
+            self.delmode = self.findparampressed("delete_mode")
+            self.copymode = self.findparampressed("copy_mode")
+            self.renderprop = not self.delmode and not self.copymode
             if self.lastpos != mpos and self.selectedprop["tp"] == "rope":
                 self.lastpos = mpos.copy()
                 ropepos = (mpos - pg.Vector2(self.field.rect.topleft)) / self.size * image1size - pg.Vector2(self.xoffset, self.yoffset) * image1size
@@ -268,14 +273,16 @@ class PE(MenuWithField):
                 if self.findparampressed("propvariation_change"):
                     self.change_variation_up()
                     self.settingsupdate()
-                elif delmode:
+                elif self.delmode:
+                    self.modpress = True
                     if len(self.data["PR"]["props"]) > 0:
                         *_, near = self.find_nearest(*posoffset)
                         self.data["PR"]["props"].pop(near)
                         self.renderer.props_full_render()
                         self.rfa()
                         self.updatehistory([["PR", "props"]])
-                elif copymode:
+                elif self.copymode:
+                    self.modpress = True
                     if len(self.data["PR"]["props"]) > 0:
                         name, _, near = self.find_nearest(*posoffset)
                         self.setprop(name[1])
@@ -299,7 +306,7 @@ class PE(MenuWithField):
                 else:
                     self.place()
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
-                if self.selectedprop["tp"] == "long" and render:
+                if self.selectedprop["tp"] == "long" and self.renderprop:
                     self.transform_reset()
                     p1 = pg.Vector2(self.rectdata[0])
                     p2 = pg.Vector2(posoffset)
@@ -327,9 +334,10 @@ class PE(MenuWithField):
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
-                if self.selectedprop["tp"] == "long" and render:
+                if self.selectedprop["tp"] == "long" and self.renderprop and not self.modpress:
                     self.place((pg.Vector2(self.rectdata[0]) + posoffset) / 2)
                     self.transform_reset()
+                self.modpress = False
 
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False
@@ -343,7 +351,7 @@ class PE(MenuWithField):
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = True
 
-            if render:
+            if self.renderprop:
                 if not any(self.helds):
                     if self.snap:
                         self.surface.blit(self.selectedimage, pos2)
@@ -368,7 +376,7 @@ class PE(MenuWithField):
                     widgets.fastmts(self.surface, f"Variation: {self.prop_settings.get('variation')}", *varpos, white)
             rl = sum(self.selectedprop["repeatL"]) if self.selectedprop.get("repeatL") else self.selectedprop["depth"]
             widgets.fastmts(self.surface, f"Depth: {self.depth} to {rl + self.depth}", *depthpos, white)
-            if copymode or delmode:
+            if self.copymode or self.delmode:
                 _, _, indx = self.find_nearest(*posoffset)
                 if indx != -1:
                     for nearp in self.data["PR"]["props"][indx][3]:
@@ -625,6 +633,8 @@ class PE(MenuWithField):
         self.updateproptransform()
 
     def place(self, longpos=None):
+        if not self.renderprop:
+            return 
         quads = self.quads.copy()
         quads2 = quads.copy()
         mousepos = pg.Vector2(pg.mouse.get_pos())
