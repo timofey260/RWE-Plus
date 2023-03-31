@@ -558,7 +558,7 @@ class MenuWithField(Menu):
         if self.draweffects > len(self.data["FE"]["effects"]):
             self.draweffects = 0
         if self.draweffects != 0:
-            self.renderer.rendermatrix(self.data["FE"]["effects"][self.draweffects - 1]["mtrx"])
+            self.renderer.rendereffect(self.draweffects - 1)
         self.rfa()
 
     def toggleprops(self):

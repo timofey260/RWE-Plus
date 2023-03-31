@@ -114,6 +114,7 @@ class FE(MenuWithField):
                 #self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
                 self.mousp = True
                 self.renderfield()
+                self.renderer.rerendereffect()
 
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False
@@ -279,6 +280,7 @@ class FE(MenuWithField):
                 self.selectedeffect = se
                 self.rebuttons()
                 self.makeparams()
+                self.renderer.rerendereffect()
                 return
             case "Move Forth":
                 se = self.selectedeffect + 1
@@ -288,6 +290,7 @@ class FE(MenuWithField):
                     self.selectedeffect = se
                     self.rebuttons()
                     self.makeparams()
+                    self.renderer.rerendereffect()
                 return
 
         self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = text

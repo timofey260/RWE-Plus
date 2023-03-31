@@ -134,6 +134,7 @@ class Renderer:
         self.props = props
         self.propcolors = propcolors
         self.data = data
+        self.effect_index = 0
 
         if render:
             size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
@@ -245,7 +246,7 @@ class Renderer:
         self.tiles_full_render(layer)
         self.props_full_render()
         if len(self.data["FE"]["effects"]):
-            self.rendermatrix(self.data["FE"]["effects"][0]["mtrx"])
+            self.rendereffect(0)
 
     def render_geo_pixel(self, xp, yp, layer):
         def incorner(x, y):
@@ -402,8 +403,12 @@ class Renderer:
                     px, py = toarr(point, "point")
                     pg.draw.circle(self.surf_props, propcolor, [px, py], 5)
 
-    def rendermatrix(self, matrix, mix=mixcol_empty):
-        for xp, x in enumerate(matrix):
+    def rerendereffect(self):
+        self.rendereffect(self.effect_index)
+
+    def rendereffect(self, indx, mix=mixcol_empty):
+        self.effect_index = indx
+        for xp, x in enumerate(self.data["FE"]["effects"][indx]["mtrx"]):
             for yp, cell in enumerate(x):
                 #surf = pg.surface.Surface([size, size])
                 col = mix.lerp(mixcol_fill, cell / 100)
