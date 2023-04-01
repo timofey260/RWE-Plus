@@ -168,6 +168,11 @@ class Renderer:
             for yp, y in enumerate(x):
                 if y == 1:
                     continue
+                self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [xp * image1size, yp * image1size, image1size, image1size])
+        for xp, x in enumerate(area):
+            for yp, y in enumerate(x):
+                if y == 1:
+                    continue
                 self.render_tile_pixel(xp, yp, layer)
 
     def render_tile_pixel(self, xp, yp, layer):
@@ -183,13 +188,20 @@ class Renderer:
         datdata = cell["data"]
 
         if datcell == "default":
-            self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
+            # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
             # pg.draw.rect(field.field, red, [posx, posy, size, size], 3)
             pass
         elif datcell == "material":
             if self.data["GE"][xp][yp][layer][0] != 0:
                 area = pg.rect.Rect([graphics["matposes"].index(datdata) * image1size, 0, image1size, image1size])
-                self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
+                # for xadd, yadd in col4:
+                #     try:
+                #         if self.data["TE"]["tlMatrix"][xp + xadd][yp + yadd][layer]["tp"] in ["tileHead", "tileBody"]:
+                #             break
+                #     except IndexError:
+                #         continue
+                # else:
+                # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
                 self.surf_tiles.blit(material, [posx, posy], area)
         elif datcell == "tileHead":
             it = None
