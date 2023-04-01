@@ -93,9 +93,7 @@ def undohistory():
     redobuffer.append(copy.deepcopy(undobuffer.pop()))
     if MenuWithField in type(surf).__bases__:
         surf.renderer.data = surf.data
-        if "GE" in historyelem[1][0] or "GE" in historyelem[0]:
-            print("render")
-            surf.render_geo_full()
+        surf.renderer.render_all(surf.layer)
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
@@ -115,8 +113,7 @@ def redohistory():
     undobuffer.append(copy.deepcopy(redobuffer.pop()))
     if MenuWithField in type(surf).__bases__:
         surf.renderer.data = surf.data
-        if "GE" in historyelem[1][0] or "GE" in historyelem[0]:
-            surf.render_geo_full()
+        surf.renderer.render_all(surf.layer)
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
