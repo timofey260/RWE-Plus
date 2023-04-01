@@ -135,6 +135,7 @@ class Renderer:
         self.propcolors = propcolors
         self.data = data
         self.effect_index = 0
+        self.lastlayer = 0
 
         if render:
             size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
@@ -170,6 +171,7 @@ class Renderer:
                 self.render_tile_pixel(xp, yp, layer)
 
     def render_tile_pixel(self, xp, yp, layer):
+        self.lastlayer = layer
         images = {}
         tiledata = self.data["TE"]["tlMatrix"]
 
@@ -242,6 +244,7 @@ class Renderer:
                 self.surf_geo.blit(self.render_geo_pixel(xp, yp, layer), [xp * image1size, yp * image1size])
 
     def render_all(self, layer):
+        self.lastlayer = layer
         self.geo_full_render(layer)
         self.tiles_full_render(layer)
         self.props_full_render()
@@ -249,6 +252,7 @@ class Renderer:
             self.rendereffect(0)
 
     def render_geo_pixel(self, xp, yp, layer):
+        self.lastlayer = layer
         def incorner(x, y):
             try:
                 return self.data["GE"][x][y][i][1]

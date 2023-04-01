@@ -447,6 +447,8 @@ class MenuWithField(Menu):
         self.area = [[1 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
 
     def rfa(self):
+        if self.layer != self.renderer.lastlayer:
+            self.renderer.render_all(self.layer)
         self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
         if self.drawgeo:
             # self.renderer.geo_full_render(self.layer)
@@ -674,8 +676,6 @@ class MenuWithField(Menu):
             sp = itm["cols"][0]
             sp2 = itm["cols"][1]
             w, h = itm["size"]
-
-            ofs = pg.Vector2(self.xoffset, self.yoffset)
             pg.draw.rect(self.fieldadd, red, [backx * self.size,
                                               backy * self.size,
                                               w * self.size, h * self.size])

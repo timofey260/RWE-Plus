@@ -140,6 +140,7 @@ class TE(MenuWithField):
                 self.fieldadd.fill(white)
                 self.mousp = True
                 self.renderer.tiles_render_area(self.area, self.layer)
+                self.renderer.geo_render_area(self.area, self.layer)
                 self.rfa()
 
             self.movemiddle(bp, pos)
@@ -227,6 +228,7 @@ class TE(MenuWithField):
                 if fg:
                     self.detecthistory(["GE"])
                 self.renderer.tiles_render_area(self.area, self.layer)
+                self.renderer.geo_render_area(self.area, self.layer)
                 self.rfa()
                 self.mousp2 = True
         else:

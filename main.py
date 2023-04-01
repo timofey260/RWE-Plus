@@ -94,6 +94,7 @@ def undohistory():
     if MenuWithField in type(surf).__bases__:
         surf.renderer.data = surf.data
         surf.renderer.render_all(surf.layer)
+        surf.rfa()
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
@@ -114,6 +115,7 @@ def redohistory():
     if MenuWithField in type(surf).__bases__:
         surf.renderer.data = surf.data
         surf.renderer.render_all(surf.layer)
+        surf.rfa()
         if hasattr(surf, "rebuttons"):
             surf.rebuttons()
 
