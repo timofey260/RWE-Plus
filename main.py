@@ -20,7 +20,7 @@ undobuffer = []
 redobuffer = []
 surf: Menu | MenuWithField = None
 
-tag = "2.1"
+tag = "2.1.1"
 version = "version: " + tag
 
 
