@@ -129,19 +129,19 @@ def inittolist():
                 tp = ""
             if tp == "box":  # math
                 ln = 4
-                size = (ln * sz[1] + (item["bfTiles"] * 2)) * 20
-                rect = pg.rect.Rect([0, size, sz[0] * 16, sz[1] * 16])
-            elif ((ln * sz[1] + (item["bfTiles"] * 2 * ln)) * 20 + 1) > img.get_height():
-                rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
+                size = (ln * sz[1] + (item["bfTiles"] * 2)) * image1size
+                rect = pg.rect.Rect([0, size, sz[0] * spritesize, sz[1] * spritesize])
+            elif ((ln * sz[1] + (item["bfTiles"] * 2 * ln)) * image1size + 1) > img.get_height():
+                rect = pg.rect.Rect([0, img.get_height() - sz[1] * spritesize, sz[0] * spritesize, sz[1] * spritesize])
             else:
-                size = (sz[1] + (item["bfTiles"] * 2)) * ln * 20
-                rect = pg.rect.Rect([0, size + 1, sz[0] * 16, sz[1] * 16])
+                size = (sz[1] + (item["bfTiles"] * 2)) * ln * image1size
+                rect = pg.rect.Rect([0, size + 1, sz[0] * spritesize, sz[1] * spritesize])
 
             try:
                 img = img.subsurface(rect)
             except ValueError:
                 try:
-                    rect = pg.rect.Rect([0, img.get_height() - sz[1] * 16, sz[0] * 16, sz[1] * 16])
+                    rect = pg.rect.Rect([0, img.get_height() - sz[1] * spritesize, sz[0] * spritesize, sz[1] * spritesize])
                     img = img.subsurface(rect)
                 except ValueError:
                     rect = pg.rect.Rect([0, 0, 1, 1])
@@ -301,10 +301,14 @@ def getprops(tiles: dict):
                 count2 += 1
                 title = f"tiles as prop {count2}"
             if tile["tp"] == "voxelStruct" and "notProp" not in tile["tags"]:
+                returnimage = pg.Surface(pg.Vector2(tile["image"].get_width(), tile["image"].get_height()) + pg.Vector2(spritesize, spritesize) * tile["bfTiles"] * 2)
+                returnimage.fill(pg.Color(255, 255, 255))
+                returnimage.blit(tile["image"], pg.Vector2(spritesize, spritesize) * tile["bfTiles"])
+                returnimage.set_colorkey(pg.Color(255, 255, 255))
                 itemlist.append({
                     "nm": tile["name"],
                     "tp": "standard",
-                    "images": [tile["image"]],
+                    "images": [returnimage],
                     "colorTreatment": "standard",
                     "color": settings["PE"]["elements_as_tiles_color"],
                     "sz": list(pg.Vector2(tile["size"]) + pg.Vector2(tile["bfTiles"] * 2, tile["bfTiles"] * 2)),
