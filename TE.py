@@ -559,6 +559,18 @@ class TE(MenuWithField):
     def changetools(self):
         self.tool = abs(1 - self.tool)
 
+    def findtile(self):
+        nd = {}
+        for cat, item in self.items.items():  # cursed
+            for i in item:
+                nd[i["name"]] = cat
+        name = self.find(nd, "Select a tile")
+        if name is None:
+            return
+        cat = self.findcat(name)
+        self.selectcat(cat)
+        self.set(cat, name)
+
     def copytile(self):
         pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
                math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]

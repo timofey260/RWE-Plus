@@ -20,7 +20,6 @@ def setasname(name):
     global inputfile
     inputfile = name
 
-
 class Menu:
     def __init__(self, surface: pg.surface.Surface, renderer, name):
         self.surface = surface
@@ -91,7 +90,7 @@ class Menu:
             print(os.path.splitext(self.data["path"])[0] + ".wep")
         else:
             savedest = self.asksaveasfilename()
-            if savedest != "":
+            if savedest != "" and savedest is not None:
                 open(savedest, "w").write(json.dumps(self.data))
                 self.data["level"] = os.path.basename(savedest)
                 self.data["path"] = savedest
@@ -121,6 +120,7 @@ class Menu:
 
         def appendbuttons():
             global filepath
+            widgets.resetpresses()
             f = os.listdir(filepath)
             f.reverse()
             buttons.clear()
@@ -142,6 +142,7 @@ class Menu:
                         count += 1
             for button in buttons:
                 button.resize()
+            widgets.enablebuttons = True
 
         inputfile = ''
         r = True
@@ -155,7 +156,7 @@ class Menu:
             for button in buttons:
                 button.blittooltip()
             label.blit()
-            widgets.fastmts(self.surface, "file name:", 0, 0, fontsize=50)
+            widgets.fastmts(self.surface, "File name:", 0, 0, fontsize=50)
 
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
@@ -233,6 +234,87 @@ class Menu:
             print("it's not a number")
             return None
 
+    def foundthis(self, text):
+        global inputfile
+        print(text)
+        inputfile = text + "\n"
+
+    def find(self, filelist: dict, q):
+        global inputfile
+        buttons = []
+        slider = 0
+        label = widgets.lable(self.surface, "Use scroll to navigate\nClick what you need\nType to search\nEscape to exit",
+                              [50, 0], black, 30)
+        label.resize()
+        widgets.bol = True
+
+        def appendbuttons():
+            buttons.clear()
+            count = 1
+            # newdict = {}
+            count2 = 0
+            for item, cat in filelist.items():
+                if 25 + 5*count > 100:
+                    break
+                if inputfile in item.lower() or inputfile in cat.lower():
+                    if count2 >= slider:
+                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + 5*count, 50, 5]), color2, item, onpress=self.foundthis, tooltip=cat))
+                        count += 1
+                    count2 += 1
+            for button in buttons:
+                button.resize()
+        inputfile = ''
+        r = True
+        appendbuttons()
+        while r:
+            self.surface.fill(color)
+            for button in buttons:
+                button.blitshadow()
+            for button in buttons:
+                button.blit()
+            for button in buttons:
+                button.blittooltip()
+            label.blit()
+            widgets.fastmts(self.surface, f"{q}:", 0, 0, fontsize=50)
+
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
+                    if event.unicode in allleters:
+                        inputfile += event.unicode
+                    elif event.key == pg.K_BACKSPACE:
+                        inputfile = inputfile[:-1]
+                        # elif event.key == pg.K_RETURN:
+                        #     r = False
+                    elif event.key == pg.K_ESCAPE:
+                        return None
+                    appendbuttons()
+                    slider = 0
+                if event.type == pg.QUIT:
+                    return None
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if event.button == 4:
+                        slider = max(slider - 1, 0)
+                        appendbuttons()
+                    elif event.button == 5:
+                        slider += 1
+                        appendbuttons()
+                if event.type == pg.WINDOWRESIZED:
+                    self.resize()
+                    label.resize()
+            if self.message == "ab":
+                slider = 0
+                self.message = ''
+                appendbuttons()
+            if "\n" in inputfile:
+                r = False
+                break
+            widgets.fastmts(self.surface, inputfile, 0, 50, fontsize=50)
+            pg.display.flip()
+            pg.display.update()
+        # i = input(q + "(leave blank for cancel): ")
+        widgets.bol = True
+        return inputfile.replace("\n", "")
+
     def savef_txt(self):
         savedest = self.asksaveasfilename(defaultextension=[".txt"])
         if savedest != "":
@@ -296,7 +378,8 @@ class Menu:
     def send(self, message):
         if message[0] == "-":
             self.mpos = 1
-            getattr(self, message[1:])()
+            if hasattr(self, message[1:]):
+                getattr(self, message[1:])()
 
     def findparampressed(self, paramname: str):
         for key, value in self.hotkeys.items():

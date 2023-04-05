@@ -17,7 +17,18 @@
   	  	"K_n+": "new",
   	  	"K_F11": "/fc",
   	  	"K_z+": "undo",
-  	  	"K_y+": "redo"
+  	  	"K_y+": "redo",
+
+  	  	"K_1+": "/-togglegeo",
+  		"K_2+": "/-toggletiles",
+  		"K_3+": "/-swichcameras",
+  		"K_4+": "/-toggleprops",
+  		"K_5+": "/-toggleeffects",
+  		"K_6+": "/-togglegrid",
+  		"K_LEFT": "/left",
+    	"K_RIGHT": "/right",
+    	"K_UP": "/up",
+    	"K_DOWN": "/down"
   	},
   	"LD": {
   		"unlock_keys": [],
@@ -28,13 +39,6 @@
   	},
   	"MN": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
-
-  		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
 
   	  	"K_q": "quit",
   	  	"K_r+": "render",
@@ -50,23 +54,11 @@
   	  	"K_z": "/LP",
   	  	"K_h": "/HK",
 
-  	  	"K_SPACE+": "-swichcameras",
-
-  	  	"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down"
+  	  	"K_SPACE+": "-swichcameras"
 
   	},
   	"GE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
-
-  		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
 
   		"K_ESCAPE": "/MN",
     	"K_l": "-swichlayers",
@@ -106,11 +98,6 @@
     	"K_SPACE+": "-swichcameras",
 
     	"K_SPACE": "rotate",
-    	
-    	"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down",
 
     	"K_LEFT+": "mleft",
     	"K_RIGHT+": "mright",
@@ -120,22 +107,10 @@
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 
-  		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
-
   		"K_ESCAPE": "/MN",
   		
     	"K_l": "-swichlayers",
     	"K_l+": "-swichlayers_back",
-
-    	"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down",
 
     	"K_g": "force_geometry",
     	"K_f": "force_place",
@@ -154,18 +129,12 @@
     	"K_SPACE": "-changetools",
     	"K_e": "-sad",
     	"K_q": "-copytile",
+    	"K_f+": "-findtile",
     	"K_LSHIFT": "movepreview"
 
   	},
 	"CE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_i", "K_k", "K_j", "K_l"],
-
-		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
 
 		"K_ESCAPE": "/MN",
 
@@ -185,12 +154,7 @@
 		"K_i": "-addup",
 		"K_k": "-adddown",
 		"K_j": "-addleft",
-		"K_l": "-addright",
-
-		"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down"
+		"K_l": "-addright"
 
   	},
 	"PE": {
@@ -199,13 +163,6 @@
 		],
 
 		"K_q+": "-changematshow",
-
-		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
 
 		"K_ESCAPE": "/MN",
 		"K_x": "-togglesnap",
@@ -248,11 +205,7 @@
     	"K_x": "pauseropephysics",
 
     	"K_SPACE@@": "cursor_propdepth_inverse",
-
-		"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down",
+    	"K_f+": "-findpropmenu",
 
     	"K_SPACE+": "-swichcameras"
   	},
@@ -260,13 +213,6 @@
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 
 		"K_q+": "-changematshow",
-
-		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
 
 		"K_ESCAPE": "/MN",
 
@@ -300,30 +246,14 @@
 		"K_SPACE+": "-swichcameras",
 
 		"K_x": "-deleteeffect",
-		"K_DELETE": "-deleteeffect",
-		"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down"
+		"K_DELETE": "-deleteeffect"
 
 
   	},
 	"EE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 
-		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
-
 		"K_ESCAPE": "/MN",
-
-		"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down",
 
     	"K_d": "-nowater",
     	"K_DELETE": "-nowater",
@@ -334,13 +264,6 @@
   	},
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
-
-  		"K_1+": "-togglegeo",
-  		"K_2+": "-toggletiles",
-  		"K_3+": "-swichcameras",
-  		"K_4+": "-toggleprops",
-  		"K_5+": "-toggleeffects",
-  		"K_6+": "-togglegrid",
 
   		"K_ESCAPE": "-save",
   		"@K_ESCAPE": "/MN",
@@ -372,11 +295,6 @@
 
   		"K_a+": "-undoshadow",
   		"K_d+": "-redoshadow",
-
-  		"K_LEFT": "left",
-    	"K_RIGHT": "right",
-    	"K_UP": "up",
-    	"K_DOWN": "down",
     	"K_SPACE+": "-swichcameras",
 
     	"K_RETURN": "-save"

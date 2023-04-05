@@ -4,6 +4,21 @@ import re
 from files import *
 import math
 
+notfound = pg.image.load(path + "notfound.png")
+notfound.set_colorkey(pg.Color(255, 255, 255))
+notfoundtile = {
+    "name": "unloaded tile",
+    "tp": "notfound",
+    "repeatL": [1],
+    "bfTiles": 0,
+    "image": notfound,
+    "size": [2, 2],
+    "category": "material",
+    "color": pg.Color(255, 255, 255),
+    "cols": [[-1], 0],
+    "cat": [1, 1],
+    "tags": [""]
+}
 
 def tojson(string: str):
     t = string.replace("[#", "{#").replace("point(", "\"point(").replace("rect(", "\"rect(").replace("color(",
@@ -301,9 +316,32 @@ def getprops(tiles: dict):
                 count2 += 1
                 title = f"tiles as prop {count2}"
             if tile["tp"] == "voxelStruct" and "notProp" not in tile["tags"]:
-                returnimage = pg.Surface(pg.Vector2(tile["image"].get_width(), tile["image"].get_height()) + pg.Vector2(spritesize, spritesize) * tile["bfTiles"] * 2)
+                # returnimage = pg.Surface(pg.Vector2(tile["image"].get_width(), tile["image"].get_height()) + pg.Vector2(spritesize, spritesize) * tile["bfTiles"] * 2)
+                # returnimage.fill(pg.Color(255, 255, 255))
+                # returnimage.blit(tile["image"], pg.Vector2(spritesize, spritesize) * tile["bfTiles"])
+                # returnimage.set_colorkey(pg.Color(255, 255, 255))
+                size = (pg.Vector2(tile["size"]) + pg.Vector2(tile["bfTiles"], tile["bfTiles"]) * 2) * image1size
+                returnimage = pg.Surface(size)
                 returnimage.fill(pg.Color(255, 255, 255))
-                returnimage.blit(tile["image"], pg.Vector2(spritesize, spritesize) * tile["bfTiles"])
+                try:
+                    img = pg.image.load(path2graphics + tile["name"] + ".png")
+                except:
+                    img = pg.transform.scale(notfound, size)
+                    returnimage.blit(pg.transform.scale(notfound, size), [0, 0])
+                    print(f"{tile['name']} is not Loaded properly")
+                img.set_colorkey(pg.Color(255, 255, 255))
+                truewidth = size.x
+                if truewidth > img.get_width():
+                    truewidth = img.get_width()
+                for layer in range(len(tile["repeatL"]) - 1, -1, -1):
+                    rect = pg.Rect(0, layer * size.y + 1, truewidth, size.y)
+                    try:
+                        returnimage.blit(img.subsurface(rect), [0, 0])
+                    except ValueError:
+                        if layer < 3:
+                            errorimg = pg.transform.scale(notfound, size)
+                            errorimg.set_colorkey(pg.Color(255, 255, 255))
+                            returnimage.blit(errorimg, [0, 0])
                 returnimage.set_colorkey(pg.Color(255, 255, 255))
                 itemlist.append({
                     "nm": tile["name"],

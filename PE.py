@@ -635,6 +635,16 @@ class PE(MenuWithField):
         self.quadsnor = self.quads.copy()
         self.updateproptransform()
 
+    def findpropmenu(self):
+        nd = {}
+        for cat, item in self.props.items():
+            for i in item:
+                nd[i["nm"]] = cat
+        name = self.find(nd, "Select a prop")
+        if name is None:
+            return
+        self.setprop(name)
+
     def place(self, longpos=None):
         if not self.renderprop:
             return 

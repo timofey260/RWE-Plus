@@ -57,21 +57,6 @@ col8 = [
 
 col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
 
-notfound = pg.image.load(path + "notfound.png")
-notfoundtile = {
-    "name": "unloaded tile",
-    "tp": "notfound",
-    "repeatL": [1],
-    "bfTiles": 0,
-    "image": notfound,
-    "size": [2, 2],
-    "category": "material",
-    "color": pg.Color(255, 255, 255),
-    "cols": [[-1], 0],
-    "cat": [1, 1],
-    "tags": [""]
-}
-
 color = pg.Color(settings["global"]["color"])
 color2 = pg.Color(settings["global"]["color2"])
 

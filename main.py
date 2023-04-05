@@ -9,7 +9,7 @@ from path_dict import PathDict
 from lingotojson import *
 from files import settings, hotkeys, path, application_path
 
-bol = True
+widgets.bol = True
 run = True
 keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
@@ -20,7 +20,7 @@ undobuffer = []
 redobuffer = []
 surf: Menu | MenuWithField = None
 
-tag = "2.1.1"
+tag = "2.1.2"
 version = "version: " + tag
 
 
@@ -135,7 +135,7 @@ def asktoexit(file, file2):
         sys.exit(0)
 
 def launchload(level):
-    global bol, surf, fullscreen, undobuffer, redobuffer, file, file2, run
+    global surf, fullscreen, undobuffer, redobuffer, file, file2, run
     if level == -1:
         file = turntoproject(open(path + "default.txt", "r").read())
         file["level"] = ""
@@ -158,7 +158,7 @@ def launchload(level):
 
 
 def launch(level):
-    global bol, surf, fullscreen, undobuffer, redobuffer, file, file2, run
+    global surf, fullscreen, undobuffer, redobuffer, file, file2, run
     launchload(level)
     items = inittolist()
     propcolors = getcolors()
@@ -192,13 +192,13 @@ def launch(level):
                     surf.resize()
                 case pg.KEYDOWN:
                     if event.key not in keys:
-                        if bol:
-                            bol = False
+                        if widgets.bol:
+                            widgets.bol = False
                             keypress(window)
                 case pg.KEYUP:
                     if event.key not in keys:
-                        if not bol:
-                            bol = True
+                        if not widgets.bol:
+                            widgets.bol = True
                 case pg.MOUSEBUTTONDOWN:
                     if event.button == 4:
                         surf.send("SU")
@@ -231,6 +231,8 @@ def launch(level):
                 case _:
                     if surf.message in menulist:
                         surf = getattr(sys.modules[__name__], surf.message)(window, renderer)
+                    else:
+                        surf.send(surf.message)
             surf.message = ""
         if len(surf.historybuffer) > 0:
             surf.historybuffer.reverse()
