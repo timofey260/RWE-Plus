@@ -247,6 +247,7 @@ class Menu:
                               [50, 0], black, 30)
         label.resize()
         widgets.bol = True
+        widgets.keybol = True
 
         def appendbuttons():
             buttons.clear()
@@ -306,13 +307,13 @@ class Menu:
                 self.message = ''
                 appendbuttons()
             if "\n" in inputfile:
-                r = False
                 break
             widgets.fastmts(self.surface, inputfile, 0, 50, fontsize=50)
             pg.display.flip()
             pg.display.update()
         # i = input(q + "(leave blank for cancel): ")
         widgets.bol = True
+        widgets.keybol = True
         return inputfile.replace("\n", "")
 
     def savef_txt(self):
@@ -477,11 +478,11 @@ class MenuWithField(Menu):
         self.fieldadd.fill(white)
         self.fieldadd.set_colorkey(white)
 
-        self.xoffset = 0
-        self.yoffset = 0
-        self.size = image1size
+        self.xoffset = self.renderer.xoffset
+        self.yoffset = self.renderer.yoffset
+        self.size = self.renderer.size
         self.rectdata = [[0, 0], [0, 0], [0, 0]]
-        self.layer = 0
+        self.layer = self.renderer.lastlayer
         self.emptyarea()
         if renderall:
             self.rfa()
@@ -556,6 +557,10 @@ class MenuWithField(Menu):
             self.renderfield()
 
     def blit(self, draw=True):
+        self.renderer.lastlayer = self.layer
+        self.renderer.xoffset = self.xoffset
+        self.renderer.yoffset = self.yoffset
+        self.renderer.size = self.size
         if draw:
             self.drawmap()
         if self.drawcameras:

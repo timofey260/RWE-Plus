@@ -3,7 +3,7 @@ TE: Some of floors don't have their texture on different materials,\nso be caref
 
 LE: You can change shadow color using <[-inverse]> key(s)
 
-FE: To fill areas faster, press <[str100]>
+FE: To fill more, press <[str100]>
 
 GE: Press <[rotate]> to rotate beams and slopes
 
@@ -12,18 +12,20 @@ You can open categories list by pressing <[-changematshow]>,\nor clicking catego
 You can easily read all hotkeys in hotkeys tab(<[/HK]>)
 Use Middle mouse button(MMB) to navigate on level
 Every menu can return you to menu with <[/MN]> button
-Move camera around with <[up]>, <[left]>, <[right]> and <[down]> keys
+Move camera around with <[/up]>, <[/left]>, <[/right]> and <[/down]> keys
 Save level before rendering it(<[save]>)
 Switch layers with <[-swichlayers]> key
 Use <[-swichcameras]> to enable camera showing on editor\nMight be helpful btw
-You can show any data in any editor by pressing\n<[-togglegeo]>, <[-toggletiles]>, <[-toggleprops]> and <[-toggleeffects]> buttons
+You can show any data in any editor by pressing\n<[/-togglegeo]>, <[/-toggletiles]>, <[/-toggleprops]> and <[/-toggleeffects]> buttons
 Copy geometry, tiles, effects and cameras by pressing <[-copylayer]>, <[-copytool]>, <[-copytool]>, <[-copycamera]>
-Undo your mistakes by pressing <[-undo]> or redo changes with <[-redo]>\nUse <[-undoshadow]> and <[-redoshadow]> for shadow image
+Undo your mistakes by pressing <[undo]> or redo changes with <[redo]>\nUse <[-undoshadow]> and <[-redoshadow]> for shadow image
+Use "..." button to find props(<[-findpropmenu]>), tiles(<[-findtile]>) and effects(<[-findeffect]>) with search menu
+Toggle grid by pressing <[-togglegrid]>
 
 Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
 Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
 Tile editor is my best and i hate Prop editor
-Prop editor ropes are here! 0w0
+Prop editor ropes are here! uwu
 
 bruh
 Welcome to RWE+

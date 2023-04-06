@@ -177,6 +177,7 @@ Generated using hotkeys to md converter
 * **ctrl + C** - -copytool - 
 * **ctrl + V** - -pastedata - 
 * **ctrl + Space** - -swichcameras - 
+* **ctrl + E** - -findeffect - 
 * **X** - -deleteeffect - 
 * **Delete** - -deleteeffect - 
 ### EE

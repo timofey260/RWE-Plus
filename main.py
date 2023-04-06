@@ -9,7 +9,7 @@ from path_dict import PathDict
 from lingotojson import *
 from files import settings, hotkeys, path, application_path
 
-widgets.bol = True
+widgets.keybol = True
 run = True
 keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
 movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
@@ -192,13 +192,13 @@ def launch(level):
                     surf.resize()
                 case pg.KEYDOWN:
                     if event.key not in keys:
-                        if widgets.bol:
-                            widgets.bol = False
+                        if widgets.keybol:
+                            widgets.keybol = False
                             keypress(window)
                 case pg.KEYUP:
                     if event.key not in keys:
-                        if not widgets.bol:
-                            widgets.bol = True
+                        if not widgets.keybol:
+                            widgets.keybol = True
                 case pg.MOUSEBUTTONDOWN:
                     if event.button == 4:
                         surf.send("SU")

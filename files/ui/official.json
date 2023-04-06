@@ -171,7 +171,8 @@
 			["TS", [96, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"],
 			["CT", [96, 10, 4, 4], [100, 100, 100], "copytool", "non", "Copy tool(<[-copytool]>)", ["geometry.png", [1, 2]]],
 			["PS", [96, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"]
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"],
+			["...", [96, 18, 4, 4], [100, 100, 100], "findtile", "non", "Browse(<[-findtile]>)"]
 			
 		],
 		"catpos": [73, 6, 23, 4],
@@ -270,7 +271,8 @@
 			["v", [2, 77, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
 			["CT", [2, 83, 4, 6], [100, 100, 100], "copytool", "non", "Copy effect zone(<[-copytool]>)", ["geometry.png", [1, 2]]],
 			["PS", [2, 89, 4, 6], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
+			["...", [96, 2, 4, 4], [100, 100, 100], "findeffect", "non", "Browse(<[-findeffect]>)"]
 			
 		],
 
@@ -351,7 +353,8 @@
 
 			["Settings", [74, 64, 22, 4], [100, 100, 100], "non", "non", "Prop settings"],
 			["Snap to grid", [80, 93, 20, 7], [100, 100, 100], "togglesnap", "non", "change snapping"],
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
+			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
+			["...", [96, 2, 4, 4], [100, 100, 100], "findpropmenu", "non", "Browse(<[-findpropmenu]>)"]
 			
 		],
 

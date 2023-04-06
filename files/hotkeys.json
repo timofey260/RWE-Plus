@@ -244,6 +244,7 @@
 		"K_v+": "-pastedata",
 
 		"K_SPACE+": "-swichcameras",
+		"K_e+": "-findeffect",
 
 		"K_x": "-deleteeffect",
 		"K_DELETE": "-deleteeffect"

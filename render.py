@@ -120,7 +120,11 @@ class Renderer:
         self.propcolors = propcolors
         self.data = data
         self.effect_index = 0
+
         self.lastlayer = 0
+        self.xoffset = 0
+        self.yoffset = 0
+        self.size = image1size
 
         if render:
             size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]

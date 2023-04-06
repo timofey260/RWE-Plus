@@ -6,6 +6,7 @@ pg.font.init()
 
 enablebuttons = True
 bol = True
+keybol = True
 mul = settings["global"]["colormul"]
 black = [0, 0, 0]
 white = [255, 255, 255]

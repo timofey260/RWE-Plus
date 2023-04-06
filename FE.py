@@ -311,6 +311,16 @@ class FE(MenuWithField):
         except ValueError:
             print("Invalid input!")
 
+    def findeffect(self):
+        nd = {}
+        for cat in effects:
+            for item in cat["efs"]:
+                nd[item["nm"]] = cat["nm"]
+        name = self.find(nd, "Select a prop")
+        if name is None:
+            return
+        self.addeffect(name)
+
     def prevparam(self):
         if self.paramindex - 1 >= 0:
             self.paramindex -= 1
