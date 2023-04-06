@@ -312,7 +312,7 @@ class Menu:
             pg.display.flip()
             pg.display.update()
         # i = input(q + "(leave blank for cancel): ")
-        widgets.bol = True
+        widgets.bol = False
         widgets.keybol = True
         return inputfile.replace("\n", "")
 

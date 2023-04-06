@@ -1,6 +1,8 @@
 import copy
 import json
 import re
+import subprocess
+
 from files import *
 import math
 
@@ -218,7 +220,8 @@ def renderlevel(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)
-    os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
+    subprocess.Popen(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}", shell=True)
+    #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     print(path2renderedlevels)
     os.system("explorer " + path2renderedlevels)
 
