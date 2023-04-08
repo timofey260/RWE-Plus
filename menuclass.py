@@ -114,8 +114,8 @@ class Menu:
         filepath = path2levels
         buttons = []
         slider = 0
-        label = widgets.lable(self.surface, "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit",
-                              [50, 0], black, 30)
+        labeltext = "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit\n"
+        label = widgets.lable(self.surface, labeltext, [50, 0], black, 30)
         label.resize()
 
         def appendbuttons():
@@ -143,6 +143,8 @@ class Menu:
             for button in buttons:
                 button.resize()
             widgets.enablebuttons = True
+            widgets.bol = False
+            label.set_text(labeltext + filepath)
 
         inputfile = ''
         r = True

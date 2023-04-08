@@ -182,16 +182,12 @@ class Renderer:
             pass
         elif datcell == "material":
             if self.data["GE"][xp][yp][layer][0] != 0:
-                area = pg.rect.Rect([graphics["matposes"].index(datdata) * image1size, 0, image1size, image1size])
-                # for xadd, yadd in col4:
-                #     try:
-                #         if self.data["TE"]["tlMatrix"][xp + xadd][yp + yadd][layer]["tp"] in ["tileHead", "tileBody"]:
-                #             break
-                #     except IndexError:
-                #         continue
-                # else:
-                # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
-                self.surf_tiles.blit(material, [posx, posy], area)
+                try:
+                    area = pg.rect.Rect([graphics["matposes"].index(datdata) * image1size, 0, image1size, image1size])
+                    self.surf_tiles.blit(material, [posx, posy], area)
+                except ValueError:
+                    self.surf_tiles.blit(notfound, [posx, posy])
+
         elif datcell == "tileHead":
             it = None
             if datdata[1] in images.keys(): # if image stored in hash, returning it, else adding to hash

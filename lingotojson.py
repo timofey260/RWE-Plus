@@ -23,8 +23,8 @@ notfoundtile = {
 }
 
 def tojson(string: str):
-    t = string.replace("#Data:", "#data:").replace("[#", "{#").replace("point(", "\"point(").replace("rect(", "\"rect(").replace("color(",
-                        "\"color(").replace(")", ")\"").replace("void", "\"void\"")
+    t = string.replace("#Data:", "#data:").replace("#Options:", "#options:")\
+        .replace("[#", "{#").replace("point(", "\"point(").replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")", ")\"").replace("void", "\"void\"")
     m = list(t)
     count = 0
     for i in m:
