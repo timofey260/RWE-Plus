@@ -383,6 +383,7 @@ class FE(MenuWithField):
         except IndexError:
             print("No elements in list!")
         self.selectedeffect = 0
+        self.paramindex = 0
         self.updatehistory([["FE"]])
         self.rebuttons()
         self.makeparams()

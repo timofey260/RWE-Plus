@@ -16,10 +16,6 @@ def rotatepoint(point, angle):
     return pg.Vector2([qx, qy])
 
 
-def setasname(name):
-    global inputfile
-    inputfile = name
-
 class Menu:
     def __init__(self, surface: pg.surface.Surface, renderer, name):
         self.surface = surface
@@ -71,6 +67,11 @@ class Menu:
 
         self.unlock_keys()
         self.resize()
+
+    def setasname(self, name):
+        global inputfile
+        inputfile = name
+        self.message = "ab"
 
     def unlock_keys(self):
         self.uc = []
@@ -133,7 +134,7 @@ class Menu:
                     if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
                         if y > 0:
                             buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
-                                                          onpress=setasname, tooltip="File"))
+                                                          onpress=self.setasname, tooltip="File"))
                         count += 1
                     elif os.path.isdir(os.path.join(filepath, file)):
                         if y > 0:

@@ -344,6 +344,7 @@ def getprops(tiles: dict):
                             errorimg = pg.transform.scale(notfound, size)
                             errorimg.set_colorkey(pg.Color(255, 255, 255))
                             returnimage.blit(errorimg, [0, 0])
+                returnimage = pg.transform.scale(returnimage, pg.Vector2(returnimage.get_size()) / image1size * spritesize)
                 returnimage.set_colorkey(pg.Color(255, 255, 255))
                 itemlist.append({
                     "nm": tile["name"],
