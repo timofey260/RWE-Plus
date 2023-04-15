@@ -229,8 +229,9 @@ class PE(MenuWithField):
                    math.floor((mpos.y - self.field.rect.y) / self.size)]
 
             realpos = mpos - self.field.rect.topleft
-            pos2 = pg.Vector2(round(math.floor(realpos.x / self.size) * self.size - self.selectedimage.get_width() / 2, 4),
-                              round(math.floor(realpos.y / self.size) * self.size - self.selectedimage.get_height() / 2, 4))
+            s2 = self.size / 2
+            pos2 = pg.Vector2(round(math.floor(realpos.x / s2) * s2 - self.selectedimage.get_width() / 2, 4),
+                              round(math.floor(realpos.y / s2) * s2 - self.selectedimage.get_height() / 2, 4))
             pos2 += self.field.rect.topleft
 
             posoffset = [(pos[0] - self.xoffset) * spritesize, (pos[1] - self.yoffset) * spritesize]
@@ -655,8 +656,8 @@ class PE(MenuWithField):
         if self.snap:
             realpos = mousepos - self.field.rect.topleft
             posonfield = pg.Vector2(
-                round((math.floor(realpos.x / self.size) - self.xoffset) * spritesize, 4),
-                round((math.floor(realpos.y / self.size) - self.yoffset) * spritesize, 4))
+                round(math.floor(realpos.x / (self.size / 2)) * (spritesize / 2) - self.xoffset * spritesize, 4),
+                round(math.floor(realpos.y / (self.size / 2)) * (spritesize / 2) - self.yoffset * spritesize, 4))
         qv = []
         for i, q in enumerate(quads):
             vec = pg.Vector2(q)
