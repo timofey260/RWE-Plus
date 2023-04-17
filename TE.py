@@ -96,7 +96,7 @@ class TE(MenuWithField):
                     self.mpos = posoffset
                     self.lastfg = fg
                     self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
-                    if self.canplaceit(posoffset[0], posoffset[1], cposxo, cposyo):
+                    if self.canplaceit(posoffset[0], posoffset[1], posoffset[0], posoffset[1]):
                         self.labels[0].set_text(
                             "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
 
@@ -428,26 +428,34 @@ class TE(MenuWithField):
         w, h = self.tileimage["size"]
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]
-        if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]) or x < 0 or y < 0:
+        px = x + int((w * .5) + .5) - 1  # center coordinates
+        py = y + int((h * .5) + .5) - 1
+        if px >= len(self.data["GE"]) or py >= len(self.data["GE"][0]) or px < 0 or py < 0:
             return False
+        #if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]) or x < 0 or y < 0:
+        #    return False
         if self.tileimage["category"] == "material":
             return self.data["GE"][x][y][self.layer][0] not in [0] and self.data["TE"]["tlMatrix"][x][y][self.layer][
                 "tp"] == "default"
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
+                xpos = x + x2
+                ypos = y + y2
+                if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
+                    continue
                 if csp != -1:
-                    if self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer]["tp"] != "default":
+                    if self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]["tp"] != "default":
                         return False
-                    if self.data["GE"][x + x2][y + y2][self.layer][0] != csp and not force_geo:
+                    if self.data["GE"][xpos][ypos][self.layer][0] != csp and not force_geo:
                         return False
                 if sp2 != 0:
                     if self.layer + 1 <= 2:
                         csp2 = sp2[x2 * h + y2]
                         if csp2 != -1:
-                            if self.data["TE"]["tlMatrix"][x + x2][y + y2][self.layer + 1]["tp"] != "default":
+                            if self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1]["tp"] != "default":
                                 return False
-                            if self.data["GE"][x + x2][y + y2][self.layer + 1][0] != csp2 and not force_geo:
+                            if self.data["GE"][xpos][ypos][self.layer + 1][0] != csp2 and not force_geo:
                                 return False
 
         return True
@@ -484,7 +492,9 @@ class TE(MenuWithField):
         sp = tile["cols"][0]
         sp2 = tile["cols"][1]
         shift = self.size // image1size + 1
-        if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]):
+        px = x + int((w * .5) + .5) - 1  # center coordinates
+        py = y + int((h * .5) + .5) - 1
+        if px >= len(self.data["GE"]) or py >= len(self.data["GE"][0]) or px < 0 or py < 0:
             return
         if self.findparampressed("movepreview"):
             if prev:
@@ -514,11 +524,15 @@ class TE(MenuWithField):
         sp2 = self.tileimage["cols"][1]
         if not self.test_cols(x, y):
             return
+        if px > len(self.data["GE"]) or py > len(self.data["GE"][0]) or px < 0 or py < 0:
+            return
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
                 xpos = x + x2
                 ypos = y + y2
+                if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
+                    continue
                 if self.tileimage["category"] == "material":
                     self.area[xpos][ypos] = 0
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
