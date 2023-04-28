@@ -151,6 +151,9 @@
 		"K_c+": "-copycamera",
 		"K_v+": "-pastedata",
 
+		"K_l": "-swichlayers",
+    	"K_l+": "-swichlayers_back",
+
 		"K_i": "-addup",
 		"K_k": "-adddown",
 		"K_j": "-addleft",
@@ -334,5 +337,11 @@
   	  	"K_h": "-HK",
   	  	"K_m": "-MN",
   	  	"K_r": "-globalkeys"
+	},
+	"TT": {
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
+		"K_l": "-swichlayers",
+    	"K_l+": "-swichlayers_back",
+    	"K_SPACE": "-rotate"
 	}
 }

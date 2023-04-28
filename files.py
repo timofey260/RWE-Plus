@@ -12,6 +12,7 @@ else:
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
 path = application_path + "\\files\\"
+path2tutorial = path + "tutorial\\"
 path2ui = path + "ui\\"
 path2graphics = application_path + "\\drizzle\\Data\\Graphics\\"
 path2cast = application_path + "\\drizzle\\Data\\Cast\\"

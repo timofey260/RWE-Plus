@@ -1,6 +1,7 @@
 import pygame as pg
 import copy
 from files import settings, fs, path, map, allleters
+from render import gray, darkgray
 
 pg.font.init()
 
@@ -84,6 +85,8 @@ class button:
         self.col2 = pg.Color(abs(self.col.r - mul), abs(self.col.g - mul), abs(self.col.b - mul))
         self.glow = 0
         self.fontsize = sum(pg.display.get_window_size()) // 74
+        self.enabled = True
+        self.visible = True
 
         self.text = text
         self.originaltext = text
@@ -112,6 +115,12 @@ class button:
 
     def blit(self, fontsize=None):
         global bol
+        if not self.enabled:
+            pg.draw.rect(self.surface, darkgray, self.rect, 0, settings["global"]["roundbuttons"])
+            textblit(self.surface, self.textimage, self.rect.center[0], self.rect.center[1], True)
+            return
+        if not self.visible:
+            return
         if fontsize is not None and fontsize != self.fontsize:
             self.set_text(self.text, fontsize)
             self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
@@ -159,6 +168,8 @@ class button:
             self.surface.blit(self.icon, pos)
 
     def blitshadow(self):
+        if not self.enabled or not  self.visible:
+            return
         invglow = 100 - self.glow
         r2 = self.rect.copy()
         r2 = r2.move(settings["global"]["doublerectoffsetx"] / 100 * invglow,
@@ -166,6 +177,8 @@ class button:
         pg.draw.rect(self.surface, self.col2, r2, 0, settings["global"]["roundbuttons"])
 
     def blittooltip(self):
+        if not self.visible:
+            return
         if self.onmouseover():
             textblit(self.surface, self.tooltipimage, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, False)
             # mts(self.surface, self.tooltip, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, white, centered=False)
@@ -227,8 +240,11 @@ class window:
             [self.rect.width / 100 * surface.get_width(), self.rect.height / 100 * surface.get_height()])
         self.color = data["color"]
         self.border = data["border"]
+        self.visible = True
 
     def blit(self, draw=True):
+        if not self.visible:
+            return
         if draw:
             pg.draw.rect(self.surface, self.color, self.rect)
         self.surface.blit(self.field, self.rect.topleft)
@@ -266,8 +282,11 @@ class lable:
         self.posp = copy.deepcopy(pos)
         self.color = color
         self.fontsize = fontsize
+        self.visible = True
 
     def blit(self):
+        if not self.visible:
+            return
         textblit(self.surface, self.textimage, self.pos[0], self.pos[1])
         # mts(self.surface, self.text, self.pos[0], self.pos[1], self.color, self.fontsize)
 

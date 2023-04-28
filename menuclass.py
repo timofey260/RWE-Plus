@@ -205,14 +205,16 @@ class Menu:
             print("it's not a string")
             return None
 
-    def askint(self, q):
-        self.savef()
+    def askint(self, q, savelevel=True):
+        if savelevel:
+            self.savef()
         i = ''
         nums = "0123456789-"
         r = True
         while r:
             self.surface.fill(color)
-            widgets.fastmts(self.surface, q + "(level was saved):", 0, 0, fontsize=50)
+            lws = "(level was saved):" if savelevel else ":"
+            widgets.fastmts(self.surface, q + lws, 0, 0, fontsize=50)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     return None

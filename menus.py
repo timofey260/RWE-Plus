@@ -10,4 +10,5 @@ from LP import * # NOQA
 from EE import * # NOQA
 from PE import * # NOQA
 from HK import * # NOQA
-menulist = ["MN", "GE", "TE", "LD", "LE", "LS", "FE", "CE", "LP", "EE", "PE", "HK"]
+from Tutorial import * # NOQA
+menulist = ["MN", "GE", "TE", "LD", "LE", "LS", "FE", "CE", "LP", "EE", "PE", "HK", "TT"]

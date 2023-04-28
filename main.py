@@ -20,7 +20,7 @@ undobuffer = []
 redobuffer = []
 surf: Menu | MenuWithField = None
 
-tag = "2.1.6"
+tag = "2.2.0"
 version = "version: " + tag
 
 
@@ -251,7 +251,12 @@ def launch(level):
             window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
         else:
             window.fill(pg.color.Color(settings["global"]["color"]))
-        surf.blit()
+        try:
+            surf.blit()
+        except KeyboardInterrupt:
+            pass
+        except:
+            surf.savef() # extra save level in case of eny crashes
         pg.display.flip()
         pg.display.update()
 
@@ -272,17 +277,38 @@ def loadmenu():
                     exit(0)
                 case pg.WINDOWRESIZED:
                     surf.resize()
+                case pg.MOUSEBUTTONDOWN:
+                    if event.button == 4:
+                        surf.send("SU")
+                    elif event.button == 5:
+                        surf.send("SD")
+                case pg.KEYDOWN:
+                    if event.key not in keys:
+                        if widgets.keybol:
+                            widgets.keybol = False
+                            keypress(window)
+                case pg.KEYUP:
+                    if event.key not in keys:
+                        if not widgets.keybol:
+                            widgets.keybol = True
         match surf.message:
             case "new":
                 launch(-1)
-                surf.message = ""
             case "open":
                 file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
                 if file is not None and os.path.exists(file):
                     launch(file)
                     surf = load(window, renderer)
-                surf.message = ""
-        keypress(window)
+            case "tutorial":
+                file = turntoproject(open(path2tutorial + "tutorial.txt", "r").read())
+                file["path"] = "tutorial"
+                renderer = Renderer(file, None, None, None, True)
+                surf = TT(window, renderer)
+        surf.message = ""
+        if not pg.key.get_pressed()[pg.K_LCTRL]:
+            for i in surf.uc:
+                if pg.key.get_pressed()[i]:
+                    keypress(window)
         window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
         pg.display.flip()
@@ -292,16 +318,16 @@ def loadmenu():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="RWE+ console", description="maybe a better, than official LE.")
+    parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.")
     parser.version = version
-    parser.add_argument("filename", type=str, nargs="?", help="level to load")
-    parser.add_argument("-n", "--new", help="opens new file", dest="new", action="store_true")
-    parser.add_argument("-v", "--version", help="shows current version and exits", action="version")
-    parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str, help="renders levels with drizzle.")
+    parser.add_argument("filename", type=str, nargs="?", help="Level to load")
+    parser.add_argument("-n", "--new", help="Opens new file", dest="new", action="store_true")
+    parser.add_argument("-v", "--version", help="Shows current version and exits", action="version")
+    parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str, help="Renders levels with drizzle.")
     # parser.parse_args()
     args = parser.parse_args()
     if args.new:
-        loadmenu()
+        launch(-1)
     if args.renderfiles is not None:
         s = application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render "
         for i in args.renderfiles:

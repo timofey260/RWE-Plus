@@ -184,7 +184,7 @@ class GE(MenuWithField):
                         self.updatehistory(paths)
                     else:
                         self.detecthistory(["GE"])
-                self.renderer.geo_render_area(self.area, self.layer)
+                self.render_geo_area()
                 self.rfa()
 
             self.movemiddle(bp, pos)

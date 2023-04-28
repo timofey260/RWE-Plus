@@ -1,11 +1,10 @@
-import menuclass
 from lingotojson import turntolingo
 from menuclass import *
 import random
 
 
 class MN(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer: menuclass.Renderer):
+    def __init__(self, surface: pg.surface.Surface, renderer: Renderer):
         super().__init__(surface, "MN", renderer)
         tips = set(open(path + "tips.txt", "r").readlines())
         self.tips = list(tips)

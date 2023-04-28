@@ -26,6 +26,8 @@ Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entra
 Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
 Tile editor is my best and i hate Prop editor
 Prop editor ropes are here! uwu
+Use tutorial if you have trouble with RWE+
+w\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne
 
 bruh
 Welcome to RWE+

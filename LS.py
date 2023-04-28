@@ -150,9 +150,9 @@ class LS(Menu):
 
     def bftileschange(self):
         try:
-            x = self.askint(f"({self.btiles[0]})Left")
-            y = self.askint(f"({self.btiles[1]})Top")
-            w = self.askint(f"({self.btiles[2]})Right")
+            x = self.askint(f"({self.btiles[0]})Left", False)
+            y = self.askint(f"({self.btiles[1]})Top", False)
+            w = self.askint(f"({self.btiles[2]})Right", False)
             h = self.askint(f"({self.btiles[3]})Bottom")
             self.data["EX2"]["extraTiles"] = [x, y, w, h]
             self.btiles = self.data["EX2"]["extraTiles"]

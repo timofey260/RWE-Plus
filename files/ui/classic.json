@@ -50,11 +50,62 @@
 	{
 		"buttons": 
 		[
-			["OPEN", [50, 0, 50, 100], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
-			["NEW", [0, 0, 50, 100], [100, 100, 100], "new", "non", "New project(<[new]>)"]
+			["Open", [0, 0, 50, 100], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
+			["New", [50, 0, 50, 50], [100, 100, 100], "new", "non", "New project(<[new]>)"],
+			["Tutorial", [50, 50, 50, 50], [100, 100, 100], "tutorial", "non", "Tutorial for new users"]
+		],
+		"labels": [
+		]
+	},
+	"TT": {
+		"buttons": 
+		[
+			["Next", [90, 0, 10, 7], [100, 100, 100], "next", "non", ""],
+			["Previous", [0, 0, 10, 7], [100, 100, 100], "prev", "non", ""],
+
+			["Wall", [0, 20, 7, 5], [100, 100, 100], "WL", "non", "", ["geometry.png", [1, 0]]],
+			["Air", [0, 25, 7, 5], [100, 100, 100], "AR", "non", "", ["geometry.png", [2, 0]]],
+			["Slope", [0, 30, 7, 5], [100, 100, 100], "SL", "non", "", ["geometry.png", [3, 0]]],
+			["Skip", [90, 7, 10, 7], [100, 100, 100], "skip", "non", ""]
+			
 		],
 		"labels":[
-		]
+			["Welcome to RWE+ Tutorial! today we are going to teach you basics of using it\nPress next button to go to next step", [11, 0], [0, 0, 0], 30],
+			["Selected tool: None", [10, 95], [0, 0, 0], 30]
+
+		],
+		"textlines": [
+			"?Welcome to RWE+ Tutorial! today we are going to teach you basics of using it\nPress next button to go to next step",
+			"The field below is your level preview what you can see\nNow try to move your preview",
+			"Good job around here, now try to scale preview as you want",
+
+			"@Great! rw levels more than just a single panel out of cubes\nyou can cycle through its 'layers'\nYou know what i'm taliking about, try it!",
+			"?Now we're on different level layer, whare is our next guide: Placing\nClick next for next step",
+
+			"You have a button here, this button changes your current tool, what you're using\nClick it",
+			"Try to place some 'Walls' somewhere",
+			"Nice, but it might be too boring to put blocks that way.\nTry to use a 'Fill' to fill any zone you want",
+			"Placing blocks is cool, buy what if you made a mistake?\nThere's 'Air' tool to remove walls and other blocks",
+			"?Great, but sometimes you want to smooth some very sharp edges of blocks,\nso there's an 'Slope's to help you out\nClick next to continue",
+			"Place some slopes",
+
+			"@Alright! You have learn all basics to build level in geometry editor.\nNormal Geometry Editor is a little bit more complex than this\nbut you will get hang of it.\nNow let's go to another layer and continue the tutorial",
+
+			"?This part of guide teaches you how to use different parts of RWE+",
+			"First construction what you will have is selector, what is very easy to use here\nSelector is just a big array of items sorted by categories\nTry to select something",
+			"Now try to cycle through it's categories",
+			"Nice, but it's slow to scroll through each category when you can just open category you want\nso for that there's a quick go to category\nPress the category button to open it",
+			"Here are your categories, what you can select, try it",
+			"@That is easy to use, but what if you would need to search\nthe exact item you want and you frogot in which category it is?\nFor that you can use 'Browse' button, press it!"
+
+		],
+		"findmenu_text": "now you are in browse menu where you can search any item you have, just type what you want!",
+		"d1":
+		{
+			"rect": [25, 20, 65, 70],
+			"color": [90, 90, 90],
+			"border": [150, 150, 150]
+		}
 	},
 	"MN":
 	{
