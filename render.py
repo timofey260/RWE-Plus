@@ -122,8 +122,7 @@ class Renderer:
         self.effect_index = 0
 
         self.lastlayer = 0
-        self.xoffset = 0
-        self.yoffset = 0
+        self.offset = pg.Vector2(0, 0)
         self.size = image1size
 
         if render:

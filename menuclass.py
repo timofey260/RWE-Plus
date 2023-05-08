@@ -110,7 +110,9 @@ class Menu:
         filepath = str(p.parent.absolute())
         self.message = "ab"
 
-    def asksaveasfilename(self, defaultextension=[".wep"]):
+    def asksaveasfilename(self, defaultextension=None):
+        if defaultextension is None:
+            defaultextension = [".wep"]
         global inputfile, filepath
         filepath = path2levels
         buttons = []
@@ -483,10 +485,9 @@ class MenuWithField(Menu):
         self.fieldadd.fill(white)
         self.fieldadd.set_colorkey(white)
 
-        self.xoffset = self.renderer.xoffset
-        self.yoffset = self.renderer.yoffset
+        self.offset = self.renderer.offset
         self.size = self.renderer.size
-        self.rectdata = [[0, 0], [0, 0], [0, 0]]
+        self.rectdata = [pg.Vector2(0, 0), pg.Vector2(0, 0), pg.Vector2(0, 0)]
         self.layer = self.renderer.lastlayer
         self.emptyarea()
         if renderall:
@@ -500,11 +501,10 @@ class MenuWithField(Menu):
     def movemiddle(self, bp, pos):
         if bp[1] == 1 and self.mousp1 and (self.mousp2 and self.mousp):
             self.rectdata[0] = pos.copy()
-            self.rectdata[1] = [self.xoffset, self.yoffset]
+            self.rectdata[1] = self.offset
             self.mousp1 = False
         elif bp[1] == 1 and not self.mousp1 and (self.mousp2 and self.mousp):
-            self.xoffset = self.rectdata[1][0] - (self.rectdata[0][0] - pos[0])
-            self.yoffset = self.rectdata[1][1] - (self.rectdata[0][1] - pos[1])
+            self.offset = self.rectdata[1] - (self.rectdata[0] - pos)
         elif bp[1] == 0 and not self.mousp1 and (self.mousp2 and self.mousp):
             self.field.field.fill(self.field.color)
             self.mousp1 = True
@@ -614,13 +614,13 @@ class MenuWithField(Menu):
                     self.size -= 1
                     self.renderfield()
             case "left":
-                self.xoffset += 1
+                self.offset.x += 1
             case "right":
-                self.xoffset -= 1
+                self.offset.x -= 1
             case "up":
-                self.yoffset += 1
+                self.offset.y += 1
             case "down":
-                self.yoffset -= 1
+                self.offset.y -= 1
 
     def detecthistory(self, path, savedata=True):
         super().detecthistory(path, savedata)
@@ -840,3 +840,43 @@ class MenuWithField(Menu):
             "notes": []
         }
         return item, [0, 0]
+
+    def mouse2field(self):
+        mpos = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size
+        #mpos -= pg.Vector2(self.xoffset, self.yoffset)
+        return mpos
+    @property
+    def posoffset(self):
+        return self.pos - self.offset
+
+    def mouse2field_sized(self):
+        return self.mouse2field() * image1size
+
+    @property
+    def pos(self):
+        mpos = self.mouse2field()
+        mpos = pg.Vector2(
+            math.floor(mpos.x),
+            math.floor(mpos.y)
+        )
+        return mpos
+    @property
+    def pos2(self):
+        return self.pos * self.size + self.field.rect.topleft
+
+    def vec2rect(self, p1: pg.Vector2, p2: pg.Vector2):
+        left = min(p1.x, p2.x)
+        right = max(p1.x, p2.x)
+        top = min(p1.y, p2.y)
+        bottom = max(p1.y, p2.y)
+        width = right - left
+        height = bottom - top
+        return pg.Rect(left, top, width, height)
+
+    @property
+    def xoffset(self):
+        return self.offset.x
+
+    @property
+    def yoffset(self):
+        return self.offset.y

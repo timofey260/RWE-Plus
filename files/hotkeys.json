@@ -97,12 +97,12 @@
 
     	"K_SPACE+": "-swichcameras",
 
-    	"K_SPACE": "rotate",
+    	"K_SPACE": "-rotate",
 
-    	"K_LEFT+": "mleft",
-    	"K_RIGHT+": "mright",
-    	"K_UP+": "mup",
-    	"K_DOWN+": "mdown"
+    	"K_LEFT+": "-mleft",
+    	"K_RIGHT+": "-mright",
+    	"K_UP+": "-mup",
+    	"K_DOWN+": "-mdown"
   	},
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],

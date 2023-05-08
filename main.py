@@ -255,8 +255,8 @@ def launch(level):
             surf.blit()
         except KeyboardInterrupt:
             pass
-        except:
-            surf.savef() # extra save level in case of eny crashes
+        # except:
+        #     surf.savef() # extra save level in case of eny crashes
         pg.display.flip()
         pg.display.update()
 

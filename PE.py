@@ -225,8 +225,7 @@ class PE(MenuWithField):
         mpos = pg.Vector2(pg.mouse.get_pos())
         if self.field.rect.collidepoint(mpos.xy) or any(self.helds):
 
-            pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
-                   math.floor((mpos.y - self.field.rect.y) / self.size)]
+            pos = self.mouse2field_round()
 
             realpos = mpos - self.field.rect.topleft
             s2 = self.size / 2
@@ -234,7 +233,7 @@ class PE(MenuWithField):
                               round(math.floor(realpos.y / s2) * s2 - self.selectedimage.get_height() / 2, 4))
             pos2 += self.field.rect.topleft
 
-            posoffset = [(pos[0] - self.xoffset) * spritesize, (pos[1] - self.yoffset) * spritesize]
+            posoffset = self.mouse2field_offset()
             bp = pg.mouse.get_pressed(3)
             self.delmode = self.findparampressed("delete_mode")
             self.copymode = self.findparampressed("copy_mode")
@@ -312,8 +311,8 @@ class PE(MenuWithField):
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedprop["tp"] == "long" and self.renderprop:
                     self.transform_reset()
-                    p1 = pg.Vector2(self.rectdata[0])
-                    p2 = pg.Vector2(posoffset)
+                    p1 = self.rectdata[0]
+                    p2 = posoffset
                     vec = p2 - p1
                     angle = math.degrees(math.atan2(vec.y, vec.x))
                     distance = p1.distance_to(p2)
@@ -334,12 +333,12 @@ class PE(MenuWithField):
                     self.rectdata[2] = pg.Vector2(i.get_size())
                     i = pg.transform.scale(i, [ww / spritesize * self.size, wh / spritesize * self.size])
                     i.set_colorkey(white)
-                    self.surface.blit(i, (pg.Vector2(self.rectdata[1]) + mpos) / 2 - pg.Vector2(i.get_size()) / 2)
+                    self.surface.blit(i, (self.rectdata[1] + mpos) / 2 - pg.Vector2(i.get_size()) / 2)
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
                 if self.selectedprop["tp"] == "long" and self.renderprop and not self.modpress:
-                    self.place((pg.Vector2(self.rectdata[0]) + posoffset) / 2)
+                    self.place((self.rectdata[0] + posoffset) / 2)
                     self.transform_reset()
                 self.modpress = False
 
