@@ -25,8 +25,7 @@ class CE(MenuWithField):
 
         if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["CM"]["cameras"]) > 0:
 
-            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
+            pos = self.pos
 
             bp = pg.mouse.get_pressed(3)
             s = [self.findparampressed("-addup"),
@@ -167,7 +166,7 @@ class CE(MenuWithField):
             quadindx = self.getquad(cam)
             self.data["CM"]["quads"][cam][quadindx][1] = round(min(self.data["CM"]["quads"][cam][quadindx][1] + self.settings["addspeed"], 1), 4)
 
-    def adddown(self): #ddddddddddd
+    def adddown(self):  # ddddddddddd
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)

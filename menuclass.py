@@ -170,7 +170,10 @@ class Menu:
                     elif event.key == pg.K_BACKSPACE:
                         inputfile = inputfile[:-1]
                     elif event.key == pg.K_RETURN:
-                        r = False
+                        if inputfile != "":
+                            r = False
+                        else:
+                            inputfile = "type_something_here"
                     elif event.key == pg.K_ESCAPE:
                         return None
                     appendbuttons()
@@ -576,9 +579,7 @@ class MenuWithField(Menu):
                             *self.field.rect.topleft, white)
         mpos = pg.mouse.get_pos()
         if self.drawgrid and self.field.rect.collidepoint(mpos):
-            pos = [math.floor((mpos[0] - self.field.rect.x) / self.size) + 0.5,
-                   math.floor((mpos[1] - self.field.rect.y) / self.size) + 0.5]
-            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
+            pos2 = self.pos2
             pg.draw.line(self.surface, cursor2, [self.field.rect.left, pos2[1]],
                          [self.field.rect.right, pos2[1]])
             pg.draw.line(self.surface, cursor2, [pos2[0], self.field.rect.top],
@@ -875,8 +876,8 @@ class MenuWithField(Menu):
 
     @property
     def xoffset(self):
-        return self.offset.x
+        return int(self.offset.x)
 
     @property
     def yoffset(self):
-        return self.offset.y
+        return int(self.offset.y)

@@ -234,12 +234,15 @@ class GE(MenuWithField):
                 return
             for xi, x in enumerate(geodata):
                 for yi, y in enumerate(x):
-                    xpos = -self.xoffset + xi
-                    ypos = -self.yoffset + yi
+                    pa = pg.Vector2(0, 0)
+                    if self.field.rect.collidepoint(pg.mouse.get_pos()):
+                        pa = self.pos
+                    xpos = -self.xoffset + xi + int(pa.x)
+                    ypos = -self.yoffset + yi + int(pa.y)
                     if (self.replaceair and y[0] == 0) or not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
-                    self.data["GE"][-self.xoffset + xi][-self.yoffset + yi][self.layer] = y
-                    self.area[-self.xoffset + xi][-self.yoffset + yi] = 0
+                    self.data["GE"][xpos][ypos][self.layer] = y
+                    self.area[xpos][ypos] = 0
             self.detecthistory(["GE"])
             self.renderer.geo_render_area(self.area, self.layer)
             self.rfa()

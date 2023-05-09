@@ -73,16 +73,15 @@ class FE(MenuWithField):
             else:
                 pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
         mpos = pg.Vector2(pg.mouse.get_pos())
-        pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
-               math.floor((mpos.y - self.field.rect.y) / self.size)]
+        pos = self.pos
         bp = pg.mouse.get_pressed(3)
 
         if self.field.rect.collidepoint(mpos) and len(self.data["FE"]["effects"]) > 0:
             if not self.copymode:
                 pg.draw.circle(self.surface, cursor, mpos, self.brushsize * self.size, 4)
 
-            posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
-            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
+            posoffset = self.posoffset
+            pos2 = self.pos2
 
             if posoffset != self.mpos:
                 self.mpos = posoffset
@@ -91,23 +90,23 @@ class FE(MenuWithField):
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
                 self.mmove = True
-                self.rectdata = [posoffset, [0, 0], pos2]
+                self.rectdata = [posoffset, pg.Vector2(0, 0), pos2]
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
-                self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
-                if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
+                self.rectdata[1] = posoffset - self.rectdata[0]
+                if (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])) and self.mmove:
                     if not self.copymode:
-                        self.paint(posoffset[0], posoffset[1], 1)
+                        self.paint(posoffset.x, posoffset.y, 1)
                     self.mmove = False
                 if self.copymode:
-                    rect = pg.Rect(
-                        [self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
+                    rect = self.vec2rect(self.rectdata[2], pos2)
                     tx = f"{int(rect.w / self.size)}, {int(rect.h / self.size)}"
                     widgets.fastmts(self.surface, tx, *mpos, white)
                     pg.draw.rect(self.surface, blue, rect, 5)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                rect = self.vec2rect(self.rectdata[0], posoffset)
                 if self.copymode:
-                    data1 = self.data["FE"]["effects"][self.selectedeffect]["mtrx"][self.rectdata[0][0]:posoffset[0]]
-                    data1 = [i[self.rectdata[0][1]:posoffset[1]] for i in data1]
+                    data1 = self.data["FE"]["effects"][self.selectedeffect]["mtrx"][rect.x:rect.w + rect.x]
+                    data1 = [i[rect.y:rect.w + rect.y] for i in data1]
                     pyperclip.copy(str(data1))
                     print("Copied!")
                 self.updatehistory([["FE", "effects", self.selectedeffect, "mtrx"]])
@@ -178,8 +177,11 @@ class FE(MenuWithField):
                 return
             for xi, x in enumerate(geodata):
                 for yi, y in enumerate(x):
-                    xpos = -self.xoffset + xi
-                    ypos = -self.yoffset + yi
+                    pa = pg.Vector2(0, 0)
+                    if self.field.rect.collidepoint(pg.mouse.get_pos()):
+                        pa = self.pos
+                    xpos = -self.xoffset + xi + int(pa.x)
+                    ypos = -self.yoffset + yi + int(pa.y)
                     if not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
                     self.data["FE"]["effects"][self.selectedeffect]["mtrx"][xpos][ypos] = y

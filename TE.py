@@ -79,26 +79,25 @@ class TE(MenuWithField):
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
 
-            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
-            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
-            posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            pos = self.pos
+            pos2 = self.pos2
+            posoffset = self.posoffset
             fg = self.findparampressed("force_geometry")
             if self.tileimage["tp"] != "pattern":
-                cposx = pos2[0] - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
-                cposy = pos2[1] - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
+                cposx = int(pos2.x) - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
+                cposy = int(pos2.y) - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
 
-                cposxo = posoffset[0] - int((self.tileimage["size"][0] * .5) + .5) + 1
-                cposyo = posoffset[1] - int((self.tileimage["size"][1] * .5) + .5) + 1
+                cposxo = int(posoffset.x) - int((self.tileimage["size"][0] * .5) + .5) + 1
+                cposyo = int(posoffset.y) - int((self.tileimage["size"][1] * .5) + .5) + 1
 
                 if posoffset != self.mpos or self.lastfg != fg:
                     self.cols = self.test_cols(cposxo, cposyo)
                     self.mpos = posoffset
                     self.lastfg = fg
-                    self.labels[1].set_text(f"X: {posoffset[0]}, Y: {posoffset[1]}, Z: {self.layer + 1}")
-                    if self.canplaceit(posoffset[0], posoffset[1], posoffset[0], posoffset[1]):
+                    self.labels[1].set_text(f"X: {posoffset.x}, Y: {posoffset.y}, Z: {self.layer + 1}")
+                    if self.canplaceit(posoffset.x, posoffset.y, posoffset.x, posoffset.y):
                         self.labels[0].set_text(
-                            "Tile: " + str(self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]))
+                            "Tile: " + str(self.data["TE"]["tlMatrix"][int(posoffset.x)][int(posoffset.y)][self.layer]))
 
                 bord = self.size // image1size + 1
                 if self.cols and self.tool == 0:
@@ -131,8 +130,8 @@ class TE(MenuWithField):
                             self.fieldadd.blit(self.tileimage["image"],
                                                [cposxo * self.size, cposyo * self.size])
                     elif self.tool == 1:
-                        self.destroy(posoffset[0], posoffset[1])
-                        pg.draw.rect(self.fieldadd, red, [posoffset[0] * self.size, posoffset[1] * self.size, self.size, self.size])
+                        self.destroy(posoffset.x, posoffset.y)
+                        pg.draw.rect(self.fieldadd, red, [posoffset.x * self.size, posoffset.y * self.size, self.size, self.size])
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.detecthistory(["TE", "tlMatrix"], not fg)
                 if fg:
@@ -147,28 +146,29 @@ class TE(MenuWithField):
 
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False
-                self.rectdata = [posoffset, [0, 0], pos2]
+                self.rectdata = [posoffset, pg.Vector2(0, 0), pos2]
                 self.emptyarea()
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
-                self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
-                rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
+                self.rectdata[1] = posoffset - self.rectdata[0]
+                rect = self.vec2rect(self.rectdata[2], pos2)
                 tx = f"{int(rect.w / self.size)}, {int(rect.h / self.size)}"
                 widgets.fastmts(self.surface, tx, *mpos, white)
                 pg.draw.rect(self.surface, select, rect, 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 # self.rectdata = [self.rectdata[0], posoffset]
+                rect = self.vec2rect(self.rectdata[0], posoffset)
                 if self.tileimage["tp"] != "pattern" and self.tool != 2:
-                    for x in range(self.rectdata[1][0]):
-                        for y in range(self.rectdata[1][1]):
+                    for x in range(int(rect.w)):
+                        for y in range(int(rect.h)):
                             if self.tool == 0:
-                                self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                                self.place(x + rect.x, y + rect.y)
                             elif self.tool == 1:
-                                self.destroy(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                                self.destroy(x + rect.x, y + rect.y)
                 elif self.tool == 2:
                     history = []
-                    for x in range(self.rectdata[1][0]):
-                        for y in range(self.rectdata[1][1]):
-                            xpos, ypos = x + self.rectdata[0][0], y + self.rectdata[0][1]
+                    for x in range(int(rect.w)):
+                        for y in range(int(rect.h)):
+                            xpos, ypos = x + rect.x, y + rect.y
                             block = self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]
                             if block["tp"] == "material" or block["tp"] == "tileHead":
                                 history.append([x, y, block])
@@ -178,49 +178,49 @@ class TE(MenuWithField):
                     savedtool = saved["name"]
                     savedcat = saved["category"]
                     save = self.currentcategory
-                    for y in range(self.rectdata[1][1]):
-                        for x in range(self.rectdata[1][0]):
+                    for y in range(int(rect.h)):
+                        for x in range(int(rect.w)):
                             if x == 0 and y == 0:
                                 self.set(self.blocks["cat"], self.blocks["NW"])
-                            elif x == self.rectdata[1][0] - 1 and y == 0:
+                            elif x == rect.w - 1 and y == 0:
                                 self.set(self.blocks["cat"], self.blocks["NE"])
-                            elif x == 0 and y == self.rectdata[1][1] - 1:
+                            elif x == 0 and y == rect.h - 1:
                                 self.set(self.blocks["cat"], self.blocks["SW"])
-                            elif x == self.rectdata[1][0] - 1 and y == self.rectdata[1][1] - 1:
+                            elif x == rect.w - 1 and y == rect.h - 1:
                                 self.set(self.blocks["cat"], self.blocks["SE"])
 
                             elif x == 0:
                                 self.set(self.blocks["cat"], self.blocks["W"])
                             elif y == 0:
                                 self.set(self.blocks["cat"], self.blocks["N"])
-                            elif x == self.rectdata[1][0] - 1:
+                            elif x == rect.w - 1:
                                 self.set(self.blocks["cat"], self.blocks["E"])
-                            elif y == self.rectdata[1][1] - 1:
+                            elif y == rect.h - 1:
                                 self.set(self.blocks["cat"], self.blocks["S"])
                             else:
                                 continue
-                            self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                            self.place(x + rect.x, y + rect.y)
                     skip = False
                     lastch = random.choice(blocks)
-                    for y in range(1, self.rectdata[1][1] - 1):
+                    for y in range(1, int(rect.h) - 1):
                         if skip:
                             skip = False
                             continue
                         ch = random.choice(blocks)
                         while ch["upper"] != lastch["lower"] or ch["tiles"] == lastch["tiles"]:
                             ch = random.choice(blocks)
-                        if y == self.rectdata[1][1] - 2 and ch["tall"] == 2:
+                        if y == self.rectdata[1].y - 2 and ch["tall"] == 2:
                             while ch["upper"] != lastch["lower"] or ch["tall"] == 2 or ch["tiles"] == lastch["tiles"]:
                                 ch = random.choice(blocks)
                         lastch = ch.copy()
                         if ch["tall"] == 2:
                             skip = True
-                        for x in range(1, self.rectdata[1][0] - 1):
+                        for x in range(1, int(rect.w) - 1):
                             n = 0
                             if len(ch["tiles"]) > 1:
                                 n = x % len(ch["tiles"]) - 1
                             self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n])
-                            self.place(x + self.rectdata[0][0], y + self.rectdata[0][1])
+                            self.place(x + rect.x, y + rect.y)
                     self.set(savedcat, savedtool)
                     self.currentcategory = save
                     self.rebuttons()
@@ -290,7 +290,10 @@ class TE(MenuWithField):
                 # w, h = self.tileimage["size"]
                 # px = blockx - int((w * .5) + .5) - 1
                 # py = blocky - int((h * .5) + .5) - 1
-                self.place(blockx - self.xoffset, blocky - self.yoffset)
+                pa = pg.Vector2(0, 0)
+                if self.field.rect.collidepoint(pg.mouse.get_pos()):
+                    pa = self.pos
+                self.place(blockx - self.xoffset + int(pa.x), blocky - self.yoffset + int(pa.y))
             else:
                 self.selectcat(cat)
             self.detecthistory(["TE", "tlMatrix"])
@@ -440,8 +443,8 @@ class TE(MenuWithField):
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
-                xpos = x + x2
-                ypos = y + y2
+                xpos = int(x + x2)
+                ypos = int(y + y2)
                 if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
                     continue
                 if csp != -1:
@@ -529,8 +532,8 @@ class TE(MenuWithField):
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
-                xpos = x + x2
-                ypos = y + y2
+                xpos = int(x + x2)
+                ypos = int(y + y2)
                 if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
                     continue
                 if self.tileimage["category"] == "material":
@@ -586,12 +589,10 @@ class TE(MenuWithField):
         self.set(cat, name)
 
     def copytile(self):
-        pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-               math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
-        posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
-        if not 0 <= posoffset[0] < len(self.data["GE"]) or not 0 <= posoffset[1] < len(self.data["GE"][0]):
+        posoffset = self.posoffset
+        if not 0 <= posoffset.x < len(self.data["GE"]) or not 0 <= posoffset.y < len(self.data["GE"][0]):
             return
-        tile = self.data["TE"]["tlMatrix"][posoffset[0]][posoffset[1]][self.layer]
+        tile = self.data["TE"]["tlMatrix"][int(posoffset.x)][int(posoffset.y)][self.layer]
         cat = "material"
         name = "Standard"
 

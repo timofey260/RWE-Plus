@@ -385,7 +385,12 @@ class Renderer:
             found, _ = self.findprop(prop[1])
             if found is None:
                 print(f"Prop {prop[1]} not Found! image not loaded")
-            image = found["images"][var] # .save(path2hash + str(id(self.data["PR"]["props"][indx][1])) + ".png")
+            try:
+                image = found["images"][var] # .save(path2hash + str(id(self.data["PR"]["props"][indx][1])) + ".png")
+            except IndexError:
+                image = found["images"][0]
+                if prop[4]["settings"].get("variation") is not None:
+                    self.data["PR"]["props"][indx][4]["settings"]["variation"] = 1
             qd = prop[3]
             quads = []
             for q in qd:
