@@ -124,6 +124,8 @@ class GE(MenuWithField):
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedtool == "MV":
                     self.offset = self.rectdata[1] - (self.rectdata[0] - pos)
+                elif self.selectedtool == "CT":
+                    pass
                 elif (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])) and self.area[int(posoffset.x)][int(posoffset.y)] == 1:
                     self.place(posoffset, False)
                     if type(self.placetile) == int:
@@ -158,7 +160,6 @@ class GE(MenuWithField):
                         if ypos == 0:
                             paths.append(["GE", xindex, yindex, self.layer])
                             count += 1
-                self.data["GE"] = self.data["GE"]
                 if len(paths) > 0:
                     if count < 20: # if we changed more than 20 pixels, changing history save method
                         self.updatehistory(paths)
@@ -181,7 +182,7 @@ class GE(MenuWithField):
                 widgets.fastmts(self.surface, tx, *mpos, white)
                 pg.draw.rect(self.surface, select, rect, 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
-                if self.selectedtool == "CP":
+                if self.selectedtool == "CP" or self.selectedtool == "CT":
                     rect = self.vec2rect(self.rectdata[0], posoffset)
                     data1 = self.data["GE"][rect.x:rect.x + rect.w]
                     data1 = [i[rect.y:rect.y + rect.h] for i in data1]
@@ -194,7 +195,15 @@ class GE(MenuWithField):
                         for y in range(int(rect.h)):
                             vec = pg.Vector2(x, y)
                             self.place(vec + rect.topleft, False)
-                    self.data["GE"] =  self.data["GE"]
+                    self.detecthistory(["GE"])
+                    self.renderer.geo_render_area(self.area, self.layer)
+                    self.rfa()
+                if self.selectedtool == "CT":
+                    rect = self.vec2rect(self.rectdata[0], posoffset)
+                    for x in range(int(rect.w)):
+                        for y in range(int(rect.h)):
+                            vec = pg.Vector2(x, y)
+                            self.place(vec + rect.topleft, False)
                     self.detecthistory(["GE"])
                     self.renderer.geo_render_area(self.area, self.layer)
                     self.rfa()
@@ -383,6 +392,11 @@ class GE(MenuWithField):
     def copylayer(self):
         self.selectedtool = "CP"
         self.placetile = 0.1
+        self.mx = 0
+
+    def cutlayer(self):
+        self.selectedtool = "CT"
+        self.placetile = 0.5
         self.mx = 0
 
     def place(self, pos, render=True):

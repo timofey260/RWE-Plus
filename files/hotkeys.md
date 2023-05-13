@@ -20,6 +20,7 @@ Generated using hotkeys to md converter
 * **F11** - /fc - 
 * **ctrl + Z** - undo - 
 * **ctrl + Y** - redo - 
+* **Escape** - /MN - 
 * **ctrl + 1** - /-togglegeo - 
 * **ctrl + 2** - /-toggletiles - 
 * **ctrl + 3** - /-swichcameras - 
@@ -30,6 +31,9 @@ Generated using hotkeys to md converter
 * **Right** - /right - 
 * **Up** - /up - 
 * **Down** - /down - 
+* **L** - /-swichlayers - 
+* **ctrl + L** - /-swichlayers_back - 
+* **ctrl + Space** - /-swichcameras - 
 ### LD
 * **N** - new - 
 * **ctrl + N** - new - 
@@ -48,11 +52,7 @@ Generated using hotkeys to md converter
 * **S** - /LS - 
 * **Z** - /LP - 
 * **H** - /HK - 
-* **ctrl + Space** - -swichcameras - 
 ### GE
-* **Escape** - /MN - 
-* **L** - -swichlayers - 
-* **ctrl + L** - -swichlayers_back - 
 * **I** - -inverse - 
 * **W** - -walls - 
 * **A** - -air - 
@@ -79,25 +79,21 @@ Generated using hotkeys to md converter
 * **D** - -clearlayer - 
 * **O** - -clearblock - 
 * **P** - -whack_a_mole_hole - 
+* **ctrl + X** - -cutlayer - 
 * **ctrl + C** - -copylayer - 
 * **ctrl + V** - -pastegeo - 
 * **ctrl + R** - -replacestate - 
-* **ctrl + Space** - -swichcameras - 
-* **Space** - rotate - 
-* **ctrl + Left** - mleft - 
-* **ctrl + Right** - mright - 
-* **ctrl + Up** - mup - 
-* **ctrl + Down** - mdown - 
+* **Space** - -rotate - 
+* **ctrl + Left** - -mleft - 
+* **ctrl + Right** - -mright - 
+* **ctrl + Up** - -mup - 
+* **ctrl + Down** - -mdown - 
 ### TE
-* **Escape** - /MN - 
-* **L** - -swichlayers - 
-* **ctrl + L** - -swichlayers_back - 
 * **G** - force_geometry - 
 * **F** - force_place - 
 * **ctrl + C** - -copytool - 
 * **ctrl + V** - -pastedata - 
 * **ctrl + Q** - -changematshow - 
-* **ctrl + Space** - -swichcameras - 
 * **D** - -rt - 
 * **A** - -lt - 
 * **W** - -ut - 
@@ -109,7 +105,6 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -findtile - 
 * **Left Shift** - movepreview - 
 ### CE
-* **Escape** - /MN - 
 * **D** - -deletecamera - 
 * **Delete** - -deletecamera - 
 * **N** - -addcamera - 
@@ -124,7 +119,6 @@ Generated using hotkeys to md converter
 * **L** - -addright - 
 ### PE
 * **ctrl + Q** - -changematshow - 
-* **Escape** - /MN - 
 * **X** - pauseropephysics - 
 * **W** - -browse_prev - 
 * **A** - -cat_prev_propupdate - 
@@ -151,17 +145,11 @@ Generated using hotkeys to md converter
 * **E** - -rotate_right - 
 * **Q** - -rotate_left - 
 * **Space** - rotate_speedup - 
-* **L** - -swichlayers - 
-* **ctrl + L** - -swichlayers_back - 
 * **Space** - cursor_propdepth_inverse - 
 * **ctrl + F** - -findpropmenu - 
-* **ctrl + Space** - -swichcameras - 
 ### FE
 * **ctrl + Q** - -changematshow - 
-* **Escape** - /MN - 
 * **Space** - -addordeleteselectedeffect - 
-* **L** - -swichlayers - 
-* **ctrl + L** - -swichlayers_back - 
 * **ctrl + R** - -prevparam - 
 * **ctrl + F** - -nextparam - 
 * **R** - -bsup - 
@@ -176,20 +164,16 @@ Generated using hotkeys to md converter
 * **A** - -prevcat - 
 * **ctrl + C** - -copytool - 
 * **ctrl + V** - -pastedata - 
-* **ctrl + Space** - -swichcameras - 
 * **ctrl + E** - -findeffect - 
 * **X** - -deleteeffect - 
 * **Delete** - -deleteeffect - 
 ### EE
-* **Escape** - /MN - 
 * **D** - -nowater - 
 * **Delete** - -nowater - 
 * **W** - -water - 
 * **F** - -swichlayers - 
-* **ctrl + Space** - -swichcameras - 
 ### LE
 * **Escape** - -save - 
-* **Escape** - /MN - 
 * **ctrl + Q** - -lightmod - 
 * **ctrl + E** - -darkmod - 
 * **W** - -hp - 
@@ -210,10 +194,8 @@ Generated using hotkeys to md converter
 * **Space** - -inverse - 
 * **ctrl + A** - -undoshadow - 
 * **ctrl + D** - -redoshadow - 
-* **ctrl + Space** - -swichcameras - 
 * **Return** - -save - 
 ### LS
-* **Escape** - /MN - 
 * **A** - -as_left - 
 * **W** - -as_top - 
 * **S** - -set_height - 
@@ -221,11 +203,9 @@ Generated using hotkeys to md converter
 * **Q** - -mswich - 
 * **B** - -bftileschange - 
 ### LP
-* **Escape** - /MN - 
 * **B** - -changeborder - 
 * **L** - -changelight - 
 ### HK
-* **Escape** - /MN - 
 * **G** - -GE - 
 * **T** - -TE - 
 * **C** - -CE - 
@@ -238,3 +218,7 @@ Generated using hotkeys to md converter
 * **H** - -HK - 
 * **M** - -MN - 
 * **R** - -globalkeys - 
+### TT
+* **L** - -swichlayers - 
+* **ctrl + L** - -swichlayers_back - 
+* **Space** - -rotate - 

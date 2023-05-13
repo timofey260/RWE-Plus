@@ -20,6 +20,7 @@ Generated using hotkeys to md converter
 * **F11** - /fc - Fullscreen
 * **ctrl + Z** - undo - Undo
 * **ctrl + Y** - redo - Redo
+* **Escape** - /MN - menu
 * **ctrl + 1** - /-togglegeo - Toggles geometry
 * **ctrl + 2** - /-toggletiles - Toggles tiles
 * **ctrl + 3** - /-swichcameras - Toggles cameras
@@ -30,6 +31,9 @@ Generated using hotkeys to md converter
 * **Right** - /right - Right
 * **Up** - /up - Up
 * **Down** - /down - Down
+* **L** - /-swichlayers - Switch layers on menu with fields
+* **ctrl + L** - /-swichlayers_back - Switch layers back
+* **ctrl + Space** - /-swichcameras - Toggles cameras
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -48,11 +52,7 @@ Generated using hotkeys to md converter
 * **S** - /LS - Level Resizing
 * **Z** - /LP - Level Properties
 * **H** - /HK - Hotkeys
-* **ctrl + Space** - -swichcameras - Toggles camera showing
 ### GE
-* **Escape** - /MN - Returns to menu
-* **L** - -swichlayers - Swiches layers up
-* **ctrl + L** - -swichlayers_back - Swiches layers down
 * **I** - -inverse - Turns walls to air and vise versa. also inverse slopes.
 * **W** - -walls - Turn cell into wall
 * **A** - -air - Turn cell into air
@@ -79,25 +79,21 @@ Generated using hotkeys to md converter
 * **D** - -clearlayer - Removes only cell, leaves added cells
 * **O** - -clearblock - Removes only added cells, like beams and paths
 * **P** - -whack_a_mole_hole - Adds Whack-a-Mole-Hole. it is portal between other Whack-a-Mole-Holes for lizards
+* **ctrl + X** - -cutlayer - Cut layer tool
 * **ctrl + C** - -copylayer - Copy tool
 * **ctrl + V** - -pastegeo - Paste clipboard pattern
 * **ctrl + R** - -replacestate - Not replaces air after pasting data.
-* **ctrl + Space** - -swichcameras - Toggles camera showing
-* **Space** - rotate - Rotate slopes and beams
-* **ctrl + Left** - mleft - Move mirror left
-* **ctrl + Right** - mright - Move mirror right
-* **ctrl + Up** - mup - Move mirror up
-* **ctrl + Down** - mdown - Move mirror down
+* **Space** - -rotate - Rotate tile
+* **ctrl + Left** - -mleft - Move mirror left
+* **ctrl + Right** - -mright - Move mirror right
+* **ctrl + Up** - -mup - Move mirror up
+* **ctrl + Down** - -mdown - Move mirror down
 ### TE
-* **Escape** - /MN - Returns to menu
-* **L** - -swichlayers - Swiches layers up
-* **ctrl + L** - -swichlayers_back - Swiches layers down
 * **G** - force_geometry - Forces geometry to tile
 * **F** - force_place - Places tile without checking it
 * **ctrl + C** - -copytool - Copy Tool
 * **ctrl + V** - -pastedata - Paste tiles
 * **ctrl + Q** - -changematshow - Shows list of categories
-* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **D** - -rt - Next category
 * **A** - -lt - Previous category
 * **W** - -ut - Previous tile
@@ -109,7 +105,6 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -findtile - Opens find tile menu
 * **Left Shift** - movepreview - Preview of prop specs on black square
 ### CE
-* **Escape** - /MN - Returns to menu
 * **D** - -deletecamera - Deletes the nearest placed camera
 * **Delete** - -deletecamera - Deletes the nearest placed camera
 * **N** - -addcamera - Adds camera at center of level
@@ -124,7 +119,6 @@ Generated using hotkeys to md converter
 * **L** - -addright - Rotates nearest edge of nearest camera clockwise
 ### PE
 * **ctrl + Q** - -changematshow - Shows list of categories
-* **Escape** - /MN - Returns to menu
 * **X** - pauseropephysics - Pauses rope physics
 * **W** - -browse_prev - Previous prop
 * **A** - -cat_prev_propupdate - Previous category + update current prop
@@ -151,17 +145,11 @@ Generated using hotkeys to md converter
 * **E** - -rotate_right - Rotates prop to right
 * **Q** - -rotate_left - Rotates prop to left
 * **Space** - rotate_speedup - Rotates prop to right
-* **L** - -swichlayers - Swiches layers up
-* **ctrl + L** - -swichlayers_back - Swiches layers down
 * **Space** - cursor_propdepth_inverse - While pressed, press RMB to change depth down
 * **ctrl + F** - -findpropmenu - Opens find prop menu
-* **ctrl + Space** - -swichcameras - Toggles camera showing
 ### FE
 * **ctrl + Q** - -changematshow - Shows list of categories
-* **Escape** - /MN - Returns to menu
 * **Space** - -addordeleteselectedeffect - Adds or deletes selected effect
-* **L** - -swichlayers - Swiches layers up
-* **ctrl + L** - -swichlayers_back - Swiches layers down
 * **ctrl + R** - -prevparam - Previous effect parameter
 * **ctrl + F** - -nextparam - Next effect parameter
 * **R** - -bsup - Increases brush size
@@ -176,20 +164,16 @@ Generated using hotkeys to md converter
 * **A** - -prevcat - Previous category
 * **ctrl + C** - -copytool - Copy tool
 * **ctrl + V** - -pastedata - Paste effect area
-* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **ctrl + E** - -findeffect - Opens effect find menu
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect
 ### EE
-* **Escape** - /MN - Returns to menu
 * **D** - -nowater - Removes water from level
 * **Delete** - -nowater - Removes water from level
 * **W** - -water - Adds water to level
 * **F** - -swichlayers - Switch water layer
-* **ctrl + Space** - -swichcameras - Toggles camera showing
 ### LE
 * **Escape** - -save - Saves shadow
-* **Escape** - /MN - Returns to menu
 * **ctrl + Q** - -lightmod - Makes pixels white
 * **ctrl + E** - -darkmod - Makew pixels black
 * **W** - -hp - Height +
@@ -210,10 +194,8 @@ Generated using hotkeys to md converter
 * **Space** - -inverse - Turns white image to black and vise versa
 * **ctrl + A** - -undoshadow - Undo shadow image
 * **ctrl + D** - -redoshadow - Redo shadow image
-* **ctrl + Space** - -swichcameras - Toggles camera showing
 * **Return** - -save - Saves shadow
 ### LS
-* **Escape** - /MN - Returns to menu
 * **A** - -as_left - Add/sub cells from left of level
 * **W** - -as_top - Add/sub cells from top of level
 * **S** - -set_height - Sets level height
@@ -221,11 +203,9 @@ Generated using hotkeys to md converter
 * **Q** - -mswich - Changes shadow cutting method
 * **B** - -bftileschange - Sets buffer tiles
 ### LP
-* **Escape** - /MN - Returns to menu
 * **B** - -changeborder - changes border, opened or walls
 * **L** - -changelight - changes sunlight
 ### HK
-* **Escape** - /MN - Returns to menu
 * **G** - -GE - Geometry Editor hotkeys
 * **T** - -TE - Tile Editor hotkeys
 * **C** - -CE - Camera Editor hotkeys
@@ -238,3 +218,7 @@ Generated using hotkeys to md converter
 * **H** - -HK - Hotkeys hotkeys
 * **M** - -MN - Menu hotkeys
 * **R** - -globalkeys - Global keys
+### TT
+* **L** - -swichlayers - Switch layers
+* **ctrl + L** - -swichlayers_back - Switch layers back
+* **Space** - -rotate - Rotate blocks

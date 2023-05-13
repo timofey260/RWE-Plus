@@ -19,6 +19,7 @@
   	  	"K_z+": "undo",
   	  	"K_y+": "redo",
 
+  	  	"K_ESCAPE": "/MN",
   	  	"K_1+": "/-togglegeo",
   		"K_2+": "/-toggletiles",
   		"K_3+": "/-swichcameras",
@@ -28,7 +29,10 @@
   		"K_LEFT": "/left",
     	"K_RIGHT": "/right",
     	"K_UP": "/up",
-    	"K_DOWN": "/down"
+    	"K_DOWN": "/down",
+    	"K_l": "/-swichlayers",
+    	"K_l+": "/-swichlayers_back",
+    	"K_SPACE+": "/-swichcameras"
   	},
   	"LD": {
   		"unlock_keys": [],
@@ -52,17 +56,11 @@
   	  	"K_p": "/PE",
   	  	"K_s": "/LS",
   	  	"K_z": "/LP",
-  	  	"K_h": "/HK",
-
-  	  	"K_SPACE+": "-swichcameras"
+  	  	"K_h": "/HK"
 
   	},
   	"GE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
-
-  		"K_ESCAPE": "/MN",
-    	"K_l": "-swichlayers",
-    	"K_l+": "-swichlayers_back",
 
     	"K_i": "-inverse",
     	"K_w": "-walls",
@@ -90,12 +88,11 @@
     	"K_d": "-clearlayer",
     	"K_o": "-clearblock",
     	"K_p": "-whack_a_mole_hole",
+    	"K_x+": "-cutlayer",
 
     	"K_c+": "-copylayer",
     	"K_v+": "-pastegeo",
     	"K_r+": "-replacestate",
-
-    	"K_SPACE+": "-swichcameras",
 
     	"K_SPACE": "-rotate",
 
@@ -107,19 +104,12 @@
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 
-  		"K_ESCAPE": "/MN",
-  		
-    	"K_l": "-swichlayers",
-    	"K_l+": "-swichlayers_back",
-
     	"K_g": "force_geometry",
     	"K_f": "force_place",
     	"K_c+": "-copytool",
     	"K_v+": "-pastedata",
 
     	"K_q+": "-changematshow",
-
-    	"K_SPACE+": "-swichcameras",
 
     	"K_d": "-rt",
     	"K_a": "-lt",
@@ -136,8 +126,6 @@
 	"CE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_i", "K_k", "K_j", "K_l"],
 
-		"K_ESCAPE": "/MN",
-
 		"K_d": "-deletecamera",
 		"K_DELETE": "-deletecamera",
 
@@ -150,9 +138,6 @@
 
 		"K_c+": "-copycamera",
 		"K_v+": "-pastedata",
-
-		"K_l": "-swichlayers",
-    	"K_l+": "-swichlayers_back",
 
 		"K_i": "-addup",
 		"K_k": "-adddown",
@@ -167,7 +152,6 @@
 
 		"K_q+": "-changematshow",
 
-		"K_ESCAPE": "/MN",
 		"K_x": "-togglesnap",
 		"K_w": "-browse_prev",
 		"K_a": "-cat_prev_propupdate",
@@ -202,28 +186,17 @@
 		"K_q": "-rotate_left",
 		"K_SPACE@": "rotate_speedup",
 
-		"K_l": "-swichlayers",
-    	"K_l+": "-swichlayers_back",
-
     	"K_x": "pauseropephysics",
 
     	"K_SPACE@@": "cursor_propdepth_inverse",
-    	"K_f+": "-findpropmenu",
-
-    	"K_SPACE+": "-swichcameras"
+    	"K_f+": "-findpropmenu"
   	},
 	"FE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 
 		"K_q+": "-changematshow",
 
-		"K_ESCAPE": "/MN",
-
-
 		"K_SPACE": "-addordeleteselectedeffect",
-
-		"K_l": "-swichlayers",
-    	"K_l+": "-swichlayers_back",
 
 		"K_r+": "-prevparam",
 		"K_f+": "-nextparam",
@@ -246,7 +219,6 @@
 		"K_c+": "-copytool",
 		"K_v+": "-pastedata",
 
-		"K_SPACE+": "-swichcameras",
 		"K_e+": "-findeffect",
 
 		"K_x": "-deleteeffect",
@@ -257,20 +229,16 @@
 	"EE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 
-		"K_ESCAPE": "/MN",
-
     	"K_d": "-nowater",
     	"K_DELETE": "-nowater",
     	"K_w": "-water",
 
-    	"K_f": "-swichlayers",
-    	"K_SPACE+": "-swichcameras"
+    	"K_f": "-swichlayers"
   	},
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
 
   		"K_ESCAPE": "-save",
-  		"@K_ESCAPE": "/MN",
   		
   		"K_q+": "-lightmod",
   		"K_e+": "-darkmod",
@@ -299,13 +267,11 @@
 
   		"K_a+": "-undoshadow",
   		"K_d+": "-redoshadow",
-    	"K_SPACE+": "-swichcameras",
 
     	"K_RETURN": "-save"
   	},
   	"LS": {
   		"unlock_keys": [],
-  		"K_ESCAPE": "/MN",
 
   		"K_a": "-as_left",
   		"K_w": "-as_top",
@@ -316,15 +282,12 @@
   	},
   	"LP": {
   		"unlock_keys": [],
-  		"K_ESCAPE": "/MN",
 
   		"K_b": "-changeborder",
   		"K_l": "-changelight"
   	},
 	"HK": {
 		"unlock_keys": [],
-		"K_ESCAPE": "/MN",
-
 		"K_g": "-GE",
   	  	"K_t": "-TE",
   	  	"K_c": "-CE",

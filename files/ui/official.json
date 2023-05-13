@@ -115,7 +115,7 @@
 			["SH", [0, 36, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
 			["W", [12, 30, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
 			["CL", [8, 6, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
-
+			["CT", [12, 12, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]],
 
 			["WL", [4, 0, 4, 6], [120, 120, 120], "s0", "walls", "Walls(<[-walls]>)", ["geometry.png", [1, 0]]],
 			["IN", [0, 0, 4, 6], [120, 120, 120], "s0", "inverse", "Inverse(<[-inverse]>)", ["geometry.png", [0, 0]]],

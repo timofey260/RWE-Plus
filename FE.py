@@ -134,7 +134,7 @@ class FE(MenuWithField):
             i.blittooltip()
         for i in self.buttons:
             i.blittooltip()
-
+    #add scroll
     def rebuttons(self):
         self.buttonslist = []
         self.matshow = False

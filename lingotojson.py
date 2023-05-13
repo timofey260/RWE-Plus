@@ -225,7 +225,7 @@ def renderlevel(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)
-    subprocess.Popen(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}", shell=True)
+    subprocess.Popen(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render \"{fl}\"", shell=True)
     #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     print(path2renderedlevels)
     os.system("explorer " + path2renderedlevels)

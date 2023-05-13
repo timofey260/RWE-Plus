@@ -225,7 +225,7 @@ class PE(MenuWithField):
         mpos = pg.Vector2(pg.mouse.get_pos())
         if self.field.rect.collidepoint(mpos.xy) or any(self.helds):
 
-            pos = self.mouse2field_round()
+            pos = self.pos
 
             realpos = mpos - self.field.rect.topleft
             s2 = self.size / 2
@@ -233,7 +233,7 @@ class PE(MenuWithField):
                               round(math.floor(realpos.y / s2) * s2 - self.selectedimage.get_height() / 2, 4))
             pos2 += self.field.rect.topleft
 
-            posoffset = self.mouse2field_offset()
+            posoffset = self.posoffset
             bp = pg.mouse.get_pressed(3)
             self.delmode = self.findparampressed("delete_mode")
             self.copymode = self.findparampressed("copy_mode")

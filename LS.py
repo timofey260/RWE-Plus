@@ -50,10 +50,6 @@ class LS(Menu):
     def resize(self):
         super().resize()
 
-    def send(self, message):
-        if message[0] == "-":
-            getattr(self, message[1:])()
-
     def as_left(self):
         val = self.askint("Enter number of tiles to be deleted/added")
         self.cuteverydata(val, 0, 0, 0)
