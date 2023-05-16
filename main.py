@@ -257,6 +257,7 @@ def launch(level):
             pass
         # except:
         #     surf.savef() # extra save level in case of eny crashes
+        #     raise
         pg.display.flip()
         pg.display.update()
 

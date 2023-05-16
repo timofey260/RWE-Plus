@@ -38,11 +38,10 @@ class TT(MenuWithField):
         self.enablenext(con)
         if self.field.rect.collidepoint(mpos) and self.field.visible:
             bp = pg.mouse.get_pressed(3)
-            pos = [math.floor((mpos[0] - self.field.rect.x) / self.size),
-                   math.floor((mpos[1] - self.field.rect.y) / self.size)]
-            pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
+            pos = self.pos
+            pos2 = self.pos2
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
-            posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            posoffset = self.posoffset
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
                 self.emptyarea()
@@ -53,8 +52,8 @@ class TT(MenuWithField):
                 elif self.selectedtool == "SL":
                     placeblock = 2 + self.toolrotation
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
-                    self.area[posoffset[0]][posoffset[1]] = 0
-                    self.data["GE"][posoffset[0]][posoffset[1]][self.layer][0] = placeblock
+                    self.area[int(posoffset[0])][int(posoffset[1])] = 0
+                    self.data["GE"][int(posoffset[0])][int(posoffset[1])][self.layer][0] = placeblock
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.step == 6 or (self.selectedtool == "AR" and self.step == 8) \
                                   or (self.selectedtool == "SL" and self.step == 10):
@@ -65,11 +64,11 @@ class TT(MenuWithField):
 
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False
-                self.rectdata = [posoffset, [0, 0], pos2]
+                self.rectdata = [posoffset, pg.Vector2(0, 0), pos2]
                 self.emptyarea()
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1) and self.step > 6:
-                self.rectdata[1] = [posoffset[0] - self.rectdata[0][0], posoffset[1] - self.rectdata[0][1]]
-                rect = pg.Rect([self.rectdata[2], [pos2[0] - self.rectdata[2][0], pos2[1] - self.rectdata[2][1]]])
+                self.rectdata[1] = posoffset - self.rectdata[0]
+                rect = self.vec2rect(self.rectdata[2], pos2)
                 tx = f"{int(rect.w / self.size)}, {int(rect.h / self.size)}"
                 widgets.fastmts(self.surface, tx, *mpos, white)
                 pg.draw.rect(self.surface, select, rect, 5)
@@ -77,16 +76,17 @@ class TT(MenuWithField):
                 if self.step == 7 or (self.selectedtool == "AR" and self.step == 8) \
                                   or (self.selectedtool == "SL" and self.step == 10):
                     self.enablenext(True)
+                rect = self.vec2rect(self.rectdata[0], posoffset)
                 placeblock = 1
                 if self.selectedtool == "AR":
                     placeblock = 0
                 elif self.selectedtool == "SL":
                     placeblock = 2 + self.toolrotation
-                for x in range(self.rectdata[1][0]):
-                    for y in range(self.rectdata[1][1]):
+                for x in range(int(rect.w)):
+                    for y in range(int(rect.h)):
                         if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
-                            self.data["GE"][x + self.rectdata[0][0]][y + self.rectdata[0][1]][self.layer][0] = placeblock
-                            self.area[x + self.rectdata[0][0]][y + self.rectdata[0][1]] = 0
+                            self.data["GE"][x + int(rect.x)][y + int(rect.y)][self.layer][0] = placeblock
+                            self.area[x + int(rect.x)][y + int(rect.y)] = 0
                 self.data["GE"] = self.data["GE"]
                 self.detecthistory(["GE"])
                 self.renderer.geo_render_area(self.area, self.layer)
