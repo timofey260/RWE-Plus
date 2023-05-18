@@ -59,11 +59,11 @@ class LS(Menu):
         self.cuteverydata(0, val, 0, 0)
 
     def set_width(self):
-        val = self.askint(f"Enter width({self.gw})")
+        val = self.askint(f"Enter width({self.gw})", defaultnumber=self.gw)
         self.cuteverydata(0, 0, val, 0)
 
     def set_height(self):
-        val = self.askint(f"Enter height({self.gh})")
+        val = self.askint(f"Enter height({self.gh})", defaultnumber=self.gh)
         self.cuteverydata(0, 0, 0, val)
 
     def cuteverydata(self, x, y, w, h):
@@ -146,10 +146,10 @@ class LS(Menu):
 
     def bftileschange(self):
         try:
-            x = self.askint(f"({self.btiles[0]})Left", False)
-            y = self.askint(f"({self.btiles[1]})Top", False)
-            w = self.askint(f"({self.btiles[2]})Right", False)
-            h = self.askint(f"({self.btiles[3]})Bottom")
+            x = self.askint(f"({self.btiles[0]})Left", True, self.btiles[0])
+            y = self.askint(f"({self.btiles[1]})Top", False, self.btiles[1])
+            w = self.askint(f"({self.btiles[2]})Right", False, self.btiles[2])
+            h = self.askint(f"({self.btiles[3]})Bottom", False, self.btiles[3])
             self.data["EX2"]["extraTiles"] = [x, y, w, h]
             self.btiles = self.data["EX2"]["extraTiles"]
         except ValueError:

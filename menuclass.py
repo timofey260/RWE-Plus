@@ -210,7 +210,7 @@ class Menu:
             print("it's not a string")
             return None
 
-    def askint(self, q, savelevel=True):
+    def askint(self, q, savelevel=True, defaultnumber=0):
         if savelevel:
             self.savef()
         i = ''
@@ -237,12 +237,12 @@ class Menu:
             pg.display.update()
         # i = input(q + "(leave blank for cancel): ")
         if i == "":
-            return None
+            return defaultnumber
         try:
             return int(i)
         except ValueError:
             print("it's not a number")
-            return None
+            return defaultnumber
 
     def foundthis(self, text):
         global inputfile
