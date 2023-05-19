@@ -255,21 +255,25 @@ class TT(MenuWithField):
         match message:
             case "SU":
                 if self.step > 1:
+                    pos = self.pos
                     self.size += 1
+                    self.offset -= pos - self.pos
                     self.renderfield()
             case "SD":
                 if self.step > 1:
                     if self.size - 1 > 0:
+                        pos = self.pos
                         self.size -= 1
+                        self.offset -= pos - self.pos
                         self.renderfield()
             case "left":
-                self.xoffset += 1
+                self.offset.x += 1
             case "right":
-                self.xoffset -= 1
+                self.offset.x -= 1
             case "up":
-                self.yoffset += 1
+                self.offset.y += 1
             case "down":
-                self.yoffset -= 1
+                self.offset.y -= 1
 
     def pastegeo(self, data, line=0):
         self.emptyarea()

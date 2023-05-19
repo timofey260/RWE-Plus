@@ -67,8 +67,8 @@ class GE(MenuWithField):
 
     def rs(self):
         self.toolrender = pg.transform.scale(self.tooltiles,
-                                             [self.tooltiles.get_width() / graphics["tilesize"][0] * self.size,
-                                              self.tooltiles.get_height() / graphics["tilesize"][1] * self.size])
+                                             [self.tooltiles.get_width() / graphics["tilesize"][0] * image1size,
+                                              self.tooltiles.get_height() / graphics["tilesize"][1] * image1size])
 
     def renderfield(self):
         super().renderfield()
@@ -93,6 +93,8 @@ class GE(MenuWithField):
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
             posoffset = self.posoffset
 
+            toolsized = pg.transform.scale(self.toolrender, pg.Vector2(self.toolrender.get_size()) / image1size * self.size)
+
             self.labels[1].set_text(f"X: {posoffset.x}, Y: {posoffset.y}, Z: {self.layer + 1}")
             if self.selectedtool in self.settings["codes"].keys():
                 if type(self.placetile) == int:
@@ -103,7 +105,7 @@ class GE(MenuWithField):
                         curtool = [graphics["tileplaceicon"][str(self.placetile - self.state)][0] * self.size,
                                    graphics["tileplaceicon"][str(self.placetile - self.state)][1] * self.size]
                     # print([abs(self.field.rect.x - pos2[0]), abs(self.field.rect.y - pos2[1])])
-                    self.surface.blit(self.toolrender, pos2, [curtool, cellsize2])
+                    self.surface.blit(toolsized, pos2, [curtool, cellsize2])
             rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
                     len(self.data["GE"][0]) * self.size]
             pg.draw.rect(self.field.field, border, rect, self.size // image1size + 1)
@@ -138,7 +140,7 @@ class GE(MenuWithField):
                                 graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
                                 graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
                         rect = [posoffset[0] * self.size, posoffset[1] * self.size]
-                        self.fieldadd.blit(self.toolrender, rect, [curtool, cellsize2])
+                        self.fieldadd.blit(toolsized, rect, [curtool, cellsize2])
                         if self.mirrorp:
                             px = posoffset.x
                             py = posoffset.y

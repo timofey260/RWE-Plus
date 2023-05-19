@@ -33,14 +33,13 @@ def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
     if col is None:
         col = black
     fontr: pg.font.Font = fs(fontsize)[0]
-    sz: pg.font.Font = fs(fontsize)[1]
+    sz: int = fs(fontsize)[1]
     if text == "RWE+":
         fontr: pg.font.Font = pg.font.Font(path + "\\" + settings["global"]["titlefont"], fontsize)
-        sz: pg.font.Font = fontr.size(allleters)[1]
+        sz: int = fontr.size(allleters)[1]
     items = text.split("\n")
     rendered = []
     w = 0
-    h = 0
     poses = []
     for l in items:
         render = fontr.render(l, True, col, None)

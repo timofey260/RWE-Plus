@@ -61,9 +61,9 @@ class Menu:
                                    onrelease=f2, tooltip=self.returnkeytext(i[5]), icon=i[6]))
         for i in self.settings["labels"]:
             if len(i) == 3:
-                self.labels.append(widgets.lable(self.surface, i[0], i[1], i[2]))
+                self.labels.append(widgets.lable(self.surface, self.returnkeytext(i[0]), i[1], i[2]))
             elif len(i) == 4:
-                self.labels.append(widgets.lable(self.surface, i[0], i[1], i[2], i[3]))
+                self.labels.append(widgets.lable(self.surface, self.returnkeytext(i[0]), i[1], i[2], i[3]))
 
         self.unlock_keys()
         self.resize()
@@ -576,7 +576,7 @@ class MenuWithField(Menu):
         if self.draweffects != 0 and self.draweffects <= len(self.data['FE']['effects']):
             widgets.fastmts(self.surface,
                             f"Effect({self.draweffects}): {self.data['FE']['effects'][self.draweffects - 1]['nm']}",
-                            *self.field.rect.topleft, white)
+                            *self.field.rect.midleft, white)
         mpos = pg.mouse.get_pos()
         if self.drawgrid and self.field.rect.collidepoint(mpos):
             pos2 = self.pos2
@@ -608,11 +608,15 @@ class MenuWithField(Menu):
         super().send(message)
         match message:
             case "SU":
+                pos = self.pos
                 self.size += 1
+                self.offset -= pos - self.pos
                 self.renderfield()
             case "SD":
                 if self.size - 1 > 0:
+                    pos = self.pos
                     self.size -= 1
+                    self.offset -= pos - self.pos
                     self.renderfield()
             case "left":
                 self.offset.x += 1

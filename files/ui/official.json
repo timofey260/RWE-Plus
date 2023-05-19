@@ -88,7 +88,8 @@
 		"labels":[
 			["", [2, 77], [0, 0, 0], 30],
 			["Tip:", [2, 73], [255, 255, 255], 30],
-			["RWE+", [33, 2], [0, 0, 0], 70]
+			["RWE+", [33, 2], [0, 0, 0], 70],
+			["MMB - Move", [2, 9], [255, 255, 255], 25]
 
 		],
 		"d1":
@@ -103,38 +104,40 @@
 		"buttons":[
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"],
 
-			["AR", [8, 0, 4, 6], [120, 120, 120], "s0", "air", "Air(<[-air]>)", ["geometry.png", [2, 0]]],
-			["SL", [12, 0, 4, 6], [100, 100, 100], "s0", "slope", "Slope(<[-slope]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [3, 0]]],
-			["RK", [0, 12, 4, 6], [100, 100, 100], "s0", "rock", "Rock(<[-rock]>)", ["geometry.png", [2, 1]]],
-			["MV", [12, 6, 4, 6], [100, 100, 100], "s0", "move", "Move(<[-move]>)", ["geometry.png", [1, 1]]],
-			["BM", [0, 18, 4, 6], [80, 80, 80], "s0", "beam", "Beam(<[-beam]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [2, 2]]],
-			["SC", [4, 24, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
-			["D", [8, 24, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
-			["MR", [4, 42, 4, 6], [20, 20, 100], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[-mup]>, <[-mleft]>,\n<[-mdown]>, <[-mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
-			["FC", [0, 30, 4, 6], [100, 100, 100], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
-			["SH", [0, 36, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
-			["W", [12, 30, 4, 6], [100, 100, 100], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
-			["CL", [8, 6, 4, 6], [100, 100, 100], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
-			["CT", [12, 12, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]],
+			["WL", [0, 0, 4, 6], [32, 153, 28], "s0", "walls", "Walls(<[-walls]>)", ["geometry.png", [1, 0]]],
+			["AR", [4, 0, 4, 6], [32, 153, 28], "s0", "air", "Air(<[-air]>)", ["geometry.png", [2, 0]]],
+			["FL", [8, 0, 4, 6], [32, 153, 28], "s0", "floor", "Floor(<[-floor]>)", ["geometry.png", [0, 1]]],
+			["SL", [12, 0, 4, 6], [32, 153, 28], "s0", "slope", "Slope(<[-slope]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [3, 0]]],
+			["GL", [0, 6, 4, 6], [32, 153, 28], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
 
-			["WL", [4, 0, 4, 6], [120, 120, 120], "s0", "walls", "Walls(<[-walls]>)", ["geometry.png", [1, 0]]],
-			["IN", [0, 0, 4, 6], [120, 120, 120], "s0", "inverse", "Inverse(<[-inverse]>)", ["geometry.png", [0, 0]]],
-			["FL", [0, 6, 4, 6], [100, 100, 100], "s0", "floor", "Floor(<[-floor]>)", ["geometry.png", [0, 1]]],
-			["SP", [4, 12, 4, 6], [100, 100, 100], "s0", "spear", "Spear(<[-spear]>)", ["geometry.png", [3, 1]]],
-			["CR", [8, 12, 4, 6], [80, 80, 80], "s0", "crack", "Crack(<[-crack]>)", ["geometry.png", [0, 2]]],
-			["GL", [8, 18, 4, 6], [80, 80, 80], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
-			["SE", [0, 24, 4, 6], [70, 70, 200], "s0", "shortcutentrance", "Shortcut Entrance(<[-shortcutentrance]>)", ["geometry.png", [0, 3]]],
-			["E", [12, 24, 4, 6], [50, 50, 180], "s0", "entrance", "Entrance(<[-entrance]>)", ["geometry.png", [3, 3]]],
-			["CA", [0, 42, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
-			["HV", [8, 30, 4, 6], [100, 100, 100], "s0", "flyhive", "Fly Hive(<[-flyhive]>)", ["geometry.png", [1, 4]]],
-			["GWD", [8, 36, 4, 6], [70, 70, 200], "s0", "garbagewormden", "Garbage Worm Den(<[-garbagewormden]>)", ["geometry.png", [2, 5]]],
-			["WG", [12, 36, 4, 6], [100, 100, 100], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
-			["WMH", [4, 36, 4, 6], [100, 100, 100], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
-			["CB", [4, 6, 4, 6], [100, 100, 100], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"],
+			["RK", [4, 6, 4, 6], [56, 173, 52], "s0", "rock", "Rock(<[-rock]>)", ["geometry.png", [2, 1]]],
+			["SP", [8, 6, 4, 6], [56, 173, 52], "s0", "spear", "Spear(<[-spear]>)", ["geometry.png", [3, 1]]],
+			["CR", [12, 6, 4, 6], [56, 173, 52], "s0", "crack", "Crack(<[-crack]>)", ["geometry.png", [0, 2]]],
+			["BM", [0, 12, 4, 6], [56, 173, 52], "s0", "beam", "Beam(<[-beam]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [2, 2]]],
+			["W", [4, 12, 4, 6], [56, 173, 52], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
+			["WG", [8, 12, 4, 6], [56, 173, 52], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
+			["WMH", [12, 12, 4, 6], [56, 173, 52], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
+			["FC", [0, 18, 4, 6], [56, 173, 52], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
+			["HV", [4, 18, 4, 6], [56, 173, 52], "s0", "flyhive", "Fly Hive(<[-flyhive]>)", ["geometry.png", [1, 4]]],
 
-			["CP", [8, 42, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
-			["PS", [12, 42, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]],
-			["RA", [4, 30, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"]
+			["SC", [8, 18, 4, 6], [70, 70, 200], "s0", "shortcut", "Shortcut(<[-shortcut]>)", ["geometry.png", [1, 3]]],
+			["SE", [12, 18, 4, 6], [70, 70, 200], "s0", "shortcutentrance", "Shortcut Entrance(<[-shortcutentrance]>)", ["geometry.png", [0, 3]]],
+			["D", [0, 24, 4, 6], [50, 50, 180], "s0", "dragonden", "Dragon Den(<[-dragonden]>)", ["geometry.png", [2, 3]]],
+			["E", [4, 24, 4, 6], [50, 50, 180], "s0", "entrance", "Entrance(<[-entrance]>)", ["geometry.png", [3, 3]]],
+			["SH", [8, 24, 4, 6], [70, 70, 200], "s0", "scavengerhole", "Scavenger Hole(<[-scavengerhole]>)", ["geometry.png", [0, 5]]],
+			["GWD", [12, 24, 4, 6], [70, 70, 200], "s0", "garbagewormden", "Garbage Worm Den(<[-garbagewormden]>)", ["geometry.png", [2, 5]]],
+
+			["CA", [0, 30, 4, 6], [100, 20, 20], "s0", "clearall", "Clear all(<[-clearall]>)", ["geometry.png", [0, 6]]],
+			["CB", [4, 30, 4, 6], [186, 32, 52], "s0", "clearblock", "Upper clear(<[-clearblock]>).\nClears only top layers, like beams and paths"],
+			["CL", [8, 30, 4, 6], [186, 32, 52], "s0", "clearlayer", "Layer clear(<[-clearlayer]>)"],
+
+			["MR", [12, 30, 4, 6], [120, 120, 120], "s0", "mirror", "Mirror(<[-mirror]>).\nUse <[-mup]>, <[-mleft]>,\n<[-mdown]>, <[-mright]> to move and rotate it.", ["geometry.png", [1, 6]]],
+			["IN", [0, 36, 4, 6], [120, 120, 120], "s0", "inverse", "Inverse(<[-inverse]>)", ["geometry.png", [0, 0]]],
+			["MV", [4, 36, 4, 6], [100, 100, 100], "s0", "move", "Move(<[-move]>)", ["geometry.png", [1, 1]]],
+			["CP", [8, 36, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
+			["PS", [12, 36, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]],
+			["RA", [0, 42, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"],
+			["CT", [4, 42, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]]
 		],
 		"d1":
 		{
@@ -145,7 +148,8 @@
 		"labels":[
 			["Tile: ", [0, 79], [255, 255, 255], 30],
 			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25],
-			["Replace air: ", [0, 94], [255, 255, 255], 25]
+			["Replace air: ", [0, 94], [255, 255, 255], 25],
+			["LMB - Place\nRMB - Fill\nMMB - Move", [18, 2], [255, 255, 255], 25]
 		],
 		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WMH": 0, "WG":0},
 		"names": {
@@ -185,7 +189,8 @@
 		"labels": [
 			["Tile: ", [2, 90], [255, 255, 255], 25],
 			["X: 0, Y: 0", [2, 93], [255, 255, 255], 25],
-			["Default material: ", [2, 87], [255, 255, 255], 25]
+			["Default material: ", [2, 87], [255, 255, 255], 25],
+			["LMB - Place tile\nRMB - Fill\nMMB - Move", [2, 2], [255, 255, 255], 25]
 		],
 		"itemsize": 2,
 		"menucolor": [120, 120, 120]
@@ -204,7 +209,8 @@
 		],
 		"labels": [
 			["Image: ", [0, 93], [255, 255, 255], 25],
-			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25]
+			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25],
+			["LMB - Paint\nMMB - Move", [6, 2], [255, 255, 255], 25]
 		],
 		"d1":{
 			"rect": [6, 2, 92, 96],
@@ -295,7 +301,8 @@
 		},
 		"labels": [
 			["%1s: %10s", [7, 64], [255, 255, 255], 25],
-			["Selected effect: ", [0, 97], [255, 255, 255], 25]
+			["Selected effect: ", [0, 97], [255, 255, 255], 25],
+			["LMB - Paint\nRMB - Erase\nMMB - Move", [2, 2], [255, 255, 255], 25]
 		],
 		"menucolor": [120, 120, 120]
 	},
@@ -314,7 +321,8 @@
 			"border": [150, 150, 150]
 		},
 		"labels": [
-			["Total cameras: %2d", [0, 97], [255, 255, 255], 25]
+			["Total cameras: %2d", [0, 97], [255, 255, 255], 25],
+			["LMB - Select camera\nMMB - Move", [6, 2], [255, 255, 255], 25]
 		],
 		"menucolor": [100, 0, 0],
 		"addspeed": 0.01,
@@ -375,7 +383,8 @@
 		"labels": [
 			["Notes:\n", [2, 64], [255, 255, 255], 25],
 			["Warning: ", [0, 94], [255, 50, 50], 25],
-			["Prop settings: ", [0, 97], [255, 255, 255], 25]
+			["Prop settings: ", [0, 97], [255, 255, 255], 25],
+			["LMB - Place Prop\nRMB - Depth+, <[cursor_propdepth_inverse]>+RMB - Depth-\nMMB - Move\n<[propvariation_change]>+LMB - Variation-, <[propvariation_change]>+RMB - Variation+", [2, 2], [255, 255, 255], 25]
 		],
 		"menucolor": [120, 120, 120],
 
@@ -401,7 +410,8 @@
 		},
 		"labels": [
 			["Water Level: %2d", [0, 93], [255, 255, 255], 25],
-			["Water Layer: %2d", [0, 97], [255, 255, 255], 25]
+			["Water Layer: %2d", [0, 97], [255, 255, 255], 25],
+			["LMB - Water level change\nMMB - Move", [6, 2], [255, 255, 255], 25]
 		],
 		"menucolor": [120, 120, 120]
 	},

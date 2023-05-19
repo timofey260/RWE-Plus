@@ -43,10 +43,9 @@ class EE(MenuWithField):
         self.labels[1].set_text(self.labels[1].originaltext % (1 - self.data["WL"]["waterInFront"] + 1))
 
         if self.field.rect.collidepoint(pg.mouse.get_pos()):
-            pos = [math.floor((pg.mouse.get_pos()[0] - self.field.rect.x) / self.size),
-                   math.floor((pg.mouse.get_pos()[1] - self.field.rect.y) / self.size)]
+            pos = self.pos
 
-            posoffset = [pos[0] - self.xoffset, pos[1] - self.yoffset]
+            posoffset = self.posoffset
 
             bp = pg.mouse.get_pressed()
 

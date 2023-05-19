@@ -20,8 +20,7 @@ class MN(MenuWithField):
         mpos = pg.Vector2(pg.mouse.get_pos())
         if self.field.rect.collidepoint(mpos):
 
-            pos = [math.floor((mpos.x - self.field.rect.x) / self.size),
-                   math.floor((mpos.y - self.field.rect.y) / self.size)]
+            pos = self.pos
             bp = pg.mouse.get_pressed(3)
 
             self.movemiddle(bp, pos)

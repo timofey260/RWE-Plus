@@ -137,8 +137,10 @@ def inittolist():
         colr = pg.Color(toarr(items[0][1], "color"))
         solved_copy[cat] = []
         for indx, item in enumerate(items[1:]):
-
-            img = pg.image.load(path2graphics + item["nm"] + ".png")
+            try:
+                img = pg.image.load(path2graphics + item["nm"] + ".png")
+            except FileNotFoundError:
+                continue
             sz = toarr(item["sz"], "point")
             try:
                 ln = len(item["repeatL"])
@@ -253,8 +255,10 @@ def getprops(tiles: dict):
         colr = pg.Color(toarr(items[0][1], "color"))
         solved_copy[cat] = []
         for indx, item in enumerate(items[1:]):
-
-            img = pg.image.load(path2props + item["nm"] + ".png")
+            try:
+                img = pg.image.load(path2props + item["nm"] + ".png")
+            except FileNotFoundError:
+                continue
             img.set_colorkey(pg.color.Color(255, 255, 255))
 
             images = []
