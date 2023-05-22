@@ -341,5 +341,6 @@ if __name__ == "__main__":
             launch(args.filename)
         except FileNotFoundError:
             print("File not found!")
+            raise
     else:
         loadmenu()

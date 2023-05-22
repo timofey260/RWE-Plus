@@ -22,6 +22,7 @@ notfoundtile = {
     "tags": [""]
 }
 
+
 def tojson(string: str):
     closebracketscount = string.count("]")
     openbracketscount = string.count("[")
@@ -30,7 +31,7 @@ def tojson(string: str):
         t = t[:-1]
     t = t.replace("#Data:", "#data:").replace("#Options:", "#options:") \
          .replace("[#", "{#").replace("point(", "\"point(")\
-         .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")", ")\"").replace("void", "\"void\"")
+         .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "\"void\"")
     count = 0
     m = list(t)
     for i in m:
@@ -51,10 +52,10 @@ def tojson(string: str):
     t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
     # print(t)
     if t != "":
-        a = json.loads(t)
+        print(t)
+        return json.loads(t)
     else:
-        a = {}
-    return a
+        return {}
 
 
 def turntoproject(string: str):
@@ -99,37 +100,40 @@ def makearr(col: list | pg.Vector2, mark):
     return f"{mark}({col[0]}, {col[1]})"
 
 
-def init_solve(file: str):
-    s = open(file, "r").readlines()
+def init_solve(files: list[str,]):
     a = {}
-    a2 = []
-    cat = ''
-    counter = 0
-    counter2 = 2
-    for i in s:
-        i = i.replace("\n", "")
-        if len(i) > 1:
-            if i[0] == "-":
-                counter2 += 1
-                a[cat] = a2
-                js = tojson(i[1:])
-                a2 = [js]
-                cat = js[0]
-                counter = 0
-            else:
-                js = tojson(i)
-                item = {}
-                for p, val in js.items():
-                    item[p] = val
-                a2.append(item)
-                counter += 1
-    a[cat] = a2
+    for file in files:
+        s = open(file, "r").readlines()
+        a2 = []
+        cat = ''
+        counter = 0
+        counter2 = 2
+        for i in s:
+            i = i.replace("\n", "")
+            if len(i) > 1:
+                if i[0] == "-":
+                    counter2 += 1
+                    a[cat] = a2
+                    js = tojson(i[1:])
+                    a2 = [js]
+                    cat = js[0]
+                    counter = 0
+                else:
+                    js = tojson(i)
+                    item = {}
+                    for p, val in js.items():
+                        item[p] = val
+                    a2.append(item)
+                    counter += 1
+        a[cat] = a2
     return a
 
 
 def inittolist():
     inv = settings["TE"]["LEtiles"]
-    solved = init_solve(path2graphics + "init.txt")
+    print(graphics)
+    tilefiles = [path2graphics + i for i in graphics["tileinits"]]
+    solved = init_solve(tilefiles)
     del solved['']
     solved_copy = solved.copy()
     for catnum, catitem in enumerate(solved.items()):
@@ -247,7 +251,9 @@ def getcolors():
 
 def getprops(tiles: dict):
     # turning tiles to props and then add them to all other props
-    solved = {**init_solve(path2props + "init.txt"), **init_solve(path + "additionprops.txt")}
+    propfiles = [path2props + i for i in graphics["propinits"]]
+    propfiles.append(path + "additionprops.txt")
+    solved = init_solve(propfiles)
     del solved['']
     solved_copy = solved.copy()
     for catnum, catitem in enumerate(solved.items()):
