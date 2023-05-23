@@ -299,7 +299,8 @@
   	  	"K_z": "-LP",
   	  	"K_h": "-HK",
   	  	"K_m": "-MN",
-  	  	"K_r": "-globalkeys"
+  	  	"K_r": "-globalkeys",
+  	  	"K_e+": "-edit"
 	},
 	"TT": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],

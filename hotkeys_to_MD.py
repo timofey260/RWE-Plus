@@ -1,3 +1,4 @@
+import copy
 import json
 import pygame as pg
 import pygame.key as k
@@ -13,52 +14,39 @@ else:
 ex = r"\\hotkeys.md"
 
 
-def turntomd(filename, output, mod=False):
+def mdtojson(filename, desc, output):
     js = json.load(open(filename, "r"))
-    if mod:
-        modded = open(mod, "r").readlines()
+    modded = json.load(open(desc, "r"))
+    newdict = {}
+    for menu, items in js.items():
+        print(menu, items)
+        newdict[menu] = {}
+        for key, func in items.items():
+            if key == "unlock_keys":
+                continue
+            if modded[menu].get(func):
+                newdict[menu][func] = modded[menu][func]
+            else:
+                newdict[menu][func] = ""
+    open(output, "w").write(json.dumps(newdict, indent=4))
+
+
+def turntomd(filename, desc, output):
+    js = json.load(open(filename, "r"))
+    modded = json.load(open(desc, "r"))
     with open(output, "w+") as file:
         file.write("Generated using hotkeys to md converter\n\n\n")
-        for key, items in js.items():
-            if mod:
-                for line in modded: # NOQA
-                    f = re.search(r"### ([a-zA-Z0-9]+)", line)
-                    if f is None:
-                        pass
-                    elif f[1] == key:
-                        file.write(line)
-                        break
-                else:
-                    file.write(f"### {key}\n")
-            else:
-                file.write(f"### {key}\n")
-            for item, value in items.items():
-                if item == "unlock_keys":
+        for menu, items in js.items():
+            file.write("###" + menu + "\n")
+            for key, func in items.items():
+                if key == "unlock_keys":
                     continue
-                d = ''
-                key2 = item.replace("+", "").replace("@", "")
-                if mod:
-                    prevcat = ""
-                    for line in modded:
-                        cat = re.search(r"### ([a-zA-Z0-9]+)", line)
-                        if cat is not None:
-                            prevcat = cat[1]
-                        if prevcat != key:
-                            continue
-                        print(prevcat, key)
-                        f = re.search(r"- ([a-zA-Z0-9-/_]+) -", line)
-                        if f is None:
-                            continue
-                        if f[1] == value:
-                            desc = re.search(r"- [a-zA-Z0-9-/_]+ - ([a-zA-Z0-9+-/_,. ]+)", line)
-                            if desc is None:
-                                continue
-                            d = desc[1]
-                            break
-                if item.find("+") != -1:
-                    file.write(f"* **ctrl + {k.name(getattr(pg, key2)).title()}** - {value} - {d}\n")
+                description = modded[menu][func]
+                key2 = key.replace("+", "").replace("@", "")
+                if key.find("+") != -1:
+                    file.write(f"* **ctrl + {k.name(getattr(pg, key2)).title()}** - {func} - {description}\n")
                 else:
-                    file.write(f"* **{k.name(getattr(pg, key2)).title()}** - {value} - {d}\n")
+                    file.write(f"* **{k.name(getattr(pg, key2)).title()}** - {func} - {description}\n")
     print("Done!")
 
 
@@ -67,7 +55,12 @@ if __name__ == "__main__":
     parser.add_argument("filename", type=str, help="file to be parsed")
     parser.add_argument("-o", "--output", default=application_path + ex,
                         metavar="file", dest="output", type=str, help="output file")
-    parser.add_argument("-m", "--merge", type=str, metavar="file", dest="mod", default=None, help="merges two files to one")
+    parser.add_argument("-t", "--tomd", type=str, metavar="file", dest="md", default=None,
+                        help="combines hotkeys and descriptions file into one markdown text")
+    parser.add_argument("-m", "--merge", type=str, metavar="file", dest="merge", default=None,
+                        help="combines hotkeys and descriptions file into one descriptions file")
     args = parser.parse_args()
-    if args.filename is not None:
-        turntomd(args.filename, args.output, args.mod)
+    if args.merge is not None:
+        mdtojson(args.filename, args.merge, args.output)
+    elif args.md is not None:
+        turntomd(args.filename, args.md, args.output)

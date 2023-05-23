@@ -4,7 +4,7 @@ class HK(Menu):
     def __init__(self, surface: pg.surface.Surface, renderer, openmenu="MN"):
         self.menu = "HK"
         self.m = openmenu
-        self.keys = open(path + "hotkeystip.md").readlines()
+        self.keys = json.load(open(path + "hotkeystip.json"))
         self.scroll = 0
 
         super().__init__(surface, renderer, "HK")
@@ -15,28 +15,18 @@ class HK(Menu):
         if name != self.m:
             self.m = name
             self.scroll = 0
-        sw = False
         text = self.m + "\n"
         text2 = "\n"
-        count = 0
-        for line in self.keys:
-            if "###" in line:
-                if sw:
-                    break
-                if name in line:
-                    sw = True
-                    continue
-            if sw:
-                if self.scroll > count:
-                    count += 1
-                    continue
-                ft = line.find(" - ")
-                tx = line[:ft] + "\n"
-                tx2 = line[ft:]
-                text += tx.replace("*", "").replace("###", "")
-                tx2 = tx2[tx2.rfind(" - ") + 2:]
-                text2 += tx2.replace("*", "").replace("###", "")
-                count += 1
+        for key, func in hotkeys[self.m].items():
+            if key == "unlock_keys":
+                continue
+            desc = self.keys[self.m][func]
+            tx = pg.key.name(getattr(pg, key.replace("@", "").replace("+", ""))).title() + "\n"
+            tx2 = desc+"\n"
+            if key.find("+") > 0:
+                tx = "Ctrl + " + tx
+            text += tx
+            text2 += tx2
 
         self.labels[0].set_text(text)
         self.labels[1].set_text(text2)
@@ -95,3 +85,6 @@ class HK(Menu):
 
     def goback(self):
         self.message = self.m
+
+    def edit(self):
+        os.system(path + "hotkeys.json")

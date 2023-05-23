@@ -433,6 +433,7 @@
 			["Prop\nEditor", [0, 84, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)"],
 
 			["To editor", [93, 0, 7, 4], [90, 90, 90], "goback", "non", "Goes to editor, hotkeys you watching"],
+			["Edit", [90, 93, 10, 7], [90, 90, 90], "edit", "non", "Opens default editor to edit hotkeys"],
 			["?", [98, 4, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 		],
 		"labels":[
