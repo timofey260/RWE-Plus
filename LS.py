@@ -137,7 +137,7 @@ class LS(Menu):
     def recount_image(self):
         try:
             lev = os.path.splitext(self.data["path"])[0] + ".png"
-            self.field = pg.image.load(lev)
+            self.field = loadimage(lev)
             self.imagew, self.imageh = self.field.get_size()
             self.imagewp = self.imagew / image1size - self.ofsleft + 1
             self.imagehp = self.imageh / image1size - self.ofstop + 1

@@ -9,19 +9,40 @@ if getattr(sys, 'frozen', False):
 else:
     application_path = os.path.dirname(__file__)
 
+islinux = os.name == "posix"
+
+
+def resolvepath(input_path): # Thanks to someone... someone nice
+    if not islinux:
+        return input_path
+    directory, filename = os.path.split(input_path)
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.lower() == filename.lower():
+                return os.path.join(root, file)
+    return None
+
+
+def loadimage(filepath):
+    resolved = resolvepath(filepath)
+    if filepath is None:
+        raise FileNotFoundError(f"Image by path {path} does not exist", path)
+    return pg.image.load(resolved)
+
+
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
-path = application_path + "\\files\\"
-path2tutorial = path + "tutorial\\"
-path2ui = path + "ui\\"
-path2graphics = application_path + "\\drizzle\\Data\\Graphics\\"
-path2cast = application_path + "\\drizzle\\Data\\Cast\\"
-path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
-path2props = application_path + "\\drizzle\\Data\\Props\\"
-path2levels = application_path + "\\LevelEditorProjects\\"
+path = application_path + "/files/"
+path2tutorial = path + "tutorial/"
+path2ui = path + "ui/"
+path2graphics = application_path + "/drizzle/Data/Graphics/"
+path2cast = application_path + "/drizzle/Data/Cast/"
+path2renderedlevels = application_path + "/drizzle/Data/Levels/"
+path2props = application_path + "/drizzle/Data/Props/"
+path2levels = application_path + "/LevelEditorProjects/"
 
-path2effectPreviews = path + "effectPreviews\\"
-path2materialPreviews = path + "materialPreviews\\"
+path2effectPreviews = path + "effectPreviews/"
+path2materialPreviews = path + "materialPreviews/"
 
 pg.font.init()
 
@@ -31,10 +52,10 @@ hotkeys = json.load(open(path + "hotkeys.json", "r"))
 e = json.load(open(path + "effects.json", "r"))
 
 
-tooltiles = pg.image.load(path + graphics["tooltiles"])
-toolmenu = pg.image.load(path + graphics["toolmenu"])
+tooltiles = loadimage(path + graphics["tooltiles"])
+toolmenu = loadimage(path + graphics["toolmenu"])
 
-mat = pg.image.load(path + graphics["materials"])
+mat = loadimage(path + graphics["materials"])
 
 ofstop = 15
 ofsleft = 15
@@ -55,12 +76,11 @@ inputpromtname = "RWE+ input"
 
 fonts: dict[[pg.font.Font, int], ...] = {}
 
-
 def fs(sz):
     if sz in fonts.keys():
         return fonts[sz]
     else:
-        f = pg.font.Font(path + "\\" + settings["global"]["font"], sz)
+        f = pg.font.Font(path + "/" + settings["global"]["font"], sz)
         fonts[sz] = [f, f.size(allleters)[1]]
         return fonts[sz]
 
@@ -74,7 +94,7 @@ def solveeffects(effects):
             if "options" not in d:
                 d["options"] = []
             if "preview" in d:
-                d["preview"] = pg.image.load(path2effectPreviews + d["preview"] + ".png")
+                d["preview"] = loadimage(path2effectPreviews + d["preview"] + ".png")
             for i in effects["defaultparams"]:
                 d["options"].append(i)
             for indx, option in enumerate(d["options"]):

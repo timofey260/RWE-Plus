@@ -16,7 +16,7 @@ class LE(MenuWithField):
         sc = [(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size]
         try:
             lev = os.path.splitext(self.data["path"])[0] + ".png"
-            self.field2.field = pg.transform.scale(pg.image.load(lev), sc)
+            self.field2.field = pg.transform.scale(loadimage(lev), sc)
         except FileNotFoundError:
             self.field2.field = pg.surface.Surface(sc)
             self.field2.field.fill(white)
@@ -42,11 +42,11 @@ class LE(MenuWithField):
         self.images = {True: [], False: []}
 
         for i in self.settings["images"]:
-            img = pg.image.load(path2cast + i)
+            img = loadimage(path2cast + i)
             img.set_colorkey(white)
             self.images[True].append(img)
 
-            img = pg.image.load(path2cast + i)
+            img = loadimage(path2cast + i)
             arr = pg.pixelarray.PixelArray(img)
             arr.replace(black, red)
             arr.replace(white, black)

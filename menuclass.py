@@ -101,7 +101,7 @@ class Menu:
 
     def addfolder(self, folder):
         global filepath
-        filepath += "\\" + folder + "\\"
+        filepath += "/" + folder + "/"
         self.message = "ab"
 
     def goback(self):

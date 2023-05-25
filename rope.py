@@ -225,7 +225,7 @@ if __name__ == "__main__":
     import lingotojson
     import pygame as pg
 
-    data = lingotojson.turntoproject(open("LevelEditorProjects\\HI_C15.txt", "r").read())
+    data = lingotojson.turntoproject(open("LevelEditorProjects/HI_C15.txt", "r").read())
     #rope = RopeModel(data, Vector2(60, 200), Vector2(60 + 9 * 16, 200),
     #                 {"nm": "Wire", "tp": "rope", "depth": 4, "tags": [], "notes": [], "segmentLength": 10,
     #                  "collisionDepth": 2, "segRad": 4.5, "grav": 0.5, "friction": 0.5, "airFric": 0.9, "stiff": 1,

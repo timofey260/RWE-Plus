@@ -1,7 +1,4 @@
-import copy
 import requests
-
-import menuclass
 from menus import *
 from tkinter.messagebox import askyesnocancel
 import argparse
@@ -167,7 +164,7 @@ def launch(level):
     width = settings["global"]["width"]
     height = settings["global"]["height"]
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
-    # pg.display.set_icon(pg.image.load(path + "icon.png"))
+    # pg.display.set_icon(loadimage(path + "icon.png"))
     renderer = Renderer(file, items, props, propcolors)
     renderer.render_all(0)
     surf = MN(window, renderer)
@@ -270,7 +267,7 @@ def loadmenu():
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE)
     renderer = Renderer({"path": ""}, None, None, None, False)
     surf = load(window, renderer)
-    pg.display.set_icon(pg.image.load(path + "icon.png"))
+    pg.display.set_icon(loadimage(path + "icon.png"))
     while run:
         for event in pg.event.get():
             match event.type:
@@ -330,7 +327,7 @@ if __name__ == "__main__":
     if args.new:
         launch(-1)
     if args.renderfiles is not None:
-        s = application_path + "\\drizzle\\Drizzle.ConsoleApp.exe render "
+        s = f"{application_path}/drizzle/Drizzle.ConsoleApp.exe render "
         for i in args.renderfiles:
             s += i + " "
         os.system(s)

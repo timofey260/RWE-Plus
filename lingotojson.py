@@ -1,12 +1,10 @@
-import copy
-import json
 import re
 import subprocess
 
 from files import *
 import math
 
-notfound = pg.image.load(path + "notfound.png")
+notfound = loadimage(path + "notfound.png")
 notfound.set_colorkey(pg.Color(255, 255, 255))
 notfoundtile = {
     "name": "unloaded tile",
@@ -150,7 +148,7 @@ def inittolist():
         solved_copy[cat] = []
         for indx, item in enumerate(items[1:]):
             try:
-                img = pg.image.load(path2graphics + item["nm"] + ".png")
+                img = loadimage(path2graphics + item["nm"] + ".png")
             except FileNotFoundError:
                 continue
             sz = toarr(item["sz"], "point")
@@ -218,7 +216,7 @@ def inittolist():
         rect = pg.rect.Rect(graphics["matposes"].index(i) * 16, 0, 16, 16)
         img = mat.subsurface(rect)
         try:
-            preview = pg.image.load(path2materialPreviews + i.lower().replace(" ", "") + ".png")
+            preview = loadimage(path2materialPreviews + i.lower().replace(" ", "") + ".png")
         except FileNotFoundError:
             preview = pg.Surface([20, 20])
             preview.set_alpha(0)
@@ -245,7 +243,7 @@ def renderlevel(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)
-    subprocess.Popen(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render \"{fl}\"", shell=True)
+    subprocess.Popen(f"{application_path}/drizzle/Drizzle.ConsoleApp.exe render \"{fl}\"", shell=True)
     #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     print(path2renderedlevels)
     os.system("explorer " + path2renderedlevels)
@@ -276,7 +274,7 @@ def getprops(tiles: dict):
         solved_copy[cat] = []
         for indx, item in enumerate(items[1:]):
             try:
-                img = pg.image.load(path2props + item["nm"] + ".png")
+                img = loadimage(path2props + item["nm"] + ".png")
             except FileNotFoundError:
                 continue
             img.set_colorkey(pg.color.Color(255, 255, 255))
@@ -356,7 +354,7 @@ def getprops(tiles: dict):
                 returnimage = pg.Surface(size)
                 returnimage.fill(pg.Color(255, 255, 255))
                 try:
-                    img = pg.image.load(path2graphics + tile["name"] + ".png")
+                    img = loadimage(path2graphics + tile["name"] + ".png")
                 except:
                     img = pg.transform.scale(notfound, size)
                     returnimage.blit(pg.transform.scale(notfound, size), [0, 0])

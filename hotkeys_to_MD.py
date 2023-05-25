@@ -11,7 +11,7 @@ if getattr(sys, 'frozen', False):
 else:
     application_path = os.path.dirname(__file__)
 
-ex = r"\\hotkeys.md"
+ex = r"/hotkeys.md"
 
 
 def mdtojson(filename, desc, output):
