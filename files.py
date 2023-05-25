@@ -20,6 +20,9 @@ path2renderedlevels = application_path + "\\drizzle\\Data\\Levels\\"
 path2props = application_path + "\\drizzle\\Data\\Props\\"
 path2levels = application_path + "\\LevelEditorProjects\\"
 
+path2effectPreviews = path + "effectPreviews\\"
+path2materialPreviews = path + "materialPreviews\\"
+
 pg.font.init()
 
 graphics = json.load(open(path + "graphics.json", "r"))
@@ -70,6 +73,8 @@ def solveeffects(effects):
             d = {**effects["defaultproperties"], **effect}
             if "options" not in d:
                 d["options"] = []
+            if "preview" in d:
+                d["preview"] = pg.image.load(path2effectPreviews + d["preview"] + ".png")
             for i in effects["defaultparams"]:
                 d["options"].append(i)
             for indx, option in enumerate(d["options"]):

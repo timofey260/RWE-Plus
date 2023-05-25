@@ -4,6 +4,8 @@ from menuclass import *
 class TT(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer: Renderer):
         super().__init__(surface, "TT", renderer)
+        self.matshow = None
+        self.buttonslist = []
         self.step = 0
         self.maxstep = 0
         self.renderer.geo_full_render(self.layer)
@@ -11,6 +13,19 @@ class TT(MenuWithField):
         self.pastedata = json.load(open(path2tutorial + "text samples.json", "r"))
         self.selectedtool = ""
         self.toolrotation = 0
+        self.examplelist = {
+            "Category 1": [
+                {"nm": "Very cool thing", "color": [10, 10, 10]},
+                {"nm": "Upper is liar", "color": [50, 50, 50]},
+                {"nm": "Upper is liar", "color": [150, 150, 150]}
+            ],
+            "Category 2": [
+                {"nm": "Ima red", "color": [200, 20, 20]},
+                {"nm": "Ima blue", "color": [20, 20, 200]}
+            ]
+        }
+        self.selectedtile = ""
+        self.currentcategory = 0
         self.resize()
         self.rfa()
         self.blit()
@@ -21,10 +36,19 @@ class TT(MenuWithField):
         self.buttons[2].visible = False
         self.buttons[3].visible = False
         self.buttons[4].visible = False
+        self.buttons[6].visible = False
+        self.buttons[7].visible = False
         self.field.visible = False
 
+    def resize(self):
+        super().resize()
+        if hasattr(self, "field"):
+            self.field.resize()
+            for i in self.buttonslist:
+                i.resize()
+            self.renderfield()
+
     def blit(self, draw=True):
-        super().blit(draw)
         mpos = pg.mouse.get_pos()
         con = False
         match self.step:
@@ -34,7 +58,14 @@ class TT(MenuWithField):
                 con = self.size != 13
             case 3:
                 con = self.layer != 0
-
+        if len(self.buttonslist) > 1:
+            pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+            for button in self.buttonslist:
+                button.blitshadow()
+            for button in self.buttonslist[:-1]:
+                button.blit(sum(pg.display.get_window_size()) // 120)
+            self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
+        super().blit(draw)
         self.enablenext(con)
         if self.field.rect.collidepoint(mpos) and self.field.visible:
             bp = pg.mouse.get_pressed(3)
@@ -57,7 +88,7 @@ class TT(MenuWithField):
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.step == 6 or (self.selectedtool == "AR" and self.step == 8) \
                                   or (self.selectedtool == "SL" and self.step == 10):
-                    self.enablenext(True)
+                    self.enablenext()
                 self.mousp = True
                 self.render_geo_area()
                 self.rfa()
@@ -75,7 +106,7 @@ class TT(MenuWithField):
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 if self.step == 7 or (self.selectedtool == "AR" and self.step == 8) \
                                   or (self.selectedtool == "SL" and self.step == 10):
-                    self.enablenext(True)
+                    self.enablenext()
                 rect = self.vec2rect(self.rectdata[0], posoffset)
                 placeblock = 1
                 if self.selectedtool == "AR":
@@ -96,7 +127,7 @@ class TT(MenuWithField):
             if self.step > 0:
                 self.movemiddle(bp, pos)
 
-    def enablenext(self, condition):
+    def enablenext(self, condition=True):
         if condition:
             self.buttons[0].enabled = True
             self.buttons[0].visible = True
@@ -183,10 +214,14 @@ class TT(MenuWithField):
                 self.buttons[3].visible = False
                 self.buttons[4].visible = False
                 self.labels[1].visible = False
+                self.buttons[6].visible = False
+                self.buttons[7].visible = False
+                self.buttonslist = []
             case 13:
+                self.labels[1].visible = True
+                self.buttons[6].visible = True
+                self.buttons[7].visible = True
                 self.rebuttons()
-    def rebuttons(self):
-        arr = {}
 
     def clearfield(self):
         clearblock = 1 if self.layer == 0 else 0
@@ -197,7 +232,7 @@ class TT(MenuWithField):
         self.rfa()
 
     def skip(self):
-        self.enablenext(True)
+        self.enablenext()
         self.next()
 
     def prev(self):
@@ -229,7 +264,7 @@ class TT(MenuWithField):
 
     def WL(self):
         if self.step == 5:
-            self.enablenext(True)
+            self.enablenext()
         self.selectedtool = "WL"
         self.labels[1].set_text("Selected tool: Wall")
 
@@ -274,6 +309,72 @@ class TT(MenuWithField):
                 self.offset.y += 1
             case "down":
                 self.offset.y -= 1
+
+    def rebuttons(self):
+        self.buttonslist = []
+        self.matshow = False
+        btn2 = None
+        itemcat = list(self.examplelist)[self.currentcategory]
+        for count, item in enumerate(self.examplelist[itemcat]):
+            cat = pg.rect.Rect(self.settings["catpos"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
+                                  tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
+            btn = widgets.button(self.surface, rect, item["color"], item["nm"], onpress=self.settile)
+            self.buttonslist.append(btn)
+        if btn2 is not None:
+            self.buttonslist.append(btn2)
+        self.toolindex = 0
+        self.resize()
+
+    def changematshow(self):
+        if self.matshow:
+            self.currentcategory = self.toolindex
+            cat = list(self.examplelist.keys())[self.currentcategory]
+            self.settile(self.examplelist[cat][0]["nm"])
+            self.rebuttons()
+        else:
+            self.cats()
+
+    def cats(self):
+        self.buttonslist = []
+        self.matshow = True
+        btn2 = None
+        for count, item in enumerate(self.examplelist.keys()):
+            cat = pg.rect.Rect(self.settings["catpos"])
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
+            rect = pg.rect.Rect(self.settings["itempos"])
+            rect = rect.move(0, rect.h * count)
+            col = self.examplelist[item][0]["color"]
+            if col is None:
+                col = gray
+            if count == self.currentcategory:
+                col = darkgray
+            btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
+            self.buttonslist.append(btn)
+        if btn2 is not None:
+            self.buttonslist.append(btn2)
+        self.resize()
+
+    def selectcat(self, name):
+        self.currentcategory = list(self.examplelist.keys()).index(name)
+        self.rebuttons()
+
+    def settile(self, name):
+        self.selectedtile = name
+        self.labels[1].set_text(self.selectedtile + " selected")
+        self.enablenext(self.step == 13)
+
+    def rt(self):
+        self.currentcategory = (self.currentcategory + 1) % len(self.examplelist.keys())
+        self.rebuttons()
+
+    def lt(self):
+        self.currentcategory -= 1
+        if self.currentcategory < 0:
+            self.currentcategory = len(self.examplelist.keys()) - 1
+        self.rebuttons()
 
     def pastegeo(self, data, line=0):
         self.emptyarea()

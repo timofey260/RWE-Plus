@@ -1,5 +1,5 @@
 -["Cogs and Gears", color(180, 255, 255)]
-[#nm:"CogA1", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(3,3), #repeatL:[1,1,2], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
+[#nm:"CogA1", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(3,3), #repeatL:[1,1,2], #tags:["randomRotat"], #layerExceptions:[], #notes:[]] --now these comments work
 [#nm:"CogA2", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(7,7), #repeatL:[1,1,2], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
 [#nm:"CogA3", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(11,11), #repeatL:[1,1,1,1], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
 [#nm:"CogB1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(5,5), #repeatL:[2,3], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
@@ -152,4 +152,4 @@
 [#nm:"ComplexLeaves20x20", #tp:"variedStandard", #colorTreatment:"standard", #bevel:10, #sz:point(20,20), #repeatL:[1,1,1,1,1,1,1,1,1,1], #vars:10, #random:1, #colorize:0, #tags:[], #layerExceptions:[], #notes:[]]
 
 -["SLUGFLEX", color(255, 255, 255)]
-[#nm:"SlugFlex", #tp:"standard", #colorTreatment:"standard", #sz:point(18,31), #repeatL:[3], #tags:[], #layerExceptions:[], #notes:["SEX"]]
+[#nm:"SlugFlex", #tp:"standard", #colorTreatment:"standard", #sz:point(18,31), #repeatL:[3], #tags:[], #layerExceptions:[], #notes:["SEXY"], #Sexiness: 1000]

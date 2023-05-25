@@ -5,59 +5,59 @@
 	
 	"effects": [
 		{"nm": "Natural", "color": [0, 200, 0], "efs": [
-			{"nm": "Slime", "tp": "standardErosion", "repeats": 130, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]]},
-			{"nm": "Melt", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": []},
-			{"nm": "Rust", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.2, "options": [["3D", ["Off", "On"], "Off"]]},
-			{"nm": "Barnacles", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.3, "options": [["3D", ["Off", "On"], "Off"]]},
+			{"nm": "Slime", "tp": "standardErosion", "repeats": 130, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]], "preview":"slime"},
+			{"nm": "Melt", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": [], "preview":"melt"},
+			{"nm": "Rust", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.2, "options": [["3D", ["Off", "On"], "Off"]], "preview":"rust"},
+			{"nm": "Barnacles", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.3, "options": [["3D", ["Off", "On"], "Off"]], "preview":"barnacles"},
 			{"nm": "Rubble", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
 			{"nm": "DecalsOnlySlime", "tp": "standardErosion", "repeats": 130, "affectOpenAreas": 0.5, "options": []}
 		]},
 		{"nm": "Erosion", "color": [115, 60, 18], "efs": [
-			{"nm": "Roughen", "tp": "standardErosion", "repeats": 30, "affectOpenAreas": 0.05, "options": []},
-			{"nm": "SlimeX3", "tp": "standardErosion", "repeats": 390, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]]},
-			{"nm": "Super Melt", "tp": "standardErosion", "repeats": 50, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]]},
-			{"nm": "Destructive Melt", "tp": "standardErosion", "repeats": 50, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]]},
-			{"nm": "Erode", "tp": "standardErosion", "repeats": 80, "affectOpenAreas": 0.5, "options": []},
-			{"nm": "Super Erode", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": []},
+			{"nm": "Roughen", "tp": "standardErosion", "repeats": 30, "affectOpenAreas": 0.05, "options": [], "preview":"roughten"},
+			{"nm": "SlimeX3", "tp": "standardErosion", "repeats": 390, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]], "preview":"slimex3"},
+			{"nm": "Super Melt", "tp": "standardErosion", "repeats": 50, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]], "preview":"supermelt"},
+			{"nm": "Destructive Melt", "tp": "standardErosion", "repeats": 50, "affectOpenAreas": 0.5, "options": [["3D", ["Off", "On"], "Off"]], "preview":"destructivemelt"},
+			{"nm": "Erode", "tp": "standardErosion", "repeats": 80, "affectOpenAreas": 0.5, "options": [], "preview":"erode"},
+			{"nm": "Super Erode", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": [], "preview":"supererode"},
 			{"nm": "DaddyCoruption"}
 		]},
 		{"nm": "Erosion2", "color": [79, 41, 11], "efs": [
 			{"nm": "Slag"}
 		]},
 		{"nm": "Artificial", "color": [110, 184, 204], "efs": [
-			{"nm": "Wires", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Fatness", ["1px", "2px", "3px", "random"], "2px"]]},
-			{"nm": "Chains", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Size", ["Small", "FAT"], "Small"]]}
+			{"nm": "Wires", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Fatness", ["1px", "2px", "3px", "random"], "2px"]], "preview":"wires"},
+			{"nm": "Chains", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Size", ["Small", "FAT"], "Small"]], "preview":"chains"}
 		]},
 		{"nm": "Plants", "color": [77, 227, 120], "efs": [
-			{"nm": "Root Grass", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Seed Pods", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Growers", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Cacti", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Rain Moss", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Hang Roots", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
-			{"nm": "Grass", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]}
+			{"nm": "Root Grass", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"rootgrass"},
+			{"nm": "Seed Pods", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"seedpods"},
+			{"nm": "Growers", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"growers"},
+			{"nm": "Cacti", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"cacti"},
+			{"nm": "Rain Moss", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"rainmoss"},
+			{"nm": "Hang Roots", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"hangroots"},
+			{"nm": "Grass", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"grass"}
 		]},
 		{"nm": "Plants2", "color": [30, 227, 86], "efs": [
-			{"nm": "Arm Growers", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Horse Tails", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Circuit Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Feather Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Thorn Growers", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Rollers", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Garbage Spirals", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]}
+			{"nm": "Arm Growers", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"armgrowers"},
+			{"nm": "Horse Tails", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"horsetails"},
+			{"nm": "Circuit Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"circutplants"},
+			{"nm": "Feather Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"featherplants"},
+			{"nm": "Thorn Growers", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"thorngrowers"},
+			{"nm": "Rollers", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"rollers"},
+			{"nm": "Garbage Spirals", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"garbagespirals"}
 		]},
 		{"nm": "Plants3", "color": [12, 237, 23], "efs": [
-			{"nm": "Thick Roots", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
-			{"nm": "Shadow Plants", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]}
+			{"nm": "Thick Roots", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"thickroots"},
+			{"nm": "Shadow Plants", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"shadowplants"}
 		]},
 		{"nm": "Plants (Individual)", "color": [14, 150, 20], "efs": [
-			{"nm": "Fungi Flowers", "options": [["Layers", ["1", "2", "3"], "1"]]},
-			{"nm": "Lighthouse Flowers", "options": [["Layers", ["1", "2", "3"], "1"]]},
-			{"nm": "Fern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Giant Mushroom", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Sprawlbush", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "featherFern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]},
-			{"nm": "Fungus Tree", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]]}
+			{"nm": "Fungi Flowers", "options": [["Layers", ["1", "2", "3"], "1"]], "preview":"slime"},
+			{"nm": "Lighthouse Flowers", "options": [["Layers", ["1", "2", "3"], "1"]], "preview":"fungiflowers"},
+			{"nm": "Fern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"lighthouseflowers"},
+			{"nm": "Giant Mushroom", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"fern"},
+			{"nm": "Sprawlbush", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"giantmushroom"},
+			{"nm": "featherFern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"featherfern"},
+			{"nm": "Fungus Tree", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"fungustree"}
 		]},
 		{"nm": "Paint Effects", "color": [90, 107, 91], "efs": [
 			{"nm": "BlackGoo"},
@@ -65,7 +65,7 @@
 		]},
 		{"nm": "Restoration", "color": [186, 54, 91], "efs": [
 			{"nm": "Restore As Scaffolding", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
-			{"nm": "Ceramic Chaos", "options": [["Colored", ["None", "White"], "White"]]}
+			{"nm": "Ceramic Chaos", "options": [["Colored", ["None", "White"], "White"]], "preview":"ceramicchaos"}
 		]}
 	],
 	"maxstr": ["BlackGoo", "Fungi Flowers", "Lighthouse Flowers", "Fern", "Giant Mushroom", "Sprawlbush", "featherFern", "Fungus Tree", "Restore As Scaffolding", "Restore As Pipes"]

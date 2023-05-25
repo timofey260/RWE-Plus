@@ -129,7 +129,6 @@ class PE(MenuWithField):
                 col = darkgray
             btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
             self.buttonslist.append(btn)
-            count += 1
         if btn2 is not None:
             self.buttonslist.append(btn2)
         self.resize()

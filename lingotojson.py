@@ -34,6 +34,7 @@ def tojson(string: str):
          .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "\"void\"")
     count = 0
     m = list(t)
+    brcount = 0
     for i in m:
         if i == "{":
             localcount = 0
@@ -48,6 +49,13 @@ def tojson(string: str):
                         break
                 v += 1
         count += 1
+        if i in ["{", "["]:
+            brcount += 1
+        elif i in ["}", "]"]:
+            brcount -= 1
+            if brcount == 0:
+                m = m[:count+1]
+                break
     t = "".join(m)
     t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
     # print(t)
@@ -209,6 +217,11 @@ def inittolist():
         col = settings["global"]["color2"]
         rect = pg.rect.Rect(graphics["matposes"].index(i) * 16, 0, 16, 16)
         img = mat.subsurface(rect)
+        try:
+            preview = pg.image.load(path2materialPreviews + i.lower().replace(" ", "") + ".png")
+        except FileNotFoundError:
+            preview = pg.Surface([20, 20])
+            preview.set_alpha(0)
         solved_copy["material"].append(
             {
                 "name": i,
@@ -221,7 +234,8 @@ def inittolist():
                 "color": col,
                 "cols": [[-1], 0],
                 "cat": [1, counter],
-                "tags": [""]
+                "tags": [""],
+                "preview": preview
             })
         counter += 1
     return solved_copy

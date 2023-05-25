@@ -66,12 +66,18 @@ class TE(MenuWithField):
 
     def blit(self):
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        super().blit()
         for button in self.buttonslist:
             button.blitshadow()
-        for button in self.buttonslist[:-1]:
+        for i, button in enumerate(self.buttonslist[:-1]):
             button.blit(sum(pg.display.get_window_size()) // 120)
+            if button.onmouseover() and not self.matshow:
+                cat = list(self.items.keys())[self.currentcategory]
+                if len(self.items[cat]) > i:
+                    if self.items[cat][i].get("preview"):
+                        self.surface.blit(self.items[cat][i]["preview"], button.rect.bottomright)
+
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
-        super().blit()
         cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         mpos = pg.mouse.get_pos()
@@ -267,7 +273,6 @@ class TE(MenuWithField):
                 col = darkgray
             btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
             self.buttonslist.append(btn)
-            count += 1
         if btn2 is not None:
             self.buttonslist.append(btn2)
         self.resize()
@@ -336,7 +341,6 @@ class TE(MenuWithField):
                 tooltip = "Size: " + str(item["size"])
                 btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getblock, tooltip=tooltip)
             self.buttonslist.append(btn)
-            count += 1
         if btn2 is not None:
             self.buttonslist.append(btn2)
         self.resize()

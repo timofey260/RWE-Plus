@@ -66,7 +66,9 @@
 			["Wall", [0, 20, 7, 5], [100, 100, 100], "WL", "non", "", ["geometry.png", [1, 0]]],
 			["Air", [0, 25, 7, 5], [100, 100, 100], "AR", "non", "", ["geometry.png", [2, 0]]],
 			["Slope", [0, 30, 7, 5], [100, 100, 100], "SL", "non", "", ["geometry.png", [3, 0]]],
-			["Skip", [90, 7, 10, 7], [100, 100, 100], "skip", "non", ""]
+			["Skip", [90, 7, 10, 7], [100, 100, 100], "skip", "non", ""],
+			[">", [27, 20, 5, 4], [100, 100, 100], "rt", "non", "Next category(<[-rt]>)", ["arrows.png", [0, 0]]],
+			["<", [0, 20, 5, 4], [100, 100, 100], "lt", "non", "Previous category(<[-lt]>)", ["arrows.png", [3, 0]]]
 			
 		],
 		"labels":[
@@ -100,6 +102,8 @@
 
 		],
 		"findmenu_text": "now you are in browse menu where you can search any item you have, just type what you want!",
+		"catpos": [5, 20, 22, 4],
+		"itempos": [5, 24, 22, 2],
 		"d1":
 		{
 			"rect": [25, 20, 65, 70],
@@ -241,7 +245,7 @@
 			["Tile: ", [0, 93], [255, 255, 255], 25],
 			["X: 0, Y: 0", [0, 97], [0, 0, 0], 25],
 			["Default material: ", [0, 90], [0, 0, 0], 25],
-			["LMB - Place tile\nRMB - Fill\nMMB - Move", [28, 2], [255, 255, 255], 25]
+			["LMB - Place tile\nRMB - Fill\nMMB - Move", [28, 80], [255, 255, 255], 25]
 		],
 		"itemsize": 2,
 		"menucolor": [120, 120, 120]
@@ -352,7 +356,7 @@
 		},
 		"labels": [
 			["%1s: %10s", [32, 64], [255, 255, 255], 25],
-			["Selected effect: ", [0, 97], [255, 255, 255], 25],
+			["Selected effect: ", [28, 97], [255, 255, 255], 25],
 			["LMB - Paint\nRMB - Erase\nMMB - Move", [28, 2], [255, 255, 255], 25]
 		],
 		"menucolor": [120, 120, 120]

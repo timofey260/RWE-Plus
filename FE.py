@@ -51,12 +51,24 @@ class FE(MenuWithField):
             i.blitshadow()
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
 
-        for i in self.buttonslist[:-1]:
-            i.blit(ts)
-        for i in self.buttonslist2:
-            i.blit(ts)
         for i in self.params:
             i.blit()
+        for i in self.buttonslist[:-1]:
+            i.blit(ts)
+            if i.onmouseover():
+                effect = self.geteffect(i.text)
+                if effect is not None and effect.get("preview"):
+                    self.surface.blit(effect["preview"], i.rect.bottomright)
+        for i in self.buttonslist2:
+            i.blit(ts)
+            if i.onmouseover():
+                effect = self.geteffect(i.text)
+                if effect is not None and effect.get("preview"):
+                    if effect["preview"].get_height() + i.rect.y > self.surface.get_height():
+                        self.surface.blit(effect["preview"], [i.rect.x + i.rect.w,
+                                                              self.surface.get_height()-effect["preview"].get_height()])
+                    else:
+                        self.surface.blit(effect["preview"], i.rect.bottomright)
 
         cir = [self.buttonslist[self.currentindex].rect.x + 3,
                self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
@@ -124,8 +136,10 @@ class FE(MenuWithField):
                         self.paint(posoffset[0], posoffset[1], -1)
                         self.mmove = False
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
+                self.updatehistory([["FE", "effects", self.selectedeffect, "mtrx"]])
                 self.mousp2 = True
                 self.renderfield()
+                self.renderer.rerendereffect()
 
             self.movemiddle(bp, pos)
         for i in self.buttonslist:
@@ -134,7 +148,14 @@ class FE(MenuWithField):
             i.blittooltip()
         for i in self.buttons:
             i.blittooltip()
-    #add scroll
+
+    def geteffect(self, text):
+        for cat in effects:
+            for c, i in enumerate(cat["efs"]):
+                if i["nm"] == text:
+                    return i
+        return None
+
     def rebuttons(self):
         self.buttonslist = []
         self.matshow = False
@@ -148,17 +169,24 @@ class FE(MenuWithField):
             rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.addeffect)
             self.buttonslist.append(btn)
-            count += 1
         if btn2 is not None:
             self.buttonslist.append(btn2)
 
         self.buttonslist2 = []
+        #instead of scroll
+        split2 = self.settings["itempos2"][1] + self.settings["itempos2"][3] * len(self.data["FE"]["effects"]) >= 100
+        count2 = 0
         for count, item in enumerate(self.data["FE"]["effects"]):
             rect = pg.rect.Rect(self.settings["itempos2"])
             rect = rect.move(0, rect.h * count)
+            if rect.y >= 100 and split2:
+                rect = rect.move(rect.width / 2, 0)
+                rect.y = self.settings["itempos2"][1] + self.settings["itempos2"][3] * count2
+                count2 += 1
+            if split2:
+                rect.width = rect.width / 2
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.selectmouseeffect)
             self.buttonslist2.append(btn)
-            count += 1
         self.resize()
         self.chtext()
 
@@ -208,7 +236,6 @@ class FE(MenuWithField):
                 col = darkgray
             btn = widgets.button(self.surface, rect, col, item["nm"], onpress=self.selectcat)
             self.buttonslist.append(btn)
-            count += 1
         if btn2 is not None:
             self.buttonslist.append(btn2)
         self.resize()
@@ -401,7 +428,13 @@ class FE(MenuWithField):
         for cat in effects:
             for effect in cat["efs"]:
                 if effect["nm"] == text:
-                    ef = copy.deepcopy(effect)
+                    image = effect.get("preview")
+                    if image:
+                        del effect["preview"]
+                        ef = copy.deepcopy(effect)
+                        effect["preview"] = image
+                    else:
+                        ef = copy.deepcopy(effect)
                     mtrx = [[0 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
                     ef["mtrx"] = mtrx
                     for n, i in enumerate(ef["options"]):
