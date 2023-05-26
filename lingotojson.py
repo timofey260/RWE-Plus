@@ -245,8 +245,8 @@ def renderlevel(data):
     turntolingo(data, file)
     subprocess.Popen(f"{application_path}/drizzle/Drizzle.ConsoleApp.exe render \"{fl}\"", shell=True)
     #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
-    print(path2renderedlevels)
-    os.system("explorer " + path2renderedlevels)
+    if not islinux:
+        os.system("explorer " + resolvepath(path2renderedlevels))
 
 
 def getcolors():

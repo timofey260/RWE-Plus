@@ -32,17 +32,17 @@ def loadimage(filepath):
 
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
-path = application_path + "/files/"
-path2tutorial = path + "tutorial/"
-path2ui = path + "ui/"
-path2graphics = application_path + "/drizzle/Data/Graphics/"
-path2cast = application_path + "/drizzle/Data/Cast/"
-path2renderedlevels = application_path + "/drizzle/Data/Levels/"
-path2props = application_path + "/drizzle/Data/Props/"
-path2levels = application_path + "/LevelEditorProjects/"
+path = resolvepath(application_path + "\\files\\")
+path2tutorial = resolvepath(path + "tutorial\\")
+path2ui = resolvepath(path + "ui\\")
+path2graphics = resolvepath(application_path + "\\drizzle\\Data\\Graphics\\")
+path2cast = resolvepath(application_path + "\\drizzle\\Data\\Cast\\")
+path2renderedlevels = resolvepath(application_path + "\\drizzle\\Data\\Levels\\")
+path2props = resolvepath(application_path + "\\drizzle\\Data\\Props\\")
+path2levels = (application_path + "\\LevelEditorProjects\\")
 
-path2effectPreviews = path + "effectPreviews/"
-path2materialPreviews = path + "materialPreviews/"
+path2effectPreviews = resolvepath(path + "effectPreviews\\")
+path2materialPreviews = resolvepath(path + "materialPreviews\\")
 
 pg.font.init()
 

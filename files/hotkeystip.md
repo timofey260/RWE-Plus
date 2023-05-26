@@ -218,7 +218,9 @@ Generated using hotkeys to md converter
 * **H** - -HK - Hotkeys hotkeys
 * **M** - -MN - Menu hotkeys
 * **R** - -globalkeys - Global keys
+* **ctrl + E** - -edit - Opens hotkeys.json to edit
 ###TT
 * **L** - -swichlayers - Switch layers
 * **ctrl + L** - -swichlayers_back - Switch layers back
 * **Space** - -rotate - Rotate blocks
+* **ctrl + Q** - -findtile - Searches for tile

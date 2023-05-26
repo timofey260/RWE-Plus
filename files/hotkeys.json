@@ -306,6 +306,7 @@
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 		"K_l": "-swichlayers",
     	"K_l+": "-swichlayers_back",
-    	"K_SPACE": "-rotate"
+    	"K_SPACE": "-rotate",
+    	"K_q+": "-findtile"
 	}
 }

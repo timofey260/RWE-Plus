@@ -302,6 +302,8 @@ def loadmenu():
                 file["path"] = "tutorial"
                 renderer = Renderer(file, None, None, None, True)
                 surf = TT(window, renderer)
+            case "load":
+                surf = load(window, renderer)
         surf.message = ""
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:
@@ -331,7 +333,8 @@ if __name__ == "__main__":
         for i in args.renderfiles:
             s += i + " "
         os.system(s)
-        os.system("explorer " + path2renderedlevels)
+        if not islinux:
+            os.system("explorer " + resolvepath(path2renderedlevels))
         exit(0)
     if args.filename is not None:
         try:

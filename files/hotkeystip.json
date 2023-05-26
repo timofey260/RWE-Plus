@@ -221,6 +221,7 @@
     "TT": {
         "-swichlayers": "Switch layers",
         "-swichlayers_back": "Switch layers back",
-        "-rotate": "Rotate blocks"
+        "-rotate": "Rotate blocks",
+        "-findtile": "Searches for tile"
     }
 }

@@ -52,12 +52,14 @@ class GE(MenuWithField):
         else:
             self.mirrorpos[1] = 0
             self.mirrorpos[0] = len(self.data["GE"]) // 2
+
     def mup(self):
         if self.mirrorpos[1] == 1:
             self.mirrorpos[0] -= 1
         else:
             self.mirrorpos[1] = 1
             self.mirrorpos[0] = len(self.data["GE"][0]) // 2
+
     def mdown(self):
         if self.mirrorpos[1] == 1:
             self.mirrorpos[0] += 1

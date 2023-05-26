@@ -6,7 +6,7 @@ class TT(MenuWithField):
         super().__init__(surface, "TT", renderer)
         self.matshow = None
         self.buttonslist = []
-        self.step = 0
+        self.step = -1
         self.maxstep = 0
         self.renderer.geo_full_render(self.layer)
         self.size = 13
@@ -14,18 +14,25 @@ class TT(MenuWithField):
         self.selectedtool = ""
         self.toolrotation = 0
         self.examplelist = {
-            "Category 1": [
+            "thingies": [
                 {"nm": "Very cool thing", "color": [10, 10, 10]},
                 {"nm": "Upper is liar", "color": [50, 50, 50]},
                 {"nm": "Upper is liar", "color": [150, 150, 150]}
             ],
-            "Category 2": [
+            "colors": [
                 {"nm": "Ima red", "color": [200, 20, 20]},
-                {"nm": "Ima blue", "color": [20, 20, 200]}
+                {"nm": "Ima blue", "color": [20, 20, 200]},
+                {"nm": "Ima green", "color": [20, 200, 20]}
+            ],
+            "More colors": [
+                {"nm": "pink", "color": [200, 20, 200]},
+                {"nm": "yellow", "color": [200, 200, 20]},
+                {"nm": "hm", "color": [20, 200, 200]}
             ]
         }
         self.selectedtile = ""
         self.currentcategory = 0
+        self.next()
         self.resize()
         self.rfa()
         self.blit()
@@ -38,6 +45,7 @@ class TT(MenuWithField):
         self.buttons[4].visible = False
         self.buttons[6].visible = False
         self.buttons[7].visible = False
+        self.buttons[8].visible = False
         self.field.visible = False
 
     def resize(self):
@@ -134,6 +142,9 @@ class TT(MenuWithField):
 
     def next(self):
         self.step += 1
+        if self.step >= len(self.settings["textlines"]):
+            self.message = "load"
+            return
         textline = self.settings["textlines"][self.step]
         firstchar = textline[0]
         self.buttons[0].visible = True
@@ -149,7 +160,6 @@ class TT(MenuWithField):
                 self.buttons[0].enabled = False
         if self.maxstep < self.step - 1:
             self.maxstep = self.step
-        self.buttons[1].set_text(str(self.step))
         self.showstep()
 
     def showstep(self):
@@ -216,12 +226,26 @@ class TT(MenuWithField):
                 self.labels[1].visible = False
                 self.buttons[6].visible = False
                 self.buttons[7].visible = False
+                self.buttons[8].visible = False
                 self.buttonslist = []
             case 13:
                 self.labels[1].visible = True
                 self.buttons[6].visible = True
                 self.buttons[7].visible = True
+                self.buttons[8].visible = True
                 self.rebuttons()
+            case 18:
+                self.labels[1].visible = True
+                self.buttons[6].visible = True
+                self.buttons[7].visible = True
+                self.buttons[8].visible = True
+                self.rebuttons()
+            case 19:
+                self.buttonslist = []
+                self.labels[1].visible = False
+                self.buttons[6].visible = False
+                self.buttons[7].visible = False
+                self.buttons[8].visible = False
 
     def clearfield(self):
         clearblock = 1 if self.layer == 0 else 0
@@ -249,7 +273,6 @@ class TT(MenuWithField):
             else:
                 self.labels[0].set_text(textline)
             self.buttons[0].enabled = True
-            self.buttons[1].set_text(str(self.step))
             self.showstep()
 
     def swichlayers(self):
@@ -341,6 +364,8 @@ class TT(MenuWithField):
         self.buttonslist = []
         self.matshow = True
         btn2 = None
+        if self.step == 15:
+            self.next()
         for count, item in enumerate(self.examplelist.keys()):
             cat = pg.rect.Rect(self.settings["catpos"])
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
@@ -359,6 +384,7 @@ class TT(MenuWithField):
 
     def selectcat(self, name):
         self.currentcategory = list(self.examplelist.keys()).index(name)
+        self.enablenext(self.step == 16)
         self.rebuttons()
 
     def settile(self, name):
@@ -366,14 +392,37 @@ class TT(MenuWithField):
         self.labels[1].set_text(self.selectedtile + " selected")
         self.enablenext(self.step == 13)
 
+    def findtile(self):
+        nd = {}
+        for cat, item in self.examplelist.items():
+            for i in item:
+                nd[i["nm"]] = cat
+        name = self.find(nd, self.settings["findmenu_text"])
+        if name is None:
+            return
+        cat = self.findcat(name)
+        if self.step == 17:
+            self.next()
+        self.selectcat(cat)
+        self.settile(name)
+
+    def findcat(self, itemname):
+        for name, listdata in self.examplelist.items():
+            for bl in listdata:
+                if bl["nm"] == itemname:
+                    return name
+        return None
+
     def rt(self):
         self.currentcategory = (self.currentcategory + 1) % len(self.examplelist.keys())
+        self.enablenext(self.step == 14)
         self.rebuttons()
 
     def lt(self):
         self.currentcategory -= 1
         if self.currentcategory < 0:
             self.currentcategory = len(self.examplelist.keys()) - 1
+        self.enablenext(self.step == 14)
         self.rebuttons()
 
     def pastegeo(self, data, line=0):
