@@ -15,7 +15,8 @@ islinux = os.name == "posix"
 def resolvepath(input_path): # Thanks to someone... someone nice
     if not islinux:
         return input_path
-    directory, filename = os.path.split(input_path)
+    path = input_path.replace("\\", "/")
+    directory, filename = os.path.split(path)
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.lower() == filename.lower():
