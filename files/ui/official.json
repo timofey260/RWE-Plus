@@ -428,6 +428,8 @@
 		"settingspos": [74, 68, 22, 2],
 		"settingscolor": [90, 90, 90],
 
+		"hide": [5],
+
 		"paramspos": [72, 68],
 		"seedchange_size": [10, 10],
 

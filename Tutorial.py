@@ -133,7 +133,7 @@ class TT(MenuWithField):
                 self.mousp2 = True
 
             if self.step > 0:
-                self.movemiddle(bp, pos)
+                self.movemiddle(bp)
 
     def enablenext(self, condition=True):
         if condition:
@@ -274,6 +274,8 @@ class TT(MenuWithField):
                 self.labels[0].set_text(textline)
             self.buttons[0].enabled = True
             self.showstep()
+        else:
+            self.message = "load"
 
     def swichlayers(self):
         if self.step in [3, 11]:

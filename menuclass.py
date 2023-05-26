@@ -82,7 +82,7 @@ class Menu:
         self.message = "%"
 
     def recaption(self):
-        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | by Timofey")
+        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | v{tag}")
 
     def savef(self, saveas=False):
         if self.data["path"] != "" and not saveas:
@@ -501,13 +501,13 @@ class MenuWithField(Menu):
         settings = json.load(open(path2ui + graphics["uifile"], "r"))
         self.__init__(self.surface, self.menu, self.renderer)
 
-    def movemiddle(self, bp, pos):
+    def movemiddle(self, bp):
         if bp[1] == 1 and self.mousp1 and (self.mousp2 and self.mousp):
-            self.rectdata[0] = pos.copy()
+            self.rectdata[0] = self.pos
             self.rectdata[1] = self.offset
             self.mousp1 = False
         elif bp[1] == 1 and not self.mousp1 and (self.mousp2 and self.mousp):
-            self.offset = self.rectdata[1] - (self.rectdata[0] - pos)
+            self.offset = self.rectdata[1] - (self.rectdata[0] - self.pos)
         elif bp[1] == 0 and not self.mousp1 and (self.mousp2 and self.mousp):
             self.field.field.fill(self.field.color)
             self.mousp1 = True
@@ -748,7 +748,9 @@ class MenuWithField(Menu):
                 f.blit(surf, [xp * size, yp * size])
                 # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
 
-    def destroy(self, x, y):
+    def destroy(self, xp, yp):
+        x = int(xp)
+        y = int(yp)
         def clearitem(mx, my, layer):
             val = self.data["TE"]["tlMatrix"][mx][my][layer]
             if val["data"] == 0:

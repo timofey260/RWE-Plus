@@ -107,6 +107,8 @@ class PE(MenuWithField):
             self.buttonslist.append(btn2)
         if self.toolindex > len(self.props[itemcat]):
             self.toolindex = 0
+        for i in self.settings["hide"]:
+            self.buttons[i].visible = True
         self.resize()
         self.settingsupdate()
 
@@ -131,6 +133,8 @@ class PE(MenuWithField):
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
+        for i in self.settings["hide"]:
+            self.buttons[i].visible = False
         self.resize()
 
     def selectcat(self, name):
@@ -202,7 +206,6 @@ class PE(MenuWithField):
             self.renderfield()
 
     def blit(self):
-        super().blit()
         if len(self.buttonslist) > 1:
             pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
             for button in self.buttonslist:
@@ -215,7 +218,7 @@ class PE(MenuWithField):
                 button.blitshadow()
             for button in self.settignslist:
                 button.blit(sum(pg.display.get_window_size()) // 120)
-
+        super().blit()
         self.labels[2].set_text(self.labels[2].originaltext + str(self.prop_settings))
         self.labels[0].set_text(self.labels[0].originaltext + "\n".join(self.notes))
         cir = [self.buttonslist[self.toolindex].rect.x + 3,
@@ -232,7 +235,7 @@ class PE(MenuWithField):
                               round(math.floor(realpos.y / s2) * s2 - self.selectedimage.get_height() / 2, 4))
             pos2 += self.field.rect.topleft
 
-            posoffset = self.posoffset
+            posoffset = self.posoffset * spritesize
             bp = pg.mouse.get_pressed(3)
             self.delmode = self.findparampressed("delete_mode")
             self.copymode = self.findparampressed("copy_mode")
@@ -386,15 +389,16 @@ class PE(MenuWithField):
                         ofc = pg.Vector2(self.xoffset, self.yoffset)
                         pos2 = (near / spritesize + ofc) * self.size + self.field.rect.topleft
                         pg.draw.line(self.surface, red, mpos, pos2, 10)
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
         else:
             if not self.matshow:
                 for index, button in enumerate(self.buttonslist[:-1]):
                     if button.onmouseover():
                         cat = list(self.props.keys())[self.currentcategory]
                         item = self.props[cat][index]
-                        w, h = item["images"][0].get_size()
-                        self.surface.blit(pg.transform.scale(item["images"][0], [w, h]), button.rect.topright)
+                        if len(item["images"]) > 0:
+                            w, h = item["images"][0].get_size()
+                            self.surface.blit(pg.transform.scale(item["images"][0], [w, h]), button.rect.topright)
                         break
 
         for button in self.buttonslist:

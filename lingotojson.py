@@ -58,7 +58,7 @@ def tojson(string: str):
     t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
     # print(t)
     if t != "":
-        print(t)
+        #print(t)
         return json.loads(t)
     else:
         return {}
@@ -243,7 +243,7 @@ def renderlevel(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)
-    subprocess.Popen(f"{application_path}/drizzle/Drizzle.ConsoleApp.exe render \"{fl}\"", shell=True)
+    subprocess.Popen(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\" render \"{fl}\"", shell=True)
     #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     if not islinux:
         os.system("explorer " + resolvepath(path2renderedlevels))
@@ -280,6 +280,8 @@ def getprops(tiles: dict):
             img.set_colorkey(pg.color.Color(255, 255, 255))
 
             images = []
+            if item.get("vars") is not None:
+                item["vars"] = max(item["vars"], 1)
 
             ws, hs = img.get_size()
             if item.get("pxlSize") is not None:

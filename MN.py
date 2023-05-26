@@ -23,7 +23,7 @@ class MN(MenuWithField):
             pos = self.pos
             bp = pg.mouse.get_pressed(3)
 
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
 
     def tiles(self):
         self.drawtiles = not self.drawtiles

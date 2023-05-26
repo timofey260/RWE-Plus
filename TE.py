@@ -66,20 +66,14 @@ class TE(MenuWithField):
 
     def blit(self):
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
-        super().blit()
         for button in self.buttonslist:
             button.blitshadow()
         for i, button in enumerate(self.buttonslist[:-1]):
             button.blit(sum(pg.display.get_window_size()) // 120)
-            if button.onmouseover() and not self.matshow:
-                cat = list(self.items.keys())[self.currentcategory]
-                if len(self.items[cat]) > i:
-                    if self.items[cat][i].get("preview"):
-                        self.surface.blit(self.items[cat][i]["preview"], button.rect.bottomright)
-
         self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
         cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
+        super().blit()
         mpos = pg.mouse.get_pos()
         if self.field.rect.collidepoint(mpos) and self.tileimage is not None:
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
@@ -148,7 +142,7 @@ class TE(MenuWithField):
                 self.renderer.geo_render_area(self.area, self.layer)
                 self.rfa()
 
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
 
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False
@@ -243,6 +237,8 @@ class TE(MenuWithField):
                     if button.onmouseover():
                         cat = list(self.items.keys())[self.currentcategory]
                         item = self.items[cat][index]
+                        if item.get("preview"):
+                            self.surface.blit(item["preview"], button.rect.bottomright)
                         if item["tp"] == "pattern":
                             break
                         w, h = item["size"]

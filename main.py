@@ -17,10 +17,6 @@ undobuffer = []
 redobuffer = []
 surf: Menu | MenuWithField = None
 
-tag = "2.2.0"
-version = "version: " + tag
-
-
 def keypress(window):
     global run, file, file2, redobuffer, undobuffer, surf
     pressed = ""
@@ -303,6 +299,7 @@ def loadmenu():
                 renderer = Renderer(file, None, None, None, True)
                 surf = TT(window, renderer)
             case "load":
+                renderer = Renderer({"path": ""}, None, None, None, False)
                 surf = load(window, renderer)
         surf.message = ""
         if not pg.key.get_pressed()[pg.K_LCTRL]:
@@ -329,7 +326,7 @@ if __name__ == "__main__":
     if args.new:
         launch(-1)
     if args.renderfiles is not None:
-        s = f"{application_path}/drizzle/Drizzle.ConsoleApp.exe render "
+        s = f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\" render "
         for i in args.renderfiles:
             s += i + " "
         os.system(s)

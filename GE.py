@@ -172,7 +172,7 @@ class GE(MenuWithField):
                 self.render_geo_area()
                 self.rfa()
 
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
 
             if bp[2] == 1 and self.mousp2 and (self.mousp and self.mousp1):
                 self.mousp2 = False

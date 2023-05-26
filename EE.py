@@ -60,7 +60,7 @@ class EE(MenuWithField):
                 self.mousp = True
                 self.rfa()
 
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
 
     def swichlayers(self):
         self.layer = 1 - self.layer

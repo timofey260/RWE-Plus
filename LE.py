@@ -120,7 +120,7 @@ class LE(MenuWithField):
                 self.updateshadowhistory()
                 self.save()
                 self.renderfield()
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
 
     def if_set(self, pressed, indx):
         if pressed and not self.pressed[indx]:

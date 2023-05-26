@@ -72,7 +72,7 @@ class CE(MenuWithField):
                 self.mousp = True
                 self.rfa()
 
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
 
     def copycamera(self):
         if self.held:

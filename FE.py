@@ -141,7 +141,7 @@ class FE(MenuWithField):
                 self.renderfield()
                 self.renderer.rerendereffect()
 
-            self.movemiddle(bp, pos)
+            self.movemiddle(bp)
         for i in self.buttonslist:
             i.blittooltip()
         for i in self.buttonslist2:
