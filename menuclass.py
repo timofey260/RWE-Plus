@@ -608,11 +608,15 @@ class MenuWithField(Menu):
         super().send(message)
         match message:
             case "SU":
+                if not self.onfield:
+                    return
                 pos = self.pos
                 self.size += 1
                 self.offset -= pos - self.pos
                 self.renderfield()
             case "SD":
+                if not self.onfield:
+                    return
                 if self.size - 1 > 0:
                     pos = self.pos
                     self.size -= 1
@@ -887,3 +891,7 @@ class MenuWithField(Menu):
     @property
     def yoffset(self):
         return int(self.offset.y)
+
+    @property
+    def onfield(self):
+        return self.field.rect.collidepoint(pg.mouse.get_pos())

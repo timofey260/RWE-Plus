@@ -79,8 +79,7 @@ class LE(MenuWithField):
         self.field.blit(False)
         super().blit(False)
         mouspos = pg.mouse.get_pos()
-        if self.field.rect.collidepoint(mouspos):
-            pos = self.pos
+        if self.onfield:
             #  pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             mouspos_onfield = [mouspos[0] - self.field.rect.x - fieldpos[0], mouspos[1] - self.field.rect.y - fieldpos[1]]
             curpos = [mouspos[0] - self.tileimage.get_width() / 2, mouspos[1] - self.tileimage.get_height() / 2]

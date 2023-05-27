@@ -17,12 +17,8 @@ class MN(MenuWithField):
 
     def blit(self):
         super().blit()
-        mpos = pg.Vector2(pg.mouse.get_pos())
-        if self.field.rect.collidepoint(mpos):
-
-            pos = self.pos
+        if self.onfield:
             bp = pg.mouse.get_pressed(3)
-
             self.movemiddle(bp)
 
     def tiles(self):

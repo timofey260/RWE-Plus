@@ -85,10 +85,9 @@ class FE(MenuWithField):
             else:
                 pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
         mpos = pg.Vector2(pg.mouse.get_pos())
-        pos = self.pos
         bp = pg.mouse.get_pressed(3)
 
-        if self.field.rect.collidepoint(mpos) and len(self.data["FE"]["effects"]) > 0:
+        if self.onfield and len(self.data["FE"]["effects"]) > 0:
             if not self.copymode:
                 pg.draw.circle(self.surface, cursor, mpos, self.brushsize * self.size, 4)
 

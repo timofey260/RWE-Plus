@@ -225,9 +225,7 @@ class PE(MenuWithField):
                self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         mpos = pg.Vector2(pg.mouse.get_pos())
-        if self.field.rect.collidepoint(mpos.xy) or any(self.helds):
-
-            pos = self.pos
+        if self.onfield or any(self.helds):
 
             realpos = mpos - self.field.rect.topleft
             s2 = self.size / 2

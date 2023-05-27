@@ -23,9 +23,7 @@ class CE(MenuWithField):
         super().blit()
         self.labels[0].set_text(self.labels[0].originaltext % len(self.data["CM"]["cameras"]))
 
-        if self.field.rect.collidepoint(pg.mouse.get_pos()) and len(self.data["CM"]["cameras"]) > 0:
-
-            pos = self.pos
+        if self.onfield and len(self.data["CM"]["cameras"]) > 0:
 
             bp = pg.mouse.get_pressed(3)
             s = [self.findparampressed("-addup"),

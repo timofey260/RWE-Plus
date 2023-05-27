@@ -83,7 +83,7 @@ class GE(MenuWithField):
         cellsize2 = [self.size, self.size]
         super().blit()
         mpos = pg.Vector2(pg.mouse.get_pos())
-        if self.field.rect.collidepoint(mpos):
+        if self.onfield:
             curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
                        graphics["tools"][self.selectedtool][1] * graphics["tilesize"][1]]
             self.surface.blit(self.tools, mpos, [curtool, graphics["tilesize"]])

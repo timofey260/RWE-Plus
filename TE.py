@@ -75,11 +75,9 @@ class TE(MenuWithField):
         pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         super().blit()
         mpos = pg.mouse.get_pos()
-        if self.field.rect.collidepoint(mpos) and self.tileimage is not None:
+        if self.onfield and self.tileimage is not None:
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
-
-            pos = self.pos
             pos2 = self.pos2
             posoffset = self.posoffset
             fg = self.findparampressed("force_geometry")

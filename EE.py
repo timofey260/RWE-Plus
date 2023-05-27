@@ -42,9 +42,7 @@ class EE(MenuWithField):
         self.labels[0].set_text(self.labels[0].originaltext % self.data["WL"]["waterLevel"])
         self.labels[1].set_text(self.labels[1].originaltext % (1 - self.data["WL"]["waterInFront"] + 1))
 
-        if self.field.rect.collidepoint(pg.mouse.get_pos()):
-            pos = self.pos
-
+        if self.onfield:
             posoffset = self.posoffset
 
             bp = pg.mouse.get_pressed()
