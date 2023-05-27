@@ -16,6 +16,8 @@ def resolvepath(input_path): # Thanks to someone... someone nice
     if not islinux:
         return input_path
     path = input_path.replace("\\", "/")
+    if os.path.isdir(path):
+        return path
     directory, filename = os.path.split(path)
     for root, dirs, files in os.walk(directory):
         for file in files:
@@ -40,7 +42,7 @@ path2graphics = resolvepath(application_path + "\\drizzle\\Data\\Graphics\\")
 path2cast = resolvepath(application_path + "\\drizzle\\Data\\Cast\\")
 path2renderedlevels = resolvepath(application_path + "\\drizzle\\Data\\Levels\\")
 path2props = resolvepath(application_path + "\\drizzle\\Data\\Props\\")
-path2levels = (application_path + "\\LevelEditorProjects\\")
+path2levels = resolvepath(application_path + "\\LevelEditorProjects\\")
 
 path2effectPreviews = resolvepath(path + "effectPreviews\\")
 path2materialPreviews = resolvepath(path + "materialPreviews\\")
