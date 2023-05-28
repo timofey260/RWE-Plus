@@ -21,6 +21,10 @@ All modules listed in requirements.txt and can be easily installed with:
 
 `$ bin/pip3 install -r requirements.txt`
 
-after that, the main.py can be opened with:
+some of the modules should be installed with apt:
+
+`sudo apt install python3-tk`
+
+after that, the main.py can be opened with bash script:
 
 `$ . run.sh`
