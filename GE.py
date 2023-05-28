@@ -144,8 +144,8 @@ class GE(MenuWithField):
                         rect = [posoffset[0] * self.size, posoffset[1] * self.size]
                         self.fieldadd.blit(toolsized, rect, [curtool, cellsize2])
                         if self.mirrorp:
-                            px = posoffset.x
-                            py = posoffset.y
+                            px = int(posoffset.x)
+                            py = int(posoffset.y)
                             if self.mirrorpos[1] == 0:
                                 px = self.mirrorpos[0] * 2 + (-px - 1)
                             else:
@@ -406,7 +406,7 @@ class GE(MenuWithField):
     def place(self, pos, render=True):
         x = int(pos.x)
         y = int(pos.y)
-        self.mirrorplace(x, y, render)
+        self.mirrorplace(pos, render)
         if x >= len(self.data["GE"]) or y >= len(self.data["GE"][0]) or x < 0 or y < 0:
             return
         self.area[x][y] = 0
@@ -438,15 +438,15 @@ class GE(MenuWithField):
             self.renderer.geo_render_area(self.area, self.layer)
             self.rfa()
 
-    def mirrorplace(self, xm, ym, render=False):
+    def mirrorplace(self, pos, render=False):
         if not self.mirrorp:
             return
-        x = xm
-        y = ym
+        x = int(pos.x)
+        y = int(pos.y)
         if self.mirrorpos[1] == 0:
-            x = self.mirrorpos[0] * 2 + (-xm - 1)
+            x = self.mirrorpos[0] * 2 + (-x - 1)
         else:
-            y = self.mirrorpos[0] * 2 + (-ym - 1)
+            y = self.mirrorpos[0] * 2 + (-y - 1)
         if x >= len(self.data["GE"]) or y >= len(self.data["GE"][0]) or x < 0 or y < 0:
             return
         self.area[x][y] = 0

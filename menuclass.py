@@ -566,8 +566,7 @@ class MenuWithField(Menu):
 
     def blit(self, draw=True):
         self.renderer.lastlayer = self.layer
-        self.renderer.xoffset = self.xoffset
-        self.renderer.yoffset = self.yoffset
+        self.renderer.offset = self.offset
         self.renderer.size = self.size
         if draw:
             self.drawmap()
