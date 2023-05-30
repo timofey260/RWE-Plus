@@ -50,14 +50,13 @@ class EE(MenuWithField):
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.count = True
                 self.mousp = False
-                self.wateroffset = self.data["WL"]["waterLevel"] + posoffset[1]
+                self.wateroffset = self.data["WL"]["waterLevel"] + int(posoffset.y)
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1) and self.count:
-                self.data["WL"]["waterLevel"] = max(self.wateroffset - posoffset[1], 0)
+                self.data["WL"]["waterLevel"] = max(self.wateroffset - int(posoffset.y), 0)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.updatehistory([["WL", "waterLevel"]])
                 self.mousp = True
                 self.rfa()
-
             self.movemiddle(bp)
 
     def swichlayers(self):
