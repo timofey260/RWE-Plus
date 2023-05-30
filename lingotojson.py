@@ -250,7 +250,7 @@ def renderlevel(data):
 
 
 def getcolors():
-    solved = open(application_path + '/drizzle/Data/Props/propColors.txt', 'r').readlines()
+    solved = open(resolvepath(application_path + '/drizzle/Data/Props/propColors.txt'), 'r').readlines()
     cols = []
     for line in solved:
         if line[0] != '[':

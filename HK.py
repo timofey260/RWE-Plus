@@ -87,4 +87,7 @@ class HK(Menu):
         self.message = self.m
 
     def edit(self):
-        os.system(path + "hotkeys.json")
+        if islinux:
+            os.system(f"open files/hotkeys.json")
+        else:
+            os.system(f"{path}hotkeys.json")
