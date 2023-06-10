@@ -393,6 +393,7 @@ class FE(MenuWithField):
         self.fieldadd.fill(white)
         super().renderfield()
         self.rf3()
+        self.recaption()
         self.makeparams()
 
     def rf3(self):
@@ -442,6 +443,7 @@ class FE(MenuWithField):
                     self.data["FE"]["effects"].append(ef.copy())
                     self.innew = False
                     self.selectedeffect = len(self.data["FE"]["effects"]) - 1
+                    self.recaption()
                     self.updatehistory([["FE"]])
                     self.renderfield()
                     self.rebuttons()
@@ -526,3 +528,10 @@ class FE(MenuWithField):
             self.scrl_down_new()
             return
         self.scrl_down_menu()
+
+    @property
+    def custom_info(self):
+        try:
+            return f"{super().custom_info} | Selected effect: {self.data['FE']['effects'][self.selectedeffect]['nm']}, [{self.selectedeffect}]"
+        except TypeError:
+            return super().custom_info

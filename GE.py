@@ -1,5 +1,6 @@
 from menuclass import *
 
+
 class GE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "GE"
@@ -18,6 +19,8 @@ class GE(MenuWithField):
         self.mirrorpos = [0, 0]
 
         self.replaceair = True
+        self.fillshape = "pancil" # pencil, brush
+        self.fillshape2 = "rect"  # rect, rect-hollow, circle, circle-hollow, line, bucket, fill
 
         super().__init__(surface, "GE", renderer)
         self.emptyarea()
@@ -31,7 +34,6 @@ class GE(MenuWithField):
         super().resize()
         if hasattr(self, "field"):
             self.rs()
-
 
     def rotate(self):
         if self.mx != 0:
@@ -95,7 +97,8 @@ class GE(MenuWithField):
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)
             posoffset = self.posoffset
 
-            toolsized = pg.transform.scale(self.toolrender, pg.Vector2(self.toolrender.get_size()) / image1size * self.size)
+            toolsized = pg.transform.scale(self.toolrender,
+                                           pg.Vector2(self.toolrender.get_size()) / image1size * self.size)
 
             self.labels[1].set_text(f"X: {posoffset.x}, Y: {posoffset.y}, Z: {self.layer + 1}")
             if self.selectedtool in self.settings["codes"].keys():
@@ -112,8 +115,10 @@ class GE(MenuWithField):
                     len(self.data["GE"][0]) * self.size]
             pg.draw.rect(self.field.field, border, rect, self.size // image1size + 1)
             if (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])):
-                tilename = settings["GE"]["names"][str(self.data["GE"][int(posoffset.x)][int(posoffset.y)][self.layer][0])]
-                self.labels[0].set_text(f"Tile: {tilename} {self.data['GE'][int(posoffset.x)][int(posoffset.y)][self.layer]}")
+                tilename = settings["GE"]["names"][
+                    str(self.data["GE"][int(posoffset.x)][int(posoffset.y)][self.layer][0])]
+                self.labels[0].set_text(
+                    f"Tile: {tilename} {self.data['GE'][int(posoffset.x)][int(posoffset.y)][self.layer]}")
 
             bp = pg.mouse.get_pressed(3)
 
@@ -180,7 +185,7 @@ class GE(MenuWithField):
                 self.emptyarea()
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
                 self.rectdata[1] = posoffset - self.rectdata[0]
-                #print(self.rectdata[2], pos2 - self.rectdata[2])
+                # print(self.rectdata[2], pos2 - self.rectdata[2])
                 rect = self.vec2rect(self.rectdata[2], pos2)
                 tx = f"{abs(int(rect.w / self.size))}, {abs(int(rect.h / self.size))}"
                 widgets.fastmts(self.surface, tx, *mpos, white)
@@ -491,3 +496,16 @@ class GE(MenuWithField):
         if self.selectedtool == "IN":
             return 0
         return slope
+
+    def tool_rect(self):
+        self.fillshape2 = "rect"
+
+    def tool_pencil(self):
+        self.fillshape = "pencil"
+
+    @property
+    def custom_info(self):
+        try:
+            return f"{super().custom_info} | LMB tool: {self.fillshape}, RMB tool: {self.fillshape2}"
+        except TypeError:
+            return super().custom_info

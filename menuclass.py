@@ -82,7 +82,7 @@ class Menu:
         self.message = "%"
 
     def recaption(self):
-        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | v{tag}")
+        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | v{tag} | {self.custom_info}")
 
     def savef(self, saveas=False):
         if self.data["path"] != "" and not saveas:
@@ -457,6 +457,10 @@ class Menu:
             string = string.replace(fgroup[0], rep)
         # string = re.sub(pat, rep, text, flags=re.IGNORECASE)
         return string
+
+    @property
+    def custom_info(self):
+        return ""
 
 
 class MenuWithField(Menu):
@@ -851,6 +855,13 @@ class MenuWithField(Menu):
         }
         return item, [0, 0]
 
+    def togglelayervisible(self):
+        self.renderer.geolayers[self.layer] = not self.renderer.geolayers[self.layer]
+        print(f"Toggeled layer {self.layer}")
+        self.recaption()
+        self.render_geo_full()
+        self.rfa()
+
     def mouse2field(self):
         mpos = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size
         #mpos -= pg.Vector2(self.xoffset, self.yoffset)
@@ -894,3 +905,7 @@ class MenuWithField(Menu):
     @property
     def onfield(self):
         return self.field.rect.collidepoint(pg.mouse.get_pos())
+
+    @property
+    def custom_info(self):
+        return f"Showed layers: {self.renderer.geolayers}, current layer[{self.renderer.lastlayer}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"

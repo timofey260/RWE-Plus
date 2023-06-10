@@ -422,6 +422,7 @@ class TE(MenuWithField):
                     self.tileimage["image"].set_colorkey(None)
                 else:
                     self.tileimage = self.tileimage2.copy()
+                self.recaption()
                 return
 
     def test_cols(self, x, y):
@@ -621,3 +622,10 @@ class TE(MenuWithField):
         self.currentcategory = list(self.items.keys()).index(cat)
         self.rebuttons()
         self.set(cat, name)
+
+    @property
+    def custom_info(self):
+        try:
+            return f"{super().custom_info} | Selected tile: {self.tileimage['name']}"
+        except TypeError:
+            return super().custom_info

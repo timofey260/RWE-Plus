@@ -37,7 +37,7 @@ def turntomd(filename, desc, output):
     with open(output, "w+") as file:
         file.write("Generated using hotkeys to md converter\n\n\n")
         for menu, items in js.items():
-            file.write("###" + menu + "\n")
+            file.write("### " + menu + "\n")
             for key, func in items.items():
                 if key == "unlock_keys":
                     continue

@@ -60,7 +60,7 @@ toolmenu = loadimage(path + graphics["toolmenu"])
 
 mat = loadimage(path + graphics["materials"])
 
-tag = "2.2.2"
+tag = "2.3.0"
 version = "version: " + tag
 
 ofstop = 15

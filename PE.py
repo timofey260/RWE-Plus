@@ -517,6 +517,7 @@ class PE(MenuWithField):
         self.currentcategory = ci[0]
         self.toolindex = ci[1]
         self.snap = "snapToGrid" in self.selectedprop["tags"]
+        self.recaption()
         self.add_warning()
         self.reset_settings()
         self.applysettings()
@@ -732,3 +733,10 @@ class PE(MenuWithField):
 
     def stretchx_down(self):
         self.stretch(0, -self.settings["stretch_speed"])
+
+    @property
+    def custom_info(self):
+        try:
+            return f"{super().custom_info} | Selected prop: {self.selectedprop['nm']}"
+        except TypeError:
+            return super().custom_info

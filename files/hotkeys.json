@@ -32,7 +32,8 @@
     	"K_DOWN": "/down",
     	"K_l": "/-swichlayers",
     	"K_l+": "/-swichlayers_back",
-    	"K_SPACE+": "/-swichcameras"
+    	"K_SPACE+": "/-swichcameras",
+    	"K_F1": "/-togglelayervisible"
   	},
   	"LD": {
   		"unlock_keys": [],

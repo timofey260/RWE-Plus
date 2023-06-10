@@ -128,6 +128,7 @@ class Renderer:
         if render:
             size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
             self.surf_geo = pg.Surface(size)
+            self.geolayers = [True, True, True]
             self.surf_tiles = pg.Surface(size)
             self.surf_tiles = self.surf_tiles.convert_alpha()
             self.surf_props = pg.Surface(size)
@@ -139,6 +140,7 @@ class Renderer:
         if size is None:  # auto
             size = [len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size]
         self.surf_geo = pg.Surface(size)
+        self.geolayers = [True, True, True]
         self.surf_tiles = pg.Surface(size)
         self.surf_tiles = self.surf_tiles.convert_alpha()
         self.surf_props = pg.Surface(size)
@@ -263,6 +265,8 @@ class Renderer:
         pixel = pg.Surface(cellsize2)
         pixel.fill(color2)
         for i in range(2, -1, -1):
+            if not self.geolayers[i]:
+                continue
             renderedimage.set_alpha(settings["global"]["secondarylayeralpha"])
             if i == layer:
                 renderedimage.set_alpha(settings["global"]["primarylayeralpha"])
@@ -422,3 +426,7 @@ class Renderer:
                 #self.surf_effect.blit(surf, [xp * size, yp * size])
                 self.surf_effect.fill(col, [xp * image1size, yp * image1size, image1size, image1size])
                 # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
+
+    @property
+    def hiddenlayer(self):
+        return self.geolayers[self.lastlayer]
