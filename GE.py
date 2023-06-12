@@ -3,11 +3,12 @@ from menuclass import *
 
 class GE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer):
-        self.menu = "GE"
         self.state = 0
         self.mx = 0
 
         self.selectedtool = ""
+        self.lastselectedtool = ""
+
         self.tools = toolmenu
         self.tooltiles = tooltiles
         self.toolrender = self.tooltiles
@@ -19,8 +20,8 @@ class GE(MenuWithField):
         self.mirrorpos = [0, 0]
 
         self.replaceair = True
-        self.fillshape = "pancil" # pencil, brush
-        self.fillshape2 = "rect"  # rect, rect-hollow, circle, circle-hollow, line, bucket, fill
+        self.fillshape = "pencil"  # pencil, brush, fill
+        self.fillshape2 = "rect"  # rect, rect-hollow, circle, circle-hollow, line
 
         super().__init__(surface, "GE", renderer)
         self.emptyarea()
@@ -85,6 +86,9 @@ class GE(MenuWithField):
         cellsize2 = [self.size, self.size]
         super().blit()
         mpos = pg.Vector2(pg.mouse.get_pos())
+        if self.selectedtool != self.lastselectedtool:
+            self.lastselectedtool = self.selectedtool
+            self.recaption()
         if self.onfield:
             curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
                        graphics["tools"][self.selectedtool][1] * graphics["tilesize"][1]]
@@ -189,7 +193,12 @@ class GE(MenuWithField):
                 rect = self.vec2rect(self.rectdata[2], pos2)
                 tx = f"{abs(int(rect.w / self.size))}, {abs(int(rect.h / self.size))}"
                 widgets.fastmts(self.surface, tx, *mpos, white)
-                pg.draw.rect(self.surface, select, rect, 5)
+                if self.fillshape2 in ["rect", "rect-hollow"] or self.selectedtool == "CP" or self.selectedtool == "CT":
+                    pg.draw.rect(self.surface, select, rect, 5)
+                elif self.fillshape2 in ["circle", "circle-hollow"]:
+                    pg.draw.ellipse(self.surface, select, rect, 5)
+                elif self.fillshape2 == "line":
+                    pg.draw.line(self.surface, select, self.rectdata[2], pos2, 5)
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
                 if self.selectedtool == "CP" or self.selectedtool == "CT":
                     rect = self.vec2rect(self.rectdata[0], posoffset)
@@ -198,14 +207,26 @@ class GE(MenuWithField):
                     data1 = [[y[self.layer] for y in x] for x in data1]
                     pyperclip.copy(str(data1))
                     print("Copied!")
-                else:
+                elif self.fillshape2 in ["circle", "circle-hollow"]:
+                    rect = self.vec2rect(self.rectdata[0], posoffset)
+                    rect2ellipse(rect, self.fillshape2 == "circle-hollow", self.place)
+                    self.detecthistory(["GE"])
+                    self.render_geo_area()
+                    self.rfa()
+                elif self.fillshape2 == "line":
+                    self.linepoints(self.rectdata[0], posoffset)
+                    self.detecthistory(["GE"])
+                    self.render_geo_area()
+                    self.rfa()
+                elif self.fillshape2 in ["rect", "rect-hollow"]:
                     rect = self.vec2rect(self.rectdata[0], posoffset)
                     for x in range(int(rect.w)):
                         for y in range(int(rect.h)):
                             vec = pg.Vector2(x, y)
-                            self.place(vec + rect.topleft, False)
+                            if self.fillshape2 == "rect" or (vec.x == 0 or vec.y == 0 or vec.x == int(rect.w)-1 or vec.y == int(rect.h)-1):
+                                self.place(vec + rect.topleft, False)
                     self.detecthistory(["GE"])
-                    self.renderer.geo_render_area(self.area, self.layer)
+                    self.render_geo_area()
                     self.rfa()
                 if self.selectedtool == "CT":
                     rect = self.vec2rect(self.rectdata[0], posoffset)
@@ -239,6 +260,20 @@ class GE(MenuWithField):
                 pg.draw.rect(self.surface, mirror, [px, self.field.rect.y, 3, self.field.field.get_height()])
             else:
                 pg.draw.rect(self.surface, mirror, [self.field.rect.x, py, self.field.field.get_width(), 3])
+        if pg.key.get_pressed()[pg.K_LCTRL]:
+            try:
+                geodata = eval(pyperclip.paste())
+                if type(geodata) != list:
+                    return
+                pos = self.field.rect.topleft + (self.pos * self.size if self.onfield else pg.Vector2(0, 0))
+                rect = pg.Rect([pos, pg.Vector2(len(geodata), len(geodata[0])) * self.size])
+
+                pg.draw.rect(self.surface, select, rect, 5)
+            except:
+                pass
+
+    def linepoints(self, pointa: pg.Vector2, pointb: pg.Vector2):
+        plotLine(pointa, pointb, self.place)
 
     def replacestate(self):
         self.replaceair = not self.replaceair
@@ -499,13 +534,39 @@ class GE(MenuWithField):
 
     def tool_rect(self):
         self.fillshape2 = "rect"
+        self.recaption()
+
+    def tool_rect_hollow(self):
+        self.fillshape2 = "rect-hollow"
+        self.recaption()
+
+    def tool_circle(self):
+        self.fillshape2 = "circle"
+        self.recaption()
+
+    def tool_circle_hollow(self):
+        self.fillshape2 = "circle-hollow"
+        self.recaption()
+
+    def tool_line(self):
+        self.fillshape2 = "line"
+        self.recaption()
 
     def tool_pencil(self):
         self.fillshape = "pencil"
+        self.recaption()
+
+    def tool_brush(self):
+        self.fillshape = "brush"
+        self.recaption()
+
+    def tool_fill(self):
+        self.fillshape = "fill"
+        self.recaption()
 
     @property
     def custom_info(self):
         try:
-            return f"{super().custom_info} | LMB tool: {self.fillshape}, RMB tool: {self.fillshape2}"
+            return f"{super().custom_info} | Placing: {self.selectedtool} | LMB tool: {self.fillshape}, RMB tool: {self.fillshape2}"
         except TypeError:
             return super().custom_info

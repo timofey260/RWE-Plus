@@ -114,6 +114,102 @@ def solveeffects(effects):
     return ef
 
 
+def plotLineLow(pointa: pg.Vector2, pointb: pg.Vector2, callback):
+    if pointa.x > pointb.x:
+        pointa, pointb = pointb, pointa
+    dx = pointb.x - pointa.x
+    dy = pointb.y - pointa.y
+    yi = 1
+    if dy < 0:
+        yi = -1
+        dy = -dy
+    D = (2 * dy) - dx
+    y = pointa.y
+
+    for x in range(int(pointa.x), int(pointb.x)):
+        callback(pg.Vector2(x, y), False)
+        if D > 0:
+            y = y + yi
+            D = D + (2 * (dy - dx))
+        else:
+            D = D + 2 * dy
+
+
+def plotLineHigh(pointa: pg.Vector2, pointb: pg.Vector2, callback):
+    if pointa.y > pointb.y:
+        pointa, pointb = pointb, pointa
+    dx = pointb.x - pointa.x
+    dy = pointb.y - pointa.y
+    xi = 1
+    if dx < 0:
+        xi = -1
+        dx = -dx
+    D = (2 * dx) - dy
+    x = pointa.x
+
+    for y in range(int(pointa.y), int(pointb.y)):
+        callback(pg.Vector2(x, y), False)
+        if D > 0:
+            x = x + xi
+            D = D + (2 * (dx - dy))
+        else:
+            D = D + 2 * dx
+
+
+def plotLine(pointa, pointb, callback):
+    if abs(pointb.y - pointa.y) < abs(pointb.x - pointa.x):
+        plotLineLow(pointa, pointb, callback)
+    else:
+        plotLineHigh(pointa, pointb, callback)
+
+
+def rect2ellipse(rect: pg.Rect, hollow, callback):
+    width = rect.width // 2
+    height = rect.height // 2
+    origin = rect.center
+    hh = height * height
+    ww = width * width
+    hhww = hh * ww
+    x0 = width
+    dx = 0
+    for x in range(-width, width + 1):
+        if x == -width or x == width or not hollow:
+            callback(pg.Vector2(origin[0] + x, origin[1]), False)
+    for y in range(1, height + 1):
+        x1 = x0 - (dx - 1)
+        while x1 > 0:
+            if x1*x1*hh + y*y*ww <= hhww:
+                break
+            x1 -= 1
+        dx = x0 - x1
+        x0 = x1
+        for x in range(-x0, x0 + 1):
+            if x == -x0 or x == x0 or not hollow:
+                callback(pg.Vector2(origin[0] + x, origin[1] - y), False)
+                callback(pg.Vector2(origin[0] + x, origin[1] + y), False)
+
+    if not hollow:
+        return
+
+    y0 = height
+    dy = 0
+    for y in range(-height, height + 1):
+        if y == -height or y == height or not hollow:
+            callback(pg.Vector2(origin[0], origin[1] + y), False)
+    for x in range(1, width + 1):
+        y1 = y0 - (dy - 1)
+        while y1 > 0:
+            if y1*y1*ww + x*x*hh <= hhww:
+                break
+            y1 -= 1
+        dy = y0 - y1
+        y0 = y1
+        for y in range(-y0, y0 + 1):
+            if y == -y0 or y == y0 or not hollow:
+                callback(pg.Vector2(origin[0] - x, origin[1] + y), False)
+                callback(pg.Vector2(origin[0] + x, origin[1] + y), False)
+
+
 def map(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 

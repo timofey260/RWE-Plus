@@ -162,7 +162,7 @@ class TE(MenuWithField):
                                 self.place(x + rect.x, y + rect.y)
                             elif self.tool == 1:
                                 self.destroy(x + rect.x, y + rect.y)
-                elif self.tool == 2:
+                elif self.tool == 2:  # copy
                     history = []
                     for x in range(int(rect.w)):
                         for y in range(int(rect.h)):
@@ -249,6 +249,20 @@ class TE(MenuWithField):
                         break
         for button in self.buttonslist:
             button.blittooltip()
+        if pg.key.get_pressed()[pg.K_LCTRL]:
+            try:
+                geodata: list = eval(pyperclip.paste())
+                if type(geodata) != list:
+                    return
+                pos = self.field.rect.topleft + (self.pos * self.size if self.onfield else pg.Vector2(0, 0))
+                geodata.sort(key=lambda x: x[0])
+                sizex = geodata[-1][0] + 1
+                geodata.sort(key=lambda y: y[1])
+                sizey = geodata[-1][1] + 1
+                rect = pg.Rect([pos, pg.Vector2(sizex, sizey) * self.size])
+                pg.draw.rect(self.surface, select, rect, 5)
+            except:
+                pass
 
     def cats(self):
         self.buttonslist = []

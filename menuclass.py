@@ -908,4 +908,4 @@ class MenuWithField(Menu):
 
     @property
     def custom_info(self):
-        return f"Showed layers: {self.renderer.geolayers}, current layer[{self.renderer.lastlayer}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"
+        return f"Showed layers: {''.join([['H', 'S'][int(i)] for i in self.renderer.geolayers])}, current layer[{self.renderer.lastlayer+1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"
