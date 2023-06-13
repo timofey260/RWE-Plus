@@ -20,8 +20,10 @@ class GE(MenuWithField):
         self.mirrorpos = [0, 0]
 
         self.replaceair = True
+
         self.fillshape = "pencil"  # pencil, brush, fill
         self.fillshape2 = "rect"  # rect, rect-hollow, circle, circle-hollow, line
+        self.brushsize = 1
 
         super().__init__(surface, "GE", renderer)
         self.emptyarea()
@@ -126,11 +128,16 @@ class GE(MenuWithField):
 
             bp = pg.mouse.get_pressed(3)
 
+            if self.fillshape == "brush":
+                pg.draw.circle(self.surface, select, pos2+pg.Vector2(self.size/2), self.size * self.brushsize, 5)
+
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedtool == "MV":
                     self.rectdata[0] = pos
                     self.rectdata[1] = self.offset
                     self.field.field.fill(self.field.color)
+                elif self.fillshape == "fill":
+                    self.bucket(posoffset)
                 else:
                     self.emptyarea()
                 self.mousp = False
@@ -139,30 +146,12 @@ class GE(MenuWithField):
                     self.offset = self.rectdata[1] - (self.rectdata[0] - pos)
                 elif self.selectedtool == "CT":
                     pass
-                elif (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])) and self.area[int(posoffset.x)][int(posoffset.y)] == 1:
+                elif self.fillshape == "brush":
+                    self.brushpaint(posoffset, toolsized)
+                elif (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])) and self.area[int(posoffset.x)][int(posoffset.y)]:
                     self.place(posoffset, False)
-                    if type(self.placetile) == int:
-                        if self.settings["codes"][self.selectedtool] == 1:
-                            curtool = [
-                                graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
-                                graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
-                        else:
-                            curtool = [
-                                graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
-                                graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
-                        rect = [posoffset[0] * self.size, posoffset[1] * self.size]
-                        self.fieldadd.blit(toolsized, rect, [curtool, cellsize2])
-                        if self.mirrorp:
-                            px = int(posoffset.x)
-                            py = int(posoffset.y)
-                            if self.mirrorpos[1] == 0:
-                                px = self.mirrorpos[0] * 2 + (-px - 1)
-                            else:
-                                py = self.mirrorpos[0] * 2 + (-py - 1)
-                            self.area[px][py] = 0
-                            px *= self.size
-                            py *= self.size
-                            self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
+                    self.drawtile(posoffset, toolsized)
+
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.fieldadd.fill(white)
                 self.mousp = True
@@ -170,7 +159,7 @@ class GE(MenuWithField):
                 count = 0
                 for xindex, xpos in enumerate(self.area):
                     for yindex, ypos in enumerate(xpos):
-                        if ypos == 0:
+                        if not ypos:
                             paths.append(["GE", xindex, yindex, self.layer])
                             count += 1
                 if len(paths) > 0:
@@ -272,6 +261,57 @@ class GE(MenuWithField):
             except:
                 pass
 
+    def drawtile(self, posoffset, toolsized):
+        cellsize2 = [self.size, self.size]
+        if type(self.placetile) == int:
+            curtool = [
+                graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+            rect = [posoffset[0] * self.size, posoffset[1] * self.size]
+            self.fieldadd.blit(toolsized, rect, [curtool, cellsize2])
+            if self.mirrorp:
+                px = int(posoffset.x)
+                py = int(posoffset.y)
+                if self.mirrorpos[1] == 0:
+                    px = self.mirrorpos[0] * 2 + (-px - 1)
+                else:
+                    py = self.mirrorpos[0] * 2 + (-py - 1)
+                self.area[px][py] = False
+                px *= self.size
+                py *= self.size
+                self.fieldadd.blit(self.toolrender, [px, py], [curtool, cellsize2])
+
+    def brushpaint(self, pos: pg.Vector2, toolsized):
+        for xp, xd in enumerate(self.data["GE"]):
+            for yp, yd in enumerate(xd):
+                vec = pg.Vector2(xp, yp)
+                dist = pos.distance_to(vec)
+                if dist <= self.brushsize and self.area[xp][yp]:
+                    self.place(vec, False)
+                    self.drawtile(vec, toolsized)
+
+    def bucket(self, pos: pg.Vector2):
+        filterblock = self.data["GE"][int(pos.x)][int(pos.y)][self.layer][0]
+        self.emptyarea()
+        self.place(pos, False)
+        lastarea = [[True for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        print(filterblock)
+        while lastarea != self.area:
+            print(lastarea == self.area)
+            lastarea = copy.deepcopy(self.area)
+            for xp, xd in enumerate(self.area):
+                for yp, cell in enumerate(xd):
+                    if not self.area[xp][yp]:
+                        for i in col4:
+                            posx = xp + i[0]
+                            posy = yp + i[1]
+                            if 0<=posx<len(self.area) and 0<=posy<len(self.area[0]) and \
+                                    self.area[posx][posy] and \
+                                    self.data["GE"][posx][posy][self.layer][0] == filterblock:
+                                self.place(pg.Vector2(posx, posy), False)
+                                break
+        print("Done filling")
+
     def linepoints(self, pointa: pg.Vector2, pointb: pg.Vector2):
         plotLine(pointa, pointb, self.place)
 
@@ -295,7 +335,7 @@ class GE(MenuWithField):
                     if (self.replaceair and y[0] == 0) or not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
                     self.data["GE"][xpos][ypos][self.layer] = y
-                    self.area[xpos][ypos] = 0
+                    self.area[xpos][ypos] = False
             self.detecthistory(["GE"])
             self.renderer.geo_render_area(self.area, self.layer)
             self.rfa()
@@ -449,7 +489,7 @@ class GE(MenuWithField):
         self.mirrorplace(pos, render)
         if x >= len(self.data["GE"]) or y >= len(self.data["GE"][0]) or x < 0 or y < 0:
             return
-        self.area[x][y] = 0
+        self.area[x][y] = False
         if self.placetile != 0.1:  # dont place
             if self.placetile == 0.2:  # inverse
                 if self.data["GE"][x][y][self.layer][0] == 0:
@@ -475,7 +515,7 @@ class GE(MenuWithField):
             else:
                 self.data["GE"][x][y][self.layer][0] = self.placetile
         if render:
-            self.renderer.geo_render_area(self.area, self.layer)
+            self.render_geo_area()
             self.rfa()
 
     def mirrorplace(self, pos, render=False):
@@ -489,7 +529,7 @@ class GE(MenuWithField):
             y = self.mirrorpos[0] * 2 + (-y - 1)
         if x >= len(self.data["GE"]) or y >= len(self.data["GE"][0]) or x < 0 or y < 0:
             return
-        self.area[x][y] = 0
+        self.area[x][y] = False
         if self.placetile != 0.1:
             if self.placetile == 0.2:
                 if self.data["GE"][x][y][self.layer][0] == 0:
@@ -515,7 +555,7 @@ class GE(MenuWithField):
             else:
                 self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.placetile)
         if render:
-            self.renderer.geo_render_area(self.area, self.layer)
+            self.render_geo_area()
             self.rfa()
 
     def reverseslope(self, slope):
@@ -563,6 +603,12 @@ class GE(MenuWithField):
     def tool_fill(self):
         self.fillshape = "fill"
         self.recaption()
+
+    def brushp(self):
+        self.brushsize += 1
+
+    def brushm(self):
+        self.brushsize = max(self.brushsize-1, 1)
 
     @property
     def custom_info(self):

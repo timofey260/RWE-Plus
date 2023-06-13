@@ -540,7 +540,7 @@ class MenuWithField(Menu):
                                                        self.f.get_height() / image1size * self.size]), [0, 0])
 
     def emptyarea(self):
-        self.area = [[1 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        self.area = [[True for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
 
     def rfa(self):
         if self.layer != self.renderer.lastlayer:
@@ -791,7 +791,7 @@ class MenuWithField(Menu):
                     posx = backx + x2
                     posy = backy + y2
                     csp = sp[x2 * h + y2]
-                    self.area[posx][posy] = 0
+                    self.area[posx][posy] = False
                     if csp != -1:
                         # pg.draw.rect(self.fieldadd, red, [posx * self.size, posy * self.size, self.size, self.size])
                         self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
@@ -814,7 +814,7 @@ class MenuWithField(Menu):
                 case "tileHead":
                     clearitem(x, y, self.layer)
                 case "material":
-                    self.area[x][y] = 0
+                    self.area[x][y] = False
                     self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
         self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
 

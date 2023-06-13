@@ -150,7 +150,7 @@ class Renderer:
 
     def tiles_full_render(self, layer):
         self.surf_tiles.fill(dc)
-        area = [[0 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        area = [[False for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
         self.tiles_render_area(area, layer)
 
     def tiles_render_area(self, area, layer):
@@ -224,17 +224,17 @@ class Renderer:
 
     def geo_full_render(self, layer):
         self.surf_geo.fill(color2)
-        area = [[0 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        area = [[False for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
         self.geo_render_area(area, layer)
 
     def geo_render_area(self, area, layer):
         for xp, x in enumerate(area):
             for yp, y in enumerate(x):
-                if y == 1:
+                if y:
                     continue
                 for i in col8:
                     try:
-                        if area[xp + i[0]][yp + i[1]] == 0:
+                        if not area[xp + i[0]][yp + i[1]]:
                             continue
                         self.surf_geo.blit(self.render_geo_pixel(xp + i[0], yp + i[1], layer), [(xp + i[0]) * image1size, (yp + i[1]) * image1size])
                     except IndexError:

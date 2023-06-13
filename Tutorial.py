@@ -91,7 +91,7 @@ class TT(MenuWithField):
                 elif self.selectedtool == "SL":
                     placeblock = 2 + self.toolrotation
                 if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
-                    self.area[int(posoffset[0])][int(posoffset[1])] = 0
+                    self.area[int(posoffset[0])][int(posoffset[1])] = False
                     self.data["GE"][int(posoffset[0])][int(posoffset[1])][self.layer][0] = placeblock
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.step == 6 or (self.selectedtool == "AR" and self.step == 8) \
@@ -125,7 +125,7 @@ class TT(MenuWithField):
                     for y in range(int(rect.h)):
                         if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
                             self.data["GE"][x + int(rect.x)][y + int(rect.y)][self.layer][0] = placeblock
-                            self.area[x + int(rect.x)][y + int(rect.y)] = 0
+                            self.area[x + int(rect.x)][y + int(rect.y)] = False
                 self.data["GE"] = self.data["GE"]
                 self.detecthistory(["GE"])
                 self.renderer.geo_render_area(self.area, self.layer)
@@ -439,7 +439,7 @@ class TT(MenuWithField):
                 ypos = self.btiles[1] + yi + 1
                 ypos += line * 6
                 self.data["GE"][xpos][ypos][self.layer] = y
-                self.area[xpos][ypos] = 0
+                self.area[xpos][ypos] = False
         self.detecthistory(["GE"])
         self.render_geo_area()
         self.rfa()

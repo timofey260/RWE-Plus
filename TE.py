@@ -550,20 +550,20 @@ class TE(MenuWithField):
                 if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
                     continue
                 if self.tileimage["category"] == "material":
-                    self.area[xpos][ypos] = 0
+                    self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
                                                                            "data": self.tileimage["name"]}
                 elif xpos == px and ypos == py:
-                    self.area[xpos][ypos] = 0
+                    self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
                                                                            "data": [p, self.tileimage["name"]]}
                 elif csp != -1:
                     p = makearr([px + 1, py + 1], "point")
-                    # self.area[xpos][ypos] = 0
+                    # self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
                                                                            "data": [p, self.layer + 1]}
                 if fg and csp != -1:
-                    self.area[xpos][ypos] = 0
+                    self.area[xpos][ypos] = False
                     self.data["GE"][xpos][ypos][self.layer][0] = csp
 
                 if sp2 != 0:

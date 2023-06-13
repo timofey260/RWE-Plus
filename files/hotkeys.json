@@ -100,7 +100,9 @@
     	"K_LEFT+": "-mleft",
     	"K_RIGHT+": "-mright",
     	"K_UP+": "-mup",
-    	"K_DOWN+": "-mdown"
+    	"K_DOWN+": "-mdown",
+    	"K_KP_PLUS": "-brushp",
+    	"K_KP_MINUS": "-brushm"
   	},
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
