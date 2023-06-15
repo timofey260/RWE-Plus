@@ -1,6 +1,8 @@
+import traceback
+
 import requests
 from menus import *
-from tkinter.messagebox import askyesnocancel
+from tkinter.messagebox import askyesnocancel, askyesno
 import argparse
 from path_dict import PathDict
 from lingotojson import *
@@ -239,18 +241,11 @@ def launch(level):
             for i in surf.uc:
                 if pg.key.get_pressed()[i]:
                     keypress(window)
-
         if settings[surf.menu].get("menucolor") is not None:
             window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
         else:
             window.fill(pg.color.Color(settings["global"]["color"]))
-        try:
-            surf.blit()
-        except KeyboardInterrupt:
-            pass
-        # except:
-        #     surf.savef() # extra save level in case of eny crashes
-        #     raise
+        surf.blit()
         pg.display.flip()
         pg.display.update()
 
@@ -338,6 +333,14 @@ if __name__ == "__main__":
             launch(args.filename)
         except FileNotFoundError:
             print("File not found!")
+            raise
+        except Exception as e:
+            # extra save level in case of eny crashes
+            print(traceback.print_exc())
+            ex = askyesno("Crash!!!",
+                          "Oops! RWE+ seems to be crashed, errorlog showed in console\nDo you want to save Level?")
+            if ex:
+                surf.savef()
             raise
     else:
         loadmenu()
