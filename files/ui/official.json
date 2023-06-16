@@ -193,7 +193,17 @@
 			["CP", [8, 36, 4, 6], [100, 100, 100], "s0", "copylayer", "Copy layer(<[-copylayer]>).\nCopies current layer zone into clipboard", ["geometry.png", [1, 2]]],
 			["PS", [12, 36, 4, 6], [100, 100, 100], "s0", "pastegeo", "Paste geometry(<[-pastegeo]>).\nPastes zone from clipboard", ["geometry.png", [3, 6]]],
 			["RA", [0, 42, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"],
-			["CT", [4, 42, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]]
+			["CT", [4, 42, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]],
+
+			["Pencil", [0, 50, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil", ["fillmethods.png", [5, 0]]],
+			["Brush", [5, 50, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush", ["fillmethods.png", [6, 0]]],
+			["Fill", [10, 50, 5, 6], [100, 100, 100], "tool_fill", "non", "Change RMB to fill", ["fillmethods.png", [0, 0]]],
+
+			["Line", [0, 58, 5, 6], [100, 100, 100], "tool_line", "non", "Change RMB to line", ["fillmethods.png", [7, 0]]],
+			["Rect", [5, 58, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect", ["fillmethods.png", [1, 0]]],
+			["Rect-\nhollow", [10, 58, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change RMB to hollow rect", ["fillmethods.png", [2, 0]]],
+			["Circle", [5, 64, 5, 6], [100, 100, 100], "tool_circle", "non", "Change RMB to circle", ["fillmethods.png", [3, 0]]],
+			["Circle-\nhollow", [10, 64, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle", ["fillmethods.png", [4, 0]]]
 		],
 		"d1":
 		{

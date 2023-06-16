@@ -29,7 +29,8 @@
         "/up": "Up",
         "/down": "Down",
         "/-swichlayers": "Switch layers on menu with fields",
-        "/-swichlayers_back": "Switch layers back"
+        "/-swichlayers_back": "Switch layers back",
+        "/-togglelayervisible": "Toggles geometry layer"
     },
     "LD": {
         "new": "New file",
@@ -84,7 +85,9 @@
         "-mleft": "Move mirror left",
         "-mright": "Move mirror right",
         "-mup": "Move mirror up",
-        "-mdown": "Move mirror down"
+        "-mdown": "Move mirror down",
+        "-brushp": "Increase brush size",
+        "-brushm": "decrease brush size"
     },
     "TE": {
         "force_geometry": "Forces geometry to tile",
