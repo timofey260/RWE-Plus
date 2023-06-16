@@ -129,6 +129,7 @@ def asktoexit(file, file2):
     else:
         sys.exit(0)
 
+
 def launchload(level):
     global surf, fullscreen, undobuffer, redobuffer, file, file2, run
     if level == -1:
