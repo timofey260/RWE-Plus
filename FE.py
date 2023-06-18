@@ -532,6 +532,8 @@ class FE(MenuWithField):
     @property
     def custom_info(self):
         try:
-            return f"{super().custom_info} | Selected effect: {self.data['FE']['effects'][self.selectedeffect]['nm']}, [{self.selectedeffect}]"
+            return f"{super().custom_info} | Selected effect: {self.data['FE']['effects'][self.selectedeffect]['nm']}[{self.selectedeffect}]"
         except TypeError:
+            return super().custom_info
+        except IndexError:
             return super().custom_info
