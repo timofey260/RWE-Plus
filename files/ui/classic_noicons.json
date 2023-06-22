@@ -170,7 +170,7 @@
 			["SP", [0, 18, 4, 6], [56, 173, 52], "s0", "spear", "Spear(<[-spear]>)", ["geometry.png", [3, 1]]],
 			["CR", [4, 18, 4, 6], [56, 173, 52], "s0", "crack", "Crack(<[-crack]>)", ["geometry.png", [0, 2]]],
 			["BM", [0, 24, 4, 6], [56, 173, 52], "s0", "beam", "Beam(<[-beam]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [2, 2]]],
-			["W", [4, 24, 4, 6], [56, 173, 52], "s0", "waterfall", "Waterfall(<[-waterfall]>)", ["geometry.png", [2, 4]]],
+			["W", [4, 24, 4, 6], [56, 173, 52], "s0", "waterfall", "Waterfall(<[-waterfall]>)\nCan be placed only on layer 1", ["geometry.png", [2, 4]]],
 			["WG", [0, 30, 4, 6], [56, 173, 52], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
 			["WMH", [4, 30, 4, 6], [56, 173, 52], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
 			["FC", [0, 36, 4, 6], [56, 173, 52], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],

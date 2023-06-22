@@ -58,10 +58,8 @@ e = json.load(open(path + "effects.json", "r"))
 tooltiles = loadimage(path + graphics["tooltiles"])
 toolmenu = loadimage(path + graphics["toolmenu"])
 
-mat = loadimage(path + graphics["materials"])
 
-tag = "2.3.0"
-version = "version: " + tag
+tag = "2.3.1"
 
 ofstop = 15
 ofsleft = 15

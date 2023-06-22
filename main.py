@@ -312,7 +312,7 @@ def loadmenu():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.")
-    parser.version = version
+    parser.version = tag
     parser.add_argument("filename", type=str, nargs="?", help="Level to load")
     parser.add_argument("-n", "--new", help="Opens new file", dest="new", action="store_true")
     parser.add_argument("-v", "--version", help="Shows current version and exits", action="version")

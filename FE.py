@@ -449,7 +449,6 @@ class FE(MenuWithField):
                     self.rebuttons()
                     return
 
-
     def selectmouseeffect(self):
         self.innew = False
         for indx, i in enumerate(self.buttonslist2):
@@ -483,7 +482,7 @@ class FE(MenuWithField):
         self.brushsize += 1
 
     def bsdown(self):
-        if self.brushsize - 1 > 1:
+        if self.brushsize - 1 > 0:
             self.brushsize -= 1
 
     def innewtab(self):

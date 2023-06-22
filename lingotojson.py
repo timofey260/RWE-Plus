@@ -211,18 +211,20 @@ def inittolist():
             solved_copy[cat].append(newitem)
     solved_copy["material"] = []
     counter = 1
-    for i in graphics["matposes"]:
+    for k, v in graphics["matposes"].items():
         col = settings["global"]["color2"]
-        rect = pg.rect.Rect(graphics["matposes"].index(i) * 16, 0, 16, 16)
-        img = mat.subsurface(rect)
+        img = pg.Surface([spritesize, spritesize], pg.SRCALPHA)
+        img.fill(pg.Color(0, 0, 0, 0))
+        ms = graphics["matsize"]
+        pg.draw.rect(img, v, pg.Rect(ms[0], ms[0], ms[1], ms[1]))
         try:
-            preview = loadimage(path2materialPreviews + i.lower().replace(" ", "") + ".png")
+            preview = loadimage(path2materialPreviews + k.lower().replace(" ", "") + ".png")
         except FileNotFoundError:
-            preview = pg.Surface([20, 20])
+            preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)
         solved_copy["material"].append(
             {
-                "name": i,
+                "name": k,
                 "tp": None,
                 "repeatL": [1],
                 "bfTiles": 0,

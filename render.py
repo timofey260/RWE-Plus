@@ -64,7 +64,6 @@ renderedimage = pg.transform.scale(tooltiles, [
             (tooltiles.get_width() / graphics["tilesize"][0]) * image1size,
             (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
 
-material = pg.transform.scale(mat, [mat.get_width() / 16 * image1size, mat.get_height() / 16 * image1size])
 
 
 def quadsize(quad):
@@ -184,8 +183,9 @@ class Renderer:
         elif datcell == "material":
             if self.data["GE"][xp][yp][layer][0] != 0:
                 try:
-                    area = pg.rect.Rect([graphics["matposes"].index(datdata) * image1size, 0, image1size, image1size])
-                    self.surf_tiles.blit(material, [posx, posy], area)
+                    ms = graphics["matsize"]
+                    rect = pg.Rect(ms[0] + posx, ms[0] + posy, ms[1], ms[1])
+                    pg.draw.rect(self.surf_tiles, graphics["matposes"][datdata], rect)
                 except ValueError:
                     self.surf_tiles.blit(notfound, [posx, posy])
 
