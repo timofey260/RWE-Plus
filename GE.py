@@ -77,12 +77,6 @@ class GE(MenuWithField):
                                              [self.tooltiles.get_width() / graphics["tilesize"][0] * image1size,
                                               self.tooltiles.get_height() / graphics["tilesize"][1] * image1size])
 
-    def renderfield(self):
-        super().renderfield()
-        self.fieldadd = pg.transform.scale(self.fieldadd,
-                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
-        self.fieldadd.fill(white)
-        # renderfield(self.fieldmap, self.size, self.layer, self.data["GE"])
 
     def blit(self):
         cellsize2 = [self.size, self.size]

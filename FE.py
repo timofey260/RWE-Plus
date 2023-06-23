@@ -30,6 +30,8 @@ class FE(MenuWithField):
         self.copymode = False
 
         super().__init__(surface, "FE", renderer)
+        #self.fieldadd.set_colorkey(None)
+        self.fieldadd.set_alpha(200)
         self.makeparams()
         self.rfa()
         self.rebuttons()
@@ -388,10 +390,8 @@ class FE(MenuWithField):
             self.makeparams()
 
     def renderfield(self):
-        self.fieldadd = pg.transform.scale(self.fieldadd,
-                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
-        self.fieldadd.fill(white)
         super().renderfield()
+        self.fieldadd.set_alpha(200)
         self.rf3()
         self.recaption()
         self.makeparams()
@@ -401,7 +401,8 @@ class FE(MenuWithField):
             fillcol = mixcol_empty
             if self.draweffects != 0:
                 fillcol = pg.Color(mixcol_empty.r, mixcol_empty.g, mixcol_empty.b, 0)
-            self.rendermatrix(self.fieldmap, self.size, self.data["FE"]["effects"][self.selectedeffect]["mtrx"], fillcol)
+            #self.fieldadd.fill(white)
+            self.rendermatrix(self.fieldadd, self.size, self.data["FE"]["effects"][self.selectedeffect]["mtrx"], fillcol)
 
     def deleteeffect(self):
         try:

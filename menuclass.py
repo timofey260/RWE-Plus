@@ -538,6 +538,9 @@ class MenuWithField(Menu):
         self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
         self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size,
                                                        self.f.get_height() / image1size * self.size]), [0, 0])
+        self.fieldadd = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd.set_colorkey(white)
+        self.fieldadd.fill(white)
 
     def emptyarea(self):
         self.area = [[True for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
@@ -745,15 +748,10 @@ class MenuWithField(Menu):
         return (0 <= x2 and x < len(self.data["GE"])) and (0 <= y2 and y < len(self.data["GE"][0]))
 
     def rendermatrix(self, field, size, matrix, mix=mixcol_empty):
-        f = field
         for xp, x in enumerate(matrix):
             for yp, cell in enumerate(x):
-                surf = pg.surface.Surface([size, size])
                 col = mix.lerp(mixcol_fill, cell / 100)
-                surf.set_alpha(col.a)
-                surf.fill(col)
-                f.blit(surf, [xp * size, yp * size])
-                # pg.draw.rect(f, col, [xp * size, yp * size, size, size], 0)
+                pg.draw.rect(field, col, [xp * size, yp * size, size, size], 0)
 
     def destroy(self, xp, yp):
         x = int(xp)

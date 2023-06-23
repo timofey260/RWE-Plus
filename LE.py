@@ -175,9 +175,6 @@ class LE(MenuWithField):
     def renderfield(self):
         self.rs()
         super().renderfield()
-        self.fieldadd = pg.transform.scale(self.fieldadd,
-                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
-        self.fieldadd.fill(white)
 
     def save(self):
         if self.data["path"] == "":

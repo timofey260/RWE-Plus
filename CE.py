@@ -142,12 +142,6 @@ class CE(MenuWithField):
                 closeindex = indx
         return closeindex
 
-    def renderfield(self):
-        self.fieldadd = pg.transform.scale(self.fieldadd,
-                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
-        self.fieldadd.fill(white)
-        super().renderfield()
-
     def getquad(self, indx):
         mpos = pg.Vector2(pg.mouse.get_pos())
         rect = self.getcamerarect(self.data["CM"]["cameras"][indx])
