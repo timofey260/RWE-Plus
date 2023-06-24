@@ -232,6 +232,7 @@
 	}, 
 	"TE":
 	{
+		"category_count": 20,
 		"LEtiles": true,
 		"buttons": [
 			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(<[-rt]>)", ["arrows.png", [0, 0]]],

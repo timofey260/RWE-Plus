@@ -18,7 +18,7 @@
 	"tileplaceicon": {"0":[1, 0], "1":[0, 0], "2":[0, 1], "3":[1, 1], "4":[2, 1], "5":[3, 1], "6":[1, 3], "7":[3, 2], "9":[2, 5], "-1":[1, 6], "-2":[0, 6], "-3":[1, 5], "-4":[3, 2], "-5":[0, 2], "-6":[1, 2], "-7":[2, 2], "-9":[0, 3], "-10":[0, 4], "-11":[2, 6], "-12":[0, 5], "-13":[3, 4], "-18":[3, 3], "-19":[2, 4], "-20":[2, 3], "-21":[1, 4]},
 	"tilesize": [100, 100],
 	"historylimit": 100,
-	"matsize": [6.25, 7.5],
+	"matsize": [6.25, 8],
 	"matposes": {
 		"Standard": [148, 148, 148],
 		"Concrete": [148, 255, 255],
@@ -41,6 +41,36 @@
 		"Dirt": [123, 74, 49],
 		"Ceramic Tile": [57, 57, 99],
 		"Temple Stone": [0, 123, 181],
-		"Circuits": [8, 206, 8]
+		"Circuits": [8, 206, 8],
+
+  		"4Mosaic": [227, 76, 13],
+  		"Color A Ceramic": [120, 0, 90],
+  		"Color B Ceramic": [0, 175, 175],
+  		"Random Pipes": [80,0,140],
+  		"Roots": [210,210,100],
+  		"Rocks": [185,200,0],
+  		"Rough Rock": [155,170,0],
+  		"Random Metal": [180, 10, 10],
+  		"Cliff": [75, 75, 75],
+  		"Non-Slip Metal": [180, 80, 80],
+  		"Stained Glass": [180, 80, 180],
+  		"Sand Block": [180, 180, 80],
+  		"Sandy Dirt": [180, 180, 80],
+  		"MegaTrash": [135,10,255],
+  		"Shallow Dense Pipes": [13,23,110],
+  		"Sheet Metal": [145, 135, 125],
+  		"Chaotic Stone 2": [90, 90, 90],
+  
+
+  		"Shallow Circuits": [15,200,155],
+  		"Random Machines 2": [116, 116, 80],
+  		"Small Machines": [80, 116, 116],
+  		"Random Metals": [255, 0, 80],
+  		"ElectricMetal": [255,0,100],
+  		"Grate": [190,50,190],
+  		"CageGrate": [50,190,190],
+  		"BulkMetal": [50,19,190],
+  		"MassiveBulkMetal": [255,19,19],
+  		"Dune Sand": [255, 255, 100]
 	}
 }

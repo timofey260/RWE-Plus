@@ -124,11 +124,14 @@ class PE(MenuWithField):
             btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
-            col = self.props[item][0]["color"]
-            if col is None:
+            try:
+                col = self.props[item][0]["color"]
+                if col is None:
+                    col = gray
+                if count == self.currentcategory:
+                    col = darkgray
+            except IndexError:
                 col = gray
-            if count == self.currentcategory:
-                col = darkgray
             btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
             self.buttonslist.append(btn)
         if btn2 is not None:

@@ -57,8 +57,8 @@ def tojson(string: str):
     t = "".join(m)
     t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
     # print(t)
-    if t != "":
-        #print(t)
+    if t.replace(" ", "") != "":
+        # print(t)
         return json.loads(t)
     else:
         return {}
@@ -209,10 +209,12 @@ def inittolist():
                 "tags": item["tags"]
             }
             solved_copy[cat].append(newitem)
-    solved_copy["material"] = []
+    matcat = "materials 0"
+    matcatcount = 0
+    solved_copy[matcat] = []
     counter = 1
     for k, v in graphics["matposes"].items():
-        col = settings["global"]["color2"]
+        col = pg.Color(v)
         img = pg.Surface([spritesize, spritesize], pg.SRCALPHA)
         img.fill(pg.Color(0, 0, 0, 0))
         ms = graphics["matsize"]
@@ -222,7 +224,7 @@ def inittolist():
         except FileNotFoundError:
             preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)
-        solved_copy["material"].append(
+        solved_copy[matcat].append(
             {
                 "name": k,
                 "tp": None,
@@ -230,13 +232,17 @@ def inittolist():
                 "bfTiles": 0,
                 "image": img,
                 "size": [1, 1],
-                "category": "material",
+                "category": matcat,
                 "color": col,
                 "cols": [[-1], 0],
                 "cat": [1, counter],
                 "tags": [""],
                 "preview": preview
             })
+        if len(solved_copy[matcat]) > 20:
+            matcatcount += 1
+            matcat = f"materials {matcatcount}"
+            solved_copy[matcat] = []
         counter += 1
     return solved_copy
 

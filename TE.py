@@ -55,8 +55,13 @@ class TE(MenuWithField):
         self.lastfg = False
 
         super().__init__(surface, "TE", renderer, False)
+        self.catlist = [[]]
+        for category in self.items.keys():
+            self.catlist[-1].append(category)
+            if len(self.catlist[-1]) >= self.settings["category_count"]:
+                self.catlist.append([])
         self.drawtiles = True
-        self.set("material", "Standard")
+        self.set("materials 0", "Standard")
         self.currentcategory = len(self.items) - 1
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
         self.rfa()
@@ -266,18 +271,21 @@ class TE(MenuWithField):
 
     def cats(self):
         self.buttonslist = []
-        self.matshow = True
+        if not self.matshow: # if cats not already used
+            self.currentcategory = self.toolindex // self.settings["category_count"]
+            self.toolindex %= self.settings["category_count"]
         btn2 = None
-        for count, item in enumerate(self.items.keys()):
+        self.matshow = True
+        for count, item in enumerate(self.catlist[self.currentcategory]):
             # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
+            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], f"Categories {self.currentcategory}", onpress=self.changematshow)
 
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
             col = self.items[item][0]["color"]
-            if count == self.currentcategory:
+            if count == self.toolindex:
                 col = darkgray
             btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
             self.buttonslist.append(btn)
@@ -372,17 +380,28 @@ class TE(MenuWithField):
             self.tileimage["image"].set_colorkey(None)
 
     def lt(self):
-        if self.currentcategory - 1 < 0:
-            self.currentcategory = len(self.items) - 1
+        if self.matshow:
+            if self.currentcategory - 1 < 0:
+                self.currentcategory = len(self.catlist) - 1
+            else:
+                self.currentcategory = self.currentcategory - 1
+            self.cats()
         else:
-            self.currentcategory = self.currentcategory - 1
-        self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
-        self.rebuttons()
+            if self.currentcategory - 1 < 0:
+                self.currentcategory = len(self.items) - 1
+            else:
+                self.currentcategory = self.currentcategory - 1
+            self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
+            self.rebuttons()
 
     def rt(self):
-        self.currentcategory = (self.currentcategory + 1) % len(self.items)
-        self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
-        self.rebuttons()
+        if self.matshow:
+            self.currentcategory = (self.currentcategory + 1) % len(self.catlist)
+            self.cats()
+        else:
+            self.currentcategory = (self.currentcategory + 1) % len(self.items)
+            self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
+            self.rebuttons()
 
     def dt(self):
         self.toolindex += 1
@@ -402,7 +421,7 @@ class TE(MenuWithField):
 
     def changematshow(self):
         if self.matshow:
-            self.currentcategory = self.toolindex
+            self.currentcategory = self.toolindex + self.currentcategory * self.settings["category_count"]
             self.toolindex = 0
             cat = list(self.items.keys())[self.currentcategory]
             self.set(cat, self.items[cat][0]["name"])

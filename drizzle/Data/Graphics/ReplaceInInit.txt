@@ -1,0 +1,3 @@
+[#nm:"marked metal ramp", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[10], #bfTiles:1, #rnd:1, #ptPos:0, #tags:["ramp","drawLast"]]
+[#nm:"segmented metal ramp", #sz:point(1,1), #specs:[0], #specs2:0, #tp:"voxelStruct", #repeatL:[10], #bfTiles:1, #rnd:1, #ptPos:0, #tags:["ramp","drawLast"]]
+[#nm:"Huge Tank", #sz:point(13,3), #specs:[0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0], #specs2:0, #tp:"voxelStruct", #repeatL:[1,1,1,1,1,1,1,1,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]

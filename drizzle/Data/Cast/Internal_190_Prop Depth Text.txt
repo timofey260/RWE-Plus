@@ -1,1 +1,1 @@
-Prop depth: 0 to 20
+Prop depth: 0 to 4

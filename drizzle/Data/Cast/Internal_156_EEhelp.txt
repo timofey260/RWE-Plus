@@ -1,1 +1,1 @@
-Edit effect: Use WASD to change the settings of the effect. Use the left and right mouse buttons to change the effect matrix
+Create new: Use the W, A, S, D keys and the spacebar to select an effect to add. Press E to edit effects added previously.
