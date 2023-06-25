@@ -19,10 +19,10 @@ Use <[-swichcameras]> to enable camera showing on editor\nMight be helpful btw
 You can show any data in any editor by pressing\n<[/-togglegeo]>, <[/-toggletiles]>, <[/-toggleprops]> and <[/-toggleeffects]> buttons
 Copy geometry, tiles, effects and cameras by pressing <[-copylayer]>, <[-copytool]>, <[-copytool]>, <[-copycamera]>
 Undo your mistakes by pressing <[undo]> or redo changes with <[redo]>\nUse <[-undoshadow]> and <[-redoshadow]> for shadow image
-Use "..." button to find props(<[-findpropmenu]>), tiles(<[-findtile]>) and effects(<[-findeffect]>) with search menu
+Use "..." button to find props(<[-findpropmenu]>),\ntiles(<[-findtile]>) and effects(<[-findeffect]>) with search menu
 Toggle grid by pressing <[-togglegrid]>
 
-Border/ buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
+Border/buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
 Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
 Tile editor is my best and i hate Prop editor
 Prop editor ropes are here! uwu

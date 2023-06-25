@@ -28,8 +28,8 @@ def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["glob
     surf = fontr.render(text, True, col, None)
     textblit(window, surf, x, y, centered)
 
-def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
 
+def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
     if col is None:
         col = black
     fontr: pg.font.Font = fs(fontsize)[0]
@@ -58,7 +58,7 @@ def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
     return surf
 
 
-def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int | float, centered: bool=False):
+def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int | float, centered: bool = False):
     if centered:
         window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
     else:
@@ -69,10 +69,12 @@ def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int
         else:
             window.blit(screen_text, [x, y])
 
+
 def resetpresses():
     global bol, enablebuttons
     bol = True
     enablebuttons = False
+
 
 class button:
     def __init__(self, surface: pg.surface.Surface, rect: pg.rect.Rect, col, text: str, icon=None, onpress=None,
@@ -125,6 +127,7 @@ class button:
             self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
         cp = False
         if self.onmouseover():
+            pg.mouse.set_cursor(pg.Cursor(pg.SYSTEM_CURSOR_HAND))
             cp = True
             self.glow = min(self.glow + 1, 100)
             if pg.mouse.get_pressed(3)[0] and bol and enablebuttons:
@@ -144,7 +147,7 @@ class button:
                     except TypeError:
                         self.onrelease()
         else:
-            #if not self.bol:
+            # if not self.bol:
             #    bol = True
             #    self.bol = True
             self.glow = max(0, self.glow - 1)
@@ -167,7 +170,7 @@ class button:
             self.surface.blit(self.icon, pos)
 
     def blitshadow(self):
-        if not self.enabled or not  self.visible:
+        if not self.enabled or not self.visible:
             return
         invglow = 100 - self.glow
         r2 = self.rect.copy()
@@ -270,6 +273,9 @@ class window:
         self.border = self.border.copy()
         return wcopy
 
+    def onmouseover(self):
+        return self.rect.collidepoint(pg.mouse.get_pos())
+
 
 class lable:
     def __init__(self, surface: pg.surface.Surface, text, pos, color, fontsize=15):
@@ -300,6 +306,7 @@ class lable:
         self.text = text
         self.textimage = mts(text, self.color, self.fontsize)
 
+
 class slider:
     def __init__(self, surface: pg.surface.Surface, text, pos, len, min, max, value, step):
         self.surface = surface
@@ -318,6 +325,7 @@ class slider:
 
         self.held = False
         self.mp = False
+        self.set_text(f"{self.originaltext}: {self.value}")
         self.resize()
 
     def blit(self):
@@ -339,6 +347,7 @@ class slider:
             if self.held:
                 val = max(min(map(mpos.x, self.pos.x, pos2.x, self.min, self.max), self.max), self.min)
                 self.value = val - val % self.step
+                self.set_text(f"{self.originaltext}: {self.value}")
         elif not pg.mouse.get_pressed()[0] and not self.mp:
             self.mp = True
             self.held = False

@@ -18,7 +18,7 @@ class MN(MenuWithField):
     def blit(self):
         super().blit()
         if self.onfield:
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
             self.movemiddle(bp)
 
     def tiles(self):

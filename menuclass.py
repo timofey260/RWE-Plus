@@ -332,6 +332,8 @@ class Menu:
             turntolingo(self.data, open(savedest, "w"))
 
     def blit(self, fontsize=None):
+        if not self.touchesanything and pg.mouse.get_cursor().data[0] != 0:
+            pg.mouse.set_cursor(pg.Cursor(pg.SYSTEM_CURSOR_ARROW))
         if settings["global"]["doublerect"]:
             for i in self.buttons:
                 i.blitshadow()
@@ -343,6 +345,13 @@ class Menu:
             i.blittooltip()
         if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
             widgets.enablebuttons = True
+
+    @property
+    def touchesanything(self):
+        for b in self.buttons:
+            if b.onmouseover():
+                return True
+        return False
 
     def updatehistory(self, paths):
         if self.data != self.datalast:
@@ -371,6 +380,44 @@ class Menu:
 
     def non(self):
         pass
+
+    @property
+    def getmouse(self):
+        mbuttons = pg.mouse.get_pressed(5)
+        rmbkey = hotkeys["mouseremap"]["RMB"]
+        mmbkey = hotkeys["mouseremap"]["MMB"]
+        lmbkey = hotkeys["mouseremap"]["LMB"]
+        keys = [False, False, False]
+        for i, key in enumerate([lmbkey, mmbkey, rmbkey]):
+            newkey = key.replace("ctrl", "").replace("shift", "").replace("+", "")
+            match newkey.lower():
+                case "lmb":
+                    keys[i] = mbuttons[0]
+                case "mouse1":
+                    keys[i] = mbuttons[0]
+                case "rmb":
+                    keys[i] = mbuttons[2]
+                case "mouse3":
+                    keys[i] = mbuttons[2]
+                case "mmb":
+                    keys[i] = mbuttons[1]
+                case "mouse2":
+                    keys[i] = mbuttons[1]
+                case "mouse4":
+                    keys[i] = mbuttons[3]
+                case "mouse5":
+                    keys[i] = mbuttons[4]
+                case _:
+                    keys[i] = False
+            if key.find("ctrl") >= 0:
+                keys[i] = keys[i] and pg.key.get_mods() & pg.KMOD_CTRL
+            else:
+                keys[i] = keys[i] and not (pg.key.get_mods() & pg.KMOD_CTRL)
+            if key.find("shift") >= 0:
+                keys[i] = keys[i] and pg.key.get_mods() & pg.KMOD_SHIFT
+            else:
+                keys[i] = keys[i] and not (pg.key.get_mods() & pg.KMOD_SHIFT)
+        return keys
 
     def resize(self):
         for i in self.buttons:
@@ -570,6 +617,20 @@ class MenuWithField(Menu):
         if hasattr(self, "field"):
             self.field.resize()
             self.renderfield()
+
+    @property
+    def touchesanything(self):
+        for b in self.buttons:
+            if b.onmouseover():
+                return True
+        if self.field.onmouseover():
+            return True
+        for i in ["buttonslist", "buttonslist2", "params", "settingslist"]:
+            if hasattr(self, i):
+                for b in getattr(self, i):
+                    if b.onmouseover():
+                        return True
+        return False
 
     def blit(self, draw=True):
         self.renderer.lastlayer = self.layer

@@ -77,6 +77,8 @@ class GE(MenuWithField):
                                              [self.tooltiles.get_width() / graphics["tilesize"][0] * image1size,
                                               self.tooltiles.get_height() / graphics["tilesize"][1] * image1size])
 
+    def TE(self):
+        self.message = "TE"
 
     def blit(self):
         cellsize2 = [self.size, self.size]
@@ -120,7 +122,7 @@ class GE(MenuWithField):
                 self.labels[0].set_text(
                     f"Tile: {tilename} {self.data['GE'][int(posoffset.x)][int(posoffset.y)][self.layer]}")
 
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
 
             if self.fillshape == "brush":
                 pg.draw.circle(self.surface, select, pos2+pg.Vector2(self.size/2), self.size * self.brushsize, 5)
@@ -176,7 +178,7 @@ class GE(MenuWithField):
                 rect = self.vec2rect(self.rectdata[2], pos2)
                 tx = f"{abs(int(rect.w / self.size))}, {abs(int(rect.h / self.size))}"
                 widgets.fastmts(self.surface, tx, *mpos, white)
-                if self.fillshape2 in ["rect", "rect-hollow"] or self.selectedtool == "CP" or self.selectedtool == "CT":
+                if self.fillshape2 in ["rect", "rect-hollow"] or self.selectedtool in ["CP", "CT", "SL"]:
                     pg.draw.rect(self.surface, select, rect, 5)
                 elif self.fillshape2 in ["circle", "circle-hollow"]:
                     pg.draw.ellipse(self.surface, select, rect, 5)
@@ -190,17 +192,17 @@ class GE(MenuWithField):
                     data1 = [[y[self.layer] for y in x] for x in data1]
                     pyperclip.copy(str(data1))
                     print("Copied!")
+                elif self.selectedtool == "SL":
+                    rect = self.vec2rect(self.rectdata[0], posoffset)
+                    for x in range(int(rect.w)):
+                        for y in range(int(rect.h)):
+                            vec = pg.Vector2(x, y) + rect.topleft
+                            self.slopify(vec)
                 elif self.fillshape2 in ["circle", "circle-hollow"]:
                     rect = self.vec2rect(self.rectdata[0], posoffset)
                     rect2ellipse(rect, self.fillshape2 == "circle-hollow", self.place)
-                    self.detecthistory(["GE"])
-                    self.render_geo_area()
-                    self.rfa()
                 elif self.fillshape2 == "line":
                     self.linepoints(self.rectdata[0], posoffset)
-                    self.detecthistory(["GE"])
-                    self.render_geo_area()
-                    self.rfa()
                 elif self.fillshape2 in ["rect", "rect-hollow"]:
                     rect = self.vec2rect(self.rectdata[0], posoffset)
                     for x in range(int(rect.w)):
@@ -208,18 +210,15 @@ class GE(MenuWithField):
                             vec = pg.Vector2(x, y)
                             if self.fillshape2 == "rect" or (vec.x == 0 or vec.y == 0 or vec.x == int(rect.w)-1 or vec.y == int(rect.h)-1):
                                 self.place(vec + rect.topleft, False)
-                    self.detecthistory(["GE"])
-                    self.render_geo_area()
-                    self.rfa()
                 if self.selectedtool == "CT":
                     rect = self.vec2rect(self.rectdata[0], posoffset)
                     for x in range(int(rect.w)):
                         for y in range(int(rect.h)):
                             vec = pg.Vector2(x, y)
                             self.place(vec + rect.topleft, False)
-                    self.detecthistory(["GE"])
-                    self.renderer.geo_render_area(self.area, self.layer)
-                    self.rfa()
+                self.detecthistory(["GE"])
+                self.render_geo_area()
+                self.rfa()
                 self.mousp2 = True
 
             # aaah math
@@ -254,6 +253,36 @@ class GE(MenuWithField):
                 pg.draw.rect(self.surface, select, rect, 5)
             except:
                 pass
+
+    def slopify(self, pos: pg.Vector2):
+        x = int(pos.x)
+        y = int(pos.y)
+        wallcount = 0
+        acell = [0] * 4
+        if not self.canplaceit(x, y, x, y):
+            return
+        if self.data["GE"][x][y][self.layer][0] != 0:
+            return
+        for count, i in enumerate(col4):
+            try:
+                cell = self.data["GE"][x+i[0]][y+i[1]][self.layer][0]
+            except IndexError:
+                cell = self.data["EX"]["defaultTerrain"]
+            acell[count] = 1 if cell == 1 else 0
+            if cell in [1]:
+                wallcount += 1
+        if wallcount == 2:
+            if acell == [1, 1, 0, 0]:
+                self.state = 2
+            elif acell == [1, 0, 1, 0]:
+                self.state = 3
+            elif acell == [0, 0, 1, 1]:
+                self.state = 1
+            elif acell == [0, 1, 0, 1]:
+                self.state = 0
+            else:
+                return
+            self.place(pos, False)
 
     def drawtile(self, posoffset, toolsized):
         cellsize2 = [self.size, self.size]

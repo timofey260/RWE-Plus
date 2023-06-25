@@ -25,7 +25,7 @@ class CE(MenuWithField):
 
         if self.onfield and len(self.data["CM"]["cameras"]) > 0:
 
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
             s = [self.findparampressed("-addup"),
                  self.findparampressed("-adddown"),
                  self.findparampressed("-addleft"),
@@ -53,7 +53,8 @@ class CE(MenuWithField):
                         val[1] = ypos
                         s = True
                     if s:
-                        v = pg.Vector2(self.field.rect.topleft) + (pg.Vector2(camw / 2, camh / 2) * self.size)
+                        v = pg.Vector2(self.field.rect.topleft) + (pg.Vector2(camw/2, camh/2) * self.size)
+                        v += self.offset * self.size
                         startpos = pg.Vector2(val) / image1size * self.size + v
                         endpos = pg.Vector2(xpos, ypos) / image1size * self.size + v
                         pg.draw.line(self.surface, purple, startpos, endpos, 3)
@@ -71,6 +72,22 @@ class CE(MenuWithField):
                 self.rfa()
 
             self.movemiddle(bp)
+
+    def camup(self):
+        if self.held:
+            c = self.data["CM"]["cameras"].pop(self.heldindex)
+            q = self.data["CM"]["quads"].pop(self.heldindex)
+            self.heldindex += 1
+            self.data["CM"]["cameras"].insert(c, self.heldindex)
+            self.data["CM"]["quads"].insert(q, self.heldindex)
+
+    def camdown(self):
+        if self.held:
+            c = self.data["CM"]["cameras"].pop(self.heldindex)
+            q = self.data["CM"]["quads"].pop(self.heldindex)
+            self.heldindex -= 1
+            self.data["CM"]["cameras"].insert(c, self.heldindex)
+            self.data["CM"]["quads"].insert(q, self.heldindex)
 
     def copycamera(self):
         if self.held:

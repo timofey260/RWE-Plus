@@ -120,12 +120,10 @@
 			["Tile\nEditor", [10, 86, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)", ["editors.png", [1, 0]]],
 			["Camera\nEditor", [20, 86, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)", ["editors.png", [5, 0]]],
 			["Light\nEditor", [30, 86, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)", ["editors.png", [3, 0]]],
-			["Env.\nEditor", [40, 86, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(<[/EE]>)", ["editors.png", [0, 1]]],
-			["Effect\nEditor", [50, 86, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)", ["editors.png", [2, 0]]],
-			["Prop\nEditor", [60, 86, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)", ["editors.png", [4, 0]]],
-			["Level\nSizing", [70, 86, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[/LS]>)", ["editors.png", [6, 0]]],
-			["Level\nProperties", [80, 86, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)", ["editors.png", [1, 1]]],
-			["Hotkeys", [90, 86, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)", ["editors.png", [2, 1]]],
+			["Effect\nEditor", [40, 86, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)", ["editors.png", [2, 0]]],
+			["Prop\nEditor", [50, 86, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)", ["editors.png", [4, 0]]],
+			["Level\nProperties", [60, 86, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)", ["editors.png", [1, 1]]],
+			["Hotkeys", [70, 86, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)", ["editors.png", [2, 1]]],
 
 			["Layer", [90, 48, 10, 14], [90, 90, 90], "swichlayers", "non", "Change layer"],
 			["Toggle\ntiles", [90, 62, 10, 14], [90, 90, 90], "tiles", "non", "Toggle tiles layer"],
@@ -158,12 +156,12 @@
 	"GE":
 	{
 		"buttons":[
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
+			["?", [93, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
 
 			["WL", [0, 0, 4, 6], [32, 153, 28], "s0", "walls", "Walls(<[-walls]>)", ["geometry.png", [1, 0]]],
 			["AR", [4, 0, 4, 6], [32, 153, 28], "s0", "air", "Air(<[-air]>)", ["geometry.png", [2, 0]]],
 			["FL", [0, 6, 4, 6], [32, 153, 28], "s0", "floor", "Floor(<[-floor]>)", ["geometry.png", [0, 1]]],
-			["SL", [4, 6, 4, 6], [32, 153, 28], "s0", "slope", "Slope(<[-slope]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [3, 0]]],
+			["SL", [4, 6, 4, 6], [32, 153, 28], "s0", "slope", "Slope(<[-slope]>)\nUse <[-rotate]> to rotate them\nFill to Slopify", ["geometry.png", [3, 0]]],
 			["GL", [0, 12, 4, 6], [32, 153, 28], "s0", "glass", "Glass(<[-glass]>)", ["geometry.png", [3, 2]]],
 
 			["RK", [4, 12, 4, 6], [56, 173, 52], "s0", "rock", "Rock(<[-rock]>)", ["geometry.png", [2, 1]]],
@@ -203,7 +201,8 @@
 			["Rect", [31, 0, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect", ["fillmethods.png", [1, 0]]],
 			["Rect-\nhollow", [36, 0, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change RMB to hollow rect", ["fillmethods.png", [2, 0]]],
 			["Circle", [41, 0, 5, 6], [100, 100, 100], "tool_circle", "non", "Change RMB to circle", ["fillmethods.png", [3, 0]]],
-			["Circle-\nhollow", [46, 0, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle", ["fillmethods.png", [4, 0]]]
+			["Circle-\nhollow", [46, 0, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle", ["fillmethods.png", [4, 0]]],
+			["TE", [95, 0, 5, 6], [100, 100, 100], "TE", "non", "Go to tile editor"]
 		],
 		"d1":
 		{
@@ -212,10 +211,10 @@
 			"border": [150, 150, 150]
 		}, 
 		"labels":[
-			["Tile: ", [0, 91], [255, 255, 255], 25],
-			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25],
-			["Replace air: ", [0, 94], [255, 255, 255], 25],
-			["LMB - Place\nRMB - Fill\nMMB - Move", [10, 7], [255, 255, 255], 25]
+			["Tile: ", [10, 88], [255, 255, 255], 25],
+			["X: 0, Y: 0", [10, 94], [255, 255, 255], 25],
+			["Replace air: ", [10, 91], [255, 255, 255], 25],
+			["LMB - Place\nRMB - Fill\nMMB - Move", [10, 7], [170, 170, 170], 25]
 		],
 		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WMH": 0, "WG":0},
 		"names": {
@@ -242,8 +241,9 @@
 			["TS", [0, 6, 4, 4], [100, 100, 100], "changetools", "non", "ToolSwap(<[-changetools]>)"],
 			["CT", [0, 10, 4, 4], [100, 100, 100], "copytool", "non", "Copy tool(<[-copytool]>)", ["geometry.png", [1, 2]]],
 			["PS", [0, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"],
-			["...", [0, 18, 4, 4], [100, 100, 100], "findtile", "non", "Browse(<[-findtile]>)"]
+			["?", [93, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys"],
+			["...", [0, 18, 4, 4], [100, 100, 100], "findtile", "non", "Browse(<[-findtile]>)"],
+			["GE", [95, 0, 5, 6], [100, 100, 100], "GE", "non", "Go to geometry editor"]
 			
 		],
 		"catpos": [4, 6, 22, 4],

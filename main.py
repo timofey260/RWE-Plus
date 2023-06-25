@@ -19,6 +19,24 @@ undobuffer = []
 redobuffer = []
 surf: Menu | MenuWithField = None
 
+
+def openlevel(level, window):
+    global run, file, file2, redobuffer, undobuffer, surf
+    surf.savef()
+    file = level
+    if file is not None and os.path.exists(file):
+        launchload(file)
+        undobuffer = []
+        redobuffer = []
+        surf.renderer.data = file
+        surf.data = file
+        surf.renderer.set_surface()
+        surf.renderer.render_all(0)
+        surf = MN(window, surf.renderer)
+        os.system("cls")
+    print("Open")
+
+
 def keypress(window):
     global run, file, file2, redobuffer, undobuffer, surf
     pressed = ""
@@ -58,19 +76,7 @@ def keypress(window):
             surf.savef()
             run = False
         case "open":
-            surf.savef()
-            file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
-            if file is not None and os.path.exists(file):
-                launchload(file)
-                undobuffer = []
-                redobuffer = []
-                surf.renderer.data = file
-                surf.data = file
-                surf.renderer.set_surface()
-                surf.renderer.render_all(0)
-                surf = MN(window, surf.renderer)
-                os.system("cls")
-            print("Open")
+            openlevel(surf.asksaveasfilename(defaultextension=[".txt", ".wep"]), window)
 
 
 def undohistory():
@@ -153,8 +159,41 @@ def launchload(level):
     redobuffer = []
 
 
+def doevents(window):
+    for event in pg.event.get():
+        match event.type:
+            case pg.DROPFILE:
+                openlevel(event.file, window)
+            case pg.QUIT:
+                asktoexit(file, file2)
+            case pg.WINDOWRESIZED:
+                surf.resize()
+            case pg.KEYDOWN:
+                if event.key not in keys:
+                    if widgets.keybol:
+                        widgets.keybol = False
+                        keypress(window)
+            case pg.KEYUP:
+                if event.key not in keys:
+                    if not widgets.keybol:
+                        widgets.keybol = True
+            case pg.MOUSEBUTTONDOWN:
+                if event.button == 4:
+                    surf.send("SU")
+                elif event.button == 5:
+                    surf.send("SD")
+
+
 def launch(level):
     global surf, fullscreen, undobuffer, redobuffer, file, file2, run
+
+    # loading image
+    loadi = loadimage(f"{path}load.png")
+    window = pg.display.set_mode(loadi.get_size(), flags=pg.NOFRAME)
+    window.blit(loadi, [0, 0])
+    pg.display.flip()
+    pg.display.update()
+
     launchload(level)
     items = inittolist()
     propcolors = getcolors()
@@ -162,12 +201,13 @@ def launch(level):
     file2 = copy.deepcopy(file)
     width = settings["global"]["width"]
     height = settings["global"]["height"]
-    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
+    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE | (pg.FULLSCREEN * fullscreen))
     # pg.display.set_icon(loadimage(path + "icon.png"))
     renderer = Renderer(file, items, props, propcolors)
     renderer.render_all(0)
     surf = MN(window, renderer)
     os.system("cls")
+    del loadi
     try:
         request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest", timeout=2)
         if request.status_code == 200:
@@ -180,26 +220,7 @@ def launch(level):
         print("Cannot find new RWE+ versions")
     run = True
     while run:
-        for event in pg.event.get():
-            match event.type:
-                case pg.QUIT:
-                    asktoexit(file, file2)
-                case pg.WINDOWRESIZED:
-                    surf.resize()
-                case pg.KEYDOWN:
-                    if event.key not in keys:
-                        if widgets.keybol:
-                            widgets.keybol = False
-                            keypress(window)
-                case pg.KEYUP:
-                    if event.key not in keys:
-                        if not widgets.keybol:
-                            widgets.keybol = True
-                case pg.MOUSEBUTTONDOWN:
-                    if event.button == 4:
-                        surf.send("SU")
-                    elif event.button == 5:
-                        surf.send("SD")
+        doevents(window)
         if surf.message != "":
             match surf.message:
                 case "undo":
@@ -237,7 +258,6 @@ def launch(level):
             redobuffer = []
             undobuffer = undobuffer[-graphics["historylimit"]:]
 
-
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:
                 if pg.key.get_pressed()[i]:
@@ -261,26 +281,7 @@ def loadmenu():
     surf = load(window, renderer)
     pg.display.set_icon(loadimage(path + "icon.png"))
     while run:
-        for event in pg.event.get():
-            match event.type:
-                case pg.QUIT:
-                    exit(0)
-                case pg.WINDOWRESIZED:
-                    surf.resize()
-                case pg.MOUSEBUTTONDOWN:
-                    if event.button == 4:
-                        surf.send("SU")
-                    elif event.button == 5:
-                        surf.send("SD")
-                case pg.KEYDOWN:
-                    if event.key not in keys:
-                        if widgets.keybol:
-                            widgets.keybol = False
-                            keypress(window)
-                case pg.KEYUP:
-                    if event.key not in keys:
-                        if not widgets.keybol:
-                            widgets.keybol = True
+        doevents(window)
         match surf.message:
             case "new":
                 launch(-1)
@@ -316,7 +317,8 @@ if __name__ == "__main__":
     parser.add_argument("filename", type=str, nargs="?", help="Level to load")
     parser.add_argument("-n", "--new", help="Opens new file", dest="new", action="store_true")
     parser.add_argument("-v", "--version", help="Shows current version and exits", action="version")
-    parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str, help="Renders levels with drizzle.")
+    parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str,
+                        help="Renders levels with drizzle.")
     # parser.parse_args()
     args = parser.parse_args()
     if args.new:

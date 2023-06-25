@@ -7,8 +7,6 @@ class FE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "FE"
 
-        self.buttonslist = []
-
         self.currentcategory = 0
         self.currentindex = 0
         self.selectedeffect = 0
@@ -87,7 +85,7 @@ class FE(MenuWithField):
             else:
                 pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
         mpos = pg.Vector2(pg.mouse.get_pos())
-        bp = pg.mouse.get_pressed(3)
+        bp = self.getmouse
 
         if self.onfield and len(self.data["FE"]["effects"]) > 0:
             if not self.copymode:

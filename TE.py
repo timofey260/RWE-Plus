@@ -69,6 +69,9 @@ class TE(MenuWithField):
         self.blit()
         self.resize()
 
+    def GE(self):
+        self.message = "GE"
+
     def blit(self):
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
         for button in self.buttonslist:
@@ -118,7 +121,7 @@ class TE(MenuWithField):
                 if self.tool == 0:
                     self.surface.blit(self.tileimage["image"], [cposx, cposy])
                     self.printcols(cposxo, cposyo, self.tileimage)
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
@@ -351,7 +354,7 @@ class TE(MenuWithField):
 
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
-            if item["category"] in ["material", "special"]:
+            if item["category"] == "special" or "material" in item["tags"]:
                 btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getmaterial)
             else:
                 tooltip = "Size: " + str(item["size"])
@@ -469,9 +472,8 @@ class TE(MenuWithField):
             return False
         #if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]) or x < 0 or y < 0:
         #    return False
-        if self.tileimage["category"] == "material":
-            return self.data["GE"][x][y][self.layer][0] not in [0] and self.data["TE"]["tlMatrix"][x][y][self.layer][
-                "tp"] == "default"
+        if "material" in self.tileimage["tags"]:
+            return self.data["GE"][x][y][self.layer][0] not in [0] and self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
@@ -568,7 +570,7 @@ class TE(MenuWithField):
                 ypos = int(y + y2)
                 if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
                     continue
-                if self.tileimage["category"] == "material":
+                if "material" in self.tileimage["tags"]:
                     self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
                                                                            "data": self.tileimage["name"]}
@@ -598,7 +600,7 @@ class TE(MenuWithField):
         #    self.rfa()
 
     def sad(self):
-        if self.tileimage["category"] == "material":
+        if "material" in self.tileimage["tags"]:
             self.data["TE"]["defaultMaterial"] = self.tileimage["name"]
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
@@ -625,7 +627,6 @@ class TE(MenuWithField):
         if not 0 <= posoffset.x < len(self.data["GE"]) or not 0 <= posoffset.y < len(self.data["GE"][0]):
             return
         tile = self.data["TE"]["tlMatrix"][int(posoffset.x)][int(posoffset.y)][self.layer]
-        cat = "material"
         name = "Standard"
 
         match tile["tp"]:
@@ -651,10 +652,14 @@ class TE(MenuWithField):
                         self.set(cat, name)
                         return
                 i += 1
-
-        self.currentcategory = list(self.items.keys()).index(cat)
-        self.rebuttons()
-        self.set(cat, name)
+        for catname, items in self.items.items():
+            for item in items:
+                if item["name"] == name:
+                    self.currentcategory = list(self.items.keys()).index(item["category"])
+                    self.rebuttons()
+                    self.getmaterial(name)
+                    return
+        print("couldn't find tile")
 
     @property
     def custom_info(self):

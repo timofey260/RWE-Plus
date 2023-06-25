@@ -1,4 +1,9 @@
 {
+	"mouseremap": {
+		"LMB": "LMB",
+		"MMB": "MMB",
+		"RMB": "ctrl+LMB"
+	},
   	"global": {
   	  	"K_1": "/MN",
   	  	"K_2": "/GE",
@@ -10,7 +15,7 @@
   	  	"K_8": "/PE",
   	  	"K_9": "/LS",
   	  	"K_0": "/LP",
-  	  	"K_MINUS": "/HK",
+  	  	"K_BACKQUOTE": "/HK",
   	  	"K_0+": "RELOAD",
   	  	"K_s+": "save",
   	  	"K_o+": "open",
@@ -101,6 +106,9 @@
     	"K_RIGHT+": "-mright",
     	"K_UP+": "-mup",
     	"K_DOWN+": "-mdown",
+
+    	"K_EQUALS": "-brushp",
+    	"K_MINUS": "-brushm",
     	"K_KP_PLUS": "-brushp",
     	"K_KP_MINUS": "-brushm"
   	},
@@ -127,7 +135,7 @@
 
   	},
 	"CE": {
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_i", "K_k", "K_j", "K_l"],
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_i", "K_k", "K_j", "K_l", "K_w", "K_a", "K_s", "K_d"],
 
 		"K_d": "-deletecamera",
 		"K_DELETE": "-deletecamera",
@@ -145,7 +153,14 @@
 		"K_i": "-addup",
 		"K_k": "-adddown",
 		"K_j": "-addleft",
-		"K_l": "-addright"
+		"K_l": "-addright",
+
+		"K_w": "-addup",
+		"K_s": "-adddown",
+		"K_a": "-addleft",
+		"K_d": "-addright",
+		"K_r": "-camup",
+		"K_f": "-camdown"
 
   	},
 	"PE": {

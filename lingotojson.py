@@ -137,7 +137,6 @@ def init_solve(files: list[str,]):
 
 def inittolist():
     inv = settings["TE"]["LEtiles"]
-    print(graphics)
     tilefiles = [path2graphics + i for i in graphics["tileinits"]]
     solved = init_solve(tilefiles)
     del solved['']
@@ -148,7 +147,7 @@ def inittolist():
         solved_copy[cat] = []
         for indx, item in enumerate(items[1:]):
             try:
-                img = loadimage(path2graphics + item["nm"] + ".png")
+                img = loadimage(f"{path2graphics}{item['nm']}.png")
             except FileNotFoundError:
                 continue
             sz = toarr(item["sz"], "point")
@@ -215,7 +214,7 @@ def inittolist():
     counter = 1
     for k, v in graphics["matposes"].items():
         col = pg.Color(v)
-        img = pg.Surface([spritesize, spritesize], pg.SRCALPHA)
+        img = pg.Surface([image1size, image1size], pg.SRCALPHA)
         img.fill(pg.Color(0, 0, 0, 0))
         ms = graphics["matsize"]
         pg.draw.rect(img, v, pg.Rect(ms[0], ms[0], ms[1], ms[1]))
@@ -236,7 +235,7 @@ def inittolist():
                 "color": col,
                 "cols": [[-1], 0],
                 "cat": [1, counter],
-                "tags": [""],
+                "tags": ["material"],
                 "preview": preview
             })
         if len(solved_copy[matcat]) > 20:
@@ -345,7 +344,7 @@ def getprops(tiles: dict):
     title = ""
     itemlist = []
     for cat, items in tiles.items():
-        if cat == "material":
+        if "material" in items[0]["tags"]:
             continue
         for indx, tile in enumerate(items[1:]):
             if count <= 0:

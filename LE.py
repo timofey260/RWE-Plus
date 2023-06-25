@@ -103,7 +103,7 @@ class LE(MenuWithField):
             self.labels[1].set_text(f"X: {curpos_on_field[0]}, Y: {curpos_on_field[1]}")
 
             self.surface.blit(self.tileimage, curpos)
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False

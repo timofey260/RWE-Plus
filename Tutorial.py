@@ -76,7 +76,7 @@ class TT(MenuWithField):
         super().blit(draw)
         self.enablenext(con)
         if self.field.rect.collidepoint(mpos) and self.field.visible:
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
             pos = self.pos
             pos2 = self.pos2
             pg.draw.rect(self.surface, cursor, [pos2, [self.size, self.size]], 1)

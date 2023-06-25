@@ -65,7 +65,6 @@ renderedimage = pg.transform.scale(tooltiles, [
             (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
 
 
-
 def quadsize(quad):
     mostleft = bignum
     mostright = 0
@@ -155,12 +154,12 @@ class Renderer:
     def tiles_render_area(self, area, layer):
         for xp, x in enumerate(area):
             for yp, y in enumerate(x):
-                if y == 1:
+                if y:
                     continue
                 self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [xp * image1size, yp * image1size, image1size, image1size])
         for xp, x in enumerate(area):
             for yp, y in enumerate(x):
-                if y == 1:
+                if y:
                     continue
                 self.render_tile_pixel(xp, yp, layer)
 
@@ -179,7 +178,7 @@ class Renderer:
         if datcell == "default":
             # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
             # pg.draw.rect(field.field, red, [posx, posy, size, size], 3)
-            pass
+            return
         elif datcell == "material":
             if self.data["GE"][xp][yp][layer][0] != 0:
                 try:

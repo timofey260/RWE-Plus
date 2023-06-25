@@ -35,7 +35,7 @@ class PE(MenuWithField):
         self.reset_settings()
 
         self.buttonslist = []
-        self.settignslist = []
+        self.settingslist = []
         self.matshow = False
 
         self.currentcategory = 0
@@ -114,7 +114,7 @@ class PE(MenuWithField):
 
     def cats(self):
         self.buttonslist = []
-        self.settignslist = []
+        self.settingslist = []
         self.matshow = True
         btn2 = None
         for count, item in enumerate(self.props.keys()):
@@ -146,14 +146,14 @@ class PE(MenuWithField):
         self.rebuttons()
 
     def settingsupdate(self):
-        self.settignslist = []
+        self.settingslist = []
         for count, item in enumerate(self.prop_settings.items()):
             name, val = item
             rect = pg.rect.Rect(self.settings["settingspos"])
             rect = rect.move(0, rect.h * count)
             btn = widgets.button(self.surface, rect, self.settings["settingscolor"], name, onpress=self.changesettings,
                                  tooltip=str(self.getval(name, val)))
-            self.settignslist.append(btn)
+            self.settingslist.append(btn)
         self.resize()
 
     def changesettings(self, name):
@@ -204,7 +204,7 @@ class PE(MenuWithField):
             self.field.resize()
             for i in self.buttonslist:
                 i.resize()
-            for i in self.settignslist:
+            for i in self.settingslist:
                 i.resize()
             self.renderfield()
 
@@ -217,9 +217,9 @@ class PE(MenuWithField):
                 button.blit(sum(pg.display.get_window_size()) // 120)
             self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
 
-            for button in self.settignslist:
+            for button in self.settingslist:
                 button.blitshadow()
-            for button in self.settignslist:
+            for button in self.settingslist:
                 button.blit(sum(pg.display.get_window_size()) // 120)
         super().blit()
         self.labels[2].set_text(self.labels[2].originaltext + str(self.prop_settings))
@@ -237,7 +237,7 @@ class PE(MenuWithField):
             pos2 += self.field.rect.topleft
 
             posoffset = self.posoffset * spritesize
-            bp = pg.mouse.get_pressed(3)
+            bp = self.getmouse
             self.delmode = self.findparampressed("delete_mode")
             self.copymode = self.findparampressed("copy_mode")
             self.renderprop = not self.delmode and not self.copymode
@@ -404,7 +404,7 @@ class PE(MenuWithField):
 
         for button in self.buttonslist:
             button.blittooltip()
-        for button in self.settignslist:
+        for button in self.settingslist:
             button.blittooltip()
 
     def find_nearest(self, x, y):
