@@ -104,7 +104,7 @@ class FE(MenuWithField):
                 self.rectdata = [posoffset, pg.Vector2(0, 0), pos2]
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.rectdata[1] = posoffset - self.rectdata[0]
-                if (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])) and self.mmove:
+                if (0 <= posoffset.x < self.levelwidth) and (0 <= posoffset.y < self.levelheight) and self.mmove:
                     if not self.copymode:
                         self.paint(posoffset.x, posoffset.y, 1)
                     self.mmove = False
@@ -130,7 +130,7 @@ class FE(MenuWithField):
                 self.mousp2 = False
                 self.mmove = True
             elif bp[2] == 1 and not self.mousp2 and (self.mousp and self.mousp1):
-                if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])) and self.mmove:
+                if (0 <= posoffset[0] < self.levelwidth) and (0 <= posoffset[1] < self.levelheight) and self.mmove:
                     if not self.copymode:
                         self.paint(posoffset[0], posoffset[1], -1)
                         self.mmove = False
@@ -434,7 +434,7 @@ class FE(MenuWithField):
                         effect["preview"] = image
                     else:
                         ef = copy.deepcopy(effect)
-                    mtrx = [[0 for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+                    mtrx = [[0 for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
                     ef["mtrx"] = mtrx
                     for n, i in enumerate(ef["options"]):
                         if i[0].lower() == "seed":

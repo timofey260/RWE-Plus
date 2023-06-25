@@ -15,8 +15,6 @@ class LS(Menu):
         self.ofstop = ofstop
         self.ofsleft = ofsleft
 
-        self.field = None
-
         self.shadowmode = True
 
         self.recount()
@@ -24,8 +22,8 @@ class LS(Menu):
         self.resize()
 
     def recount(self):
-        self.gw = len(self.data["GE"])
-        self.gh = len(self.data["GE"][0])
+        self.gw = self.levelwidth
+        self.gh = self.levelheight
         self.tw = len(self.data["TE"]["tlMatrix"])
         self.th = len(self.data["TE"]["tlMatrix"][0])
 
@@ -78,10 +76,10 @@ class LS(Menu):
         self.resizeprops(x, y, w, h)
         self.resizeimage(x, y, w, h)
         self.recount_image()
-        self.data["EX2"]["size"] = makearr([len(self.data["GE"]), len(self.data["GE"][0])], "point")
+        self.data["EX2"]["size"] = makearr([self.levelwidth, self.levelheight], "point")
         print("done")
         self.updatehistory([[]])
-        self.renderer.set_surface([image1size * len(self.data["GE"]), image1size * len(self.data["GE"][0])])
+        self.renderer.set_surface([image1size * self.levelwidth, image1size * self.levelheight])
         self.renderer.render_all(0)
 
     def cutdata(self, x, y, w, h, array, default_instance):
@@ -127,7 +125,7 @@ class LS(Menu):
                         dat = toarr(item["data"][0], "point")
                         dat[0] -= x
                         dat[1] -= y
-                        if dat[0] < 0 or dat[1] < 0 or dat[0] > len(self.data["GE"]) or dat[1] > len(self.data["GE"][0]):
+                        if dat[0] < 0 or dat[1] < 0 or dat[0] > self.levelwidth or dat[1] > self.levelheight:
                             cutted[xp][yp][layer] = {"tp": "default", "data": 0}
                         else:
                             cutted[xp][yp][layer]["data"][0] = makearr(dat, "point")
@@ -164,8 +162,8 @@ class LS(Menu):
                 self.field = f2.subsurface(pg.rect.Rect(0, 0, (self.gw + self.ofsleft) * image1size, (self.gh + self.ofstop) * image1size))
             else:
                 sc = [
-                    (len(self.data["GE"]) + self.ofsleft) * image1size,
-                    (len(self.data["GE"][0]) + self.ofstop) * image1size
+                    (self.levelwidth + self.ofsleft) * image1size,
+                    (self.levelheight + self.ofstop) * image1size
                 ]
                 self.field = pg.transform.scale(self.field, sc)
             lev = os.path.splitext(self.data["path"])[0] + ".png"

@@ -136,7 +136,7 @@ class Renderer:
 
     def set_surface(self, size=None):
         if size is None:  # auto
-            size = [len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size]
+            size = [self.levelwidth * image1size, self.levelheight * image1size]
         self.surf_geo = pg.Surface(size)
         self.geolayers = [True, True, True]
         self.surf_tiles = pg.Surface(size)
@@ -148,7 +148,7 @@ class Renderer:
 
     def tiles_full_render(self, layer):
         self.surf_tiles.fill(dc)
-        area = [[False for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        area = [[False for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
         self.tiles_render_area(area, layer)
 
     def tiles_render_area(self, area, layer):
@@ -223,7 +223,7 @@ class Renderer:
 
     def geo_full_render(self, layer):
         self.surf_geo.fill(color2)
-        area = [[False for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        area = [[False for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
         self.geo_render_area(area, layer)
 
     def geo_render_area(self, area, layer):
@@ -288,8 +288,8 @@ class Renderer:
                            graphics["shows2"][str(adds)][1] * image1size]
                 bufftiles = self.data["EX2"]["extraTiles"]
                 bufftiles = pg.Rect(bufftiles[0], bufftiles[1],
-                                    len(self.data["GE"]) - bufftiles[0] - bufftiles[2],
-                                    len(self.data["GE"][0]) - bufftiles[1] - bufftiles[3])
+                                    self.levelwidth - bufftiles[0] - bufftiles[2],
+                                    self.levelheight - bufftiles[1] - bufftiles[3])
                 if bufftiles.collidepoint(xp, yp):
                     if adds == 11:  # cracked terrain search
                         inputs = 0
@@ -429,3 +429,11 @@ class Renderer:
     @property
     def hiddenlayer(self):
         return self.geolayers[self.lastlayer]
+
+    @property
+    def levelwidth(self):
+        return len(self.data["GE"])
+
+    @property
+    def levelheight(self):
+        return len(self.data["GE"][0])

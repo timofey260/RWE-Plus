@@ -332,8 +332,8 @@ class Menu:
             turntolingo(self.data, open(savedest, "w"))
 
     def blit(self, fontsize=None):
-        if not self.touchesanything and pg.mouse.get_cursor().data[0] != 0:
-            pg.mouse.set_cursor(pg.Cursor(pg.SYSTEM_CURSOR_ARROW))
+        if not self.touchesanything:
+            self.setcursor()
         if settings["global"]["doublerect"]:
             for i in self.buttons:
                 i.blitshadow()
@@ -345,6 +345,11 @@ class Menu:
             i.blittooltip()
         if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
             widgets.enablebuttons = True
+
+    def setcursor(self, cursor=pg.SYSTEM_CURSOR_ARROW):
+        c = pg.Cursor(cursor)
+        if pg.mouse.get_cursor().data[0] != c.data[0]:
+            pg.mouse.set_cursor(c)
 
     @property
     def touchesanything(self):
@@ -497,7 +502,7 @@ class Menu:
                     groups[-1][i] = "ctrl + " + pg.key.name(getattr(pg, k))
                 else:
                     groups[-1][i] = pg.key.name(getattr(pg, k))
-            rep = str(groups[-1]).replace("[", "").replace("]", "").replace("'", "").replace(" ", "").replace("+",
+            rep = ",".join(groups[-1]).replace("'", "").replace(" ", "").replace("+",
                                                                                                               " + ")
             rep = " or ".join(rep.rsplit(",", 1))
             rep = rep.replace(",", ", ")
@@ -529,7 +534,7 @@ class MenuWithField(Menu):
         self.drawgrid = False
         self.selectedeffect = 0
 
-        self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
+        self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
 
         self.field = widgets.window(self.surface, self.settings["d1"])
         self.btiles = self.data["EX2"]["extraTiles"]
@@ -565,12 +570,12 @@ class MenuWithField(Menu):
             self.renderfield()
 
     def drawborder(self):
-        rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
-                len(self.data["GE"][0]) * self.size]
+        rect = [self.xoffset * self.size, self.yoffset * self.size, self.levelwidth * self.size,
+                self.levelheight * self.size]
         pg.draw.rect(self.field.field, border, rect, 5)
         fig = [(self.btiles[0] + self.xoffset) * self.size, (self.btiles[1] + self.yoffset) * self.size,
-               (len(self.data["GE"]) - self.btiles[2] - self.btiles[0]) * self.size,
-               (len(self.data["GE"][0]) - self.btiles[3] - self.btiles[1]) * self.size]
+               (self.levelwidth - self.btiles[2] - self.btiles[0]) * self.size,
+               (self.levelheight - self.btiles[3] - self.btiles[1]) * self.size]
         rect = pg.rect.Rect(fig)
         pg.draw.rect(self.field.field, bftiles, rect, 5)
         self.field.blit()
@@ -582,20 +587,20 @@ class MenuWithField(Menu):
         self.drawborder()
 
     def renderfield(self):
-        self.fieldmap = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldmap = pg.surface.Surface([self.levelwidth * self.size, self.levelheight * self.size])
         self.fieldmap.blit(pg.transform.scale(self.f, [self.f.get_width() / image1size * self.size,
                                                        self.f.get_height() / image1size * self.size]), [0, 0])
-        self.fieldadd = pg.surface.Surface([len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+        self.fieldadd = pg.surface.Surface([self.levelwidth * self.size, self.levelheight * self.size])
         self.fieldadd.set_colorkey(white)
         self.fieldadd.fill(white)
 
     def emptyarea(self):
-        self.area = [[True for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        self.area = [[True for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
 
     def rfa(self):
         if self.layer != self.renderer.lastlayer:
             self.renderer.render_all(self.layer)
-        self.f = pg.Surface([len(self.data["GE"]) * image1size, len(self.data["GE"][0]) * image1size])
+        self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
         if self.drawgeo:
             # self.renderer.geo_full_render(self.layer)
             self.f.blit(self.renderer.surf_geo, [0, 0])
@@ -806,7 +811,7 @@ class MenuWithField(Menu):
         self.savef(True)
 
     def canplaceit(self, x, y, x2, y2):
-        return (0 <= x2 and x < len(self.data["GE"])) and (0 <= y2 and y < len(self.data["GE"][0]))
+        return (0 <= x2 and x < self.levelwidth) and (0 <= y2 and y < self.levelheight)
 
     def rendermatrix(self, field, size, matrix, mix=mixcol_empty):
         for xp, x in enumerate(matrix):
@@ -923,7 +928,7 @@ class MenuWithField(Menu):
 
     def mouse2field(self):
         mpos = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size
-        #mpos -= pg.Vector2(self.xoffset, self.yoffset)
+        # mpos -= pg.Vector2(self.xoffset, self.yoffset)
         return mpos
     @property
     def posoffset(self):
@@ -968,3 +973,11 @@ class MenuWithField(Menu):
     @property
     def custom_info(self):
         return f"Showed layers: {''.join([['H', 'S'][int(i)] for i in self.renderer.geolayers])}, current layer[{self.renderer.lastlayer+1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"
+
+    @property
+    def levelwidth(self):
+        return len(self.data["GE"])
+
+    @property
+    def levelheight(self):
+        return len(self.data["GE"][0])

@@ -90,7 +90,7 @@ class TT(MenuWithField):
                     placeblock = 0
                 elif self.selectedtool == "SL":
                     placeblock = 2 + self.toolrotation
-                if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
+                if (0 <= posoffset[0] < self.levelwidth) and (0 <= posoffset[1] < self.levelheight):
                     self.area[int(posoffset[0])][int(posoffset[1])] = False
                     self.data["GE"][int(posoffset[0])][int(posoffset[1])][self.layer][0] = placeblock
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
@@ -123,7 +123,7 @@ class TT(MenuWithField):
                     placeblock = 2 + self.toolrotation
                 for x in range(int(rect.w)):
                     for y in range(int(rect.h)):
-                        if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
+                        if (0 <= posoffset[0] < self.levelwidth) and (0 <= posoffset[1] < self.levelheight):
                             self.data["GE"][x + int(rect.x)][y + int(rect.y)][self.layer][0] = placeblock
                             self.area[x + int(rect.x)][y + int(rect.y)] = False
                 self.data["GE"] = self.data["GE"]
@@ -249,8 +249,8 @@ class TT(MenuWithField):
 
     def clearfield(self):
         clearblock = 1 if self.layer == 0 else 0
-        for x in range(self.btiles[0], len(self.data["GE"]) - self.btiles[2]):
-            for y in range(self.btiles[1], len(self.data["GE"][0]) - self.btiles[3]):
+        for x in range(self.btiles[0], self.levelwidth - self.btiles[2]):
+            for y in range(self.btiles[1], self.levelheight - self.btiles[3]):
                 self.data["GE"][x][y][self.layer][0] = clearblock
         self.render_geo_full()
         self.rfa()

@@ -49,28 +49,28 @@ class GE(MenuWithField):
             self.mirrorpos[0] -= 1
         else:
             self.mirrorpos[1] = 0
-            self.mirrorpos[0] = len(self.data["GE"]) // 2
+            self.mirrorpos[0] = self.levelwidth // 2
 
     def mright(self):
         if self.mirrorpos[1] == 0:
             self.mirrorpos[0] += 1
         else:
             self.mirrorpos[1] = 0
-            self.mirrorpos[0] = len(self.data["GE"]) // 2
+            self.mirrorpos[0] = self.levelwidth // 2
 
     def mup(self):
         if self.mirrorpos[1] == 1:
             self.mirrorpos[0] -= 1
         else:
             self.mirrorpos[1] = 1
-            self.mirrorpos[0] = len(self.data["GE"][0]) // 2
+            self.mirrorpos[0] = self.levelheight // 2
 
     def mdown(self):
         if self.mirrorpos[1] == 1:
             self.mirrorpos[0] += 1
         else:
             self.mirrorpos[1] = 1
-            self.mirrorpos[0] = len(self.data["GE"][0]) // 2
+            self.mirrorpos[0] = self.levelheight // 2
 
     def rs(self):
         self.toolrender = pg.transform.scale(self.tooltiles,
@@ -86,6 +86,7 @@ class GE(MenuWithField):
         mpos = pg.Vector2(pg.mouse.get_pos())
         if self.selectedtool != self.lastselectedtool:
             self.lastselectedtool = self.selectedtool
+            self.s0()
             self.recaption()
         if self.onfield:
             curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
@@ -113,10 +114,10 @@ class GE(MenuWithField):
                                    graphics["tileplaceicon"][str(self.placetile - self.state)][1] * self.size]
                     # print([abs(self.field.rect.x - pos2[0]), abs(self.field.rect.y - pos2[1])])
                     self.surface.blit(toolsized, pos2, [curtool, cellsize2])
-            rect = [self.xoffset * self.size, self.yoffset * self.size, len(self.data["GE"]) * self.size,
-                    len(self.data["GE"][0]) * self.size]
+            rect = [self.xoffset * self.size, self.yoffset * self.size, self.levelwidth * self.size,
+                    self.levelheight * self.size]
             pg.draw.rect(self.field.field, border, rect, self.size // image1size + 1)
-            if (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])):
+            if (0 <= posoffset.x < self.levelwidth) and (0 <= posoffset.y < self.levelheight):
                 tilename = settings["GE"]["names"][
                     str(self.data["GE"][int(posoffset.x)][int(posoffset.y)][self.layer][0])]
                 self.labels[0].set_text(
@@ -144,7 +145,7 @@ class GE(MenuWithField):
                     pass
                 elif self.fillshape == "brush":
                     self.brushpaint(posoffset, toolsized)
-                elif (0 <= posoffset.x < len(self.data["GE"])) and (0 <= posoffset.y < len(self.data["GE"][0])) and self.area[int(posoffset.x)][int(posoffset.y)]:
+                elif (0 <= posoffset.x < self.levelwidth) and (0 <= posoffset.y < self.levelheight) and self.area[int(posoffset.x)][int(posoffset.y)]:
                     self.place(posoffset, False)
                     self.drawtile(posoffset, toolsized)
 
@@ -317,7 +318,7 @@ class GE(MenuWithField):
         filterblock = self.data["GE"][int(pos.x)][int(pos.y)][self.layer][0]
         self.emptyarea()
         self.place(pos, False)
-        lastarea = [[True for _ in range(len(self.data["GE"][0]))] for _ in range(len(self.data["GE"]))]
+        lastarea = [[True for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
         print(filterblock)
         while lastarea != self.area:
             print(lastarea == self.area)
@@ -445,7 +446,7 @@ class GE(MenuWithField):
 
     def mirror(self):
         self.mirrorp = not self.mirrorp
-        self.mirrorpos = [len(self.data["GE"]) // 2, 0]
+        self.mirrorpos = [self.levelwidth // 2, 0]
 
     def clearall(self):
         self.selectedtool = "CA"
@@ -510,7 +511,7 @@ class GE(MenuWithField):
         x = int(pos.x)
         y = int(pos.y)
         self.mirrorplace(pos, render)
-        if x >= len(self.data["GE"]) or y >= len(self.data["GE"][0]) or x < 0 or y < 0:
+        if x >= self.levelwidth or y >= self.levelheight or x < 0 or y < 0:
             return
         self.area[x][y] = False
         if self.placetile != 0.1:  # dont place
@@ -550,7 +551,7 @@ class GE(MenuWithField):
             x = self.mirrorpos[0] * 2 + (-x - 1)
         else:
             y = self.mirrorpos[0] * 2 + (-y - 1)
-        if x >= len(self.data["GE"]) or y >= len(self.data["GE"][0]) or x < 0 or y < 0:
+        if x >= self.levelwidth or y >= self.levelheight or x < 0 or y < 0:
             return
         self.area[x][y] = False
         if self.placetile != 0.1:

@@ -219,10 +219,11 @@ def inittolist():
         ms = graphics["matsize"]
         pg.draw.rect(img, v, pg.Rect(ms[0], ms[0], ms[1], ms[1]))
         try:
-            preview = loadimage(path2materialPreviews + k.lower().replace(" ", "") + ".png")
+            preview = loadimage(path2materialPreviews + k.lower() + ".png")
         except FileNotFoundError:
             preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)
+        preview.set_colorkey(pg.Color(255, 255, 255))
         solved_copy[matcat].append(
             {
                 "name": k,
@@ -238,7 +239,7 @@ def inittolist():
                 "tags": ["material"],
                 "preview": preview
             })
-        if len(solved_copy[matcat]) > 20:
+        if len(solved_copy[matcat]) > 30:
             matcatcount += 1
             matcat = f"materials {matcatcount}"
             solved_copy[matcat] = []

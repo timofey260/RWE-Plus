@@ -2,7 +2,7 @@
 	"mouseremap": {
 		"LMB": "LMB",
 		"MMB": "MMB",
-		"RMB": "ctrl+LMB"
+		"RMB": "RMB"
 	},
   	"global": {
   	  	"K_1": "/MN",
@@ -110,7 +110,17 @@
     	"K_EQUALS": "-brushp",
     	"K_MINUS": "-brushm",
     	"K_KP_PLUS": "-brushp",
-    	"K_KP_MINUS": "-brushm"
+    	"K_KP_MINUS": "-brushm",
+
+    	"K_KP0": "-tool_circle",
+    	"+K_KP0": "-tool_circle_hollow",
+    	"K_KP1": "-tool_rect",
+    	"+K_KP1": "-tool_rect_hollow",
+    	"K_KP2": "-tool_fill",
+
+    	"K_KP_DIVIDE": "-tool_line",
+    	"K_KP_MULTIPLY": "-tool_pencil",
+    	"+K_KP_MULTIPLY": "-tool_brush"
   	},
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],

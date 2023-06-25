@@ -201,8 +201,9 @@ def launch(level):
     file2 = copy.deepcopy(file)
     width = settings["global"]["width"]
     height = settings["global"]["height"]
+
     window = pg.display.set_mode([width, height], flags=pg.RESIZABLE | (pg.FULLSCREEN * fullscreen))
-    # pg.display.set_icon(loadimage(path + "icon.png"))
+    pg.display.set_icon(loadimage(path + "icon.png"))
     renderer = Renderer(file, items, props, propcolors)
     renderer.render_all(0)
     surf = MN(window, renderer)
@@ -233,7 +234,7 @@ def launch(level):
                     asktoexit(file, file2)
                 case "fc":
                     fullscreen = not fullscreen
-                    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE + (pg.FULLSCREEN * fullscreen))
+                    window = pg.display.set_mode([width, height], flags=pg.RESIZABLE | (pg.FULLSCREEN * fullscreen))
                     # pg.display.toggle_fullscreen()
                     surf.resize()
                 case "save":

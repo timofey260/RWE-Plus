@@ -193,16 +193,16 @@
 			["RA", [0, 84, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"],
 			["CT", [4, 84, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]],
 
-			["Pencil", [10, 0, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil", ["fillmethods.png", [5, 0]]],
-			["Brush", [15, 0, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush", ["fillmethods.png", [6, 0]]],
-			["Fill", [20, 0, 5, 6], [100, 100, 100], "tool_fill", "non", "Change RMB to fill", ["fillmethods.png", [0, 0]]],
+			["Pencil", [10, 0, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil(<[-tool_pencil]>)", ["fillmethods.png", [5, 0]]],
+			["Brush", [15, 0, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush(<[-tool_brush]>)", ["fillmethods.png", [6, 0]]],
+			["Fill", [20, 0, 5, 6], [100, 100, 100], "tool_fill", "non", "Change RMB to fill(<[-tool_fill]>)", ["fillmethods.png", [0, 0]]],
 
-			["Line", [26, 0, 5, 6], [100, 100, 100], "tool_line", "non", "Change RMB to line", ["fillmethods.png", [7, 0]]],
-			["Rect", [31, 0, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect", ["fillmethods.png", [1, 0]]],
-			["Rect-\nhollow", [36, 0, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change RMB to hollow rect", ["fillmethods.png", [2, 0]]],
-			["Circle", [41, 0, 5, 6], [100, 100, 100], "tool_circle", "non", "Change RMB to circle", ["fillmethods.png", [3, 0]]],
-			["Circle-\nhollow", [46, 0, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle", ["fillmethods.png", [4, 0]]],
-			["TE", [95, 0, 5, 6], [100, 100, 100], "TE", "non", "Go to tile editor"]
+			["Line", [26, 0, 5, 6], [100, 100, 100], "tool_line", "non", "Change RMB to line(<[-tool_line]>)", ["fillmethods.png", [7, 0]]],
+			["Rect", [31, 0, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect(<[-tool_rect]>)", ["fillmethods.png", [1, 0]]],
+			["Rect-\nhollow", [36, 0, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change RMB to hollow rect(<[-tool_rect_hollow]>)", ["fillmethods.png", [2, 0]]],
+			["Circle", [41, 0, 5, 6], [100, 100, 100], "tool_circle", "non", "Change RMB to circle(<[-tool_circle]>)", ["fillmethods.png", [3, 0]]],
+			["Circle-\nhollow", [46, 0, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle(<[-tool_circle_hollow]>)", ["fillmethods.png", [4, 0]]],
+			["TE", [95, 0, 5, 6], [100, 100, 100], "TE", "non", "Go to tile editor(<[/TE]>)"]
 		],
 		"d1":
 		{
@@ -231,7 +231,7 @@
 	}, 
 	"TE":
 	{
-		"category_count": 20,
+		"category_count": 30,
 		"LEtiles": true,
 		"buttons": [
 			[">", [22, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(<[-rt]>)", ["arrows.png", [0, 0]]],
@@ -283,21 +283,7 @@
 			"rect": [6, 2, 92, 96],
 			"color": [90, 90, 90],
 			"border": [150, 150, 150]
-		},
-		"images": [
-			"Internal_244_bigSignGradient1.png",
-			"Internal_265_bigCircle.png",
-			"Internal_266_leaves.png",
-			"Internal_267_oilyLight.png",
-			"Internal_268_directionalLight.png",
-			"Internal_269_blobLight1.png",
-			"Internal_270_blobLight2.png",
-			"Internal_271_wormsLight.png",
-			"Internal_272_crackLight.png",
-			"Internal_273_squareishLight.png",
-			"Internal_274_holeLight.png",
-			"Internal_275_roundedRectLight.png"
-		]
+		}
 	},
 	"LS": {
 		"buttons": [
@@ -398,8 +384,14 @@
 	},
 	"LP": {
 		"buttons": [
-			["Change Border", [2, 2, 20, 14], [100, 100, 100], "changeborder", "non", "Change border settings(<[-changeborder]>)"],
-			["Change Sunlight", [2, 16, 20, 14], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(<[-changelight]>)"],
+			["Water", [1, 2, 7, 5], [100, 100, 100], "water", "non", "Allows to control water"],
+			["Layer", [1, 7, 7, 5], [100, 100, 100], "non", "non", "Changes water rendering layer"],
+			["Remove", [1, 12, 7, 5], [100, 100, 100], "nowater", "non", "Removes water from level"],
+
+			["Sizing", [1, 20, 7, 5], [100, 100, 100], "sizing", "non", "Allows to change size of level"],
+
+			["Border", [1, 28, 7, 5], [100, 100, 100], "changeborder", "non", "Change border settings(<[-changeborder]>)"],
+			["Sunlight", [1, 33, 7, 5], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(<[-changelight]>)"],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 			
 		],
@@ -413,8 +405,14 @@
 		"nml0": "OFF",
 		"nml1": "ON",
 
+		"d1":{
+			"rect": [15, 2, 83, 96],
+			"color": [90, 90, 90],
+			"border": [150, 150, 150]
+		},
+
 		"sliders": [
-			["Tile seed", [2, 50], 20, [0, 400, 1], ["EX2", "tileSeed"]]
+			["Tile seed", [0, 50], 13, [0, 400, 1], ["EX2", "tileSeed"]]
 		]
 
 	},

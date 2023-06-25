@@ -204,7 +204,7 @@ class button:
         self.set_text(self.text, self.fontsize)
 
     def onmouseover(self):
-        return self.rect.collidepoint(pg.mouse.get_pos())
+        return self.rect.collidepoint(pg.mouse.get_pos()) and self.visible and self.enabled
 
     def set_tooltip(self, text, fontsize=None):
         if text == self.tooltip:
@@ -347,7 +347,7 @@ class slider:
             if self.held:
                 val = max(min(map(mpos.x, self.pos.x, pos2.x, self.min, self.max), self.max), self.min)
                 self.value = val - val % self.step
-                self.set_text(f"{self.originaltext}: {self.value}")
+                self.set_text(f"{self.originaltext}: {int(self.value)}")
         elif not pg.mouse.get_pressed()[0] and not self.mp:
             self.mp = True
             self.held = False

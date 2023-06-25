@@ -13,7 +13,7 @@ class LE(MenuWithField):
         self.ofstop = ofstop
         self.ofsleft = ofsleft
 
-        sc = [(len(self.data["GE"]) + self.ofsleft) * image1size, (len(self.data["GE"][0]) + self.ofstop) * image1size]
+        sc = [(self.levelwidth + self.ofsleft) * image1size, (self.levelheight + self.ofstop) * image1size]
         try:
             lev = os.path.splitext(self.data["path"])[0] + ".png"
             self.field2.field = pg.transform.scale(loadimage(lev), sc)
@@ -41,7 +41,7 @@ class LE(MenuWithField):
 
         self.images = {True: [], False: []}
 
-        for i in self.settings["images"]:
+        for i in graphics["shadowimages"]:
             img = loadimage(path2cast + i)
             img.set_colorkey(white)
             self.images[True].append(img)
@@ -99,7 +99,7 @@ class LE(MenuWithField):
             self.if_set(s[2], 2)
             self.if_set(s[3], 3)
 
-            self.labels[0].set_text("Image: " + self.settings["images"][self.selectedimage])
+            self.labels[0].set_text("Image: " + graphics["shadowimages"][self.selectedimage])
             self.labels[1].set_text(f"X: {curpos_on_field[0]}, Y: {curpos_on_field[1]}")
 
             self.surface.blit(self.tileimage, curpos)
@@ -159,16 +159,16 @@ class LE(MenuWithField):
 
 
     def map_to_field(self, x, y):
-        return [x / ((len(self.data["GE"]) + self.ofsleft) * self.size) * self.field2.field.get_width(),
-                y / ((len(self.data["GE"][0]) + self.ofstop) * self.size) * self.field2.field.get_height()]
+        return [x / ((self.levelwidth + self.ofsleft) * self.size) * self.field2.field.get_width(),
+                y / ((self.levelheight + self.ofstop) * self.size) * self.field2.field.get_height()]
 
     def rs(self):
         if not hasattr(self, "field2"):
             return
         self.field3 = self.field2.copy()
         self.field3.field = pg.transform.scale(self.field2.field,
-                                               [(len(self.data["GE"]) + self.ofsleft) * self.size,
-                                                (len(self.data["GE"][0]) + self.ofstop) * self.size])
+                                               [(self.levelwidth + self.ofsleft) * self.size,
+                                                (self.levelheight + self.ofstop) * self.size])
         self.field3.field.set_alpha(100)
         self.field3.field.set_colorkey(white)
 

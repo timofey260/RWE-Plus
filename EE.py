@@ -25,8 +25,8 @@ class EE(MenuWithField):
         super().blit()
         self.fieldadd.fill(white)
         if self.data["WL"]["waterLevel"] != -1:
-            height = len(self.data["GE"][0]) * self.size
-            width = len(self.data["GE"]) * self.size
+            height = self.levelheight * self.size
+            width = self.levelwidth * self.size
 
             top = height - ((wladd + self.data["WL"]["waterLevel"]) * self.size)
 

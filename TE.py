@@ -127,7 +127,7 @@ class TE(MenuWithField):
                 self.mousp = False
                 self.emptyarea()
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
-                # if (0 <= posoffset[0] < len(self.data["GE"])) and (0 <= posoffset[1] < len(self.data["GE"][0])):
+                # if (0 <= posoffset[0] < self.levelwidth) and (0 <= posoffset[1] < self.levelheight):
                 #     pass
                 if self.tileimage["tp"] != "pattern" or self.tool == 0:
                     if self.tool == 0:
@@ -374,7 +374,7 @@ class TE(MenuWithField):
 
     def renderfield(self):
         self.fieldadd = pg.transform.scale(self.fieldadd,
-                                           [len(self.data["GE"]) * self.size, len(self.data["GE"][0]) * self.size])
+                                           [self.levelwidth * self.size, self.levelheight * self.size])
         self.fieldadd.fill(white)
         super().renderfield()
         if self.tileimage is not None and self.tileimage["tp"] != "pattern":
@@ -468,9 +468,9 @@ class TE(MenuWithField):
         sp2 = self.tileimage["cols"][1]
         px = x + int((w * .5) + .5) - 1  # center coordinates
         py = y + int((h * .5) + .5) - 1
-        if px >= len(self.data["GE"]) or py >= len(self.data["GE"][0]) or px < 0 or py < 0:
+        if px >= self.levelwidth or py >= self.levelheight or px < 0 or py < 0:
             return False
-        #if x + w > len(self.data["GE"]) or y + h > len(self.data["GE"][0]) or x < 0 or y < 0:
+        #if x + w > self.levelwidth or y + h > self.levelheight or x < 0 or y < 0:
         #    return False
         if "material" in self.tileimage["tags"]:
             return self.data["GE"][x][y][self.layer][0] not in [0] and self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
@@ -479,7 +479,7 @@ class TE(MenuWithField):
                 csp = sp[x2 * h + y2]
                 xpos = int(x + x2)
                 ypos = int(y + y2)
-                if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
+                if xpos >= self.levelwidth or ypos >= self.levelheight or xpos < 0 or ypos < 0:
                     continue
                 if csp != -1:
                     if self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]["tp"] != "default":
@@ -531,7 +531,7 @@ class TE(MenuWithField):
         shift = self.size // image1size + 1
         px = x + int((w * .5) + .5) - 1  # center coordinates
         py = y + int((h * .5) + .5) - 1
-        if px >= len(self.data["GE"]) or py >= len(self.data["GE"][0]) or px < 0 or py < 0:
+        if px >= self.levelwidth or py >= self.levelheight or px < 0 or py < 0:
             return
         if self.findparampressed("movepreview"):
             if prev:
@@ -561,14 +561,14 @@ class TE(MenuWithField):
         sp2 = self.tileimage["cols"][1]
         if not self.test_cols(x, y):
             return
-        if px > len(self.data["GE"]) or py > len(self.data["GE"][0]) or px < 0 or py < 0:
+        if px > self.levelwidth or py > self.levelheight or px < 0 or py < 0:
             return
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
                 xpos = int(x + x2)
                 ypos = int(y + y2)
-                if xpos >= len(self.data["GE"]) or ypos >= len(self.data["GE"][0]) or xpos < 0 or ypos < 0:
+                if xpos >= self.levelwidth or ypos >= self.levelheight or xpos < 0 or ypos < 0:
                     continue
                 if "material" in self.tileimage["tags"]:
                     self.area[xpos][ypos] = False
@@ -624,7 +624,7 @@ class TE(MenuWithField):
 
     def copytile(self):
         posoffset = self.posoffset
-        if not 0 <= posoffset.x < len(self.data["GE"]) or not 0 <= posoffset.y < len(self.data["GE"][0]):
+        if not 0 <= posoffset.x < self.levelwidth or not 0 <= posoffset.y < self.levelheight:
             return
         tile = self.data["TE"]["tlMatrix"][int(posoffset.x)][int(posoffset.y)][self.layer]
         name = "Standard"
