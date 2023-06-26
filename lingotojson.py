@@ -219,7 +219,7 @@ def inittolist():
         ms = graphics["matsize"]
         pg.draw.rect(img, v, pg.Rect(ms[0], ms[0], ms[1], ms[1]))
         try:
-            preview = loadimage(path2materialPreviews + k.lower() + ".png")
+            preview = loadimage(path2materialPreviews + k + ".png")
         except FileNotFoundError:
             preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)

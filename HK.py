@@ -1,5 +1,6 @@
 from menuclass import *
 
+
 class HK(Menu):
     def __init__(self, surface: pg.surface.Surface, renderer, openmenu="MN"):
         self.menu = "HK"
@@ -23,7 +24,7 @@ class HK(Menu):
             desc = self.keys[self.m][func]
             tx = pg.key.name(getattr(pg, key.replace("@", "").replace("+", ""))).title() + "\n"
             tx2 = desc+"\n"
-            if key.find("+") > 0:
+            if "+" in key:
                 tx = "Ctrl + " + tx
             text += tx
             text2 += tx2

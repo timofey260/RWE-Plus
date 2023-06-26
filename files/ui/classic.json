@@ -285,31 +285,6 @@
 			"border": [150, 150, 150]
 		}
 	},
-	"LS": {
-		"buttons": [
-			["Shadows sizing: ", [70, 2, 30, 6], [100, 100, 100], "mswich", "non", "Cut shadows/strech them(<[-mswich]>)"],
-			["Add/sub left", [1, 2, 30, 6], [100, 100, 100], "as_left", "non", "Add or sub from left border of level(<[-as_left]>)"],
-			["Add/sub top", [1, 8, 30, 6], [100, 100, 100], "as_top", "non", "Add or sub from top border of level(<[-as_top]>)"],
-			["Change width", [1, 14, 30, 6], [100, 100, 100], "set_width", "non", "set width of level(<[-set_width]>)"],
-			["Change height", [1, 20, 30, 6], [100, 100, 100], "set_height", "non", "set height of level(<[-set_height]>)"],
-			["Change buffer tiles", [1, 26, 30, 6], [100, 100, 100], "bftileschange", "non", "Change buffer tiles zone(<[-bftileschange]>)"],
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
-
-		],
-		"tm1": "Cut",
-		"tt1": "Cut shadows(<[-mswich]>)",
-
-		"tm2": "Strech",
-		"tt2": "Scale shadows to a geometry(<[-mswich]>)",
-		"labels": [
-			["Image sizes: %3d, %3d(%3d, %3d)", [0, 89], [255, 255, 255], 25],
-			["Geometry sizes: %3d, %3d", [0, 93], [255, 255, 255], 25],
-			["Tile sizes: %3d, %3d", [0, 97], [255, 255, 255], 25],
-			["Buffer tiles: %10s", [0, 85], [255, 255, 255], 25],
-			["Rescale geometry/tiles/effects(no undo)", [32, 2], [0, 0, 0], 30],
-			["Change buffer tiles zone", [32, 26], [0, 0, 0], 30]
-		]
-	},
 	"FE":{
 		"buttons": [
 			["v", [20, 2, 4, 4], [100, 100, 100], "scrl_down_new", "non", "Next effect(<[-scrl_down]>)", ["arrows.png", [2, 0]]],
@@ -384,11 +359,13 @@
 	},
 	"LP": {
 		"buttons": [
-			["Water", [1, 2, 7, 5], [100, 100, 100], "water", "non", "Allows to control water"],
-			["Layer", [1, 7, 7, 5], [100, 100, 100], "non", "non", "Changes water rendering layer"],
-			["Remove", [1, 12, 7, 5], [100, 100, 100], "nowater", "non", "Removes water from level"],
+			["Water", [1, 2, 7, 5], [100, 100, 100], "water", "non", "Allows to control water(<[-water]>)"],
+			["Layer", [1, 7, 7, 5], [100, 100, 100], "waterlayer", "non", "Changes water rendering layer"],
+			["Remove", [1, 12, 7, 5], [100, 100, 100], "nowater", "non", "Removes water from level(<[-nowater]>)"],
 
-			["Sizing", [1, 20, 7, 5], [100, 100, 100], "sizing", "non", "Allows to change size of level"],
+			["Sizing", [1, 20, 7, 5], [100, 100, 100], "sizing", "non", "Allows to change size of level with mouse(<[-sizing]>)"],
+			["C", [8, 20, 3, 5], [100, 100, 100], "cutmanually", "non", "Set level size with numbers"],
+			["B", [11, 20, 3, 5], [100, 100, 100], "btilesmanually", "non", "Set border size with numbers"],
 
 			["Border", [1, 28, 7, 5], [100, 100, 100], "changeborder", "non", "Change border settings(<[-changeborder]>)"],
 			["Sunlight", [1, 33, 7, 5], [100, 100, 100], "changelight", "non", "Toggle Sunlight light(<[-changelight]>)"],
@@ -396,14 +373,11 @@
 			
 		],
 		"labels": [
-			["Border: %10s", [0, 97], [255, 255, 255], 25],
-			["Sunlight: %10s", [0, 93], [255, 255, 255], 25]
+			["Solid Border: %5s, Sunlight: %5s", [0, 96], [255, 255, 255], 25],
+			["Sizing, Buffer tiles: %5s, level size: %5s", [0, 92], [255, 255, 255], 25],
+			["Water level: %3d, In front: %5s", [0, 88], [255, 255, 255], 25],
+			["LMB - Resize/water layer\nMMB - Move", [15, 70], [170, 170, 170], 25]
 		],
-		"nmd0": "Passable",
-		"nmd1": "Solid",
-
-		"nml0": "OFF",
-		"nml1": "ON",
 
 		"d1":{
 			"rect": [15, 2, 83, 96],
@@ -461,26 +435,6 @@
 		"rotate_speed": 0.1,
 		"rotate_speedup": 1,
 		"stretch_speed": 0.3
-	},
-	"EE":{
-		"buttons": [
-			["AW", [2, 2, 4, 6], [100, 100, 100], "water", "non", "Adds water to the level(w)"],
-			["RW", [2, 8, 4, 6], [100, 100, 100], "nowater", "non", "Delete water from level(d, delete)"],
-			["WIF", [2, 14, 4, 6], [100, 100, 100], "swichlayers", "non", "Change layer of water(f)"],
-			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
-			
-		],
-		"d1":{
-			"rect": [6, 2, 92, 96],
-			"color": [90, 90, 90],
-			"border": [150, 150, 150]
-		},
-		"labels": [
-			["Water Level: %2d", [0, 93], [255, 255, 255], 25],
-			["Water Layer: %2d", [0, 97], [255, 255, 255], 25],
-			["LMB - Water level change\nMMB - Move", [6, 2], [255, 255, 255], 25]
-		],
-		"menucolor": [120, 120, 120]
 	},
 	"HK": {
 		"buttons": 

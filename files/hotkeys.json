@@ -10,12 +10,10 @@
   	  	"K_3": "/TE",
   	  	"K_4": "/CE",
   	  	"K_5": "/LE",
-  	  	"K_6": "/EE",
-  	  	"K_7": "/FE",
-  	  	"K_8": "/PE",
-  	  	"K_9": "/LS",
-  	  	"K_0": "/LP",
-  	  	"K_BACKQUOTE": "/HK",
+  	  	"K_6": "/FE",
+  	  	"K_7": "/PE",
+  	  	"K_8": "/LP",
+  	  	"K_9": "/HK",
   	  	"K_0+": "RELOAD",
   	  	"K_s+": "save",
   	  	"K_o+": "open",
@@ -57,10 +55,8 @@
   	  	"K_t": "/TE",
   	  	"K_c": "/CE",
   	  	"K_l": "/LE",
-  	  	"K_e": "/EE",
   	  	"K_f": "/FE",
   	  	"K_p": "/PE",
-  	  	"K_s": "/LS",
   	  	"K_z": "/LP",
   	  	"K_h": "/HK"
 
@@ -254,15 +250,6 @@
 
 
   	},
-	"EE": {
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
-
-    	"K_d": "-nowater",
-    	"K_DELETE": "-nowater",
-    	"K_w": "-water",
-
-    	"K_f": "-swichlayers"
-  	},
   	"LE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_w", "K_a", "K_s", "K_d", "K_q", "K_e", "K_KP8", "K_KP5", "K_KP2", "K_KP4", "K_KP6"],
 
@@ -298,21 +285,14 @@
 
     	"K_RETURN": "-save"
   	},
-  	"LS": {
-  		"unlock_keys": [],
-
-  		"K_a": "-as_left",
-  		"K_w": "-as_top",
-  		"K_s": "-set_height",
-  		"K_d": "-set_width",
-  		"K_q": "-mswich",
-  		"K_b": "-bftileschange"
-  	},
   	"LP": {
   		"unlock_keys": [],
 
   		"K_b": "-changeborder",
-  		"K_l": "-changelight"
+  		"K_l": "-changelight",
+  		"K_w": "-water",
+  		"+K_w": "-nowater",
+  		"K_s": "-sizing"
   	},
 	"HK": {
 		"unlock_keys": [],

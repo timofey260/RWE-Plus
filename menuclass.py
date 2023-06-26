@@ -514,6 +514,20 @@ class Menu:
     def custom_info(self):
         return ""
 
+    @property
+    def levelwidth(self):
+        return len(self.data["GE"])
+
+    @property
+    def levelheight(self):
+        return len(self.data["GE"][0])
+
+    def onundo(self):
+        pass
+
+    def onredo(self):
+        self.onundo()
+
 
 class MenuWithField(Menu):
     def __init__(self, surface: pg.Surface, name, renderer: render.Renderer, renderall=True):
@@ -973,11 +987,3 @@ class MenuWithField(Menu):
     @property
     def custom_info(self):
         return f"Showed layers: {''.join([['H', 'S'][int(i)] for i in self.renderer.geolayers])}, current layer[{self.renderer.lastlayer+1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"
-
-    @property
-    def levelwidth(self):
-        return len(self.data["GE"])
-
-    @property
-    def levelheight(self):
-        return len(self.data["GE"][0])

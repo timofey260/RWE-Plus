@@ -83,17 +83,21 @@ def undohistory():
     global undobuffer, redobuffer, file, surf
     if len(undobuffer) == 0:
         return
-    print("undo")
+    print("Undo")
+    lastsize = [surf.levelwidth, surf.levelheight]
     historyelem = undobuffer[-1]
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
         pathdict[*historyelem[0], *i[0]] = i[1][1]
     surf.data = copy.deepcopy(pathdict.data)
     file = surf.data
+    surf.renderer.data = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
     redobuffer.append(copy.deepcopy(undobuffer.pop()))
+    if [surf.levelwidth, surf.levelheight] != lastsize:
+        surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
+    surf.onundo()
     if MenuWithField in type(surf).__bases__:
-        surf.renderer.data = surf.data
         surf.renderer.render_all(surf.layer)
         surf.rfa()
         if hasattr(surf, "rebuttons"):
@@ -104,17 +108,21 @@ def redohistory():
     global undobuffer, redobuffer, file, surf
     if len(redobuffer) == 0:
         return
-    print("redo")
+    print("Redo")
+    lastsize = [surf.levelwidth, surf.levelheight]
     historyelem = redobuffer[-1]
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
         pathdict[*historyelem[0], *i[0]] = i[1][0]
     surf.data = copy.deepcopy(pathdict.data)
     file = surf.data
+    surf.renderer.data = surf.data
     surf.datalast = copy.deepcopy(pathdict.data)
     undobuffer.append(copy.deepcopy(redobuffer.pop()))
+    if [surf.levelwidth, surf.levelheight] != lastsize:
+        surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
+    surf.onredo()
     if MenuWithField in type(surf).__bases__:
-        surf.renderer.data = surf.data
         surf.renderer.render_all(surf.layer)
         surf.rfa()
         if hasattr(surf, "rebuttons"):

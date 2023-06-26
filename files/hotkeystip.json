@@ -1,14 +1,13 @@
 {
+    "mouseremap": {},
     "global": {
         "/MN": "Menu",
         "/GE": "Geometry Editor",
         "/TE": "Tile Editor",
         "/CE": "Camera Editor",
         "/LE": "Light Editor",
-        "/EE": "Environment Editor",
         "/FE": "Effect Editor",
         "/PE": "Prop Editor",
-        "/LS": "Level Resizing",
         "/LP": "Level Properties",
         "/HK": "Hotkeys",
         "RELOAD": "reloads UI",
@@ -43,10 +42,8 @@
         "/TE": "Tile Editor",
         "/CE": "Camera Editor",
         "/LE": "Light Editor",
-        "/EE": "Environment Editor",
         "/FE": "Effect Editor",
         "/PE": "Prop Editor",
-        "/LS": "Level Resizing",
         "/LP": "Level Properties",
         "/HK": "Hotkeys"
     },
@@ -87,7 +84,15 @@
         "-mup": "Move mirror up",
         "-mdown": "Move mirror down",
         "-brushp": "Increase brush size",
-        "-brushm": "decrease brush size"
+        "-brushm": "decrease brush size",
+        "-tool_circle": "Changes RMB to circle tool",
+        "-tool_circle_hollow": "Changes RMB to hollow circle tool",
+        "-tool_rect": "Changes RMB to rectangle tool",
+        "-tool_rect_hollow": "Changes RMB to hollow rectangle tool",
+        "-tool_fill": "Changes LMB to fill",
+        "-tool_line": "Changes RMB to line",
+        "-tool_pencil": "Changes LMB to pencil",
+        "-tool_brush": "Changes LMB to brush"
     },
     "TE": {
         "force_geometry": "Forces geometry to tile",
@@ -107,6 +112,7 @@
         "movepreview": "Preview of prop specs on black square"
     },
     "CE": {
+        "-addright": "Rotates nearest edge of nearest camera clockwise",
         "-deletecamera": "Deletes the nearest placed camera",
         "-addcamera": "Adds camera at center of level",
         "-pickupcamera": "Pick up nearest camera",
@@ -116,7 +122,8 @@
         "-addup": "Moves nearest edge of nearest camera out of original position",
         "-adddown": "Moves nearest edge of nearest camera to original position",
         "-addleft": "Rotates nearest edge of nearest camera counter-clockwise",
-        "-addright": "Rotates nearest edge of nearest camera clockwise"
+        "-camup": "Moves selected camera up",
+        "-camdown": "Moves selected camera down"
     },
     "PE": {
         "-changematshow": "Shows list of categories",
@@ -169,11 +176,6 @@
         "-findeffect": "Opens effect find menu",
         "-deleteeffect": "Delete selected effect"
     },
-    "EE": {
-        "-nowater": "Removes water from level",
-        "-water": "Adds water to level",
-        "-swichlayers": "Switch water layer"
-    },
     "LE": {
         "-save": "Saves shadow",
         "-lightmod": "Makes pixels white",
@@ -194,17 +196,12 @@
         "-undoshadow": "Undo shadow image",
         "-redoshadow": "Redo shadow image"
     },
-    "LS": {
-        "-as_left": "Add/sub cells from left of level",
-        "-as_top": "Add/sub cells from top of level",
-        "-set_height": "Sets level height",
-        "-set_width": "Sets level width",
-        "-mswich": "Changes shadow cutting method",
-        "-bftileschange": "Sets buffer tiles"
-    },
     "LP": {
         "-changeborder": "Changes border, opened or walls",
-        "-changelight": "Changes sunlight"
+        "-changelight": "Changes sunlight",
+        "-water": "Changes current tool to water adding",
+        "-nowater": "Removes water from level",
+        "-sizing": "Changes current tool to level resizing"
     },
     "HK": {
         "-GE": "Geometry Editor hotkeys",

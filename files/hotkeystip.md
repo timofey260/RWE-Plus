@@ -7,12 +7,10 @@ Generated using hotkeys to md converter
 * **3** - /TE - Tile Editor
 * **4** - /CE - Camera Editor
 * **5** - /LE - Light Editor
-* **6** - /EE - Environment Editor
-* **7** - /FE - Effect Editor
-* **8** - /PE - Prop Editor
-* **9** - /LS - Level Resizing
-* **0** - /LP - Level Properties
-* **-** - /HK - Hotkeys
+* **6** - /FE - Effect Editor
+* **7** - /PE - Prop Editor
+* **8** - /LP - Level Properties
+* **9** - /HK - Hotkeys
 * **ctrl + 0** - RELOAD - reloads UI
 * **ctrl + S** - save - Saves file
 * **ctrl + O** - open - Opens file
@@ -47,10 +45,8 @@ Generated using hotkeys to md converter
 * **T** - /TE - Tile Editor
 * **C** - /CE - Camera Editor
 * **L** - /LE - Light Editor
-* **E** - /EE - Environment Editor
 * **F** - /FE - Effect Editor
 * **P** - /PE - Prop Editor
-* **S** - /LS - Level Resizing
 * **Z** - /LP - Level Properties
 * **H** - /HK - Hotkeys
 ### GE
@@ -89,8 +85,18 @@ Generated using hotkeys to md converter
 * **ctrl + Right** - -mright - Move mirror right
 * **ctrl + Up** - -mup - Move mirror up
 * **ctrl + Down** - -mdown - Move mirror down
+* **=** - -brushp - Increase brush size
+* **-** - -brushm - decrease brush size
 * **[+]** - -brushp - Increase brush size
 * **[-]** - -brushm - decrease brush size
+* **[0]** - -tool_circle - Changes RMB to circle tool
+* **ctrl + [0]** - -tool_circle_hollow - Changes RMB to hollow circle tool
+* **[1]** - -tool_rect - Changes RMB to rectangle tool
+* **ctrl + [1]** - -tool_rect_hollow - Changes RMB to hollow rectangle tool
+* **[2]** - -tool_fill - Changes LMB to fill
+* **[/]** - -tool_line - Changes RMB to line
+* **[\*]** - -tool_pencil - Changes LMB to pencil
+* **ctrl + [\*]** - -tool_brush - Changes LMB to brush
 ### TE
 * **G** - force_geometry - Forces geometry to tile
 * **F** - force_place - Places tile without checking geometry
@@ -108,7 +114,7 @@ Generated using hotkeys to md converter
 * **ctrl + F** - -findtile - Opens find tile menu
 * **Left Shift** - movepreview - Preview of prop specs on black square
 ### CE
-* **D** - -deletecamera - Deletes the nearest placed camera
+* **D** - -addright - Rotates nearest edge of nearest camera clockwise
 * **Delete** - -deletecamera - Deletes the nearest placed camera
 * **N** - -addcamera - Adds camera at center of level
 * **E** - -pickupcamera - Pick up nearest camera
@@ -120,6 +126,11 @@ Generated using hotkeys to md converter
 * **K** - -adddown - Moves nearest edge of nearest camera to original position
 * **J** - -addleft - Rotates nearest edge of nearest camera counter-clockwise
 * **L** - -addright - Rotates nearest edge of nearest camera clockwise
+* **W** - -addup - Moves nearest edge of nearest camera out of original position
+* **S** - -adddown - Moves nearest edge of nearest camera to original position
+* **A** - -addleft - Rotates nearest edge of nearest camera counter-clockwise
+* **R** - -camup - Moves selected camera up
+* **F** - -camdown - Moves selected camera down
 ### PE
 * **ctrl + Q** - -changematshow - Shows list of categories
 * **X** - pauseropephysics - Pauses rope physics
@@ -170,11 +181,6 @@ Generated using hotkeys to md converter
 * **ctrl + E** - -findeffect - Opens effect find menu
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect
-### EE
-* **D** - -nowater - Removes water from level
-* **Delete** - -nowater - Removes water from level
-* **W** - -water - Adds water to level
-* **F** - -swichlayers - Switch water layer
 ### LE
 * **Escape** - -save - Saves shadow
 * **ctrl + Q** - -lightmod - Makes pixels white
@@ -198,16 +204,12 @@ Generated using hotkeys to md converter
 * **ctrl + A** - -undoshadow - Undo shadow image
 * **ctrl + D** - -redoshadow - Redo shadow image
 * **Return** - -save - Saves shadow
-### LS
-* **A** - -as_left - Add/sub cells from left of level
-* **W** - -as_top - Add/sub cells from top of level
-* **S** - -set_height - Sets level height
-* **D** - -set_width - Sets level width
-* **Q** - -mswich - Changes shadow cutting method
-* **B** - -bftileschange - Sets buffer tiles
 ### LP
 * **B** - -changeborder - Changes border, opened or walls
 * **L** - -changelight - Changes sunlight
+* **W** - -water - Changes current tool to water adding
+* **ctrl + W** - -nowater - Removes water from level
+* **S** - -sizing - Changes current tool to level resizing
 ### HK
 * **G** - -GE - Geometry Editor hotkeys
 * **T** - -TE - Tile Editor hotkeys

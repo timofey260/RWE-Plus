@@ -25,8 +25,6 @@ class LE(MenuWithField):
         self.redohistory = []
         self.oldshadow = self.field2.field.copy()
 
-        self.size = image1size
-
         self.message = ''
         self.n = 0
 

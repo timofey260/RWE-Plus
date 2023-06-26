@@ -21,6 +21,8 @@ def mdtojson(filename, desc, output):
     for menu, items in js.items():
         print(menu, items)
         newdict[menu] = {}
+        if menu == "mouseremap":
+            continue
         for key, func in items.items():
             if key == "unlock_keys":
                 continue
@@ -37,6 +39,8 @@ def turntomd(filename, desc, output):
     with open(output, "w+") as file:
         file.write("Generated using hotkeys to md converter\n\n\n")
         for menu, items in js.items():
+            if menu == "mouseremap":
+                continue
             file.write("### " + menu + "\n")
             for key, func in items.items():
                 if key == "unlock_keys":

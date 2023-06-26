@@ -250,11 +250,13 @@ class Renderer:
 
     def render_geo_pixel(self, xp, yp, layer):
         self.lastlayer = layer
+
         def incorner(x, y):
             try:
                 return self.data["GE"][x][y][i][1]
             except IndexError:
                 return []
+
         def incornerblock(x, y):
             try:
                 return self.data["GE"][x][y][i][0]
