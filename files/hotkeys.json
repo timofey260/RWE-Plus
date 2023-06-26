@@ -166,7 +166,12 @@
 		"K_a": "-addleft",
 		"K_d": "-addright",
 		"K_r": "-camup",
-		"K_f": "-camdown"
+		"K_f": "-camdown",
+
+		"K_e+": "-edit",
+		"K_c": "-edit",
+		"K_v": "-move",
+		"K_m": "-move"
 
   	},
 	"PE": {

@@ -340,6 +340,8 @@
 			["Delete", [2, 6, 4, 4], [100, 100, 100], "deletecamera", "non", "Delete camera from level(<[-deletecamera]>)", ["icons.png", [0, 0]]],
 			["Copy", [2, 10, 4, 4], [100, 100, 100], "copycamera", "non", "Copy held camera(<[-copycamera]>)", ["geometry.png", [1, 2]]],
 			["Paste", [2, 14, 4, 4], [100, 100, 100], "pastedata", "non", "Paste camera(<[-pastedata]>)", ["geometry.png", [3, 6]]],
+			["Edit", [2, 18, 4, 4], [100, 100, 100], "edit", "non", "Enable edit mode(<[-edit]>)"],
+			["Move", [2, 22, 4, 4], [100, 100, 100], "move", "non", "Enable move mode(<[-move]>)"],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 			
 		],

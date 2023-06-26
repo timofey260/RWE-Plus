@@ -898,8 +898,7 @@ class MenuWithField(Menu):
 
     def getcamerarect(self, cam):
         pos = pg.Vector2(toarr(cam, "point"))
-        p = (pos / image1size) * self.size + self.field.rect.topleft + pg.Vector2(self.xoffset * self.size,
-                                                                                  self.yoffset * self.size)
+        p = (pos / image1size) * self.size + self.field.rect.topleft + self.offset * self.size
         return pg.Rect([p, [camw * self.size, camh * self.size]])
 
     def rendergrid(self):
@@ -959,9 +958,14 @@ class MenuWithField(Menu):
             math.floor(mpos.y)
         )
         return mpos
+
     @property
     def pos2(self):
         return self.pos * self.size + self.field.rect.topleft
+
+    @property
+    def camerapos(self):
+        return pg.Vector2(pg.mouse.get_pos()) + self.field.rect.topleft + self.offset * self.size
 
     def vec2rect(self, p1: pg.Vector2, p2: pg.Vector2):
         left = min(p1.x, p2.x)

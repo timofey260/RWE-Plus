@@ -7,6 +7,7 @@ error = settings["global"]["snap_error"] # snap error
 class CE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
         self.menu = "CE"
+        self.mode = "move"  # move, edit
         super().__init__(surface, "CE", renderer, renderall=False)
 
         self.held = False
@@ -14,6 +15,7 @@ class CE(MenuWithField):
         self.drawcameras = True
         self.camoffset = pg.Vector2(0, 0)
         self.pressed = [False] * 4
+        self.heldpointindex = 0
 
         self.rfa()
         self.blit()
@@ -36,7 +38,7 @@ class CE(MenuWithField):
             self.if_set(s[2], 2)
             self.if_set(s[3], 3)
             mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size
-            if self.held and self.heldindex < len(self.data["CM"]["cameras"]):
+            if self.held and self.heldindex < len(self.data["CM"]["cameras"]) and self.mode == "move":
                 val = list(self.camoffset + mpos)
                 val[0] = round(val[0], 4)
                 val[1] = round(val[1], 4)
@@ -63,15 +65,42 @@ class CE(MenuWithField):
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
-                if not self.held:
-                    self.pickupcamera()
+                if self.mode == "move":
+                    if not self.held:
+                        self.pickupcamera()
+                    else:
+                        self.placecamera()
                 else:
-                    self.placecamera()
+                    pass
+            elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
+                if self.mode == "edit" and self.held:
+                    cam = self.closestcameraindex()
+                    quadindx = self.getquad(cam)
+                    rect = self.getcamerarect(self.data["CM"]["cameras"][self.heldindex])
+                    x = self.camerapos.x - rect.x
+                    y = self.camerapos.y - rect.y
+                    print(rect.topleft, x, y)
+                    r = math.sqrt(x**2 + y**2)
+                    o = math.atan2(y, x)
+                    self.data["CM"]["quads"][self.heldindex][quadindx] = [r, o]
+                    pg.draw.circle(self.surface, red, [x, y], 5)
+                    pg.draw.circle(self.surface, green, self.camerapos, 5)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
                 self.rfa()
 
             self.movemiddle(bp)
+
+    def edit(self):
+        if self.held:
+            self.mode = "edit"
+            self.recaption()
+        else:
+            print("First pick up camera!")
+
+    def move(self):
+        self.mode = "move"
+        self.recaption()
 
     def camup(self):
         if self.held:
@@ -167,7 +196,7 @@ class CE(MenuWithField):
 
         closest = dist.index(min(dist))
 
-        return (closest)
+        return closest
 
     def addup(self):
         if not self.held:
@@ -194,3 +223,7 @@ class CE(MenuWithField):
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
             self.data["CM"]["quads"][cam][quadindx][0] = math.ceil(self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360
+
+    @property
+    def custom_info(self):
+        return f"{super().custom_info} | Mode: {self.mode}"
