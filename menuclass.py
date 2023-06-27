@@ -735,6 +735,16 @@ class MenuWithField(Menu):
         self.f.blit(self.renderer.surf_geo, [0, 0])
         self.renderfield()
 
+    def render_tiles_area(self):
+        self.renderer.tiles_render_area(self.area, self.layer)
+        self.f.blit(self.renderer.tiles, [0, 0])
+        self.renderfield()
+
+    def render_tiles_full(self):
+        self.renderer.tiles_full_render(self.layer)
+        self.f.blit(self.renderer.tiles, [0, 0])
+        self.renderfield()
+
     def togglegeo(self):
         self.drawgeo = not self.drawgeo
         self.rfa()
@@ -775,12 +785,12 @@ class MenuWithField(Menu):
 
             pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(self.size * 5, 0),
                          pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0),
-                         self.size // 3)
+                         self.size // 3 + 1)
 
             pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(0, self.size * 5),
                          pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5),
-                         self.size // 3)
-            pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3)
+                         self.size // 3 + 1)
+            pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3 + 1)
 
             if "quads" not in self.data["CM"]:
                 self.data["CM"]["quads"] = []
@@ -807,8 +817,12 @@ class MenuWithField(Menu):
             br = pg.Vector2(rect.bottomright) + pg.Vector2(newquads[2])
             bl = pg.Vector2(rect.bottomleft) + pg.Vector2(newquads[3])
 
-            if hasattr(self, "held") and indx == closest and not self.held:
+            if indx == closest and (hasattr(self, "held") and not self.held) or \
+                    (hasattr(self, "mode") and self.mode == "edit" and hasattr(self, "heldindex") and
+                    self.heldindex == indx):
                 quadindx = self.getquad(closest)
+                if hasattr(self, "mode") and self.mode == "edit":
+                    quadindx = self.getquad(self.heldindex)
 
                 vec = pg.Vector2([tl, tr, br, bl][quadindx])
 
@@ -817,9 +831,26 @@ class MenuWithField(Menu):
                 rects = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
                 pg.draw.line(self.surface, camera_held, rects[quadindx], vec, self.size // 3)
 
-                pg.draw.circle(self.surface, camera_held, vec, self.size * 3, self.size // 3)
+                qlist = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
 
+                pg.draw.circle(self.surface, camera_held, qlist[quadindx], self.size * 5, self.size // 3)
+                widgets.fastmts(self.surface, f"Order: {indx}", rect.centerx, rect.centery, white)
+                # pg.draw.circle(self.surface, camera_held, rect.topright, self.size * 5, self.size // 3)
+                # pg.draw.circle(self.surface, camera_held, rect.bottomleft, self.size * 5, self.size // 3)
+                # pg.draw.circle(self.surface, camera_held, rect.bottomright, self.size * 5, self.size // 3)
+            elif hasattr(self, "held") and self.held and hasattr(self, "heldindex") and self.heldindex == indx:
+                widgets.fastmts(self.surface, f"Order: {indx}", rect.centerx, rect.centery, white)
             pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
+
+    def getquad(self, indx):
+        mpos = pg.Vector2(pg.mouse.get_pos())
+        rect = self.getcamerarect(self.data["CM"]["cameras"][indx])
+
+        dist = [pg.Vector2(i).distance_to(mpos) for i in [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]]
+
+        closest = dist.index(min(dist))
+
+        return closest
 
     def saveasf(self):
         self.savef(True)
@@ -939,6 +970,13 @@ class MenuWithField(Menu):
         self.render_geo_full()
         self.rfa()
 
+    def toggletileslayervisible(self):
+        self.renderer.tilelayers[self.layer] = not self.renderer.tilelayers[self.layer]
+        print(f"Toggeled Tiles layer {self.layer}")
+        self.recaption()
+        self.renderer.tiles_full_render(self.layer)
+        self.rfa()
+
     def mouse2field(self):
         mpos = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size
         # mpos -= pg.Vector2(self.xoffset, self.yoffset)
@@ -963,10 +1001,6 @@ class MenuWithField(Menu):
     def pos2(self):
         return self.pos * self.size + self.field.rect.topleft
 
-    @property
-    def camerapos(self):
-        return pg.Vector2(pg.mouse.get_pos()) + self.field.rect.topleft + self.offset * self.size
-
     def vec2rect(self, p1: pg.Vector2, p2: pg.Vector2):
         left = min(p1.x, p2.x)
         right = max(p1.x, p2.x)
@@ -990,4 +1024,6 @@ class MenuWithField(Menu):
 
     @property
     def custom_info(self):
-        return f"Showed layers: {''.join([['H', 'S'][int(i)] for i in self.renderer.geolayers])}, current layer[{self.renderer.lastlayer+1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"
+        return f"Showed layers: {''.join([['H', 'S'][int(i)] for i in self.renderer.geolayers])}, " \
+               f"Tiles: {''.join([['H', 'S'][int(i)] for i in self.renderer.tilelayers])}, " \
+               f"current layer[{self.renderer.lastlayer+1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"

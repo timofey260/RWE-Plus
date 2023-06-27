@@ -29,7 +29,8 @@
         "/down": "Down",
         "/-swichlayers": "Switch layers on menu with fields",
         "/-swichlayers_back": "Switch layers back",
-        "/-togglelayervisible": "Toggles geometry layer"
+        "/-togglelayervisible": "Toggles geometry layer",
+        "/-toggletileslayervisible": "Toggles tile layer"
     },
     "LD": {
         "new": "New file",
@@ -117,13 +118,16 @@
         "-addcamera": "Adds camera at center of level",
         "-pickupcamera": "Pick up nearest camera",
         "-placecamera": "Place picked camera",
+        "-togglemode": "Toggles betwen Edit and Move modes",
         "-copycamera": "Copy held camera",
         "-pastedata": "Paste camera",
         "-addup": "Moves nearest edge of nearest camera out of original position",
         "-adddown": "Moves nearest edge of nearest camera to original position",
         "-addleft": "Rotates nearest edge of nearest camera counter-clockwise",
         "-camup": "Moves selected camera up",
-        "-camdown": "Moves selected camera down"
+        "-camdown": "Moves selected camera down",
+        "-edit": "Enables edit mode",
+        "-move": "Enables move mode"
     },
     "PE": {
         "-changematshow": "Shows list of categories",

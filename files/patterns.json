@@ -5,7 +5,7 @@
 			"tp": "pattern",
 			"category": "special",
 			"patcat": "SU patterns",
-			"color": [0, 220, 0],
+			"color": [255, 0, 0],
 			"prefix": "SUPattern"
 		},
 		{
@@ -13,8 +13,16 @@
 			"tp": "pattern",
 			"category": "special",
 			"patcat": "SU grates",
-			"color": [0, 220, 0],
+			"color": [255, 0, 255],
 			"prefix": "SUGrate"
+		},
+		{
+			"name": "Alt Grate box",
+			"tp": "pattern",
+			"category": "special",
+			"patcat": "Alt grates",
+			"color": [75, 75, 240],
+			"prefix": "AltGrate"
 		}
 	],
 	"blocks": {

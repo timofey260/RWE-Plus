@@ -71,25 +71,31 @@ class CE(MenuWithField):
                     else:
                         self.placecamera()
                 else:
-                    pass
+                    self.setcursor(pg.SYSTEM_CURSOR_SIZEALL)
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.mode == "edit" and self.held:
-                    cam = self.closestcameraindex()
-                    quadindx = self.getquad(cam)
+                    quadindx = self.getquad(self.heldindex)
                     rect = self.getcamerarect(self.data["CM"]["cameras"][self.heldindex])
-                    x = self.camerapos.x - rect.x
-                    y = self.camerapos.y - rect.y
-                    print(rect.topleft, x, y)
-                    r = math.sqrt(x**2 + y**2)
-                    o = math.atan2(y, x)
-                    self.data["CM"]["quads"][self.heldindex][quadindx] = [r, o]
-                    pg.draw.circle(self.surface, red, [x, y], 5)
-                    pg.draw.circle(self.surface, green, self.camerapos, 5)
+                    qlist = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
+                    mouse = pg.Vector2(pg.mouse.get_pos()) - qlist[quadindx]
+                    r, o = mouse.rotate(90).as_polar()
+                    self.data["CM"]["quads"][self.heldindex][quadindx] = \
+                        [o, round(min(r / 100 / self.size * image1size, 1), 4)]
+
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
+                self.setcursor()
+                self.detecthistory(["CM", "quads", self.heldindex])
                 self.mousp = True
                 self.rfa()
 
             self.movemiddle(bp)
+
+    def togglemode(self):
+        if self.mode == "move":
+            self.edit()
+        else:
+            self.move()
+
 
     def edit(self):
         if self.held:
@@ -103,20 +109,22 @@ class CE(MenuWithField):
         self.recaption()
 
     def camup(self):
-        if self.held:
+        if self.held and self.heldindex + 1 < len(self.data["CM"]["cameras"]):
             c = self.data["CM"]["cameras"].pop(self.heldindex)
             q = self.data["CM"]["quads"].pop(self.heldindex)
             self.heldindex += 1
-            self.data["CM"]["cameras"].insert(c, self.heldindex)
-            self.data["CM"]["quads"].insert(q, self.heldindex)
+            self.data["CM"]["cameras"].insert(self.heldindex, c)
+            self.data["CM"]["quads"].insert(self.heldindex, q)
+            self.updatehistory(["CM"])
 
     def camdown(self):
-        if self.held:
+        if self.held and self.heldindex - 1 >= 0:
             c = self.data["CM"]["cameras"].pop(self.heldindex)
             q = self.data["CM"]["quads"].pop(self.heldindex)
             self.heldindex -= 1
-            self.data["CM"]["cameras"].insert(c, self.heldindex)
-            self.data["CM"]["quads"].insert(q, self.heldindex)
+            self.data["CM"]["cameras"].insert(self.heldindex, c)
+            self.data["CM"]["quads"].insert(self.heldindex, q)
+            self.updatehistory(["CM"])
 
     def copycamera(self):
         if self.held:
@@ -188,16 +196,6 @@ class CE(MenuWithField):
                 closeindex = indx
         return closeindex
 
-    def getquad(self, indx):
-        mpos = pg.Vector2(pg.mouse.get_pos())
-        rect = self.getcamerarect(self.data["CM"]["cameras"][indx])
-
-        dist = [pg.Vector2(i).distance_to(mpos) for i in [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]]
-
-        closest = dist.index(min(dist))
-
-        return closest
-
     def addup(self):
         if not self.held:
             cam = self.closestcameraindex()
@@ -222,7 +220,8 @@ class CE(MenuWithField):
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
-            self.data["CM"]["quads"][cam][quadindx][0] = math.ceil(self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360
+            self.data["CM"]["quads"][cam][quadindx][0] = math.ceil(
+                self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360
 
     @property
     def custom_info(self):

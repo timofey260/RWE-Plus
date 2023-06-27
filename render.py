@@ -127,6 +127,7 @@ class Renderer:
             size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
             self.surf_geo = pg.Surface(size)
             self.geolayers = [True, True, True]
+            self.tilelayers = [True, True, True]
             self.surf_tiles = pg.Surface(size)
             self.surf_tiles = self.surf_tiles.convert_alpha()
             self.surf_props = pg.Surface(size)
@@ -139,6 +140,7 @@ class Renderer:
             size = [self.levelwidth * image1size, self.levelheight * image1size]
         self.surf_geo = pg.Surface(size)
         self.geolayers = [True, True, True]
+        self.tilelayers = [True, True, True]
         self.surf_tiles = pg.Surface(size)
         self.surf_tiles = self.surf_tiles.convert_alpha()
         self.surf_props = pg.Surface(size)
@@ -163,62 +165,72 @@ class Renderer:
                     continue
                 self.render_tile_pixel(xp, yp, layer)
 
-    def render_tile_pixel(self, xp, yp, layer):
-        self.lastlayer = layer
-        images = {}
+    def render_tile_pixel(self, xp, yp, l):
+        self.lastlayer = l
         tiledata = self.data["TE"]["tlMatrix"]
 
-        cell = tiledata[xp][yp][layer]
-        posx = xp * image1size
-        posy = yp * image1size
-
-        datcell = cell["tp"]
-        datdata = cell["data"]
-
-        if datcell == "default":
-            # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
-            # pg.draw.rect(field.field, red, [posx, posy, size, size], 3)
-            return
-        elif datcell == "material":
-            if self.data["GE"][xp][yp][layer][0] != 0:
-                try:
-                    ms = graphics["matsize"]
-                    rect = pg.Rect(ms[0] + posx, ms[0] + posy, ms[1], ms[1])
-                    pg.draw.rect(self.surf_tiles, graphics["matposes"][datdata], rect)
-                except ValueError:
-                    self.surf_tiles.blit(notfound, [posx, posy])
-
-        elif datcell == "tileHead":
+        def findtileimage(name):
             it = None
-            if datdata[1] in images.keys(): # if image stored in hash, returning it, else adding to hash
-                it = images[datdata[1]]
-            else:
-                for i in self.tiles.keys():
-                    for i2 in self.tiles[i]:
-                        if i2["name"] == datdata[1]:
-                            img = i2.copy()
-                            img["image"] = pg.transform.scale(img["image"], [img["image"].get_width() / 16 * image1size,
-                                                                             img["image"].get_height() / 16 * image1size])
-                            images[datdata[1]] = img
-                            it = img
-                            break
-                    if it is not None:
+            for i in self.tiles.keys():
+                for i2 in self.tiles[i]:
+                    if i2["name"] == name:
+                        img = i2.copy()
+                        img["image"] = pg.transform.scale(img["image"], [img["image"].get_width() / 16 * image1size,
+                                                                         img["image"].get_height() / 16 * image1size])
+                        it = img
                         break
+                if it is not None:
+                    break
             if it is None:
                 it = notfoundtile
-            cposx = posx - int((it["size"][0] * .5) + .5) * image1size + image1size
-            cposy = posy - int((it["size"][1] * .5) + .5) * image1size + image1size
-            siz = pg.rect.Rect([cposx, cposy, it["size"][0] * image1size, it["size"][1] * image1size])
-            if not settings["TE"]["LEtiles"]:
-                pg.draw.rect(self.surf_tiles, it["color"], siz, 0)
-            #for xpos in range(0, it["size"][0]):
-            #    for ypos in range(0, it["size"][1]):
-            #        #if it["cols"][0][xpos * it["size"][1] + ypos] == -1:
-            #        self.surf_tiles.fill(dc, [(cposx + xpos) * image1size, (cposy + ypos) * image1size, image1size, image1size])
-            # self.surf_tiles.fill(dc, siz)
-            self.surf_tiles.blit(it["image"], [cposx, cposy])
-        elif datcell == "tileBody":
-            pass
+            return it
+
+        for layer in range(2, -1, -1):
+            cell = tiledata[xp][yp][layer]
+            posx = xp * image1size
+            posy = yp * image1size
+
+            datcell = cell["tp"]
+            datdata = cell["data"]
+            if layer > 0 and self.data["GE"][xp][yp][layer-1][0] != 0 and layer != l:
+                continue
+            if not self.tilelayers[layer]:
+                continue
+            if datcell == "default":
+                # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
+                # pg.draw.rect(field.field, red, [posx, posy, size, size], 3)
+                pass
+            elif datcell == "material":
+                if self.data["GE"][xp][yp][layer][0] != 0:
+                    try:
+                        it = findtileimage(datdata)
+                        #ms = graphics["matsize"]
+                        #rect = pg.Rect(ms[0] + posx, ms[0] + posy, ms[1], ms[1])
+                        #pg.draw.rect(self.surf_tiles, graphics["matposes"][datdata], rect)
+                        if layer != l:
+                            it["image"].set_alpha(settings["global"]["tiles_secondarylayeralpha"])
+                        else:
+                            it["image"].set_alpha(settings["global"]["tiles_primarylayeralpha"])
+                        self.surf_tiles.blit(it["image"], [posx, posy])
+                        it["image"].set_alpha(255)
+                    except ValueError:
+                        self.surf_tiles.blit(notfound, [posx, posy])
+
+            elif datcell == "tileHead":
+                it = findtileimage(datdata[1])
+                cposx = posx - int((it["size"][0] * .5) + .5) * image1size + image1size
+                cposy = posy - int((it["size"][1] * .5) + .5) * image1size + image1size
+                siz = pg.rect.Rect([cposx, cposy, it["size"][0] * image1size, it["size"][1] * image1size])
+                if not settings["TE"]["LEtiles"]:
+                    pg.draw.rect(self.surf_tiles, it["color"], siz, 0)
+                if layer != l:
+                    it["image"].set_alpha(settings["global"]["tiles_secondarylayeralpha"])
+                else:
+                    it["image"].set_alpha(settings["global"]["tiles_primarylayeralpha"])
+                self.surf_tiles.blit(it["image"], [cposx, cposy])
+                it["image"].set_alpha(255)
+            elif datcell == "tileBody":
+                pass
         # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
 
     def geo_full_render(self, layer):

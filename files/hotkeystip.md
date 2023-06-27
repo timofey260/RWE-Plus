@@ -33,6 +33,7 @@ Generated using hotkeys to md converter
 * **ctrl + L** - /-swichlayers_back - Switch layers back
 * **ctrl + Space** - /-swichcameras - Toggles cameras
 * **F1** - /-togglelayervisible - Toggles geometry layer
+* **F2** - /-toggletileslayervisible - Toggles tile layer
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -119,7 +120,7 @@ Generated using hotkeys to md converter
 * **N** - -addcamera - Adds camera at center of level
 * **E** - -pickupcamera - Pick up nearest camera
 * **P** - -placecamera - Place picked camera
-* **Space** - -placecamera - Place picked camera
+* **Space** - -togglemode - Toggles betwen Edit and Move modes
 * **ctrl + C** - -copycamera - Copy held camera
 * **ctrl + V** - -pastedata - Paste camera
 * **I** - -addup - Moves nearest edge of nearest camera out of original position
@@ -131,6 +132,10 @@ Generated using hotkeys to md converter
 * **A** - -addleft - Rotates nearest edge of nearest camera counter-clockwise
 * **R** - -camup - Moves selected camera up
 * **F** - -camdown - Moves selected camera down
+* **ctrl + E** - -edit - Enables edit mode
+* **C** - -edit - Enables edit mode
+* **V** - -move - Enables move mode
+* **M** - -move - Enables move mode
 ### PE
 * **ctrl + Q** - -changematshow - Shows list of categories
 * **X** - pauseropephysics - Pauses rope physics

@@ -44,7 +44,6 @@ class TE(MenuWithField):
             self.items["special"][indx]["cat"] = [len(self.items), indx + 1]
         self.blocks = p["blocks"]
         self.buttonslist = []
-        self.currentcategory = 0
         self.toolindex = 0
 
         self.tileimage = None
@@ -62,7 +61,7 @@ class TE(MenuWithField):
                 self.catlist.append([])
         self.drawtiles = True
         self.set("materials 0", "Standard")
-        self.currentcategory = len(self.items) - 1
+        self.currentcategory = len(self.items) - 2
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
         self.rfa()
         self.rebuttons()
