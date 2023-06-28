@@ -104,9 +104,9 @@ class GE(MenuWithField):
                                            pg.Vector2(self.toolrender.get_size()) / image1size * self.size)
 
             self.labels[1].set_text(f"X: {posoffset.x}, Y: {posoffset.y}, Z: {self.layer + 1}")
-            if self.selectedtool in self.settings["codes"].keys():
+            if self.selectedtool in graphics["codes"].keys():
                 if type(self.placetile) == int:
-                    if self.settings["codes"][self.selectedtool] == 1:
+                    if graphics["codes"][self.selectedtool] == 1:
                         curtool = [graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
                                    graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
                     else:
@@ -530,10 +530,10 @@ class GE(MenuWithField):
                 self.data["GE"][x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:  # clear upper
                 self.data["GE"][x][y][self.layer][1] = []
-            elif self.selectedtool in self.settings["codes"].keys():  # else
-                if self.settings["codes"][self.selectedtool] == 1:
+            elif self.selectedtool in graphics["codes"].keys():  # else
+                if graphics["codes"][self.selectedtool] == 1:
                     self.data["GE"][x][y][self.layer][0] = self.placetile + self.state
-                if self.settings["codes"][self.selectedtool] == 0:
+                if graphics["codes"][self.selectedtool] == 0:
                     if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
                         self.data["GE"][x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
@@ -570,10 +570,10 @@ class GE(MenuWithField):
                 self.data["GE"][x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:
                 self.data["GE"][x][y][self.layer][1] = []
-            elif self.selectedtool in self.settings["codes"].keys():
-                if self.settings["codes"][self.selectedtool] == 1:
+            elif self.selectedtool in graphics["codes"].keys():
+                if graphics["codes"][self.selectedtool] == 1:
                     self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
-                if self.settings["codes"][self.selectedtool] == 0:
+                if graphics["codes"][self.selectedtool] == 0:
                     if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
                         self.data["GE"][x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:

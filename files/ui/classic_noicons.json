@@ -218,7 +218,6 @@
 			["Replace air: ", [10, 91], [255, 255, 255], 25],
 			["LMB - Place\nRMB - Fill\nMMB - Move", [10, 7], [170, 170, 170], 25]
 		],
-		"codes": {"AR":1, "WL":1, "SL":1, "FL":1, "SE":1, "GL":1, "BM":0, "HV":0, "RK":0, "SC":0, "D":0, "FC":0, "SH":0, "W":0, "SP":0, "CR":0, "E":0, "GWD":0, "WMH": 0, "WG":0},
 		"names": {
 			"0": "Air",
 			"1": "Solid",
