@@ -31,7 +31,6 @@ Generated using hotkeys to md converter
 * **Down** - /down - Down
 * **L** - /-swichlayers - Switch layers on menu with fields
 * **ctrl + L** - /-swichlayers_back - Switch layers back
-* **ctrl + Space** - /-swichcameras - Toggles cameras
 * **F1** - /-togglelayervisible - Toggles geometry layer
 * **F2** - /-toggletileslayervisible - Toggles tile layer
 ### LD
@@ -96,8 +95,8 @@ Generated using hotkeys to md converter
 * **ctrl + [1]** - -tool_rect_hollow - Changes RMB to hollow rectangle tool
 * **[2]** - -tool_fill - Changes LMB to fill
 * **[/]** - -tool_line - Changes RMB to line
-* **[\*]** - -tool_pencil - Changes LMB to pencil
-* **ctrl + [\*]** - -tool_brush - Changes LMB to brush
+* **[*]** - -tool_pencil - Changes LMB to pencil
+* **ctrl + [*]** - -tool_brush - Changes LMB to brush
 ### TE
 * **G** - force_geometry - Forces geometry to tile
 * **F** - force_place - Places tile without checking geometry
@@ -114,6 +113,14 @@ Generated using hotkeys to md converter
 * **Q** - -copytile - Copies tile in cursor
 * **ctrl + F** - -findtile - Opens find tile menu
 * **Left Shift** - movepreview - Preview of prop specs on black square
+* **=** - -brushp - Increase brush size
+* **-** - -brushm - decrease brush size
+* **[+]** - -brushp - Increase brush size
+* **[-]** - -brushm - decrease brush size
+* **B** - -brush - Enables Bruhs
+* **P** - -pencil - Enables pencil
+* **C** - -pencil - Enables pencil
+* **V** - -togglebrush - Toggles betwen pencil and brush
 ### CE
 * **D** - -addright - Rotates nearest edge of nearest camera clockwise
 * **Delete** - -deletecamera - Deletes the nearest placed camera

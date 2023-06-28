@@ -118,14 +118,14 @@
 	{
 		"buttons":
 		[
-			["Geometry\nEditor", [0, 86, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)", ["editors.png", [0, 0]]],
-			["Tile\nEditor", [10, 86, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)", ["editors.png", [1, 0]]],
-			["Camera\nEditor", [20, 86, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)", ["editors.png", [5, 0]]],
-			["Light\nEditor", [30, 86, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)", ["editors.png", [3, 0]]],
-			["Effect\nEditor", [40, 86, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)", ["editors.png", [2, 0]]],
-			["Prop\nEditor", [50, 86, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)", ["editors.png", [4, 0]]],
-			["Level\nProperties", [60, 86, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)", ["editors.png", [1, 1]]],
-			["Hotkeys", [70, 86, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)", ["editors.png", [2, 1]]],
+			["Geometry\nEditor", [0, 86, 13, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[/GE]>)", ["editors.png", [0, 0]]],
+			["Tile\nEditor", [13, 86, 13, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)", ["editors.png", [1, 0]]],
+			["Camera\nEditor", [26, 86, 13, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[/CE]>)", ["editors.png", [5, 0]]],
+			["Light\nEditor", [39, 86, 13, 14], [90, 90, 90], "LE", "non", "Light Editor(<[/LE]>)", ["editors.png", [3, 0]]],
+			["Effect\nEditor", [52, 86, 13, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[/FE]>)", ["editors.png", [2, 0]]],
+			["Prop\nEditor", [65, 86, 13, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[/PE]>)", ["editors.png", [4, 0]]],
+			["Level\nProperties", [78, 86, 13, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)", ["editors.png", [1, 1]]],
+			["Hotkeys", [91, 86, 9, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)", ["editors.png", [2, 1]]],
 
 			["Layer", [90, 48, 10, 14], [90, 90, 90], "swichlayers", "non", "Change layer"],
 			["Toggle\ntiles", [90, 62, 10, 14], [90, 90, 90], "tiles", "non", "Toggle tiles layer"],
@@ -348,6 +348,8 @@
 			["Edit", [2, 19, 4, 4], [100, 100, 100], "edit", "non", "Enable edit mode(<[-edit]>)"],
 			["Move", [2, 23, 4, 4], [100, 100, 100], "move", "non", "Enable move mode(<[-move]>)"],
 			["Mode", [2, 23, 4, 4], [100, 100, 100], "togglemode", "non", "toggle between move and edit modes(<[-togglemode]>)"],
+			["^", [2, 27, 4, 4], [100, 100, 100], "camup", "non", "Moves selected camera up(<[-camup]>)", ["arrows.png", [1, 0]]],
+			["V", [2, 31, 4, 4], [100, 100, 100], "camdown", "non", "Moves selected camera down(<[-camdown]>)", ["arrows.png", [2, 0]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 			
 		],
@@ -399,6 +401,7 @@
 
 	},
 	"PE":{
+		"category_count": 20,
 		"buttons": [
 			["v", [20, 2, 4, 4], [100, 100, 100], "browse_next", "non", "Next prop(s)", ["arrows.png", [2, 0]]],
 			["^", [16, 2, 4, 4], [100, 100, 100], "browse_prev", "non", "Previous prop(w)", ["arrows.png", [1, 0]]],
@@ -447,27 +450,25 @@
 	"HK": {
 		"buttons": 
 		[
-			["Level\nSizing", [10, 0, 10, 14], [90, 90, 90], "LS", "non", "Level Size(<[-LS]>)", ["editors.png", [6, 0]]],
-			["Level\nProperties", [10, 14, 10, 14], [90, 90, 90], "LP", "non", "Level Properties(<[-LP]>)", ["editors.png", [1, 1]]],
-			["Hotkeys", [10, 28, 10, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[-HK]>)", ["editors.png", [2, 1]]],
-			["Menu", [10, 42, 10, 14], [90, 90, 90], "MN", "non", "MN(<[-MN]>)"],
-			["Global", [10, 56, 10, 14], [90, 90, 90], "globalkeys", "non", "Global(<[-globalkeys]>)"],
 
-			["Geometry\nEditor", [0, 0, 10, 14], [90, 90, 90], "GE", "non", "Geometry Editor(<[-GE]>)", ["editors.png", [0, 0]]],
-			["Tile\nEditor", [0, 14, 10, 14], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)", ["editors.png", [1, 0]]],
-			["Camera\nEditor", [0, 28, 10, 14], [90, 90, 90], "CE", "non", "Camera Editor(<[-CE]>)", ["editors.png", [5, 0]]],
-			["Light\nEditor", [0, 42, 10, 14], [90, 90, 90], "LE", "non", "Light Editor(<[-LE]>)", ["editors.png", [3, 0]]],
-			["Env.\nEditor", [0, 56, 10, 14], [90, 90, 90], "EE", "non", "Environment Editor(<[-EE]>)", ["editors.png", [0, 1]]],
-			["Effect\nEditor", [0, 70, 10, 14], [90, 90, 90], "FE", "non", "Effect Editor(<[-FE]>)", ["editors.png", [2, 0]]],
-			["Prop\nEditor", [0, 84, 10, 14], [90, 90, 90], "PE", "non", "Prop Editor(<[-PE]>)", ["editors.png", [4, 0]]],
+			["Geometry\nEditor", [0, 0, 10, 10], [90, 90, 90], "GE", "non", "Geometry Editor(<[-GE]>)", ["editors.png", [0, 0]]],
+			["Tile\nEditor", [0, 10, 10, 10], [90, 90, 90], "TE", "non", "Tile Editor(<[/TE]>)", ["editors.png", [1, 0]]],
+			["Camera\nEditor", [0, 20, 10, 10], [90, 90, 90], "CE", "non", "Camera Editor(<[-CE]>)", ["editors.png", [5, 0]]],
+			["Light\nEditor", [0, 30, 10, 10], [90, 90, 90], "LE", "non", "Light Editor(<[-LE]>)", ["editors.png", [3, 0]]],
+			["Effect\nEditor", [0, 40, 10, 10], [90, 90, 90], "FE", "non", "Effect Editor(<[-FE]>)", ["editors.png", [2, 0]]],
+			["Prop\nEditor", [0, 50, 10, 10], [90, 90, 90], "PE", "non", "Prop Editor(<[-PE]>)", ["editors.png", [4, 0]]],
+			["Level\nProperties", [0, 60, 10, 10], [90, 90, 90], "LP", "non", "Level Properties(<[-LP]>)", ["editors.png", [1, 1]]],
+			["Hotkeys", [0, 70, 10, 10], [90, 90, 90], "HK", "non", "Hotkeys(<[-HK]>)", ["editors.png", [2, 1]]],
+			["Menu", [0, 80, 10, 10], [90, 90, 90], "MN", "non", "MN(<[-MN]>)"],
+			["Global", [0, 90, 10, 10], [90, 90, 90], "globalkeys", "non", "Global(<[-globalkeys]>)"],
 
 			["To editor", [93, 0, 7, 4], [90, 90, 90], "goback", "non", "Goes to editor, hotkeys you watching"],
 			["Edit", [90, 93, 10, 7], [90, 90, 90], "edit", "non", "Opens default editor to edit hotkeys"],
 			["?", [98, 4, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 		],
 		"labels":[
-			["", [20, 0], [255, 255, 255], 18],
-			["", [30, 0], [255, 255, 255], 18]
+			["", [11, 0], [255, 255, 255], 18],
+			["", [21, 0], [255, 255, 255], 18]
 		]
 	}
 }

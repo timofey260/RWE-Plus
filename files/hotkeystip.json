@@ -112,7 +112,10 @@
         "-findtile": "Opens find tile menu",
         "movepreview": "Preview of prop specs on black square",
         "-brushp": "Increase brush size",
-        "-brushm": "decrease brush size"
+        "-brushm": "decrease brush size",
+        "-brush": "Enables Bruhs",
+        "-pencil": "Enables pencil",
+        "-togglebrush": "Toggles betwen pencil and brush"
     },
     "CE": {
         "-addright": "Rotates nearest edge of nearest camera clockwise",

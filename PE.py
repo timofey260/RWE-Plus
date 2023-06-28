@@ -9,7 +9,7 @@ values = {
         "def": "none"
     },
     "renderTime": {
-        0: "Pre Effcts", # ?
+        0: "Pre Effcts",  # ?
         "def": "Post Effcts"
     },
     "variation": {
@@ -67,6 +67,11 @@ class PE(MenuWithField):
         self.modpress = False
 
         super().__init__(surface, "PE", renderer)
+        self.catlist = [[]]
+        for category in self.props.keys():
+            self.catlist[-1].append(category)
+            if len(self.catlist[-1]) >= self.settings["category_count"]:
+                self.catlist.append([])
         self.drawprops = True
         cat = list(self.props.keys())[self.currentcategory]
         self.setprop(self.props[cat][0]["nm"], cat)
@@ -115,9 +120,12 @@ class PE(MenuWithField):
     def cats(self):
         self.buttonslist = []
         self.settingslist = []
-        self.matshow = True
         btn2 = None
-        for count, item in enumerate(self.props.keys()):
+        if not self.matshow:
+            self.currentcategory = self.toolindex // self.settings["category_count"]
+            self.toolindex %= self.settings["category_count"]
+        self.matshow = True
+        for count, item in enumerate(self.catlist[self.currentcategory]):
             # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
             cat = pg.rect.Rect(self.settings["catpos"])
@@ -468,7 +476,9 @@ class PE(MenuWithField):
             self.updateproptransform()
 
     def browse_next(self):
-        self.toolindex = (self.toolindex + 1) % (len(self.buttonslist) - 1)
+        self.toolindex += 1
+        if self.toolindex > len(self.buttonslist) - 2:
+            self.toolindex = 0
         if not self.matshow:
             self.setprop(self.buttonslist[self.toolindex].text)
 
@@ -481,7 +491,7 @@ class PE(MenuWithField):
 
     def changematshow(self):
         if self.matshow:
-            self.currentcategory = self.toolindex
+            self.currentcategory = self.toolindex + self.currentcategory * self.settings["category_count"]
             self.toolindex = 0
             cat = list(self.props.keys())[self.currentcategory]
             self.setprop(self.props[cat][0]["nm"], cat)
@@ -492,23 +502,36 @@ class PE(MenuWithField):
 
     def cat_next_propupdate(self):
         self.cat_next()
-        self.setprop(self.buttonslist[self.toolindex].text)
+        if not self.matshow:
+            self.setprop(self.buttonslist[self.toolindex].text)
 
     def cat_prev_propupdate(self):
         self.cat_prev()
-        self.setprop(self.buttonslist[self.toolindex].text)
+        if not self.matshow:
+            self.setprop(self.buttonslist[self.toolindex].text)
 
     def cat_next(self):
-        self.toolindex = 0
-        self.currentcategory = (self.currentcategory + 1) % len(self.props)
-        self.rebuttons()
+        if self.matshow:
+            self.currentcategory = (self.currentcategory + 1) % len(self.catlist)
+            self.cats()
+        else:
+            self.toolindex = 0
+            self.currentcategory = (self.currentcategory + 1) % len(self.props)
+            self.rebuttons()
 
     def cat_prev(self):
-        self.toolindex = 0
-        self.currentcategory -= 1
-        if self.currentcategory < 0:
-            self.currentcategory = len(self.props) - 1
-        self.rebuttons()
+        if self.matshow:
+            if self.currentcategory - 1 < 0:
+                self.currentcategory = len(self.catlist) - 1
+            else:
+                self.currentcategory = self.currentcategory - 1
+            self.cats()
+        else:
+            self.toolindex = 0
+            self.currentcategory -= 1
+            if self.currentcategory < 0:
+                self.currentcategory = len(self.props) - 1
+            self.rebuttons()
 
     def setprop(self, name, cat=None):
         prop, ci = self.findprop(name, cat)

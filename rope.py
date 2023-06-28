@@ -221,6 +221,14 @@ class RopeModel:
             return self.data["GE"][int(pos.x - 1)][int(pos.y - 1)][layer][0]
         return 1
 
+    @property
+    def levelwidth(self):
+        return len(self.data["GE"])
+
+    @property
+    def levelheight(self):
+        return len(self.data["GE"][0])
+
 if __name__ == "__main__":
     import lingotojson
     import pygame as pg

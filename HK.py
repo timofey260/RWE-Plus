@@ -65,14 +65,8 @@ class HK(Menu):
     def FE(self):
         self.load_menu("FE")
 
-    def EE(self):
-        self.load_menu("EE")
-
     def PE(self):
         self.load_menu("PE")
-
-    def LS(self):
-        self.load_menu("LS")
 
     def LP(self):
         self.load_menu("LP")
