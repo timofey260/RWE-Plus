@@ -137,7 +137,16 @@
     	"K_e": "-sad",
     	"K_q": "-copytile",
     	"K_f+": "-findtile",
-    	"K_LSHIFT": "movepreview"
+    	"K_LSHIFT": "movepreview",
+    	"K_EQUALS": "-brushp",
+    	"K_MINUS": "-brushm",
+    	"K_KP_PLUS": "-brushp",
+    	"K_KP_MINUS": "-brushm",
+    	"K_KP_MINUS": "-brushm",
+    	"K_b": "-brush",
+    	"K_p": "-pencil",
+    	"K_c": "-pencil",
+    	"K_v": "-togglebrush"
 
   	},
 	"CE": {

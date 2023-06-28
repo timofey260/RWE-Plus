@@ -266,7 +266,7 @@ class FE(MenuWithField):
         addspace = self.settings["additionspace"] / 100 * ws[0]
         ppos = self.settings["paramspos"]
 
-        if self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][0].lower() == "seed":
+        if len(self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][1]) < 1:
             rect = pg.Rect([ppos, self.settings["seedchange_size"]])
             btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), "Set seed",
                                  onpress=self.changeseed)
@@ -327,12 +327,12 @@ class FE(MenuWithField):
 
     def changeseed(self):
         try:
-            seed = self.askint("Enter seed")
-            if seed == -1:
+            value = self.askint("Enter velue(type -1 for random)", False)
+            if value == -1:
                 self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
-            if 0 <= seed <= 500:
+            if 0 <= value <= 500:
                 print("Seed changed!")
-            self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = seed
+            self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = value
             self.updatehistory([["FE", "effects", self.selectedeffect, "options", self.paramindex, 2]])
             self.makeparams()
             return

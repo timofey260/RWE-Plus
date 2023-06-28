@@ -110,7 +110,9 @@
         "-sad": "Sets material as default",
         "-copytile": "Copies tile in cursor",
         "-findtile": "Opens find tile menu",
-        "movepreview": "Preview of prop specs on black square"
+        "movepreview": "Preview of prop specs on black square",
+        "-brushp": "Increase brush size",
+        "-brushm": "decrease brush size"
     },
     "CE": {
         "-addright": "Rotates nearest edge of nearest camera clockwise",

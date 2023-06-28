@@ -227,6 +227,8 @@ def launch(level):
                 print("https://github.com/timofey260/RWE-Plus/releases/latest")
     except requests.exceptions.ConnectionError:
         print("Cannot find new RWE+ versions")
+    except requests.exceptions.ReadTimeout:
+        print("Cannot find new RWE+ versions")
     run = True
     while run:
         doevents(window)

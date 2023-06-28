@@ -45,6 +45,8 @@ class TE(MenuWithField):
         self.blocks = p["blocks"]
         self.buttonslist = []
         self.toolindex = 0
+        self.brushmode = False
+        self.squarebrush = False
 
         self.tileimage = None
         self.tileimage2 = None
@@ -52,6 +54,7 @@ class TE(MenuWithField):
         self.cols = False
 
         self.lastfg = False
+        self.brushsize = 1
 
         super().__init__(surface, "TE", renderer, False)
         self.catlist = [[]]
@@ -67,6 +70,12 @@ class TE(MenuWithField):
         self.rebuttons()
         self.blit()
         self.resize()
+
+    def brush(self):
+        self.brushmode = True
+
+    def pencil(self):
+        self.brushmode = False
 
     def GE(self):
         self.message = "GE"
@@ -121,7 +130,12 @@ class TE(MenuWithField):
                     self.surface.blit(self.tileimage["image"], [cposx, cposy])
                     self.printcols(cposxo, cposyo, self.tileimage)
             bp = self.getmouse
-
+            if self.brushmode:
+                if self.squarebrush:
+                    rect = pg.Rect([pos2, [self.brushsize * self.size, self.brushsize * self.size]])
+                    pg.draw.rect(self.surface, select, rect, 3)
+                else:
+                    pg.draw.circle(self.surface, select, pos2+pg.Vector2(self.size/2), self.size * self.brushsize, 5)
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
                 self.emptyarea()
@@ -130,10 +144,10 @@ class TE(MenuWithField):
                 #     pass
                 if self.tileimage["tp"] != "pattern" or self.tool == 0:
                     if self.tool == 0:
-                        if self.cols:
-                            self.place(cposxo, cposyo)
-                            self.fieldadd.blit(self.tileimage["image"],
-                                               [cposxo * self.size, cposyo * self.size])
+                        if self.brushmode:
+                            self.brushpaint(pg.Vector2(cposxo, cposyo))
+                        elif self.cols:
+                            self.place(cposxo, cposyo, True)
                     elif self.tool == 1:
                         self.destroy(posoffset.x, posoffset.y)
                         pg.draw.rect(self.fieldadd, red, [posoffset.x * self.size, posoffset.y * self.size, self.size, self.size])
@@ -270,6 +284,30 @@ class TE(MenuWithField):
                 pg.draw.rect(self.surface, select, rect, 5)
             except:
                 pass
+
+    def togglebrush(self):
+        self.squarebrush = not self.squarebrush
+
+    def brushp(self):
+        self.brushsize += 1
+
+    def brushm(self):
+        self.brushsize = max(self.brushsize-1, 1)
+
+    def brushpaint(self, pos: pg.Vector2):
+        if self.squarebrush:
+            for xp in range(self.brushsize):
+                for yp in range(self.brushsize):
+                    vecx = int(pos.x) + xp
+                    vecy = int(pos.y) + yp
+                    self.place(vecx, vecy, True)
+        else:
+            for xp, xd in enumerate(self.data["GE"]):
+                for yp, yd in enumerate(xd):
+                    vec = pg.Vector2(xp, yp)
+                    dist = pos.distance_to(vec)
+                    if dist <= self.brushsize and self.area[xp][yp]:
+                        self.place(int(vec.x), int(vec.y), True)
 
     def cats(self):
         self.buttonslist = []
@@ -550,7 +588,7 @@ class TE(MenuWithField):
                         csp = -1
                     printtile(shift, layer2)
 
-    def place(self, x, y):
+    def place(self, x, y, render=False):
         fg = self.findparampressed("force_geometry")
         w, h = self.tileimage["size"]
         px = x + int((w * .5) + .5) - 1 # center coordinates
@@ -562,6 +600,9 @@ class TE(MenuWithField):
             return
         if px > self.levelwidth or py > self.levelheight or px < 0 or py < 0:
             return
+        if render:
+            self.fieldadd.blit(self.tileimage["image"],
+                               [x * self.size, y * self.size])
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
