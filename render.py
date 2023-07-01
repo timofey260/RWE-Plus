@@ -192,8 +192,14 @@ class Renderer:
 
             datcell = cell["tp"]
             datdata = cell["data"]
-            if layer > 0 and self.data["GE"][xp][yp][layer-1][0] != 0 and layer != l:
+            if layer == 1 and self.data["GE"][xp][yp][0][0] != 0 and layer != l:
                 continue
+            elif layer == 2 and (self.data["GE"][xp][yp][0][0] != 0 or
+                                 self.data["GE"][xp][yp][1][0] != 0) and layer != l:
+                continue
+            if layer < l:
+                continue
+
             if not self.tilelayers[layer]:
                 continue
             if datcell == "default":

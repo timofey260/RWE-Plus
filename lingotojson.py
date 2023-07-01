@@ -254,7 +254,7 @@ def renderlevel(data):
     subprocess.Popen(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\" render \"{fl}\"", shell=True)
     #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     if not islinux:
-        os.system("explorer " + resolvepath(path2renderedlevels))
+        os.system("start " + resolvepath(path2renderedlevels))
 
 
 def getcolors():

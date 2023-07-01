@@ -80,7 +80,7 @@ class CE(MenuWithField):
                     mouse = pg.Vector2(pg.mouse.get_pos()) - qlist[quadindx]
                     r, o = mouse.rotate(90).as_polar()
                     self.data["CM"]["quads"][self.heldindex][quadindx] = \
-                        [o, round(min(r / 100 / self.size * image1size, 1), 4)]
+                        [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)]
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.setcursor()

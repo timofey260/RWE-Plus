@@ -426,6 +426,7 @@ class TE(MenuWithField):
             else:
                 self.currentcategory = self.currentcategory - 1
             self.cats()
+            self.toolindex = self.toolindex if len(self.buttonslist) - 1 > self.toolindex else 0
         else:
             if self.currentcategory - 1 < 0:
                 self.currentcategory = len(self.items) - 1
@@ -438,6 +439,7 @@ class TE(MenuWithField):
         if self.matshow:
             self.currentcategory = (self.currentcategory + 1) % len(self.catlist)
             self.cats()
+            self.toolindex = self.toolindex if len(self.buttonslist) - 1 > self.toolindex else 0
         else:
             self.currentcategory = (self.currentcategory + 1) % len(self.items)
             self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
@@ -510,7 +512,8 @@ class TE(MenuWithField):
         #if x + w > self.levelwidth or y + h > self.levelheight or x < 0 or y < 0:
         #    return False
         if "material" in self.tileimage["tags"]:
-            return self.data["GE"][x][y][self.layer][0] not in [0] and self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
+            return (self.data["GE"][x][y][self.layer][0] not in [0] or force_geo) \
+                and self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
@@ -623,7 +626,9 @@ class TE(MenuWithField):
                     # self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
                                                                            "data": [p, self.layer + 1]}
-                if fg and csp != -1:
+                if fg and csp != -1 or fg and "material" in self.tileimage["tags"]:
+                    if csp == -1:
+                        csp = 1
                     self.area[xpos][ypos] = False
                     self.data["GE"][xpos][ypos][self.layer][0] = csp
 

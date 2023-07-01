@@ -292,6 +292,12 @@ def loadmenu():
     surf = load(window, renderer)
     pg.display.set_icon(loadimage(path + "icon.png"))
     while run:
+        for event in pg.event.get():
+            match event.type:
+                case pg.DROPFILE:
+                    if event.file is not None and os.path.exists(event.file):
+                        launch(event.file)
+                    surf = load(window, renderer)
         doevents(window)
         match surf.message:
             case "new":

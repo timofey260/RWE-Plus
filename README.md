@@ -1,23 +1,21 @@
 # RWE![Plus](https://github.com/timofey260/RWE-Plus/blob/master/files/icon.png?raw=true)
-Maybe better version of official rain world editor
+Maybe a better version of official rain world editor
+
+![icon](https://github.com/timofey260/RWE-Plus/blob/master/files/image.png?raw=true)
 
 ## RWE+ features
 1. New UI with clickable buttons
 2. Level view scailing
-3. Shadow resizing
-4. View any data(props, tiles, geometry) in any editors
-5. Full UI customization
-6. Hotkeys customization
-7. Tile preview
-8. Camera snap as in community editor
-9. Much faster than community and official editors
-10. [Drizzle](https://github.com/PJB3005/Drizzle) rendering
-11. Undo ability
-12. Copy-Paste data from clipboard
+3. View any data(props, tiles, geometry) in any editors
+4. Full UI customization
+5. Hotkeys customization
+6. Tile/prop/effect previews 
+7. Much faster than community and official editors
+8. [Drizzle](https://github.com/PJB3005/Drizzle) rendering 
+9. Undo ability 
+10. Copy-Paste data from clipboard
 
 and a lot more!
-
-![icon](https://github.com/timofey260/RWE-Plus/blob/master/files/image.png?raw=true)
 
 ## UI's
 
@@ -38,10 +36,9 @@ and a lot more!
 * Geometry editor
 * Tile editor
 * Light editor
-* Level resizing
 * Effect editor
 * Camera editor
 * Level properties
-* Environment Editor
 * Prop Editor
 * Hotkey view
+* Tutorial

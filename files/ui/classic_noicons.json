@@ -197,7 +197,7 @@
 
 			["Pencil", [10, 0, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil(<[-tool_pencil]>)", ["fillmethods.png", [5, 0]]],
 			["Brush", [15, 0, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush(<[-tool_brush]>)", ["fillmethods.png", [6, 0]]],
-			["Fill", [20, 0, 5, 6], [100, 100, 100], "tool_fill", "non", "Change RMB to fill(<[-tool_fill]>)", ["fillmethods.png", [0, 0]]],
+			["Fill", [20, 0, 5, 6], [100, 100, 100], "tool_fill", "non", "Change LMB to fill(<[-tool_fill]>)", ["fillmethods.png", [0, 0]]],
 
 			["Line", [26, 0, 5, 6], [100, 100, 100], "tool_line", "non", "Change RMB to line(<[-tool_line]>)", ["fillmethods.png", [7, 0]]],
 			["Rect", [31, 0, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect(<[-tool_rect]>)", ["fillmethods.png", [1, 0]]],
