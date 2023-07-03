@@ -176,7 +176,7 @@ class LE(MenuWithField):
 
     def save(self):
         if self.data["path"] == "":
-            level = asksaveasfilename(defaultextension="wep")
+            level = self.asksaveasfilename(defaultextension=[".wep"])
             self.data["level"] = os.path.basename(level)
             self.data["path"] = level
             self.data["dir"] = os.path.abspath(level)
