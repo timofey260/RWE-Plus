@@ -1,4 +1,6 @@
 import json
+import webbrowser
+
 import pygame as pg
 import os
 import sys
@@ -12,7 +14,7 @@ else:
 islinux = os.name == "posix"
 
 
-def resolvepath(input_path): # Thanks to someone... someone nice
+def resolvepath(input_path):  # Thanks to someone... someone nice
     if not islinux:
         return input_path
     path = input_path.replace("\\", "/")
@@ -59,7 +61,7 @@ tooltiles = loadimage(path + graphics["tooltiles"])
 toolmenu = loadimage(path + graphics["toolmenu"])
 
 
-tag = "2.4.0"
+tag = "2.4.1"
 
 ofstop = 15
 ofsleft = 15
@@ -69,16 +71,17 @@ spritesize = 16
 image2sprite = spritesize / image1size
 sprite2image = image1size / spritesize
 
-camw = 70
-camh = 40
+camw = 70  # camera width in blocks
+camh = 40  # camera height in blocks
 
-wladd = 5.7
-bignum = 9999999
+wladd = 5.7  # addition to water level
+bignum = 9999999  # just a big number
 
 inputpromtname = "RWE+ input"
 
 
 fonts: dict[[pg.font.Font, int], ...] = {}
+
 
 def fs(sz):
     if sz in fonts.keys():
@@ -210,6 +213,14 @@ def rect2ellipse(rect: pg.Rect, hollow, callback):
 
 def map(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
+
+def report():
+    webbrowser.open("https://github.com/timofey260/RWE-Plus/issues/new/choose")
+
+
+def github():
+    webbrowser.open("https://github.com/timofey260/RWE-Plus")
 
 
 effects = solveeffects(e)

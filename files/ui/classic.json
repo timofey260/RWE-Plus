@@ -52,9 +52,11 @@
 	{
 		"buttons": 
 		[
-			["Open", [0, 0, 50, 100], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
-			["New", [50, 0, 50, 50], [100, 100, 100], "new", "non", "New project(<[new]>)"],
-			["Tutorial", [50, 50, 50, 50], [100, 100, 100], "tutorial", "non", "Tutorial for new users"]
+			["Open", [0, 0, 50, 50], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
+			["New", [0, 50, 50, 50], [100, 100, 100], "new", "non", "New project(<[new]>)"],
+			["Tutorial", [50, 0, 50, 40], [90, 90, 90], "tutorial", "non", "Tutorial for new users"],
+			["Report", [50, 40, 50, 30], [70, 70, 70], "report", "non", "Report a bug"],
+			["Github", [50, 70, 50, 30], [70, 70, 70], "github", "non", "Go to RWE+ github"]
 		],
 		"labels": [
 		]
@@ -127,11 +129,14 @@
 			["Level\nProperties", [78, 86, 13, 14], [90, 90, 90], "LP", "non", "Level Properties(<[/LP]>)", ["editors.png", [1, 1]]],
 			["Hotkeys", [91, 86, 9, 14], [90, 90, 90], "HK", "non", "Hotkeys(<[/HK]>)", ["editors.png", [2, 1]]],
 
+			["Report", [70, 10, 10, 10], [90, 90, 90], "report", "non", "Report a bug", ["urls.png", [1, 0]]],
+			["Github", [80, 10, 10, 10], [90, 90, 90], "github", "non", "Go to RWE+ github", ["urls.png", [0, 0]]],
+
 			["Layer", [90, 48, 10, 14], [90, 90, 90], "swichlayers", "non", "Change layer"],
 			["Toggle\ntiles", [90, 62, 10, 14], [90, 90, 90], "tiles", "non", "Toggle tiles layer"],
 
 			
-			["Render", [90, 10, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
+			["Render", [90, 10, 10, 10], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)\nRendering in seperate proccess"],
 			["Save", [90, 0, 10, 10], [90, 90, 90], "save", "non", "Save as .wep project(<[save]>)", ["editors.png", [3, 1]]],
 			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "Save as .wep project", ["editors.png", [4, 1]]],
 			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "Save as official level editor file"],

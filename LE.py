@@ -1,5 +1,4 @@
 from menuclass import *
-from tkinter.filedialog import asksaveasfilename
 
 
 class LE(MenuWithField):

@@ -18,3 +18,13 @@ class load(Menu):
 
     def tutorial(self):
         self.message = "tutorial"
+
+    def report(self):
+        report()
+
+    def github(self):
+        github()
+
+    @property
+    def custom_info(self):
+        return "Have fun!"

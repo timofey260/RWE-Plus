@@ -67,3 +67,9 @@ class MN(MenuWithField):
 
     def nexttip(self):
         self.labels[0].set_text(self.returnkeytext(random.choice(self.tips).replace("\n", "").replace("\\n", "\n")))
+
+    def report(self):
+        report()
+
+    def github(self):
+        github()
