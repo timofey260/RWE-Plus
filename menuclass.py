@@ -770,6 +770,7 @@ class MenuWithField(Menu):
         self.rfa()
 
     def rendercameras(self):
+        closest = 0
         if hasattr(self, "closestcameraindex"):
             closest = self.closestcameraindex()
         for indx, cam in enumerate(self.data["CM"]["cameras"]):
