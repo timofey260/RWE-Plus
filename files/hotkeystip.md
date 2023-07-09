@@ -95,8 +95,8 @@ Generated using hotkeys to md converter
 * **ctrl + [1]** - -tool_rect_hollow - Changes RMB to hollow rectangle tool
 * **[2]** - -tool_fill - Changes LMB to fill
 * **[/]** - -tool_line - Changes RMB to line
-* **[*]** - -tool_pencil - Changes LMB to pencil
-* **ctrl + [*]** - -tool_brush - Changes LMB to brush
+* **[\*]** - -tool_pencil - Changes LMB to pencil
+* **ctrl + [\*]** - -tool_brush - Changes LMB to brush
 ### TE
 * **G** - force_geometry - Forces geometry to tile
 * **F** - force_place - Places tile without checking geometry
