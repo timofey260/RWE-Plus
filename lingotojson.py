@@ -58,7 +58,6 @@ def tojson(string: str):
     t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
     # print(t)
     if t.replace(" ", "") != "":
-        # print(t)
         return json.loads(t)
     else:
         return {}
@@ -345,6 +344,10 @@ def getprops(tiles: dict):
     title = ""
     itemlist = []
     for cat, items in tiles.items():
+        if not items:
+            print(cat, items)
+            continue
+
         if "material" in items[0]["tags"]:
             continue
         for indx, tile in enumerate(items[1:]):
