@@ -1,3 +1,4 @@
+import subprocess
 import traceback
 
 import requests
@@ -341,12 +342,11 @@ if __name__ == "__main__":
     if args.new:
         launch(-1)
     if args.renderfiles is not None:
-        s = f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\" render "
-        for i in args.renderfiles:
-            s += i + " "
-        os.system(s)
+        s = f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\""
+        subprocess.run([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", *args.renderfiles], shell=True)
+        # os.system(s)
         if not islinux:
-            os.system("explorer " + resolvepath(path2renderedlevels))
+            os.system("start " + resolvepath(path2renderedlevels))
         exit(0)
     if args.filename is not None:
         try:

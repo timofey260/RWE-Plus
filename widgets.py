@@ -180,10 +180,12 @@ class button:
 
     def blittooltip(self):
         if not self.visible:
-            return
+            return False
         if self.onmouseover():
             textblit(self.surface, self.tooltipimage, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, False)
             # mts(self.surface, self.tooltip, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, white, centered=False)
+            return True
+        return False
 
     def resize(self):
         x = self.lastrect.x / 100 * self.surface.get_width()

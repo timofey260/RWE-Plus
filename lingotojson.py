@@ -250,7 +250,8 @@ def renderlevel(data):
     fl = os.path.splitext(data["path"])[0] + ".txt"
     file = open(fl, "w")
     turntolingo(data, file)
-    subprocess.Popen(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\" render \"{fl}\"", shell=True)
+    #print(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}")
+    subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
     #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
     if not islinux:
         os.system("start " + resolvepath(path2renderedlevels))

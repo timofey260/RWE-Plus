@@ -159,7 +159,8 @@ class Menu:
             for button in buttons:
                 button.blit()
             for button in buttons:
-                button.blittooltip()
+                if button.blittooltip():
+                    continue
             label.blit()
             widgets.fastmts(self.surface, "File name:", 0, 0, fontsize=50)
 
@@ -284,7 +285,8 @@ class Menu:
             for button in buttons:
                 button.blit()
             for button in buttons:
-                button.blittooltip()
+                if button.blittooltip():
+                    continue
             label.blit()
             widgets.fastmts(self.surface, f"{q}:", 0, 0, fontsize=50)
 
@@ -342,7 +344,8 @@ class Menu:
         for i in self.buttons:
             i.blit(fontsize)
         for i in self.buttons:
-            i.blittooltip()
+            if i.blittooltip():
+                continue
         if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
             widgets.enablebuttons = True
 
@@ -779,19 +782,24 @@ class MenuWithField(Menu):
             rect2 = pg.Rect(rect.x + self.size, rect.y + self.size, rect.w - self.size * 2, rect.h - self.size * 2)
             rect3 = pg.Rect(rect2.x + self.size * 8, rect2.y, rect2.w - self.size * 16, rect2.h)
             # print(camera_border, rect, self.size)
-            pg.draw.rect(self.surface, camera_border, rect, max(self.size // 3, 1))
-            pg.draw.rect(self.surface, camera_border, rect2, max(self.size // 4, 1))
+            pg.draw.rect(self.surface, camera_border, rect.clip(self.field.rect), max(self.size // 3, 1))
+            pg.draw.rect(self.surface, camera_border, rect2.clip(self.field.rect), max(self.size // 4, 1))
 
-            pg.draw.rect(self.surface, red, rect3, max(self.size // 3, 1))
+            pg.draw.rect(self.surface, red, rect3.clip(self.field.rect), max(self.size // 3, 1))
 
-            pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(self.size * 5, 0),
-                         pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0),
+            line = self.field.rect.clipline(pg.Vector2(rect.center) - pg.Vector2(self.size * 5, 0),
+                         pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0))
+            if line:
+                pg.draw.line(self.surface, camera_border, line[0], line[1],
                          self.size // 3 + 1)
 
-            pg.draw.line(self.surface, camera_border, pg.Vector2(rect.center) - pg.Vector2(0, self.size * 5),
-                         pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5),
+            line = self.field.rect.clipline(pg.Vector2(rect.center) - pg.Vector2(0, self.size * 5),
+                         pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5))
+            if line:
+                pg.draw.line(self.surface, camera_border, line[0], line[1],
                          self.size // 3 + 1)
-            pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3 + 1)
+            if self.field.rect.collidepoint(rect.center):
+                pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3 + 1)
 
             if "quads" not in self.data["CM"]:
                 self.data["CM"]["quads"] = []
@@ -827,21 +835,31 @@ class MenuWithField(Menu):
 
                 vec = pg.Vector2([tl, tr, br, bl][quadindx])
 
-                pg.draw.line(self.surface, camera_notheld, rect.center, vec, self.size // 3)
+                line = self.field.rect.clipline(rect.center, vec)
+                if line:
+                    pg.draw.line(self.surface, camera_notheld, line[0], line[1], self.size // 3)
 
                 rects = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
-                pg.draw.line(self.surface, camera_held, rects[quadindx], vec, self.size // 3)
+                line = self.field.rect.clipline(rects[quadindx], vec)
+                if line:
+                    pg.draw.line(self.surface, camera_held, line[0], line[1], self.size // 3)
 
                 qlist = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
 
-                pg.draw.circle(self.surface, camera_held, qlist[quadindx], self.size * 5, self.size // 3)
-                widgets.fastmts(self.surface, f"Order: {indx}", rect.centerx, rect.centery, white)
+                if self.field.rect.collidepoint(qlist[quadindx]):
+                    pg.draw.circle(self.surface, camera_held, qlist[quadindx], self.size * 5, self.size // 3)
+                if self.field.rect.collidepoint(rect.center):
+                    widgets.fastmts(self.surface, f"Order: {indx}", rect.centerx, rect.centery, white)
                 # pg.draw.circle(self.surface, camera_held, rect.topright, self.size * 5, self.size // 3)
                 # pg.draw.circle(self.surface, camera_held, rect.bottomleft, self.size * 5, self.size // 3)
                 # pg.draw.circle(self.surface, camera_held, rect.bottomright, self.size * 5, self.size // 3)
             elif hasattr(self, "held") and self.held and hasattr(self, "heldindex") and self.heldindex == indx:
                 widgets.fastmts(self.surface, f"Order: {indx}", rect.centerx, rect.centery, white)
-            pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
+            #pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
+            for i in [[tl, bl], [bl, br], [br, tr], [tr, tl]]:
+                line = self.field.rect.clipline(i[0], i[1])
+                if line:
+                    pg.draw.line(self.surface, col, line[0], line[1], self.size // 3)
 
     def getquad(self, indx):
         mpos = pg.Vector2(pg.mouse.get_pos())
