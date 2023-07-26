@@ -303,6 +303,20 @@ class Renderer:
             if 11 in over and over.index(11) != 0:
                 over.remove(11)
                 over.insert(0, 11)
+            if cell in [2, 3, 4, 5]:
+                numwall = []
+                for tile in col4:
+                    t = incornerblock(xp + tile[0], yp + tile[1])
+                    numwall.append(t if t == 1 else 0)
+                print(numwall, cell)
+                if (numwall == [0, 1, 0, 1] and cell == 2) or \
+                    (numwall == [0, 0, 1, 1] and cell == 3) or \
+                    (numwall == [1, 1, 0, 0] and cell == 4) or \
+                    (numwall == [1, 0, 1, 0] and cell == 5):
+                    pass
+                else:
+                    pg.draw.line(pixel, red, [0, 0], [image1size, image1size], 1)
+                    pg.draw.line(pixel, red, [image1size, 0], [0, image1size], 1)
             for addsindx, adds in enumerate(over):
                 curtool = [graphics["shows2"][str(adds)][0] * image1size,
                            graphics["shows2"][str(adds)][1] * image1size]

@@ -16,8 +16,12 @@ movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
 fullscreen = settings["global"]["fullscreen"]
 file = ""
 file2 = ""
+defaultlevel = turntoproject(open(path + "default.txt", "r").read())
+undobuffer = [defaultlevel] * graphics["historylimit"]
+redobuffer = [defaultlevel] * graphics["historylimit"]
 undobuffer = []
 redobuffer = []
+del defaultlevel
 surf: Menu | MenuWithField = None
 
 
