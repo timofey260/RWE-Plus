@@ -308,7 +308,7 @@ class Renderer:
                 for tile in col4:
                     t = incornerblock(xp + tile[0], yp + tile[1])
                     numwall.append(t if t == 1 else 0)
-                print(numwall, cell)
+                #print(numwall, cell)
                 if (numwall == [0, 1, 0, 1] and cell == 2) or \
                     (numwall == [0, 0, 1, 1] and cell == 3) or \
                     (numwall == [1, 1, 0, 0] and cell == 4) or \
@@ -366,7 +366,7 @@ class Renderer:
                                 tilecounter += 1
                             if curtile in [0, 6] and tile in col4:  # if we found air in 4 places near
                                 foundair = True
-                                if 5 in incorner(xp - tile[0], yp - tile[1]):  # if opposite of air is wire
+                                if any(item in [5, 6, 7, 19, 21] for item in incorner(xp - tile[0], yp - tile[1])):  # if opposite of air is wire
                                     foundwire = True
                                     match tile:
                                         case [0, 1]:  # N
