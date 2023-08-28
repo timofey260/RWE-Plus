@@ -172,11 +172,16 @@ def launchload(level):
     redobuffer = []
 
 
-def doevents(window):
+def doevents(window, dropfile=True):
+    global surf, render
     for event in pg.event.get():
         match event.type:
             case pg.DROPFILE:
-                openlevel(event.file, window)
+                if dropfile:
+                    openlevel(event.file, window)
+                else:
+                    if event.file is not None and os.path.exists(event.file):
+                        launch(event.file)
             case pg.QUIT:
                 asktoexit(file, file2)
             case pg.WINDOWRESIZED:
@@ -297,13 +302,7 @@ def loadmenu():
     surf = load(window, renderer)
     pg.display.set_icon(loadimage(path + "icon.png"))
     while run:
-        for event in pg.event.get():
-            match event.type:
-                case pg.DROPFILE:
-                    if event.file is not None and os.path.exists(event.file):
-                        launch(event.file)
-                    surf = load(window, renderer)
-        doevents(window)
+        doevents(window, False)
         match surf.message:
             case "new":
                 launch(-1)
@@ -311,7 +310,6 @@ def loadmenu():
                 file = surf.asksaveasfilename(defaultextension=[".txt", ".wep"])
                 if file is not None and os.path.exists(file):
                     launch(file)
-                    surf = load(window, renderer)
             case "tutorial":
                 file = turntoproject(open(path2tutorial + "tutorial.txt", "r").read())
                 file["path"] = "tutorial"

@@ -314,6 +314,7 @@ class TT(MenuWithField):
                 getattr(self, message[1:])()
         match message:
             case "SU":
+                print("scr")
                 if not self.onfield:
                     return
                 if self.step > 1:
@@ -322,6 +323,7 @@ class TT(MenuWithField):
                     self.offset -= pos - self.pos
                     self.renderfield()
             case "SD":
+                print("scroll")
                 if not self.onfield:
                     return
                 if self.step > 1:
