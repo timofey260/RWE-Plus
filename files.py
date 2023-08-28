@@ -61,7 +61,7 @@ tooltiles = loadimage(path + graphics["tooltiles"])
 toolmenu = loadimage(path + graphics["toolmenu"])
 
 
-tag = "2.4.2"
+tag = "2.4.3"
 
 ofstop = 15
 ofsleft = 15
