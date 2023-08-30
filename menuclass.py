@@ -884,6 +884,8 @@ class MenuWithField(Menu):
                 pg.draw.rect(field, col, [xp * size, yp * size, size, size], 0)
 
     def destroy(self, xp, yp):
+        if xp > self.levelwidth - 1 or yp > self.levelheight - 1:
+            return
         x = int(xp)
         y = int(yp)
         self.area[x][y] = False
