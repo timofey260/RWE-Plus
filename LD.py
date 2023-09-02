@@ -17,7 +17,7 @@ class load(Menu):
         self.message = "new"
 
     def tutorial(self):
-        self.message = "tutorial"
+        self.message = "tutorialRWE"
 
     def report(self):
         report()

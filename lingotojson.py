@@ -300,9 +300,9 @@ def getprops(tiles: dict):
                     w = round(ws / item["vars"])
                 if item.get("repeatL") is not None:
                     h = math.floor((hs / len(item["repeatL"])))
-                    if item.get("sz") is not None and len(item["repeatL"]) < 2:
+                    if item.get("sz") is not None:
                         sz = toarr(item["sz"], "point")
-                        w = sz[0] * image1size
+                        w = min(sz[0] * image1size, ws)
                         h = sz[1] * image1size
 
                     cons = 0.4
@@ -320,7 +320,10 @@ def getprops(tiles: dict):
                         for iindex, _ in enumerate(item["repeatL"]):
                             # print(img, item["nm"], varindx * w, hs - h, w, h)
                             curcol = curcol.lerp(bl, cons)
-                            ss = img.subsurface(varindx * w, (len(item["repeatL"]) - 1 - iindex) * h, w, h).copy()
+                            rect = pg.Rect(varindx * w, (len(item["repeatL"]) - 1 - iindex) * h, w, h + 1)
+                            rect = rect.clip(pg.Rect(0, 0, ws, hs))
+                            ss = img.subsurface(rect).copy()
+
                             pxl = pg.PixelArray(ss)
                             pxl.replace(bl, curcol)
                             ss = pxl.make_surface()

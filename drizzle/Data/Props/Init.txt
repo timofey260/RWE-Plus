@@ -106,8 +106,8 @@
 [#nm:"AiScreenCorner", #tp:"standard", #colorTreatment:"standard", #sz:point(5,5), #repeatL:[1,1,1,1,1,1,1,1], #tags:[], #layerExceptions:[], #notes:[]]
 
 [#nm:"AiChamberCorner", #tp:"standard", #colorTreatment:"standard", #sz:point(5,5), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
-[#nm:"AiChamberSide1", #tp:"standard", #colorTreatment:"standard", #sz:point(1,3), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
-[#nm:"AiChamberSide2", #tp:"standard", #colorTreatment:"standard", #sz:point(1,3), #repeatL:[1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"AiChamberSide1", #tp:"standard", #colorTreatment:"standard", #sz:point(3,1), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"AiChamberSide2", #tp:"standard", #colorTreatment:"standard", #sz:point(3,1), #repeatL:[1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
 
 [#nm:"AI screen Top", #tp:"standard", #colorTreatment:"standard", #sz:point(29,21), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
 [#nm:"AI screen Bottom", #tp:"standard", #colorTreatment:"standard", #sz:point(29,23), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
