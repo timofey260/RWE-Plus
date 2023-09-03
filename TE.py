@@ -1,3 +1,4 @@
+import widgets
 from menuclass import *
 from lingotojson import *
 import random
@@ -31,7 +32,7 @@ blocks = [
 
 class TE(MenuWithField):
 
-    def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
+    def __init__(self, surface: pg.Surface, renderer: render.Renderer):
         self.menu = "TE"
         self.tool = 0 # 0 - place, 1 - destroy, 2 - copy
 
@@ -66,6 +67,9 @@ class TE(MenuWithField):
         self.set("materials 0", "Standard")
         self.currentcategory = len(self.items) - 2
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
+
+        self.selector = widgets.Selector(surface)
+
         self.rfa()
         self.rebuttons()
         self.blit()
@@ -82,6 +86,7 @@ class TE(MenuWithField):
 
     def blit(self):
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        self.selector.blit()
         for button in self.buttonslist:
             button.blitshadow()
         for i, button in enumerate(self.buttonslist[:-1]):

@@ -106,32 +106,32 @@ def makearr(col: list | pg.Vector2, mark):
 
 
 def init_solve(files: list[str,]):
-    a = {}
+    output = {}
     for file in files:
         s = open(file, "r").readlines()
-        a2 = []
+        categoryData = []
         cat = ''
-        counter = 0
-        counter2 = 2
+        itemCounter = 0
+        catCounter = 2
         for i in s:
             i = i.replace("\n", "")
             if len(i) > 1:
                 if i[0] == "-":
-                    counter2 += 1
-                    a[cat] = a2
+                    catCounter += 1
+                    output[cat] = categoryData
                     js = tojson(i[1:])
-                    a2 = [js]
+                    categoryData = [js]
                     cat = js[0]
-                    counter = 0
+                    itemCounter = 0
                 else:
                     js = tojson(i)
                     item = {}
                     for p, val in js.items():
                         item[p] = val
-                    a2.append(item)
-                    counter += 1
-        a[cat] = a2
-    return a
+                    categoryData.append(item)
+                    itemCounter += 1
+        output[cat] = categoryData
+    return output
 
 
 def inittolist():

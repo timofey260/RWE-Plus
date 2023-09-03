@@ -108,6 +108,7 @@ class button:
         self.onpress = onpress
         self.onrelease = onrelease
         self.bol = True
+        self.buttonData = {}
         self.set_text(self.text)
 
     def set_color(self, color):
@@ -364,3 +365,35 @@ class slider:
     def set_text(self, text):
         self.text = text
         self.textimage = mts(text, buttontextcolor)
+
+
+class Selector():
+    def __init__(self, surface: pg.Surface):
+        self.data = {}
+        self.buttonlist = []
+        self.currentcategory = 0
+        self.currentitem = 0
+        self.surface = surface
+        self.favouritefile = ""
+        self.linesAmount = 20
+        '''
+        data format:
+        [{
+            name,
+            color,
+            items:
+            {name, description, data}
+        }, ...]
+        '''
+
+    def items(self):
+        pass
+
+    def categories(self):
+        pass
+
+    def favorites(self):
+        pass
+
+    def blit(self):
+        pg.draw.rect(self.surface, white, [0, 0, 20, 20])
