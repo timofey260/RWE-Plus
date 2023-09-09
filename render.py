@@ -171,9 +171,9 @@ class Renderer:
 
         def findtileimage(name):
             it = None
-            for i in self.tiles.keys():
-                for i2 in self.tiles[i]:
-                    if i2["name"] == name:
+            for i in self.tiles:
+                for i2 in i["items"]:
+                    if i2["nm"] == name:
                         img = i2.copy()
                         img["image"] = pg.transform.scale(img["image"], [img["image"].get_width() / 16 * image1size,
                                                                          img["image"].get_height() / 16 * image1size])
@@ -391,13 +391,16 @@ class Renderer:
 
     def findprop(self, name, cat=None):
         if cat is not None:
-            for itemi, item in enumerate(self.props[cat]):
+            for cati, items in enumerate(self.props):
+                if items["name"] == cat:
+                    for itemi, item in enumerate(self.props[cati]):
+                        if item["nm"] == name:
+                            return item, [cati, itemi]
+                    break
+        for cati, cats in enumerate(self.props):
+            for itemi, item in enumerate(cats["items"]):
                 if item["nm"] == name:
-                    return item, [list(self.props.keys()).index(cat), itemi]
-        for cati, cats in self.props.items():
-            for itemi, item in enumerate(cats):
-                if item["nm"] == name:
-                    return item, [list(self.props.keys()).index(cati), itemi]
+                    return item, [cati, itemi]
         item = {
             "nm": "notfound",
             "tp": "standard",

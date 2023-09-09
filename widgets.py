@@ -1,5 +1,7 @@
 import pygame as pg
 import copy
+import files
+import menuclass
 from files import settings, fs, path, map, allleters, loadimage
 from render import gray, darkgray
 
@@ -108,7 +110,7 @@ class button:
         self.onpress = onpress
         self.onrelease = onrelease
         self.bol = True
-        self.buttonData = {}
+        self.buttondata = {}
         self.set_text(self.text)
 
     def set_color(self, color):
@@ -136,7 +138,7 @@ class button:
                 bol = False
                 if self.onpress is not None:
                     try:
-                        self.onpress(self.text)
+                        self.onpress(self)
                     except TypeError:
                         self.onpress()
             elif not pg.mouse.get_pressed(3)[0] and not bol and enablebuttons:
@@ -144,7 +146,7 @@ class button:
                 bol = True
                 if self.onrelease is not None:
                     try:
-                        self.onrelease(self.text)
+                        self.onrelease(self)
                     except TypeError:
                         self.onrelease()
         else:
@@ -368,26 +370,63 @@ class slider:
 
 
 class Selector():
-    def __init__(self, surface: pg.Surface):
-        self.data = {}
-        self.buttonlist = []
+    def __init__(self, surface: pg.Surface, menu, data):
+        self.data = data
+        self.buttonslist: list[button, ] = []
+        self.menu = menu
+        self.itemrect = pg.Rect(self.menu.settings["itempos"])
+        self.bigbuttonrect = pg.Rect(self.menu.settings["catpos"])
+        self.bigbutton = button(surface, self.bigbuttonrect, white, "")
+
         self.currentcategory = 0
         self.currentitem = 0
+
         self.surface = surface
-        self.favouritefile = ""
+        self.favouritefile = files.path + "favorite_props.txt"
         self.linesAmount = 20
+
+        self.pos = pg.Vector2()
+        self.show = "items"
+        self.catlist = []
+        self.callback = menu.non
         '''
         data format:
         [{
             name,
             color,
             items:
-            {name, description, data}
+            {nm, description, data}
         }, ...]
         '''
+        self.items()
+        self.resize()
+
+    def resize(self):
+        for i in self.buttonslist:
+            i.resize()
+        self.bigbutton.resize()
 
     def items(self):
-        pass
+        self.buttonslist = []
+        self.matshow = False
+        self.show = "items"
+        catdata = self.data[self.currentcategory]
+        for count, item in enumerate(catdata["items"]):
+            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
+            # rect = pg.rect.Rect(0, 0, 100, 10)
+            rect = self.itemrect.copy()
+            rect = rect.move(0, rect.h * count)
+            if item["category"] == "special" or "material" in item["tags"]:
+                btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"])#, onpress=self.getmaterial)
+            else:
+                btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"])#, onpress=self.getblock, tooltip=tooltip)
+            btn.buttondata = item
+            self.buttonslist.append(btn)
+        btn2 = button(self.surface, self.bigbuttonrect, settings["global"]["color"], catdata["name"])#,
+        #              onpress=self.changematshow,
+        #              tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"))
+        self.bigbutton = btn2
+        self.menu.resize()
 
     def categories(self):
         pass
@@ -396,4 +435,59 @@ class Selector():
         pass
 
     def blit(self):
-        pg.draw.rect(self.surface, white, [0, 0, 20, 20])
+        pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        for button in self.buttonslist:
+            button.blitshadow()
+        self.bigbutton.blitshadow()
+        for button in self.buttonslist:
+            button.blit(sum(pg.display.get_window_size()) // 120)
+
+    def blittooltip(self):
+        cir = [self.buttonslist[self.currentitem].rect.x + 3,
+               self.buttonslist[self.currentitem].rect.y + self.buttonslist[self.currentitem].rect.h / 2]
+        pg.draw.circle(self.surface, white, cir, self.buttonslist[self.currentitem].rect.h / 2)
+        self.bigbutton.blit(sum(pg.display.get_window_size()) // 100)
+        for button in self.buttonslist:
+            if button.blittooltip():
+                mwfpos = button.rect.topright
+                import menuclass
+                import TE
+                if type(self.menu) is TE.TE and button.buttondata["tp"] != "pattern":
+                    m: TE.TE = self.menu
+                    m.printcols(0, 0, button.buttondata, True)
+                if issubclass(type(self.menu), menuclass.MenuWithField):
+                    mwf: menuclass.MenuWithField = self.menu
+                    mwfpos = mwf.field.rect.topleft
+                if button.buttondata.get("preview"):
+                    self.surface.blit(button.buttondata["preview"], mwfpos)
+                if button.buttondata.get("image"):
+                    w, h = button.buttondata["size"]
+                    w *= self.menu.size
+                    h *= self.menu.size
+                    self.surface.blit(pg.transform.scale(button.buttondata["image"], [w, h]), mwfpos)
+                if button.buttondata.get("images"):
+                    w, h = button.buttondata["size"]
+                    w *= self.menu.size
+                    h *= self.menu.size
+                    self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
+                break
+    def up(self):
+        self.currentitem = (self.currentitem - 1) % len(self.buttonslist)
+
+    def down(self):
+        self.currentitem = (self.currentitem + 1) % len(self.buttonslist)
+
+    def right(self):
+        self.currentcategory = (self.currentcategory + 1) % len(self.data)
+        self.items()
+
+    def left(self):
+        self.currentcategory = (self.currentcategory - 1) % len(self.data)
+        self.items()
+
+    @property
+    def touchesanything(self):
+        for i in self.buttonslist:
+            if i.onmouseover():
+                return True
+        return self.bigbutton.onmouseover()

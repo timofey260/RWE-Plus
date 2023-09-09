@@ -652,6 +652,9 @@ class MenuWithField(Menu):
                 for b in getattr(self, i):
                     if b.onmouseover():
                         return True
+        if hasattr(self, "selector"):
+            if getattr(self, "selector").touchesanything:
+                return True
         return False
 
     def blit(self, draw=True):

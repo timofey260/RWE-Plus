@@ -1,3 +1,4 @@
+import copy
 import re
 import subprocess
 
@@ -106,31 +107,28 @@ def makearr(col: list | pg.Vector2, mark):
 
 
 def init_solve(files: list[str,]):
-    output = {}
+    output = []
     for file in files:
         s = open(file, "r").readlines()
-        categoryData = []
-        cat = ''
-        itemCounter = 0
-        catCounter = 2
+        category_data = []
+        item_counter = 0
         for i in s:
             i = i.replace("\n", "")
             if len(i) > 1:
                 if i[0] == "-":
-                    catCounter += 1
-                    output[cat] = categoryData
+                    output.append(category_data)
                     js = tojson(i[1:])
-                    categoryData = [js]
-                    cat = js[0]
-                    itemCounter = 0
+                    category_data = {"name": js[0], "color": pg.Color(toarr(js[1], "color")), "items": []}
+                    item_counter = 0
                 else:
                     js = tojson(i)
                     item = {}
                     for p, val in js.items():
                         item[p] = val
-                    categoryData.append(item)
-                    itemCounter += 1
-        output[cat] = categoryData
+                    category_data["items"].append(item)
+                    item_counter += 1
+        output.append(category_data)
+        output.remove([])
     return output
 
 
@@ -138,13 +136,13 @@ def inittolist():
     inv = settings["TE"]["LEtiles"]
     tilefiles = [path2graphics + i for i in graphics["tileinits"]]
     solved = init_solve(tilefiles)
-    del solved['']
-    solved_copy = solved.copy()
-    for catnum, catitem in enumerate(solved.items()):
-        cat, items = catitem
-        colr = pg.Color(toarr(items[0][1], "color"))
-        solved_copy[cat] = []
-        for indx, item in enumerate(items[1:]):
+    solved_copy = copy.deepcopy(solved)
+    for catnum, catitem in enumerate(solved):
+        cat = catitem["name"]
+        items = catitem["items"]
+        colr = catitem["color"]
+        solved_copy[catnum]["items"] = []
+        for indx, item in enumerate(items):
             try:
                 img = loadimage(f"{path2graphics}{item['nm']}.png")
             except FileNotFoundError:
@@ -194,9 +192,10 @@ def inittolist():
                 img.set_colorkey(pg.Color(255, 255, 255))
 
             newitem = {
-                "name": item["nm"],
+                "nm": item["nm"],
                 "tp": item.get("tp"),
                 "repeatL": item["repeatL"] if item.get("repeatL") is not None else [1],
+                "description": "Size" + str(sz),
                 "bfTiles": item["bfTiles"],
                 "image": img,
                 "size": sz,
@@ -206,11 +205,10 @@ def inittolist():
                 "cat": [catnum + 1, indx + 1],
                 "tags": item["tags"]
             }
-            solved_copy[cat].append(newitem)
+            solved_copy[catnum]["items"].append(newitem)
     matcat = "materials 0"
     matcatcount = 0
-    solved_copy[matcat] = []
-    counter = 1
+    solved_copy.insert(matcatcount, {"name": matcat, "color": pg.Color(0, 0, 0), "items": []})
     for k, v in graphics["matposes"].items():
         col = pg.Color(v)
         img = pg.Surface([image1size, image1size], pg.SRCALPHA)
@@ -223,26 +221,26 @@ def inittolist():
             preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)
         preview.set_colorkey(pg.Color(255, 255, 255))
-        solved_copy[matcat].append(
+        solved_copy[matcatcount]["items"].append(
             {
-                "name": k,
+                "nm": k,
                 "tp": None,
                 "repeatL": [1],
+                "description": "Material",
                 "bfTiles": 0,
                 "image": img,
                 "size": [1, 1],
                 "category": matcat,
                 "color": col,
                 "cols": [[-1], 0],
-                "cat": [1, counter],
+                "cat": [1, matcatcount],
                 "tags": ["material"],
                 "preview": preview
             })
-        if len(solved_copy[matcat]) > 30:
+        if len(solved_copy[matcatcount]["items"]) > 30:
             matcatcount += 1
             matcat = f"materials {matcatcount}"
-            solved_copy[matcat] = []
-        counter += 1
+            solved_copy.insert(matcatcount, {"name": matcat, "color": pg.Color(0, 0, 0), "items": []})
     return solved_copy
 
 
@@ -274,13 +272,12 @@ def getprops(tiles: dict):
     propfiles = [path2props + i for i in graphics["propinits"]]
     propfiles.append(path + "additionprops.txt")
     solved = init_solve(propfiles)
-    del solved['']
-    solved_copy = solved.copy()
-    for catnum, catitem in enumerate(solved.items()):
-        cat, items = catitem
-        colr = pg.Color(toarr(items[0][1], "color"))
-        solved_copy[cat] = []
-        for indx, item in enumerate(items[1:]):
+    solved_copy = copy.deepcopy(solved)
+    for catnum, catitem in enumerate(solved):
+        items = catitem["items"]
+        colr = catitem["color"]
+        solved_copy[catnum]["items"] = []
+        for indx, item in enumerate(items):
             try:
                 img = loadimage(path2props + item["nm"] + ".png")
             except FileNotFoundError:
@@ -335,11 +332,12 @@ def getprops(tiles: dict):
                     images.append(img.subsurface(iindex * w, 0, w, h))
             else:
                 images.append(img.subsurface(0, hs - h, w, h))
-
-            newitem = solved[cat][indx + 1]
+            newitem = solved[catnum]["items"][indx]
             newitem["images"] = images
             newitem["color"] = list(colr)
-            solved_copy[cat].append(newitem)
+            newitem["category"] = solved[catnum]["name"]
+            newitem["description"] = "Prop"
+            solved_copy[catnum]["items"].append(newitem)
     # solved_copy["material"] = []
     # for cat in tiles:
     #     pass
@@ -347,18 +345,20 @@ def getprops(tiles: dict):
     count2 = 0
     title = ""
     itemlist = []
-    for cat, items in tiles.items():
+    for catnum, catdata in enumerate(tiles):
+        cat = catdata["name"]
+        items = catdata["items"]
         if not items:
             print(cat, items)
             continue
 
         if "material" in items[0]["tags"]:
             continue
-        for indx, tile in enumerate(items[1:]):
+        for indx, tile in enumerate(items):
             if count <= 0:
                 count = settings["PE"]["elements_as_tiles_count"]
                 if title != "":
-                    solved_copy[title] = itemlist
+                    solved_copy.append({"name": title, "color": pg.Color(0, 0, 0), "items": itemlist})
                     itemlist = []
                 count2 += 1
                 title = f"tiles as prop {count2}"
@@ -371,7 +371,7 @@ def getprops(tiles: dict):
                 returnimage = pg.Surface(size)
                 returnimage.fill(pg.Color(255, 255, 255))
                 try:
-                    img = loadimage(path2graphics + tile["name"] + ".png")
+                    img = loadimage(path2graphics + tile["nm"] + ".png")
                 except:
                     img = pg.transform.scale(notfound, size)
                     returnimage.blit(pg.transform.scale(notfound, size), [0, 0])
@@ -392,8 +392,9 @@ def getprops(tiles: dict):
                 returnimage = pg.transform.scale(returnimage, pg.Vector2(returnimage.get_size()) / image1size * spritesize)
                 returnimage.set_colorkey(pg.Color(255, 255, 255))
                 itemlist.append({
-                    "nm": tile["name"],
+                    "nm": tile["nm"],
                     "tp": "standard",
+                    "description": "Tile as prop",
                     "images": [returnimage],
                     "colorTreatment": "standard",
                     "color": settings["PE"]["elements_as_tiles_color"],
@@ -402,10 +403,12 @@ def getprops(tiles: dict):
                     "repeatL": tile["repeatL"],
                     "tags": ["tile"],
                     "layerExceptions": [],
-                    "notes": ["Tile as prop"]
+                    "notes": ["Tile as prop"],
+                    "category": cat
                 })
                 count -= 1
-    solved_copy[title] = itemlist
+    solved_copy[count2]["items"] = itemlist
+    print(solved_copy)
     return solved_copy
 
 

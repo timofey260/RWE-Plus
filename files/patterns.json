@@ -1,24 +1,27 @@
 {
 	"patterns": [
 		{
-			"name": "SU Pattern box",
+			"nm": "SU Pattern box",
 			"tp": "pattern",
+			"description": "Pattern",
 			"category": "special",
 			"patcat": "SU patterns",
 			"color": [255, 0, 0],
 			"prefix": "SUPattern"
 		},
 		{
-			"name": "SU Grate box",
+			"nm": "SU Grate box",
 			"tp": "pattern",
+			"description": "Pattern",
 			"category": "special",
 			"patcat": "SU grates",
 			"color": [255, 0, 255],
 			"prefix": "SUGrate"
 		},
 		{
-			"name": "Alt Grate box",
+			"nm": "Alt Grate box",
 			"tp": "pattern",
+			"description": "Pattern",
 			"category": "special",
 			"patcat": "Alt grates",
 			"color": [75, 75, 240],

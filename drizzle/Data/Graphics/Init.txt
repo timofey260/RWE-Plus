@@ -268,7 +268,7 @@
 [#nm:"Mud Grates", #sz:point(2,4), #specs:[1,1,1,1,1,1,1,1], #specs2:0, #tp:"voxelStruct", #repeatL:[2,2,6], #bfTiles:0, #rnd:1, #ptPos:0, #tags:["nonSolid"]]
 [#nm:"big ring", #sz:point(5,1), #specs:[0,-1,-1,-1,0], #specs2:[0,-1,-1,-1,0], #tp:"voxelStruct", #repeatL:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"cage", #sz:point(5,2), #specs:[0,0,-1,0,0,0,-1,0,0,0], #specs2:0, #tp:"voxelStruct", #repeatL:[1,1,6,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:["nonSolid"]]
-[#nm:"Crane House", #sz:point(6,6), #specs:[1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1], #specs2:void, #tp:"voxelStruct", #repeatL:[1,1,2,2,2,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
+[#nm:"Crane House", #sz:point(6,6), #specs:[1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1], #specs2:0, #tp:"voxelStruct", #repeatL:[1,1,2,2,2,1,1], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"segment - W", #sz:point(1,2), #specs:[1,1], #specs2:0, #tp:"voxelStruct", #repeatL:[1,9], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"segment - E", #sz:point(1,2), #specs:[1,1], #specs2:0, #tp:"voxelStruct", #repeatL:[1,9], #bfTiles:1, #rnd:1, #ptPos:0, #tags:[]]
 [#nm:"Winged Pillar", #sz:point(3,3), #specs:[1,1,1,1,1,1,1,1,1], #specs2:0, #tp:"voxelStruct", #repeatL:[1,1,1,1,1,5], #bfTiles:0, #rnd:1, #ptPos:0, #tags:["nonSolid"]]

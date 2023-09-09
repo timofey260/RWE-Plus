@@ -40,9 +40,9 @@ class TE(MenuWithField):
 
         self.items = renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
-        self.items["special"] = p["patterns"]
+        self.items.insert(0, {"name": "Special", "color": black, "items": p["patterns"]})
         for indx, pattern in enumerate(p["patterns"]):
-            self.items["special"][indx]["cat"] = [len(self.items), indx + 1]
+            self.items[0]["items"][indx]["cat"] = [len(self.items), indx + 1]
         self.blocks = p["blocks"]
         self.buttonslist = []
         self.toolindex = 0
@@ -58,20 +58,18 @@ class TE(MenuWithField):
         self.brushsize = 1
 
         super().__init__(surface, "TE", renderer, False)
-        self.catlist = [[]]
-        for category in self.items.keys():
-            self.catlist[-1].append(category)
-            if len(self.catlist[-1]) >= self.settings["category_count"]:
-                self.catlist.append([])
+        self.catlist = []
+        for category in self.items:
+            self.catlist.append(category["name"])
         self.drawtiles = True
         self.set("materials 0", "Standard")
-        self.currentcategory = len(self.items) - 2
+        self.currentcategory = 0
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
-        self.selector = widgets.Selector(surface)
+        self.selector = widgets.Selector(surface, self, self.items)
 
         self.rfa()
-        self.rebuttons()
+        #self.rebuttons()
         self.blit()
         self.resize()
 
@@ -85,15 +83,15 @@ class TE(MenuWithField):
         self.message = "GE"
 
     def blit(self):
-        pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        #pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
+        #for button in self.buttonslist:
+        #    button.blitshadow()
+        #for i, button in enumerate(self.buttonslist[:-1]):
+        #    button.blit(sum(pg.display.get_window_size()) // 120)
+        #self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
+        #cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
+        #pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         self.selector.blit()
-        for button in self.buttonslist:
-            button.blitshadow()
-        for i, button in enumerate(self.buttonslist[:-1]):
-            button.blit(sum(pg.display.get_window_size()) // 120)
-        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
-        cir = [self.buttonslist[self.toolindex].rect.x + 3, self.buttonslist[self.toolindex].rect.y + self.buttonslist[self.toolindex].rect.h / 2]
-        pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         super().blit()
         mpos = pg.mouse.get_pos()
         if self.onfield and self.tileimage is not None:
@@ -273,8 +271,7 @@ class TE(MenuWithField):
                         self.surface.blit(pg.transform.scale(item["image"], [w, h]), [self.field.rect.x, self.field.rect.y])
                         self.printcols(0, 0, item, True)
                         break
-        for button in self.buttonslist:
-            button.blittooltip()
+        self.selector.blittooltip()
         if pg.key.get_pressed()[pg.K_LCTRL]:
             try:
                 geodata: list = eval(pyperclip.paste())
@@ -410,9 +407,9 @@ class TE(MenuWithField):
         super().resize()
         if hasattr(self, "field"):
             self.field.resize()
-            for i in self.buttonslist:
-                i.resize()
             self.renderfield()
+        if hasattr(self, "selector"):
+            self.selector.resize()
 
     def renderfield(self):
         self.fieldadd = pg.transform.scale(self.fieldadd,
@@ -425,46 +422,16 @@ class TE(MenuWithField):
             self.tileimage["image"].set_colorkey(None)
 
     def lt(self):
-        if self.matshow:
-            if self.currentcategory - 1 < 0:
-                self.currentcategory = len(self.catlist) - 1
-            else:
-                self.currentcategory = self.currentcategory - 1
-            self.cats()
-            self.toolindex = self.toolindex if len(self.buttonslist) - 1 > self.toolindex else 0
-        else:
-            if self.currentcategory - 1 < 0:
-                self.currentcategory = len(self.items) - 1
-            else:
-                self.currentcategory = self.currentcategory - 1
-            self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
-            self.rebuttons()
+        self.selector.left()
 
     def rt(self):
-        if self.matshow:
-            self.currentcategory = (self.currentcategory + 1) % len(self.catlist)
-            self.cats()
-            self.toolindex = self.toolindex if len(self.buttonslist) - 1 > self.toolindex else 0
-        else:
-            self.currentcategory = (self.currentcategory + 1) % len(self.items)
-            self.set(list(self.items)[self.currentcategory], self.items[list(self.items)[self.currentcategory]][0]["name"])
-            self.rebuttons()
+        self.selector.right()
 
     def dt(self):
-        self.toolindex += 1
-        if self.toolindex > len(self.buttonslist) - 2:
-            self.toolindex = 0
-        if not self.matshow:
-            cat = list(self.items.keys())[self.currentcategory]
-            self.set(cat, self.items[cat][self.toolindex]["name"])
+        self.selector.down()
 
     def ut(self):
-        self.toolindex -= 1
-        if self.toolindex < 0:
-            self.toolindex = len(self.buttonslist) - 2
-        if not self.matshow:
-            cat = list(self.items.keys())[self.currentcategory]
-            self.set(cat, self.items[cat][self.toolindex]["name"])
+        self.selector.up()
 
     def changematshow(self):
         if self.matshow:
@@ -487,8 +454,8 @@ class TE(MenuWithField):
 
     def set(self, cat, name, render=True):
         self.tool = 0
-        for num, i in enumerate(self.items[cat]):
-            if i["name"] == name:
+        for num, i in enumerate(self.items[self.catlist.index(cat)]["items"]):
+            if i["nm"] == name:
                 self.toolindex = num
                 self.tileimage2 = i.copy()
                 if self.tileimage2["tp"] != "pattern" and render:
@@ -621,11 +588,11 @@ class TE(MenuWithField):
                 if "material" in self.tileimage["tags"]:
                     self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
-                                                                           "data": self.tileimage["name"]}
+                                                                           "data": self.tileimage["nm"]}
                 elif xpos == px and ypos == py:
                     self.area[xpos][ypos] = False
                     self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
-                                                                           "data": [p, self.tileimage["name"]]}
+                                                                           "data": [p, self.tileimage["nm"]]}
                 elif csp != -1:
                     p = makearr([px + 1, py + 1], "point")
                     # self.area[xpos][ypos] = False
@@ -651,7 +618,7 @@ class TE(MenuWithField):
 
     def sad(self):
         if "material" in self.tileimage["tags"]:
-            self.data["TE"]["defaultMaterial"] = self.tileimage["name"]
+            self.data["TE"]["defaultMaterial"] = self.tileimage["nm"]
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
     def cleartool(self):
@@ -714,6 +681,6 @@ class TE(MenuWithField):
     @property
     def custom_info(self):
         try:
-            return f"{super().custom_info} | Selected tile: {self.tileimage['name']}"
+            return f"{super().custom_info} | Selected tile: {self.tileimage['nm']}"
         except TypeError:
             return super().custom_info
