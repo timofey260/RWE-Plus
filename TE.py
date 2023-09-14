@@ -38,7 +38,7 @@ class TE(MenuWithField):
 
         self.matshow = False
 
-        self.items = renderer.tiles
+        self.items: ItemData = renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
         self.items.insert(0, {"name": "Special", "color": black, "items": p["patterns"]})
         for indx, pattern in enumerate(p["patterns"]):

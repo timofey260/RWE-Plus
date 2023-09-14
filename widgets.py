@@ -387,8 +387,10 @@ class Selector():
 
         self.pos = pg.Vector2()
         self.show = "items"
-        self.catlist = []
         self.callback = menu.non
+
+        self.catsnum = len(self.data)
+        self.itemsnum = 1
         '''
         data format:
         [{
@@ -426,6 +428,7 @@ class Selector():
         #              onpress=self.changematshow,
         #              tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"))
         self.bigbutton = btn2
+        self.itemsnum = len(self.buttonslist)
         self.menu.resize()
 
     def categories(self):
@@ -471,18 +474,19 @@ class Selector():
                     h *= self.menu.size
                     self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
                 break
+
     def up(self):
-        self.currentitem = (self.currentitem - 1) % len(self.buttonslist)
+        self.currentitem = (self.currentitem - 1) % self.itemsnum
 
     def down(self):
-        self.currentitem = (self.currentitem + 1) % len(self.buttonslist)
+        self.currentitem = (self.currentitem + 1) % self.itemsnum
 
     def right(self):
-        self.currentcategory = (self.currentcategory + 1) % len(self.data)
+        self.currentcategory = (self.currentcategory + 1) % self.catsnum
         self.items()
 
     def left(self):
-        self.currentcategory = (self.currentcategory - 1) % len(self.data)
+        self.currentcategory = (self.currentcategory - 1) % self.catsnum
         self.items()
 
     @property

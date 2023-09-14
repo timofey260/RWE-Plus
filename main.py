@@ -358,9 +358,16 @@ if __name__ == "__main__":
             raise
         except Exception as e:
             # extra save level in case of eny crashes
-            print(traceback.print_exc())
+            f = open(application_path + "\\CrashLog.txt", "w")
+            f.write(traceback.format_exc())
+            f.write("This is why RWE+ crashed^^^\nSorry")
+            if settings["global"]["saveoncrash"]:
+                surf.savef()
+                raise
+            traceback.print_exc()
             ex = askyesno("Crash!!!",
-                          "Oops! RWE+ seems to be crashed, errorlog showed in console\nDo you want to save Level?")
+                          "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to save "
+                          "Level?")
             if ex:
                 surf.savef()
             raise

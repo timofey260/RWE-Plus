@@ -106,8 +106,41 @@ def makearr(col: list | pg.Vector2, mark):
     return f"{mark}({col[0]}, {col[1]})"
 
 
+class ItemData():
+    def __init__(self):
+        self.data = []
+        self.categories = []
+        for i in self.data:
+            self.categories.append(i["name"])
+
+    def __getitem__(self, item):
+        if type(item) is str:
+            return self.searchitem(item)
+        elif type(item) is int:
+            return self.data[item]
+        return None
+
+    def searchitem(self, name):
+        pass
+
+    def append(self, category_data):
+        self.data.append(category_data)
+
+    def remove(self, category_data):
+        self.data.remove(category_data)
+
+    def insert(self, index, category_data):
+        self.data.insert(index, category_data)
+
+    def __str__(self):
+        return str(self.data)
+
+    def __len__(self):
+        return len(self.data)
+
+
 def init_solve(files: list[str,]):
-    output = []
+    output = ItemData()
     for file in files:
         s = open(file, "r").readlines()
         category_data = []
@@ -137,7 +170,7 @@ def inittolist():
     tilefiles = [path2graphics + i for i in graphics["tileinits"]]
     solved = init_solve(tilefiles)
     solved_copy = copy.deepcopy(solved)
-    for catnum, catitem in enumerate(solved):
+    for catnum, catitem in enumerate(solved.data):
         cat = catitem["name"]
         items = catitem["items"]
         colr = catitem["color"]
@@ -273,7 +306,7 @@ def getprops(tiles: dict):
     propfiles.append(path + "additionprops.txt")
     solved = init_solve(propfiles)
     solved_copy = copy.deepcopy(solved)
-    for catnum, catitem in enumerate(solved):
+    for catnum, catitem in enumerate(solved.data):
         items = catitem["items"]
         colr = catitem["color"]
         solved_copy[catnum]["items"] = []

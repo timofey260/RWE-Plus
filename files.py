@@ -52,7 +52,7 @@ path2materialPreviews = resolvepath(path + "materialPreviews\\")
 pg.font.init()
 
 graphics = json.load(open(path + "graphics.json", "r"))
-settings = json.load(open(path2ui +  graphics["uifile"], "r"))
+settings = json.load(open(path2ui + graphics["uifile"], "r"))
 hotkeys = json.load(open(path + "hotkeys.json", "r"))
 e = json.load(open(path + "effects.json", "r"))
 
