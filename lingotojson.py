@@ -109,9 +109,8 @@ def makearr(col: list | pg.Vector2, mark):
 class ItemData():
     def __init__(self):
         self.data = []
-        self.categories = []
-        for i in self.data:
-            self.categories.append(i["name"])
+        self._categories = []
+        self._colors = []
 
     def __getitem__(self, item):
         if type(item) is str:
@@ -122,6 +121,20 @@ class ItemData():
 
     def searchitem(self, name):
         pass
+
+    @property
+    def categories(self):
+        if not self._categories:
+            for i in self.data:
+                self._categories.append(i["name"])
+        return self._categories
+
+    @property
+    def colors(self):
+        if not self._colors:
+            for i in self.data:
+                self._colors.append(i["color"])
+        return self._colors
 
     def append(self, category_data):
         self.data.append(category_data)
@@ -236,7 +249,8 @@ def inittolist():
                 "color": colr,
                 "cols": [item["specs"], item["specs2"]],
                 "cat": [catnum + 1, indx + 1],
-                "tags": item["tags"]
+                "tags": item["tags"],
+                "printcols": True
             }
             solved_copy[catnum]["items"].append(newitem)
     matcat = "materials 0"

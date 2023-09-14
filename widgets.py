@@ -1,8 +1,11 @@
+import math
+
 import pygame as pg
 import copy
 import files
 import menuclass
 from files import settings, fs, path, map, allleters, loadimage
+from lingotojson import ItemData
 from render import gray, darkgray
 
 pg.font.init()
@@ -371,7 +374,7 @@ class slider:
 
 class Selector():
     def __init__(self, surface: pg.Surface, menu, data):
-        self.data = data
+        self.data: ItemData = data
         self.buttonslist: list[button, ] = []
         self.menu = menu
         self.itemrect = pg.Rect(self.menu.settings["itempos"])
@@ -386,8 +389,8 @@ class Selector():
         self.linesAmount = 20
 
         self.pos = pg.Vector2()
-        self.show = "items"
-        self.callback = menu.non
+        self.show = "items" # cats, items, favs
+        self.callback = self.defaultcallback
 
         self.catsnum = len(self.data)
         self.itemsnum = 1
@@ -410,31 +413,56 @@ class Selector():
 
     def items(self):
         self.buttonslist = []
-        self.matshow = False
         self.show = "items"
+        self.currentitem = 0
         catdata = self.data[self.currentcategory]
+        self.itemsnum = len(catdata["items"])
+        self.catsnum = len(self.data)
         for count, item in enumerate(catdata["items"]):
-            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
-            # rect = pg.rect.Rect(0, 0, 100, 10)
             rect = self.itemrect.copy()
             rect = rect.move(0, rect.h * count)
-            if item["category"] == "special" or "material" in item["tags"]:
-                btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"])#, onpress=self.getmaterial)
-            else:
-                btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"])#, onpress=self.getblock, tooltip=tooltip)
+            btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"], onpress=self.callback)
             btn.buttondata = item
             self.buttonslist.append(btn)
-        btn2 = button(self.surface, self.bigbuttonrect, settings["global"]["color"], catdata["name"])#,
-        #              onpress=self.changematshow,
-        #              tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"))
+        btn2 = button(self.surface, self.bigbuttonrect, settings["global"]["color"], catdata["name"],
+                      tooltip=self.menu.returnkeytext("Open category list(<[-changematshow]>)"),
+                      onpress=self.catswap)
         self.bigbutton = btn2
-        self.itemsnum = len(self.buttonslist)
         self.menu.resize()
 
     def categories(self):
-        pass
+        self.buttonslist = []
+        self.show = "cats"
+        self.currentitem = self.currentcategory % self.menu.settings["category_count"]
+        self.currentcategory = 0
+        currenttab = self.currentcategory * self.menu.settings["category_count"]
+        self.itemsnum = len(self.data.categories[currenttab:currenttab + self.menu.settings["category_count"]])
+        self.catsnum = math.ceil(len(self.data.categories) / self.menu.settings["category_count"])
+        for count, item in enumerate(self.data.categories[currenttab:currenttab + self.menu.settings["category_count"]]):
+            itemindx = currenttab + count
+            rect = self.itemrect.copy()
+            rect = rect.move(0, rect.h * count)
+            tooltip = "\n".join(i["nm"] for i in self.data[itemindx]["items"])
+            btn = button(self.surface, rect, self.data.colors[itemindx], item, tooltip=tooltip, onpress=self.callback)
+            btn.buttondata = {"name": item, "tp": "pattern"}
+            self.buttonslist.append(btn)
+        btn2 = button(self.surface, self.bigbuttonrect, settings["global"]["color"],
+                      "categories" + str(self.currentcategory),
+                      tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"),
+                      onpress=self.catswap)
+        self.bigbutton = btn2
+        self.menu.resize()
+
+    def catswap(self, buttondata):
+        if self.show == "items":
+            self.categories()
+        else:
+            self.items()
 
     def favorites(self):
+        pass
+
+    def defaultcallback(self, item):
         pass
 
     def blit(self):
@@ -442,6 +470,7 @@ class Selector():
         for button in self.buttonslist:
             button.blitshadow()
         self.bigbutton.blitshadow()
+        self.bigbutton.blit(sum(pg.display.get_window_size()) // 100)
         for button in self.buttonslist:
             button.blit(sum(pg.display.get_window_size()) // 120)
 
@@ -449,13 +478,12 @@ class Selector():
         cir = [self.buttonslist[self.currentitem].rect.x + 3,
                self.buttonslist[self.currentitem].rect.y + self.buttonslist[self.currentitem].rect.h / 2]
         pg.draw.circle(self.surface, white, cir, self.buttonslist[self.currentitem].rect.h / 2)
-        self.bigbutton.blit(sum(pg.display.get_window_size()) // 100)
         for button in self.buttonslist:
             if button.blittooltip():
                 mwfpos = button.rect.topright
                 import menuclass
                 import TE
-                if type(self.menu) is TE.TE and button.buttondata["tp"] != "pattern":
+                if type(self.menu) is TE.TE and button.buttondata.get("printcols", False):
                     m: TE.TE = self.menu
                     m.printcols(0, 0, button.buttondata, True)
                 if issubclass(type(self.menu), menuclass.MenuWithField):
@@ -483,11 +511,20 @@ class Selector():
 
     def right(self):
         self.currentcategory = (self.currentcategory + 1) % self.catsnum
-        self.items()
+        self.recreate()
 
     def left(self):
         self.currentcategory = (self.currentcategory - 1) % self.catsnum
-        self.items()
+        self.recreate()
+
+    def recreate(self):
+        match self.show:
+            case "items":
+                self.items()
+            case "cats":
+                self.categories()
+            case "favs":
+                self.favorites()
 
     @property
     def touchesanything(self):

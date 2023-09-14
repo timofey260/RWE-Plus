@@ -312,28 +312,7 @@ class TE(MenuWithField):
                         self.place(int(vec.x), int(vec.y), True)
 
     def cats(self):
-        self.buttonslist = []
-        if not self.matshow: # if cats not already used
-            self.currentcategory = self.toolindex // self.settings["category_count"]
-            self.toolindex %= self.settings["category_count"]
-        btn2 = None
-        self.matshow = True
-        for count, item in enumerate(self.catlist[self.currentcategory]):
-            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
-            # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], f"Categories {self.currentcategory}", onpress=self.changematshow)
-
-            rect = pg.rect.Rect(self.settings["itempos"])
-            rect = rect.move(0, rect.h * count)
-            col = self.items[item][0]["color"]
-            if count == self.toolindex:
-                col = darkgray
-            btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
-            self.buttonslist.append(btn)
-        if btn2 is not None:
-            self.buttonslist.append(btn2)
-        self.resize()
+        self.selector.categories()
 
     def pastedata(self):
         try:
