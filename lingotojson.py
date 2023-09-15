@@ -117,10 +117,21 @@ class ItemData():
             return self.searchitem(item)
         elif type(item) is int:
             return self.data[item]
+        elif type(item) is tuple:
+            return self.searchitem(item[1], item[0])
         return None
 
-    def searchitem(self, name):
-        pass
+    def searchitem(self, name, category=None):
+        if category is None:
+            for catnum, cat in enumerate(self.data):
+                for itemnum, items in enumerate(cat["items"]):
+                    if items["nm"] == name:
+                        return items
+        else:
+            for itemnum, items in enumerate(self.data[self.categories.index(category)]["items"]):
+                if items["nm"] == name:
+                    return items
+        return None
 
     @property
     def categories(self):
@@ -455,7 +466,6 @@ def getprops(tiles: dict):
                 })
                 count -= 1
     solved_copy[count2]["items"] = itemlist
-    print(solved_copy)
     return solved_copy
 
 

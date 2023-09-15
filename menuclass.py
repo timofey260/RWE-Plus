@@ -245,16 +245,17 @@ class Menu:
             print("it's not a number")
             return defaultnumber
 
-    def foundthis(self, text):
+    def foundthis(self, button):
         global inputfile
-        print(text)
-        inputfile = text + "\n"
+        print(button)
+        inputfile = button.text + "\n"
 
     def find(self, filelist: dict, q):
         global inputfile
         buttons = []
         slider = 0
-        label = widgets.lable(self.surface, "Use scroll to navigate\nClick what you need\nType to search\nEscape to exit",
+        label = widgets.lable(self.surface,
+                              "Use scroll to navigate\nClick what you need\nType to search\nEscape to exit",
                               [50, 0], black, 30)
         label.resize()
         widgets.bol = True
@@ -266,15 +267,17 @@ class Menu:
             # newdict = {}
             count2 = 0
             for item, cat in filelist.items():
-                if 25 + 5*count > 100:
+                if 25 + 5 * count > 100:
                     break
                 if inputfile in item.lower() or inputfile in cat.lower():
                     if count2 >= slider:
-                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + 5*count, 50, 5]), color2, item, onpress=self.foundthis, tooltip=cat))
+                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + 5 * count, 50, 5]), color2, item,
+                                                      onpress=self.foundthis, tooltip=cat))
                         count += 1
                     count2 += 1
             for button in buttons:
                 button.resize()
+
         inputfile = ''
         r = True
         appendbuttons()
@@ -386,7 +389,7 @@ class Menu:
             if savedata:
                 self.datalast = copy.deepcopy(self.data)
 
-    def non(self):
+    def non(self, *args):
         pass
 
     @property
@@ -506,7 +509,7 @@ class Menu:
                 else:
                     groups[-1][i] = pg.key.name(getattr(pg, k))
             rep = ",".join(groups[-1]).replace("'", "").replace(" ", "").replace("+",
-                                                                                                              " + ")
+                                                                                 " + ")
             rep = " or ".join(rep.rsplit(",", 1))
             rep = rep.replace(",", ", ")
             string = string.replace(fgroup[0], rep)
@@ -791,16 +794,16 @@ class MenuWithField(Menu):
             pg.draw.rect(self.surface, red, rect3.clip(self.field.rect), max(self.size // 3, 1))
 
             line = self.field.rect.clipline(pg.Vector2(rect.center) - pg.Vector2(self.size * 5, 0),
-                         pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0))
+                                            pg.Vector2(rect.center) + pg.Vector2(self.size * 5, 0))
             if line:
                 pg.draw.line(self.surface, camera_border, line[0], line[1],
-                         self.size // 3 + 1)
+                             self.size // 3 + 1)
 
             line = self.field.rect.clipline(pg.Vector2(rect.center) - pg.Vector2(0, self.size * 5),
-                         pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5))
+                                            pg.Vector2(rect.center) + pg.Vector2(0, self.size * 5))
             if line:
                 pg.draw.line(self.surface, camera_border, line[0], line[1],
-                         self.size // 3 + 1)
+                             self.size // 3 + 1)
             if self.field.rect.collidepoint(rect.center):
                 pg.draw.circle(self.surface, camera_border, rect.center, self.size * 3, self.size // 3 + 1)
 
@@ -831,7 +834,7 @@ class MenuWithField(Menu):
 
             if indx == closest and (hasattr(self, "held") and not self.held) or \
                     (hasattr(self, "mode") and self.mode == "edit" and hasattr(self, "heldindex") and
-                    self.heldindex == indx):
+                     self.heldindex == indx):
                 quadindx = self.getquad(closest)
                 if hasattr(self, "mode") and self.mode == "edit":
                     quadindx = self.getquad(self.heldindex)
@@ -858,7 +861,7 @@ class MenuWithField(Menu):
                 # pg.draw.circle(self.surface, camera_held, rect.bottomright, self.size * 5, self.size // 3)
             elif hasattr(self, "held") and self.held and hasattr(self, "heldindex") and self.heldindex == indx:
                 widgets.fastmts(self.surface, f"Order: {indx}", rect.centerx, rect.centery, white)
-            #pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
+            # pg.draw.polygon(self.surface, col, [tl, bl, br, tr], self.size // 3)
             for i in [[tl, bl], [bl, br], [br, tr], [tr, tl]]:
                 line = self.field.rect.clipline(i[0], i[1])
                 if line:
@@ -868,7 +871,8 @@ class MenuWithField(Menu):
         mpos = pg.Vector2(pg.mouse.get_pos())
         rect = self.getcamerarect(self.data["CM"]["cameras"][indx])
 
-        dist = [pg.Vector2(i).distance_to(mpos) for i in [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]]
+        dist = [pg.Vector2(i).distance_to(mpos) for i in
+                [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]]
 
         closest = dist.index(min(dist))
 
@@ -892,25 +896,19 @@ class MenuWithField(Menu):
         x = int(xp)
         y = int(yp)
         self.area[x][y] = False
+
         def clearitem(mx, my, layer):
             val = self.data["TE"]["tlMatrix"][mx][my][layer]
             if val["data"] == 0:
                 return
             name = val["data"][1]
-            itm = None
-            for i in self.items.keys():
-                for i2 in self.items[i]:
-                    if i2["name"] == name:
-                        itm = i2
-                        break
-                if itm is not None:
-                    break
+            itm = self.items[name]
             if itm is None:
                 self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
                 return
             backx = mx - int((itm["size"][0] * .5) + .5) + 1
             backy = my - int((itm["size"][1] * .5) + .5) + 1
-            #if backx + itm["size"][0] > len(self.data["TE"]["tlMatrix"])-1 or backy + itm["size"][1] > len(
+            # if backx + itm["size"][0] > len(self.data["TE"]["tlMatrix"])-1 or backy + itm["size"][1] > len(
             #        self.data["TE"]["tlMatrix"][0])-1:
             #    return
             # startcell = self.data["TE"]["tlMatrix"][backx][backy][layer]
@@ -1008,6 +1006,7 @@ class MenuWithField(Menu):
         mpos = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size
         # mpos -= pg.Vector2(self.xoffset, self.yoffset)
         return mpos
+
     @property
     def posoffset(self):
         return self.pos - self.offset
@@ -1053,4 +1052,4 @@ class MenuWithField(Menu):
     def custom_info(self):
         return f"Showed layers: {''.join([['H', 'S'][int(i)] for i in self.renderer.geolayers])}, " \
                f"Tiles: {''.join([['H', 'S'][int(i)] for i in self.renderer.tilelayers])}, " \
-               f"current layer[{self.renderer.lastlayer+1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"
+               f"current layer[{self.renderer.lastlayer + 1}]: {'Showed' if self.renderer.hiddenlayer else 'Hidden'}"

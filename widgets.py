@@ -67,12 +67,13 @@ def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int
     if centered:
         window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
     else:
+        ypos = min(y, window.get_height() - screen_text.get_height())
         if x + screen_text.get_width() < window.get_width():
-            window.blit(screen_text, [x, y])
+            window.blit(screen_text, [x, ypos])
         elif x - screen_text.get_width() > 0:
-            window.blit(screen_text, [window.get_width() - screen_text.get_width(), y])
+            window.blit(screen_text, [window.get_width() - screen_text.get_width(), ypos])
         else:
-            window.blit(screen_text, [x, y])
+            window.blit(screen_text, [x, ypos])
 
 
 def resetpresses():
@@ -389,7 +390,7 @@ class Selector():
         self.linesAmount = 20
 
         self.pos = pg.Vector2()
-        self.show = "items" # cats, items, favs
+        self.show = "items"  # cats, items, favs
         self.callback = self.defaultcallback
 
         self.catsnum = len(self.data)
@@ -413,15 +414,17 @@ class Selector():
 
     def items(self):
         self.buttonslist = []
-        self.show = "items"
-        self.currentitem = 0
+        if self.show != "items":
+            self.currentcategory = self.currentitem + (self.currentcategory * self.menu.settings["category_count"])
+            self.currentitem = 0
         catdata = self.data[self.currentcategory]
         self.itemsnum = len(catdata["items"])
         self.catsnum = len(self.data)
+        self.show = "items"
         for count, item in enumerate(catdata["items"]):
             rect = self.itemrect.copy()
             rect = rect.move(0, rect.h * count)
-            btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"], onpress=self.callback)
+            btn = button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"], onpress=self.onclick)
             btn.buttondata = item
             self.buttonslist.append(btn)
         btn2 = button(self.surface, self.bigbuttonrect, settings["global"]["color"], catdata["name"],
@@ -432,22 +435,23 @@ class Selector():
 
     def categories(self):
         self.buttonslist = []
-        self.show = "cats"
-        self.currentitem = self.currentcategory % self.menu.settings["category_count"]
-        self.currentcategory = 0
+        if self.show != "cats":
+            self.currentitem = self.currentcategory % self.menu.settings["category_count"]
+            self.currentcategory = self.currentcategory // self.menu.settings["category_count"]
         currenttab = self.currentcategory * self.menu.settings["category_count"]
         self.itemsnum = len(self.data.categories[currenttab:currenttab + self.menu.settings["category_count"]])
         self.catsnum = math.ceil(len(self.data.categories) / self.menu.settings["category_count"])
+        self.show = "cats"
         for count, item in enumerate(self.data.categories[currenttab:currenttab + self.menu.settings["category_count"]]):
             itemindx = currenttab + count
             rect = self.itemrect.copy()
             rect = rect.move(0, rect.h * count)
             tooltip = "\n".join(i["nm"] for i in self.data[itemindx]["items"])
-            btn = button(self.surface, rect, self.data.colors[itemindx], item, tooltip=tooltip, onpress=self.callback)
+            btn = button(self.surface, rect, self.data.colors[itemindx], item, tooltip=tooltip, onpress=self.onclick)
             btn.buttondata = {"name": item, "tp": "pattern"}
             self.buttonslist.append(btn)
         btn2 = button(self.surface, self.bigbuttonrect, settings["global"]["color"],
-                      "categories" + str(self.currentcategory),
+                      "categories " + str(self.currentcategory),
                       tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"),
                       onpress=self.catswap)
         self.bigbutton = btn2
@@ -464,6 +468,9 @@ class Selector():
 
     def defaultcallback(self, item):
         pass
+
+    def onclick(self, button):
+        self.callback(button)
 
     def blit(self):
         pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
@@ -525,6 +532,11 @@ class Selector():
                 self.categories()
             case "favs":
                 self.favorites()
+
+    def setcat(self, index):
+        self.currentcategory = index
+        self.currentitem = 0
+        self.recreate()
 
     @property
     def touchesanything(self):

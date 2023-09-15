@@ -40,12 +40,11 @@ class TE(MenuWithField):
 
         self.items: ItemData = renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
-        self.items.insert(0, {"name": "Special", "color": black, "items": p["patterns"]})
+        self.items.insert(0, {"name": "special", "color": black, "items": p["patterns"]})
         for indx, pattern in enumerate(p["patterns"]):
             self.items[0]["items"][indx]["cat"] = [len(self.items), indx + 1]
         self.blocks = p["blocks"]
         self.buttonslist = []
-        self.toolindex = 0
         self.brushmode = False
         self.squarebrush = False
 
@@ -58,15 +57,12 @@ class TE(MenuWithField):
         self.brushsize = 1
 
         super().__init__(surface, "TE", renderer, False)
-        self.catlist = []
-        for category in self.items:
-            self.catlist.append(category["name"])
         self.drawtiles = True
         self.set("materials 0", "Standard")
-        self.currentcategory = 0
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
         self.selector = widgets.Selector(surface, self, self.items)
+        self.selector.callback = self.selectorset
 
         self.rfa()
         #self.rebuttons()
@@ -197,9 +193,9 @@ class TE(MenuWithField):
                     pyperclip.copy(str(history))
                 elif self.tool == 0 and self.tileimage["tp"] == "pattern":
                     saved = self.tileimage
-                    savedtool = saved["name"]
+                    savedtool = saved["nm"]
                     savedcat = saved["category"]
-                    save = self.currentcategory
+                    save = self.selector.currentcategory
                     for y in range(int(rect.h)):
                         for x in range(int(rect.w)):
                             if x == 0 and y == 0:
@@ -241,11 +237,11 @@ class TE(MenuWithField):
                             n = 0
                             if len(ch["tiles"]) > 1:
                                 n = x % len(ch["tiles"]) - 1
+                            print(saved)
                             self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n])
                             self.place(x + rect.x, y + rect.y)
                     self.set(savedcat, savedtool)
-                    self.currentcategory = save
-                    self.rebuttons()
+                    self.selector.currentcategory = save
                 self.detecthistory(["TE", "tlMatrix"])
                 if fg:
                     self.detecthistory(["GE"])
@@ -253,24 +249,6 @@ class TE(MenuWithField):
                 self.renderer.geo_render_area(self.area, self.layer)
                 self.rfa()
                 self.mousp2 = True
-        else:
-            if not self.matshow:
-                for index, button in enumerate(self.buttonslist[:-1]):
-                    if button.onmouseover():
-                        cat = list(self.items.keys())[self.currentcategory]
-                        item = self.items[cat][index]
-                        if item.get("preview"):
-                            self.surface.blit(item["preview"], button.rect.bottomright)
-                        if item["tp"] == "pattern":
-                            break
-                        w, h = item["size"]
-                        w *= self.size
-                        h *= self.size
-                        if not settings["TE"]["LEtiles"]:
-                            pg.draw.rect(self.surface, item["color"], [self.field.rect.x, self.field.rect.y, w, h])
-                        self.surface.blit(pg.transform.scale(item["image"], [w, h]), [self.field.rect.x, self.field.rect.y])
-                        self.printcols(0, 0, item, True)
-                        break
         self.selector.blittooltip()
         if pg.key.get_pressed()[pg.K_LCTRL]:
             try:
@@ -327,7 +305,7 @@ class TE(MenuWithField):
                     name = data["data"]
                 else:
                     name = data["data"][1]
-                cat = self.findcat(name)
+                cat = self.items[name]["category"]
                 self.set(cat, name, False)
                 # w, h = self.tileimage["size"]
                 # px = blockx - int((w * .5) + .5) - 1
@@ -337,7 +315,7 @@ class TE(MenuWithField):
                     pa = self.pos
                 self.place(blockx - self.xoffset + int(pa.x), blocky - self.yoffset + int(pa.y))
             else:
-                self.selectcat(cat)
+                self.selector.setcat(cat)
             self.detecthistory(["TE", "tlMatrix"])
             self.renderer.tiles_render_area(self.area, self.layer)
             self.rfa()
@@ -345,42 +323,10 @@ class TE(MenuWithField):
             print("Error pasting data!")
 
     def findcat(self, itemname):
-        for name, listdata in self.items.items():
-            for bl in listdata:
-                if bl["name"] == itemname:
-                    return name
-        return None
+        return self.items[itemname]["category"]
 
     def copytool(self):
         self.tool = 2
-
-    def selectcat(self, name):
-        self.currentcategory = list(self.items.keys()).index(name)
-        self.toolindex = 0
-        self.rebuttons()
-
-    def rebuttons(self):
-        self.buttonslist = []
-        self.matshow = False
-        btn2 = None
-        for count, item in enumerate(self.items[list(self.items.keys())[self.currentcategory]]):
-            # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
-            # rect = pg.rect.Rect(0, 0, 100, 10)
-            cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], item["category"], onpress=self.changematshow,
-                                  tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
-
-            rect = pg.rect.Rect(self.settings["itempos"])
-            rect = rect.move(0, rect.h * count)
-            if item["category"] == "special" or "material" in item["tags"]:
-                btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getmaterial)
-            else:
-                tooltip = "Size: " + str(item["size"])
-                btn = widgets.button(self.surface, rect, item["color"], item["name"], onpress=self.getblock, tooltip=tooltip)
-            self.buttonslist.append(btn)
-        if btn2 is not None:
-            self.buttonslist.append(btn2)
-        self.resize()
 
     def resize(self):
         super().resize()
@@ -413,43 +359,28 @@ class TE(MenuWithField):
         self.selector.up()
 
     def changematshow(self):
-        if self.matshow:
-            self.currentcategory = self.toolindex + self.currentcategory * self.settings["category_count"]
-            self.toolindex = 0
-            cat = list(self.items.keys())[self.currentcategory]
-            self.set(cat, self.items[cat][0]["name"])
-            self.rebuttons()
-        else:
-            self.toolindex = self.currentcategory
-            self.cats()
+        self.selector.catswap(None)
 
-    def getblock(self, text):
-        cat = self.buttonslist[-1].text
-        self.set(cat, text)
-
-    def getmaterial(self, text):
-        cat = self.buttonslist[-1].text
-        self.set(cat, text)
+    def selectorset(self, buttondata: widgets.button):
+        self.set(buttondata.buttondata["category"], buttondata.buttondata["nm"])
 
     def set(self, cat, name, render=True):
         self.tool = 0
-        for num, i in enumerate(self.items[self.catlist.index(cat)]["items"]):
-            if i["nm"] == name:
-                self.toolindex = num
-                self.tileimage2 = i.copy()
-                if self.tileimage2["tp"] != "pattern" and render:
-                    self.tileimage2["image"] = i["image"].copy()
-                    self.tileimage2["image"].set_alpha(100)
-                    self.tileimage = self.tileimage2.copy()
-
-                    self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"],
-                                                                 [self.size * self.tileimage2["size"][0],
-                                                                  self.size * self.tileimage2["size"][1]])
-                    self.tileimage["image"].set_colorkey(None)
-                else:
-                    self.tileimage = self.tileimage2.copy()
-                self.recaption()
-                return
+        i = self.items[cat, name]
+        if i is not None and i["nm"] == name:
+            self.tileimage2 = i.copy()
+            if self.tileimage2["tp"] != "pattern" and render:
+                self.tileimage2["image"] = i["image"].copy()
+                self.tileimage2["image"].set_alpha(100)
+                self.tileimage = self.tileimage2.copy()
+                self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"],
+                                                             [self.size * self.tileimage2["size"][0],
+                                                              self.size * self.tileimage2["size"][1]])
+                self.tileimage["image"].set_colorkey(None)
+            else:
+                self.tileimage = self.tileimage2.copy()
+            self.recaption()
+            return
 
     def test_cols(self, x, y):
         force_geo = self.findparampressed("force_geometry") or self.findparampressed("force_place")
@@ -608,14 +539,15 @@ class TE(MenuWithField):
 
     def findtile(self):
         nd = {}
-        for cat, item in self.items.items():  # cursed
-            for i in item:
-                nd[i["name"]] = cat
+        for catnum, item in enumerate(self.items.data):
+            cat = self.items.categories[catnum]
+            for i in item["items"]:
+                nd[i["nm"]] = cat
         name = self.find(nd, "Select a tile")
         if name is None:
             return
-        cat = self.findcat(name)
-        self.selectcat(cat)
+        cat = self.items[name]
+        self.selector.setcat(cat)
         self.set(cat, name)
 
     def copytile(self):
@@ -630,6 +562,10 @@ class TE(MenuWithField):
                 return
             case "material":
                 name = tile["data"]
+                tile = self.items[name]
+                if tile is not None:
+                    self.set(tile["category"], tile["nm"])
+                    return
             case "tileBody":
                 pos = toarr(tile["data"][0], "point")
                 pos[0] -= 1
@@ -637,24 +573,10 @@ class TE(MenuWithField):
                 tile = self.data["TE"]["tlMatrix"][pos[0]][pos[1]][tile["data"][1] - 1]
 
         if tile["tp"] == "tileHead":
-            i = 0
-            for catname, items in self.items.items():
-                for item in items:
-                    if item["name"] == tile["data"][1]:
-                        cat = catname
-                        name = tile["data"][1]
-                        self.currentcategory = i
-                        self.rebuttons()
-                        self.set(cat, name)
-                        return
-                i += 1
-        for catname, items in self.items.items():
-            for item in items:
-                if item["name"] == name:
-                    self.currentcategory = list(self.items.keys()).index(item["category"])
-                    self.rebuttons()
-                    self.getmaterial(name)
-                    return
+            tile = self.items[tile["data"][1]]
+            if tile is not None:
+                self.set(tile["category"], tile["nm"])
+                return
         print("couldn't find tile")
 
     @property
