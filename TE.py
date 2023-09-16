@@ -34,7 +34,7 @@ class TE(MenuWithField):
 
     def __init__(self, surface: pg.Surface, renderer: render.Renderer):
         self.menu = "TE"
-        self.tool = 0 # 0 - place, 1 - destroy, 2 - copy
+        self.tool = 0  # 0 - place, 1 - destroy, 2 - copy
 
         self.matshow = False
 
@@ -61,7 +61,7 @@ class TE(MenuWithField):
         self.set("materials 0", "Standard")
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
-        self.selector = widgets.Selector(surface, self, self.items)
+        self.selector = widgets.Selector(surface, self, self.items, "s1")
         self.selector.callback = self.selectorset
 
         self.rfa()
@@ -333,8 +333,6 @@ class TE(MenuWithField):
         if hasattr(self, "field"):
             self.field.resize()
             self.renderfield()
-        if hasattr(self, "selector"):
-            self.selector.resize()
 
     def renderfield(self):
         self.fieldadd = pg.transform.scale(self.fieldadd,
@@ -361,8 +359,12 @@ class TE(MenuWithField):
     def changematshow(self):
         self.selector.catswap(None)
 
-    def selectorset(self, buttondata: widgets.button):
-        self.set(buttondata.buttondata["category"], buttondata.buttondata["nm"])
+    def selectorset(self, buttondata):
+        if self.selector.show == "items":
+            self.selector.setbyname(buttondata["nm"])
+            self.set(buttondata["category"], buttondata["nm"])
+        elif self.selector.show == "cats":
+            self.selector.setcat(buttondata["index"])
 
     def set(self, cat, name, render=True):
         self.tool = 0
@@ -546,16 +548,15 @@ class TE(MenuWithField):
         name = self.find(nd, "Select a tile")
         if name is None:
             return
-        cat = self.items[name]
-        self.selector.setcat(cat)
-        self.set(cat, name)
+        item = self.items[name]
+        self.selector.setbyname(name)
+        self.set(item["category"], name)
 
     def copytile(self):
         posoffset = self.posoffset
         if not 0 <= posoffset.x < self.levelwidth or not 0 <= posoffset.y < self.levelheight:
             return
         tile = self.data["TE"]["tlMatrix"][int(posoffset.x)][int(posoffset.y)][self.layer]
-        name = "Standard"
 
         match tile["tp"]:
             case "default":

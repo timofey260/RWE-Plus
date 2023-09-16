@@ -348,11 +348,11 @@ class TT(MenuWithField):
         itemcat = list(self.examplelist)[self.currentcategory]
         for count, item in enumerate(self.examplelist[itemcat]):
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
+            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
                                   tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
-            btn = widgets.button(self.surface, rect, item["color"], item["nm"], onpress=self.settile)
+            btn = widgets.Button(self.surface, rect, item["color"], item["nm"], onpress=self.settile)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
@@ -376,7 +376,7 @@ class TT(MenuWithField):
             self.next()
         for count, item in enumerate(self.examplelist.keys()):
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
+            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], "Categories", onpress=self.changematshow)
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
             col = self.examplelist[item][0]["color"]
@@ -384,7 +384,7 @@ class TT(MenuWithField):
                 col = gray
             if count == self.currentcategory:
                 col = darkgray
-            btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
+            btn = widgets.Button(self.surface, rect, col, item, onpress=self.selectcat)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)

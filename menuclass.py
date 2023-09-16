@@ -37,8 +37,8 @@ class Menu:
 
         self.size = image1size
         self.message = ""
-        self.buttons: list[widgets.button, ...] = []
-        self.labels: list[widgets.lable, ...] = []
+        self.buttons: list[widgets.Button, ...] = []
+        self.labels: list[widgets.Label, ...] = []
 
         widgets.resetpresses()
 
@@ -53,17 +53,17 @@ class Menu:
                 f2 = self.non
             if len(i) == 6:
                 self.buttons.append(
-                    widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
+                    widgets.Button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
                                    onrelease=f2, tooltip=self.returnkeytext(i[5])))
             elif len(i) == 7:
                 self.buttons.append(
-                    widgets.button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
+                    widgets.Button(self.surface, pg.rect.Rect(i[1]), i[2], i[0], onpress=f,
                                    onrelease=f2, tooltip=self.returnkeytext(i[5]), icon=i[6]))
         for i in self.settings["labels"]:
             if len(i) == 3:
-                self.labels.append(widgets.lable(self.surface, self.returnkeytext(i[0]), i[1], i[2]))
+                self.labels.append(widgets.Label(self.surface, self.returnkeytext(i[0]), i[1], i[2]))
             elif len(i) == 4:
-                self.labels.append(widgets.lable(self.surface, self.returnkeytext(i[0]), i[1], i[2], i[3]))
+                self.labels.append(widgets.Label(self.surface, self.returnkeytext(i[0]), i[1], i[2], i[3]))
 
         self.unlock_keys()
         self.resize()
@@ -118,7 +118,7 @@ class Menu:
         buttons = []
         slider = 0
         labeltext = "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit\n"
-        label = widgets.lable(self.surface, labeltext, [50, 0], black, 30)
+        label = widgets.Label(self.surface, labeltext, [50, 0], black, 30)
         label.resize()
 
         def appendbuttons():
@@ -127,7 +127,7 @@ class Menu:
             f = os.listdir(filepath)
             f.reverse()
             buttons.clear()
-            buttons.append(widgets.button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback,
+            buttons.append(widgets.Button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback,
                                           tooltip="Go back"))
             count = 1
             for file in f:
@@ -135,12 +135,12 @@ class Menu:
                     y = 5 * count - slider * 5
                     if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
                         if y > 0:
-                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
+                            buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
                                                           onpress=self.setasname, tooltip="File"))
                         count += 1
                     elif os.path.isdir(os.path.join(filepath, file)):
                         if y > 0:
-                            buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
+                            buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
                                                           onpress=self.addfolder, tooltip="Folder"))
                         count += 1
             for button in buttons:
@@ -254,7 +254,7 @@ class Menu:
         global inputfile
         buttons = []
         slider = 0
-        label = widgets.lable(self.surface,
+        label = widgets.Label(self.surface,
                               "Use scroll to navigate\nClick what you need\nType to search\nEscape to exit",
                               [50, 0], black, 30)
         label.resize()
@@ -271,7 +271,7 @@ class Menu:
                     break
                 if inputfile in item.lower() or inputfile in cat.lower():
                     if count2 >= slider:
-                        buttons.append(widgets.button(self.surface, pg.Rect([0, 20 + 5 * count, 50, 5]), color2, item,
+                        buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + 5 * count, 50, 5]), color2, item,
                                                       onpress=self.foundthis, tooltip=cat))
                         count += 1
                     count2 += 1
@@ -441,7 +441,7 @@ class Menu:
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui + graphics["uifile"], "r"))
+        settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
         self.__init__(self.surface, self.data, self.menu)
 
     def send(self, message):
@@ -556,7 +556,7 @@ class MenuWithField(Menu):
 
         self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
 
-        self.field = widgets.window(self.surface, self.settings["d1"])
+        self.field = widgets.Window(self.surface, self.settings["d1"])
         self.btiles = self.data["EX2"]["extraTiles"]
         self.fieldmap = self.field.field
 
@@ -574,7 +574,7 @@ class MenuWithField(Menu):
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui + graphics["uifile"], "r"))
+        settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
         self.__init__(self.surface, self.menu, self.renderer)
 
     def movemiddle(self, bp):

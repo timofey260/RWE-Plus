@@ -27,7 +27,7 @@ class LP(MenuWithField):
         self.tool = ""  # env, size
         super().__init__(surface, "LP", renderer)
         for i in self.settings["sliders"]:
-            self.sliders.append(widgets.slider(
+            self.sliders.append(widgets.Slider(
                 self.surface,
                 i[0], i[1], i[2],
                 i[3][0], i[3][1], self.data[i[4][0]][i[4][1]], i[3][2]))

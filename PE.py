@@ -102,11 +102,11 @@ class PE(MenuWithField):
         itemcat = list(self.props.keys())[self.currentcategory]
         for count, item in enumerate(self.props[itemcat]):
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
+            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], itemcat, onpress=self.changematshow,
                                   tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
-            btn = widgets.button(self.surface, rect, item["color"], item["nm"], onpress=self.setprop)
+            btn = widgets.Button(self.surface, rect, item["color"], item["nm"], onpress=self.setprop)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
@@ -129,7 +129,7 @@ class PE(MenuWithField):
             # rect = pg.rect.Rect([0, count * self.settings["itemsize"], self.field2.field.get_width(), self.settings["itemsize"]])
             # rect = pg.rect.Rect(0, 0, 100, 10)
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], f"Categories {self.currentcategory}", onpress=self.changematshow)
+            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], f"Categories {self.currentcategory}", onpress=self.changematshow)
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
             try:
@@ -140,7 +140,7 @@ class PE(MenuWithField):
                     col = darkgray
             except IndexError:
                 col = gray
-            btn = widgets.button(self.surface, rect, col, item, onpress=self.selectcat)
+            btn = widgets.Button(self.surface, rect, col, item, onpress=self.selectcat)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
@@ -159,7 +159,7 @@ class PE(MenuWithField):
             name, val = item
             rect = pg.rect.Rect(self.settings["settingspos"])
             rect = rect.move(0, rect.h * count)
-            btn = widgets.button(self.surface, rect, self.settings["settingscolor"], name, onpress=self.changesettings,
+            btn = widgets.Button(self.surface, rect, self.settings["settingscolor"], name, onpress=self.changesettings,
                                  tooltip=str(self.getval(name, val)))
             self.settingslist.append(btn)
         self.resize()

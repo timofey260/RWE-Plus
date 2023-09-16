@@ -189,17 +189,23 @@ def init_solve(files: list[str,]):
     return output
 
 
-def inittolist():
+def inittolist(window: pg.Surface):
     inv = settings["TE"]["LEtiles"]
-    tilefiles = [path2graphics + i for i in graphics["tileinits"]]
+    tilefiles = [path2graphics + i for i in globalsettings["tileinits"]]
     solved = init_solve(tilefiles)
     solved_copy = copy.deepcopy(solved)
+    f = pg.font.Font(path + "/" + settings["global"]["font"], 20)
     for catnum, catitem in enumerate(solved.data):
         cat = catitem["name"]
+
         items = catitem["items"]
         colr = catitem["color"]
         solved_copy[catnum]["items"] = []
         for indx, item in enumerate(items):
+            surf = f.render(f"Loading tile {item['nm']}...", True, pg.color.THECOLORS["white"], None)
+            pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
+            window.blit(surf, [0, 0])
+            pg.display.update()
             try:
                 img = loadimage(f"{path2graphics}{item['nm']}.png")
             except FileNotFoundError:
@@ -267,11 +273,11 @@ def inittolist():
     matcat = "materials 0"
     matcatcount = 0
     solved_copy.insert(matcatcount, {"name": matcat, "color": pg.Color(0, 0, 0), "items": []})
-    for k, v in graphics["matposes"].items():
+    for k, v in globalsettings["matposes"].items():
         col = pg.Color(v)
         img = pg.Surface([image1size, image1size], pg.SRCALPHA)
         img.fill(pg.Color(0, 0, 0, 0))
-        ms = graphics["matsize"]
+        ms = globalsettings["matsize"]
         pg.draw.rect(img, v, pg.Rect(ms[0], ms[0], ms[1], ms[1]))
         try:
             preview = loadimage(path2materialPreviews + k + ".png")
@@ -291,7 +297,7 @@ def inittolist():
                 "category": matcat,
                 "color": col,
                 "cols": [[-1], 0],
-                "cat": [1, matcatcount],
+                "cat": [matcatcount + 1, len(solved_copy[matcatcount]["items"]) + 1],
                 "tags": ["material"],
                 "preview": preview
             })
@@ -325,17 +331,22 @@ def getcolors():
     return cols
 
 
-def getprops(tiles: dict):
+def getprops(tiles: dict, window: pg.Surface):
     # turning tiles to props and then add them to all other props
-    propfiles = [path2props + i for i in graphics["propinits"]]
+    propfiles = [path2props + i for i in globalsettings["propinits"]]
     propfiles.append(path + "additionprops.txt")
     solved = init_solve(propfiles)
     solved_copy = copy.deepcopy(solved)
+    f = pg.font.Font(path + "/" + settings["global"]["font"], 20)
     for catnum, catitem in enumerate(solved.data):
         items = catitem["items"]
         colr = catitem["color"]
         solved_copy[catnum]["items"] = []
         for indx, item in enumerate(items):
+            surf = f.render(f"Loading prop {item['nm']}...", True, pg.color.THECOLORS["white"], None)
+            pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
+            window.blit(surf, [0, 0])
+            pg.display.update()
             try:
                 img = loadimage(path2props + item["nm"] + ".png")
             except FileNotFoundError:

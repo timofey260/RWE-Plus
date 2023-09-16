@@ -6,7 +6,7 @@ class LE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer):
         self.menu = "LE"
         super().__init__(surface, "LE", renderer)
-        self.field2 = widgets.window(self.surface, self.settings["d1"])
+        self.field2 = widgets.Window(self.surface, self.settings["d1"])
         self.field3 = self.field2.copy()
 
         sc = [(self.levelwidth + ofsleft) * image1size, (self.levelheight + ofstop) * image1size]
@@ -37,7 +37,7 @@ class LE(MenuWithField):
 
         self.images = {True: [], False: []}
 
-        for i in graphics["shadowimages"]:
+        for i in globalsettings["shadowimages"]:
             img = loadimage(path2cast + i)
             img.set_colorkey(white)
             self.images[True].append(img)
@@ -95,7 +95,7 @@ class LE(MenuWithField):
             self.if_set(s[2], 2)
             self.if_set(s[3], 3)
 
-            self.labels[0].set_text("Image: " + graphics["shadowimages"][self.selectedimage])
+            self.labels[0].set_text("Image: " + globalsettings["shadowimages"][self.selectedimage])
             self.labels[1].set_text(f"X: {curpos_on_field[0]}, Y: {curpos_on_field[1]}")
 
             self.surface.blit(self.tileimage, curpos)

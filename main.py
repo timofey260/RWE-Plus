@@ -1,6 +1,4 @@
-import subprocess
 import traceback
-
 import requests
 from menus import *
 from tkinter.messagebox import askyesnocancel, askyesno
@@ -8,6 +6,7 @@ import argparse
 from path_dict import PathDict
 from lingotojson import *
 from files import settings, hotkeys, path, application_path
+import time
 
 widgets.keybol = True
 run = True
@@ -17,12 +16,13 @@ fullscreen = settings["global"]["fullscreen"]
 file = ""
 file2 = ""
 defaultlevel = turntoproject(open(path + "default.txt", "r").read())
-undobuffer = [defaultlevel] * graphics["historylimit"]
-redobuffer = [defaultlevel] * graphics["historylimit"]
-undobuffer = []
-redobuffer = []
+undobuffer = [defaultlevel] * globalsettings["historylimit"]
+redobuffer = [defaultlevel] * globalsettings["historylimit"]
+undobuffer.clear()
+redobuffer.clear()
 del defaultlevel
 surf: Menu | MenuWithField = None
+savetimer = time.time()
 
 
 def openlevel(level, window):
@@ -203,7 +203,7 @@ def doevents(window, dropfile=True):
 
 
 def launch(level):
-    global surf, fullscreen, undobuffer, redobuffer, file, file2, run
+    global surf, fullscreen, undobuffer, redobuffer, file, file2, run, savetimer
 
     # loading image
     loadi = loadimage(f"{path}load.png")
@@ -213,9 +213,9 @@ def launch(level):
     pg.display.update()
 
     launchload(level)
-    items = inittolist()
+    items = inittolist(window)
     propcolors = getcolors()
-    props = getprops(items)
+    props = getprops(items, window)
     file2 = copy.deepcopy(file)
     width = settings["global"]["width"]
     height = settings["global"]["height"]
@@ -277,7 +277,7 @@ def launch(level):
             undobuffer.extend(surf.historybuffer)
             surf.historybuffer = []
             redobuffer = []
-            undobuffer = undobuffer[-graphics["historylimit"]:]
+            undobuffer = undobuffer[-globalsettings["historylimit"]:]
 
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in surf.uc:
@@ -288,6 +288,10 @@ def launch(level):
         else:
             window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
+        if 1 < globalsettings["autosavedelay"] < time.time() - savetimer:
+            print("Autosaving")
+            surf.savef()
+            savetimer = time.time()
         pg.display.flip()
         pg.display.update()
 
@@ -332,7 +336,9 @@ def loadmenu():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.")
+    parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.\n"
+                                     "Tool for making levels for rain world",
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.version = tag
     parser.add_argument("filename", type=str, nargs="?", help="Level to load")
     parser.add_argument("-n", "--new", help="Opens new file", dest="new", action="store_true")

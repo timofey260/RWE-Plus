@@ -74,8 +74,8 @@ class GE(MenuWithField):
 
     def rs(self):
         self.toolrender = pg.transform.scale(self.tooltiles,
-                                             [self.tooltiles.get_width() / graphics["tilesize"][0] * image1size,
-                                              self.tooltiles.get_height() / graphics["tilesize"][1] * image1size])
+                                             [self.tooltiles.get_width() / globalsettings["tilesize"][0] * image1size,
+                                              self.tooltiles.get_height() / globalsettings["tilesize"][1] * image1size])
 
     def TE(self):
         self.message = "TE"
@@ -89,9 +89,9 @@ class GE(MenuWithField):
             self.s0()
             self.recaption()
         if self.onfield:
-            curtool = [graphics["tools"][self.selectedtool][0] * graphics["tilesize"][0],
-                       graphics["tools"][self.selectedtool][1] * graphics["tilesize"][1]]
-            self.surface.blit(self.tools, mpos, [curtool, graphics["tilesize"]])
+            curtool = [globalsettings["tools"][self.selectedtool][0] * globalsettings["tilesize"][0],
+                       globalsettings["tools"][self.selectedtool][1] * globalsettings["tilesize"][1]]
+            self.surface.blit(self.tools, mpos, [curtool, globalsettings["tilesize"]])
 
             # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
@@ -104,14 +104,14 @@ class GE(MenuWithField):
                                            pg.Vector2(self.toolrender.get_size()) / image1size * self.size)
 
             self.labels[1].set_text(f"X: {posoffset.x}, Y: {posoffset.y}, Z: {self.layer + 1}")
-            if self.selectedtool in graphics["codes"].keys():
+            if self.selectedtool in globalsettings["codes"].keys():
                 if type(self.placetile) == int:
-                    if graphics["codes"][self.selectedtool] == 1:
-                        curtool = [graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
-                                   graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                    if globalsettings["codes"][self.selectedtool] == 1:
+                        curtool = [globalsettings["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                                   globalsettings["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
                     else:
-                        curtool = [graphics["tileplaceicon"][str(self.placetile - self.state)][0] * self.size,
-                                   graphics["tileplaceicon"][str(self.placetile - self.state)][1] * self.size]
+                        curtool = [globalsettings["tileplaceicon"][str(self.placetile - self.state)][0] * self.size,
+                                   globalsettings["tileplaceicon"][str(self.placetile - self.state)][1] * self.size]
                     # print([abs(self.field.rect.x - pos2[0]), abs(self.field.rect.y - pos2[1])])
                     self.surface.blit(toolsized, pos2, [curtool, cellsize2])
             rect = [self.xoffset * self.size, self.yoffset * self.size, self.levelwidth * self.size,
@@ -289,8 +289,8 @@ class GE(MenuWithField):
         cellsize2 = [self.size, self.size]
         if type(self.placetile) == int:
             curtool = [
-                graphics["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
-                graphics["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
+                globalsettings["tileplaceicon"][str(self.placetile + self.state)][0] * self.size,
+                globalsettings["tileplaceicon"][str(self.placetile + self.state)][1] * self.size]
             rect = [posoffset[0] * self.size, posoffset[1] * self.size]
             self.fieldadd.blit(toolsized, rect, [curtool, cellsize2])
             if self.mirrorp:
@@ -530,10 +530,10 @@ class GE(MenuWithField):
                 self.data["GE"][x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:  # clear upper
                 self.data["GE"][x][y][self.layer][1] = []
-            elif self.selectedtool in graphics["codes"].keys():  # else
-                if graphics["codes"][self.selectedtool] == 1:
+            elif self.selectedtool in globalsettings["codes"].keys():  # else
+                if globalsettings["codes"][self.selectedtool] == 1:
                     self.data["GE"][x][y][self.layer][0] = self.placetile + self.state
-                if graphics["codes"][self.selectedtool] == 0:
+                if globalsettings["codes"][self.selectedtool] == 0:
                     if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
                         self.data["GE"][x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:
@@ -570,10 +570,10 @@ class GE(MenuWithField):
                 self.data["GE"][x][y][self.layer] = [0, []]
             elif self.placetile == 0.6:
                 self.data["GE"][x][y][self.layer][1] = []
-            elif self.selectedtool in graphics["codes"].keys():
-                if graphics["codes"][self.selectedtool] == 1:
+            elif self.selectedtool in globalsettings["codes"].keys():
+                if globalsettings["codes"][self.selectedtool] == 1:
                     self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
-                if graphics["codes"][self.selectedtool] == 0:
+                if globalsettings["codes"][self.selectedtool] == 0:
                     if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
                         self.data["GE"][x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
             else:

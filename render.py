@@ -61,8 +61,8 @@ color = pg.Color(settings["global"]["color"])
 color2 = pg.Color(settings["global"]["color2"])
 
 renderedimage = pg.transform.scale(tooltiles, [
-            (tooltiles.get_width() / graphics["tilesize"][0]) * image1size,
-            (tooltiles.get_height() / graphics["tilesize"][1]) * image1size])
+    (tooltiles.get_width() / globalsettings["tilesize"][0]) * image1size,
+    (tooltiles.get_height() / globalsettings["tilesize"][1]) * image1size])
 
 
 def quadsize(quad):
@@ -295,8 +295,8 @@ class Renderer:
             if cell == 7 and 4 not in over:
                 self.data["GE"][xp][yp][i][0] = 0
                 cell = self.data["GE"][xp][yp][i][0]
-            curtool = [graphics["shows"][str(cell)][0] * image1size,
-                       graphics["shows"][str(cell)][1] * image1size]
+            curtool = [globalsettings["shows"][str(cell)][0] * image1size,
+                       globalsettings["shows"][str(cell)][1] * image1size]
             pixel.blit(renderedimage, [0, 0], [curtool, cellsize2])
             if 4 in over and self.data["GE"][xp][yp][i][0] != 7:
                 self.data["GE"][xp][yp][i][1].remove(4)
@@ -318,8 +318,8 @@ class Renderer:
                     pg.draw.line(pixel, red, [0, 0], [image1size, image1size], 1)
                     pg.draw.line(pixel, red, [image1size, 0], [0, image1size], 1)
             for addsindx, adds in enumerate(over):
-                curtool = [graphics["shows2"][str(adds)][0] * image1size,
-                           graphics["shows2"][str(adds)][1] * image1size]
+                curtool = [globalsettings["shows2"][str(adds)][0] * image1size,
+                           globalsettings["shows2"][str(adds)][1] * image1size]
                 bufftiles = self.data["EX2"]["extraTiles"]
                 bufftiles = pg.Rect(bufftiles[0], bufftiles[1],
                                     self.levelwidth - bufftiles[0] - bufftiles[2],
@@ -335,21 +335,21 @@ class Renderer:
                                 if inputs == 1:
                                     match tile:
                                         case [0, 1]:  # N
-                                            pos = graphics["crackv"]
+                                            pos = globalsettings["crackv"]
                                         case [0, -1]:  # S
-                                            pos = graphics["crackv"]
+                                            pos = globalsettings["crackv"]
                                         case [-1, 0]:  # E
-                                            pos = graphics["crackh"]
+                                            pos = globalsettings["crackh"]
                                         case [1, 0]:  # W
-                                            pos = graphics["crackh"]
+                                            pos = globalsettings["crackh"]
                                 elif inputs > 1:
                                     pos = -1
                         if inputs == 2:
                             pos = -1
                             if 11 in incorner(xp + 1, yp) and 11 in incorner(xp - 1, yp):
-                                pos = graphics["crackh"]
+                                pos = globalsettings["crackh"]
                             elif 11 in incorner(xp, yp + 1) and 11 in incorner(xp, yp - 1):
-                                pos = graphics["crackv"]
+                                pos = globalsettings["crackv"]
                         if pos != -1:
                             curtool = [pos[0] * image1size, pos[1] * image1size]
                     if adds == 4:  # shortcut entrance validation
@@ -370,13 +370,13 @@ class Renderer:
                                     foundwire = True
                                     match tile:
                                         case [0, 1]:  # N
-                                            pos = graphics["shortcutentrancetexture"]["N"]
+                                            pos = globalsettings["shortcutentrancetexture"]["N"]
                                         case [0, -1]:  # S
-                                            pos = graphics["shortcutentrancetexture"]["S"]
+                                            pos = globalsettings["shortcutentrancetexture"]["S"]
                                         case [-1, 0]:  # E
-                                            pos = graphics["shortcutentrancetexture"]["E"]
+                                            pos = globalsettings["shortcutentrancetexture"]["E"]
                                         case [1, 0]:  # W
-                                            pos = graphics["shortcutentrancetexture"]["W"]
+                                            pos = globalsettings["shortcutentrancetexture"]["W"]
                                 else:
                                     break
                             if 5 in curhover and tile in col4:  # if wire in 4 places near

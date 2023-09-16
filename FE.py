@@ -161,12 +161,12 @@ class FE(MenuWithField):
         btn2 = None
         for count, item in enumerate(effects[self.currentcategory]["efs"]):
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"], onpress=self.cats,
+            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"], onpress=self.cats,
                                   tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
 
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
-            btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.addeffect)
+            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.addeffect)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
@@ -184,7 +184,7 @@ class FE(MenuWithField):
                 count2 += 1
             if split2:
                 rect.width = rect.width / 2
-            btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.selectmouseeffect)
+            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.selectmouseeffect)
             self.buttonslist2.append(btn)
         self.resize()
         self.chtext()
@@ -224,7 +224,7 @@ class FE(MenuWithField):
         btn2 = None
         for count, item in enumerate(effects):
             cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.button(self.surface, cat, settings["global"]["color"], "Categories",
+            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], "Categories",
                                   onpress=self.changematshow)
             rect = pg.rect.Rect(self.settings["itempos"])
             rect = rect.move(0, rect.h * count)
@@ -233,7 +233,7 @@ class FE(MenuWithField):
                 col = gray
             if count == self.currentcategory:
                 col = darkgray
-            btn = widgets.button(self.surface, rect, col, item["nm"], onpress=self.selectcat)
+            btn = widgets.Button(self.surface, rect, col, item["nm"], onpress=self.selectcat)
             self.buttonslist.append(btn)
         if btn2 is not None:
             self.buttonslist.append(btn2)
@@ -268,7 +268,7 @@ class FE(MenuWithField):
 
         if len(self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][1]) < 1:
             rect = pg.Rect([ppos, self.settings["seedchange_size"]])
-            btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), "Set seed",
+            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), "Set seed",
                                  onpress=self.changeseed)
             btn.resize()
             self.params.append(btn)
@@ -280,7 +280,7 @@ class FE(MenuWithField):
                 rect = pg.Rect(self.params[-1].rect.topright[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
             except IndexError:
                 rect = pg.Rect(ppos[0] / 100 * ws[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
-            btn = widgets.button(self.surface, rect, pg.Color(settings["global"]["color2"]), i, onpress=self.changeparam)
+            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), i, onpress=self.changeparam)
             self.params.append(btn)
         self.buttons[self.settings['currentparamindex']].set_text(str(self.paramindex))
 

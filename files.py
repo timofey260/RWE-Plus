@@ -51,14 +51,14 @@ path2materialPreviews = resolvepath(path + "materialPreviews\\")
 
 pg.font.init()
 
-graphics = json.load(open(path + "graphics.json", "r"))
-settings = json.load(open(path2ui + graphics["uifile"], "r"))
+globalsettings = json.load(open(path + "settings.json", "r"))
+settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
 hotkeys = json.load(open(path + "hotkeys.json", "r"))
 e = json.load(open(path + "effects.json", "r"))
 
 
-tooltiles = loadimage(path + graphics["tooltiles"])
-toolmenu = loadimage(path + graphics["toolmenu"])
+tooltiles = loadimage(path + globalsettings["tooltiles"])
+toolmenu = loadimage(path + globalsettings["toolmenu"])
 
 
 tag = "2.4.5"
