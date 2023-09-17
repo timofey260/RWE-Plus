@@ -162,6 +162,9 @@ class ItemData():
     def __len__(self):
         return len(self.data)
 
+    def isempty(self):
+        return len(self.data) == 0
+
 
 def init_solve(files: list[str,]):
     output = ItemData()
@@ -170,7 +173,7 @@ def init_solve(files: list[str,]):
         category_data = []
         item_counter = 0
         for i in s:
-            i = i.replace("\n", "")
+            i = i.strip()
             if len(i) > 1:
                 if i[0] == "-":
                     output.append(category_data)

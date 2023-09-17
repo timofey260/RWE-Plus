@@ -289,7 +289,7 @@ def launch(level):
             window.fill(pg.color.Color(settings["global"]["color"]))
         surf.blit()
         if 1 < globalsettings["autosavedelay"] < time.time() - savetimer:
-            print("Autosaving")
+            print("Autosaving...")
             surf.savef()
             savetimer = time.time()
         pg.display.flip()

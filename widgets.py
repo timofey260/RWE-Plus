@@ -1,5 +1,4 @@
 import math
-
 import pygame as pg
 import copy
 import files
@@ -380,8 +379,7 @@ class Slider:
 
 
 class Selector():
-    def __init__(self, surface: pg.Surface, menu, data, selectorid):
-        import render
+    def __init__(self, surface: pg.Surface, menu, data, selectorid, favouritesfile = None):
         self.data: ItemData = data
         self.buttonslist: list[Button, ] = []
         self.menu = menu
@@ -395,17 +393,21 @@ class Selector():
 
         self.currentcategory = 0
         self.currentitem = 0
+        self.lastcategory = 0
+        self.lastitem = 0
 
         self.surface = surface
-        self.favouritefile = files.path + "favorite_props.txt"
+        self.favouritefile = files.resolvepath(files.path2favs + favouritesfile) if favouritesfile is not None else None
         self.linesAmount = 20
 
         self.pos = pg.Vector2()
+        self.lastshow = "items"
         self.show = "items"  # NOQA cats, items, favs
         self.callback = self.defaultcallback
 
         self.catsnum = len(self.data)
         self.itemsnum = 1
+        self._favourites = ItemData()
         '''
         data format:
         [{
@@ -418,21 +420,52 @@ class Selector():
         self.items()
         self.resize()
 
+    def loadfavorites(self):
+        print(f"loading {self.favouritefile}")
+        if self.favouritefile is None:
+            return
+        try:
+            file = open(self.favouritefile, "r")
+        except FileNotFoundError:
+            return
+        lines = file.readlines()
+        self._favourites = ItemData()
+        catdata = {"name": "", "color": pg.color.THECOLORS["black"], "items": []}
+        for i, line in enumerate(lines):
+            line: str = line.strip()
+            if len(line) <= 0:
+                continue
+            if line[0] == "#":
+                if catdata["name"] != "":
+                    self._favourites.append(catdata)
+                catdata = {"name": line[1:], "color": pg.color.THECOLORS["black"], "items": []}
+            else:
+                tile = self.data[line]
+                if tile is None:
+                    print(f"couldn't load tile: {line} in category {catdata['name']}")
+                    continue
+                catdata["items"].append(tile)
+        self._favourites.append(catdata)
+
     def resize(self):
         for i in self.buttonslist:
             i.resize()
         self.bigbutton.resize()
-        self.currentitem = restrict(self.currentitem, 0, self.itemsnum)
-        self.currentcategory = restrict(self.currentcategory, 0, self.catsnum)
+        self.restrict()
 
     def items(self):
+        self.restrict()
         self.buttonslist = []
-        if self.show != "items":
+        if self.show == "cats":
             self.currentcategory = self.currentitem + (self.currentcategory * self.menu.settings["category_count"])
             self.currentitem = 0
+        elif self.show == "favs":
+            self.setbyname(self.selecteditem["nm"], False)
         catdata = self.data[self.currentcategory]
-        self.itemsnum = len(catdata["items"]) - 1
-        self.catsnum = len(self.data) - 1
+
+        self.itemsnum = len(catdata["items"])
+        self.catsnum = len(self.data)
+
         self.show = "items"
         self.bigbutton = Button(self.surface, self.bigbuttonrect, settings["global"]["color"], catdata["name"],
                                 tooltip=self.menu.returnkeytext("Open category list(<[-changematshow]>)"),
@@ -447,13 +480,16 @@ class Selector():
         self.resize()
 
     def categories(self):
+        self.restrict()
         self.buttonslist = []
-        if self.show != "cats":
+        if self.show == "items":
             self.currentitem = self.currentcategory % self.menu.settings["category_count"]
             self.currentcategory = self.currentcategory // self.menu.settings["category_count"]
         currenttab = self.currentcategory * self.menu.settings["category_count"]
-        self.itemsnum = len(self.data.categories[currenttab:currenttab + self.menu.settings["category_count"]]) - 1
+
+        self.itemsnum = len(self.data.categories[currenttab:currenttab + self.menu.settings["category_count"]])
         self.catsnum = math.ceil(len(self.data.categories) / self.menu.settings["category_count"])
+
         self.show = "cats"
         self.bigbutton = Button(self.surface, self.bigbuttonrect, settings["global"]["color"],
                                 "categories " + str(self.currentcategory),
@@ -475,9 +511,32 @@ class Selector():
             self.categories()
         else:
             self.items()
+        #self.recreate()
 
-    def favorites(self):
-        pass
+    def favourites(self):
+        self.restrict()
+        self.buttonslist = []
+        if self._favourites.isempty():
+            self.loadfavorites()
+        if self.show != "favs":
+            self.currentitem = 0
+            self.currentcategory = 0
+        self.itemsnum = len(self._favourites[self.currentcategory]["items"])
+        self.catsnum = len(self._favourites.categories)
+
+        self.show = "favs"
+        self.bigbutton = Button(self.surface, self.bigbuttonrect, settings["global"]["color"],
+                                self._favourites.categories[self.currentcategory],
+                                tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"),
+                                onpress=self.catswap)
+        for count, item in enumerate(self._favourites[self.currentcategory]["items"]):
+            rect = self.itemrect.copy()
+            rect = rect.move(*(self.buttonoffset * count).xy)
+            btn = Button(self.surface, rect, item["color"], item["nm"], tooltip=item["description"],
+                         onpress=self.onclick)
+            btn.buttondata = item
+            self.buttonslist.append(btn)
+        self.resize()
 
     def defaultcallback(self, item):
         pass
@@ -485,7 +544,7 @@ class Selector():
     def onclick(self, button: Button | str):
         if type(button) is Button:
             self.callback(button.buttondata)
-        if type(button) is str and button == "scroll":
+        if type(button) is str and self.show != "cats" and button == "scroll":
             self.callback(self.selecteditem)
 
     def blit(self):
@@ -530,31 +589,37 @@ class Selector():
                 break
 
     def up(self):
-        self.currentitem = (self.currentitem - 1) % (self.itemsnum + 1)
+        self.currentitem = (self.currentitem - 1) % self.itemsnum
         self.onclick("scroll")
 
     def down(self):
-        self.currentitem = (self.currentitem + 1) % (self.itemsnum + 1)
+        self.currentitem = (self.currentitem + 1) % self.itemsnum
         self.onclick("scroll")
 
     def right(self):
-        self.currentcategory = (self.currentcategory + 1) % (self.catsnum + 1)
+        self.currentcategory = (self.currentcategory + 1) % self.catsnum
         self.recreate()
         self.onclick("scroll")
 
     def left(self):
-        self.currentcategory = (self.currentcategory - 1) % (self.catsnum + 1)
+        self.currentcategory = (self.currentcategory - 1) % self.catsnum
         self.recreate()
         self.onclick("scroll")
 
     def recreate(self):
+        if (self.currentcategory == self.lastcategory and self.currentitem == self.lastitem and
+                self.show == self.lastshow):
+            return
+        self.lastshow = self.show
+        self.lastitem = self.currentitem
+        self.lastcategory = self.currentcategory
         match self.show:
             case "items":
                 self.items()
             case "cats":
                 self.categories()
             case "favs":
-                self.favorites()
+                self.favourites()
 
     def setcat(self, index):
         self.currentcategory = index
@@ -562,17 +627,24 @@ class Selector():
         self.show = "items"
         self.recreate()
 
-    def setbyname(self, name):
+    def setbyname(self, name, dorecreate=True):
         tile = self.data[name]
         self.currentcategory = self.data.categories.index(tile["category"])
         self.currentitem = tile["cat"][1] - 1
         self.show = "items"
-        self.recreate()
+        if dorecreate:
+            self.recreate()
+
+    def restrict(self):
+        self.currentitem = restrict(self.currentitem, 0, self.itemsnum)
+        print(self.currentcategory, self.catsnum)
+        self.currentcategory = restrict(self.currentcategory, 0, self.catsnum)
 
     @property
     def selecteditem(self):
-        self.currentitem = restrict(self.currentitem, 0, self.itemsnum)
-        self.currentcategory = restrict(self.currentcategory, 0, self.catsnum)
+        self.restrict()
+        if self.show == "favs":
+            return self._favourites[self.currentcategory]["items"][self.currentitem]
         return self.data[self.currentcategory]["items"][self.currentitem]
 
     @property

@@ -38,6 +38,7 @@ def loadimage(filepath):
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
 path = resolvepath(application_path + "\\files\\")
+path2favs = resolvepath(path + "favourites\\")
 path2tutorial = resolvepath(path + "tutorial\\")
 path2ui = resolvepath(path + "ui\\")
 path2graphics = resolvepath(application_path + "\\drizzle\\Data\\Graphics\\")
@@ -61,7 +62,7 @@ tooltiles = loadimage(path + globalsettings["tooltiles"])
 toolmenu = loadimage(path + globalsettings["toolmenu"])
 
 
-tag = "2.4.5"
+tag = "2.5.0"
 
 ofstop = 15
 ofsleft = 15

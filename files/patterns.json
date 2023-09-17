@@ -7,7 +7,8 @@
 			"category": "special",
 			"patcat": "SU patterns",
 			"color": [255, 0, 0],
-			"prefix": "SUPattern"
+			"prefix": "SUPattern",
+			"tags": ["pattern"]
 		},
 		{
 			"nm": "SU Grate box",
@@ -16,7 +17,8 @@
 			"category": "special",
 			"patcat": "SU grates",
 			"color": [255, 0, 255],
-			"prefix": "SUGrate"
+			"prefix": "SUGrate",
+			"tags": ["pattern"]
 		},
 		{
 			"nm": "Alt Grate box",

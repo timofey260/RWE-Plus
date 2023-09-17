@@ -123,6 +123,7 @@
 
     	"K_g": "force_geometry",
     	"K_f": "force_place",
+    	"K_h": "-showfavs",
     	"K_c+": "-copytool",
     	"K_v+": "-pastedata",
 

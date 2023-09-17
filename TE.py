@@ -1,3 +1,5 @@
+import traceback
+
 import widgets
 from menuclass import *
 from lingotojson import *
@@ -61,7 +63,7 @@ class TE(MenuWithField):
         self.set("materials 0", "Standard")
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
-        self.selector = widgets.Selector(surface, self, self.items, "s1")
+        self.selector = widgets.Selector(surface, self, self.items, "s1", "tiles.txt")
         self.selector.callback = self.selectorset
 
         self.rfa()
@@ -315,11 +317,12 @@ class TE(MenuWithField):
                     pa = self.pos
                 self.place(blockx - self.xoffset + int(pa.x), blocky - self.yoffset + int(pa.y))
             else:
-                self.selector.setcat(cat)
+                self.selector.setcat(self.items.categories.index(cat))
             self.detecthistory(["TE", "tlMatrix"])
             self.renderer.tiles_render_area(self.area, self.layer)
             self.rfa()
         except:
+            traceback.print_exc()
             print("Error pasting data!")
 
     def findcat(self, itemname):
@@ -359,14 +362,19 @@ class TE(MenuWithField):
     def changematshow(self):
         self.selector.catswap(None)
 
+    def showfavs(self):
+        self.selector.favourites()
+
     def selectorset(self, buttondata):
         if self.selector.show == "items":
-            self.selector.setbyname(buttondata["nm"])
+            #self.selector.setbyname(buttondata["nm"])
             self.set(buttondata["category"], buttondata["nm"])
         elif self.selector.show == "cats":
             self.selector.setcat(buttondata["index"])
 
     def set(self, cat, name, render=True):
+        if hasattr(self, "selector"):
+            self.selector.setbyname(name)
         self.tool = 0
         i = self.items[cat, name]
         if i is not None and i["nm"] == name:
