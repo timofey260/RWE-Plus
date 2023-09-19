@@ -319,7 +319,7 @@ class LP(MenuWithField):
         arr = array
         if x >= 0:
             for _ in range(x):
-                arr.insert(0, [copy.deepcopy(default_instance) for _ in range(len(arr[0]))])
+                arr.insert(0, [deepcopy(default_instance) for _ in range(len(arr[0]))])
         else:
             arr = arr[-x:]
 
@@ -328,12 +328,12 @@ class LP(MenuWithField):
                 arr = arr[:w]
             else:
                 for _ in range(w - self.gw):
-                    arr.append([copy.deepcopy(default_instance) for _ in range(len(arr[0]))])
+                    arr.append([deepcopy(default_instance) for _ in range(len(arr[0]))])
 
         if y >= 0:
             for i in range(len(arr)):
                 for _ in range(y):
-                    arr[i].insert(0, copy.deepcopy(default_instance))
+                    arr[i].insert(0, deepcopy(default_instance))
         else:
             for i in range(len(arr)):
                 arr[i] = arr[i][-y:]
@@ -344,7 +344,7 @@ class LP(MenuWithField):
                     arr[i] = arr[i][:h]
                 else:
                     for _ in range(h - self.gh):
-                        arr[i].append(copy.deepcopy(default_instance))
+                        arr[i].append(deepcopy(default_instance))
         return arr
 
     def cutmanually(self):

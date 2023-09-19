@@ -75,7 +75,7 @@ def keypress(window):
             surf.reload()
         case "save":
             surf.savef()
-            file2 = copy.deepcopy(file)
+            file2 = deepcopy(file)
         case "new":
             print("New")
             surf.savef()
@@ -94,11 +94,11 @@ def undohistory():
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
         pathdict[*historyelem[0], *i[0]] = i[1][1]
-    surf.data = copy.deepcopy(pathdict.data)
+    surf.data = deepcopy(pathdict.data)
     file = surf.data
     surf.renderer.data = surf.data
-    surf.datalast = copy.deepcopy(pathdict.data)
-    redobuffer.append(copy.deepcopy(undobuffer.pop()))
+    surf.datalast = deepcopy(pathdict.data)
+    redobuffer.append(deepcopy(undobuffer.pop()))
     if [surf.levelwidth, surf.levelheight] != lastsize:
         surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
     surf.onundo()
@@ -119,11 +119,11 @@ def redohistory():
     pathdict = PathDict(surf.data)
     for i in historyelem[1:]:
         pathdict[*historyelem[0], *i[0]] = i[1][0]
-    surf.data = copy.deepcopy(pathdict.data)
+    surf.data = deepcopy(pathdict.data)
     file = surf.data
     surf.renderer.data = surf.data
-    surf.datalast = copy.deepcopy(pathdict.data)
-    undobuffer.append(copy.deepcopy(redobuffer.pop()))
+    surf.datalast = deepcopy(pathdict.data)
+    undobuffer.append(deepcopy(redobuffer.pop()))
     if [surf.levelwidth, surf.levelheight] != lastsize:
         surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
     surf.onredo()
@@ -216,7 +216,7 @@ def launch(level):
     items = inittolist(window)
     propcolors = getcolors()
     props = getprops(items, window)
-    file2 = copy.deepcopy(file)
+    file2 = deepcopy(file)
     width = settings["global"]["width"]
     height = settings["global"]["height"]
 
@@ -259,13 +259,13 @@ def launch(level):
                     surf.resize()
                 case "save":
                     surf.savef()
-                    file2 = copy.deepcopy(file)
+                    file2 = deepcopy(file)
                 case "saveas":
                     surf.saveasf()
-                    file2 = copy.deepcopy(file)
+                    file2 = deepcopy(file)
                 case "savetxt":
                     surf.savef_txt()
-                    file2 = copy.deepcopy(file)
+                    file2 = deepcopy(file)
                 case _:
                     if surf.message in menulist:
                         surf = getattr(sys.modules[__name__], surf.message)(window, renderer)

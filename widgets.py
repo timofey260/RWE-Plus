@@ -2,7 +2,6 @@ import math
 import pygame as pg
 import copy
 import files
-import menuclass
 import render
 from files import settings, fs, path, map, allleters, loadimage
 from lingotojson import ItemData

@@ -2,6 +2,7 @@ import copy
 import render
 import widgets
 import pyperclip
+import ujson
 from render import *
 
 inputfile = ''
@@ -22,7 +23,7 @@ class Menu:
         self.menu = name
         self.renderer = renderer
         self.data = renderer.data
-        self.datalast = copy.deepcopy(renderer.data)
+        self.datalast = deepcopy(renderer.data)
         self.settings = settings[self.menu]
         self.hotkeys = hotkeys[name]
         self.historybuffer = []
@@ -373,8 +374,8 @@ class Menu:
                 if ch != lastch:
                     h.append([historypath, [ch, lastch]])
             if len(h) > 0:
-                self.historybuffer.append(copy.deepcopy(h))
-            self.datalast = copy.deepcopy(self.data)
+                self.historybuffer.append(deepcopy(h))
+            self.datalast = deepcopy(self.data)
 
     def detecthistory(self, path, savedata=True):
         if self.data != self.datalast:
@@ -385,9 +386,9 @@ class Menu:
                 if x != pthlast[xindx]:
                     history.append([[xindx], [x, pthlast[xindx]]])
             if len(history) > 0:
-                self.historybuffer.append(copy.deepcopy(history))
+                self.historybuffer.append(deepcopy(history))
             if savedata:
-                self.datalast = copy.deepcopy(self.data)
+                self.datalast = deepcopy(self.data)
 
     def non(self, *args):
         pass

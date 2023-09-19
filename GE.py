@@ -322,7 +322,7 @@ class GE(MenuWithField):
         print(filterblock)
         while lastarea != self.area:
             print(lastarea == self.area)
-            lastarea = copy.deepcopy(self.area)
+            lastarea = deepcopy(self.area)
             for xp, xd in enumerate(self.area):
                 for yp, cell in enumerate(xd):
                     if not self.area[xp][yp]:

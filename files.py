@@ -1,4 +1,4 @@
-import json
+import ujson as json
 import webbrowser
 
 import pygame as pg
@@ -215,6 +215,9 @@ def rect2ellipse(rect: pg.Rect, hollow, callback):
 def map(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
+
+def deepcopy(data):
+    return json.loads(json.dumps(data))
 
 def report():
     webbrowser.open("https://github.com/timofey260/RWE-Plus/issues/new/choose")
