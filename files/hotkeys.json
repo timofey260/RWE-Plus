@@ -123,7 +123,6 @@
 
     	"K_g": "force_geometry",
     	"K_f": "force_place",
-    	"K_h": "-showfavs",
     	"K_c+": "-copytool",
     	"K_v+": "-pastedata",
 
@@ -135,6 +134,7 @@
     	"K_s": "-dt",
     	"K_TAB": "-cleartool",
     	"K_SPACE": "-changetools",
+    	"K_h": "-showfavs",
     	"K_e": "-sad",
     	"K_q": "-copytile",
     	"K_f+": "-findtile",

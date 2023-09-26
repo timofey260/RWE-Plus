@@ -29,8 +29,8 @@ def tojson(string: str):
     if closebracketscount > openbracketscount:
         t = t[:-1]
     t = t.replace("#Data:", "#data:").replace("#Options:", "#options:") \
-         .replace("[#", "{#").replace("point(", "\"point(")\
-         .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "\"void\"")
+        .replace("[#", "{#").replace("point(", "\"point(") \
+        .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "\"void\"")
     count = 0
     m = list(t)
     brcount = 0
@@ -74,15 +74,15 @@ def turntoproject(string: str):
     proj["LE"] = tojson(lines[3])  # light editor and presets
     proj["EX"] = tojson(lines[4])  # map settings
     proj["EX2"] = tojson(lines[5])  # light and level settings
-    proj["CM"] = tojson(lines[6])  # camera settigs
+    proj["CM"] = tojson(lines[6])  # camera settings
     proj["WL"] = tojson(lines[7])  # water level
-    proj["PR"] = tojson(lines[8])  # props and settingsw
+    proj["PR"] = tojson(lines[8])  # props and settings why the hell i typed both settings wrong???
     return proj
 
 
 def tolingo(string: dict):
     s = json.dumps(string)
-    t = s.replace("\"point(", "point(").replace("\"rect(", "rect(").replace("\"color(", "color(")\
+    t = s.replace("\"point(", "point(").replace("\"rect(", "rect(").replace("\"color(", "color(") \
         .replace(")\"", ")").replace("{", "[").replace("}", "]").replace("'", "")
     t = re.sub(r"\"([a-zA-Z]+[0-9]*)\":", r"#\1:", t)
     #print(t)
@@ -149,12 +149,19 @@ class ItemData():
 
     def append(self, category_data):
         self.data.append(category_data)
+        self.categories.append(category_data["name"])
+
+    def addcat(self, name, color):
+        self.data.append({"name": name, "color": color, "items": []})
+        self.categories.append(name)
 
     def remove(self, category_data):
         self.data.remove(category_data)
+        self.categories.remove(category_data["name"])
 
     def insert(self, index, category_data):
         self.data.insert(index, category_data)
+        self.categories.insert(index, category_data["name"])
 
     def __str__(self):
         return str(self.data)

@@ -197,26 +197,26 @@ class TE(MenuWithField):
                     saved = self.tileimage
                     savedtool = saved["nm"]
                     savedcat = saved["category"]
-                    save = self.selector.currentcategory
+                    savedata = [self.selector.currentcategory, self.selector.currentitem, self.selector.show]
                     for y in range(int(rect.h)):
                         for x in range(int(rect.w)):
                             if x == 0 and y == 0:
-                                self.set(self.blocks["cat"], self.blocks["NW"])
+                                self.set(self.blocks["cat"], self.blocks["NW"], usefavs=False)
                             elif x == rect.w - 1 and y == 0:
-                                self.set(self.blocks["cat"], self.blocks["NE"])
+                                self.set(self.blocks["cat"], self.blocks["NE"], usefavs=False)
                             elif x == 0 and y == rect.h - 1:
-                                self.set(self.blocks["cat"], self.blocks["SW"])
+                                self.set(self.blocks["cat"], self.blocks["SW"], usefavs=False)
                             elif x == rect.w - 1 and y == rect.h - 1:
-                                self.set(self.blocks["cat"], self.blocks["SE"])
+                                self.set(self.blocks["cat"], self.blocks["SE"], usefavs=False)
 
                             elif x == 0:
-                                self.set(self.blocks["cat"], self.blocks["W"])
+                                self.set(self.blocks["cat"], self.blocks["W"], usefavs=False)
                             elif y == 0:
-                                self.set(self.blocks["cat"], self.blocks["N"])
+                                self.set(self.blocks["cat"], self.blocks["N"], usefavs=False)
                             elif x == rect.w - 1:
-                                self.set(self.blocks["cat"], self.blocks["E"])
+                                self.set(self.blocks["cat"], self.blocks["E"], usefavs=False)
                             elif y == rect.h - 1:
-                                self.set(self.blocks["cat"], self.blocks["S"])
+                                self.set(self.blocks["cat"], self.blocks["S"], usefavs=False)
                             else:
                                 continue
                             self.place(x + rect.x, y + rect.y)
@@ -239,11 +239,11 @@ class TE(MenuWithField):
                             n = 0
                             if len(ch["tiles"]) > 1:
                                 n = x % len(ch["tiles"]) - 1
-                            print(saved)
                             self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n])
                             self.place(x + rect.x, y + rect.y)
+                    self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
                     self.set(savedcat, savedtool)
-                    self.selector.currentcategory = save
+                    self.selector.recreate()
                 self.detecthistory(["TE", "tlMatrix"])
                 if fg:
                     self.detecthistory(["GE"])
@@ -371,12 +371,17 @@ class TE(MenuWithField):
             self.set(buttondata["category"], buttondata["nm"])
         elif self.selector.show == "cats":
             self.selector.setcat(buttondata["index"])
+        elif self.selector.show == "favs":
+            self.set(buttondata["category"], buttondata["nm"])
 
-    def set(self, cat, name, render=True):
-        if hasattr(self, "selector"):
-            self.selector.setbyname(name)
+    def set(self, cat, name, render=True, usefavs=True):
         self.tool = 0
-        i = self.items[cat, name]
+        if usefavs and hasattr(self, "selector") and self.selector.show == "favs":
+            i = self.selector._favourites[cat, name]
+        else:
+            i = self.items[cat, name]
+        if hasattr(self, "selector"):
+            self.selector.setbyname(name, fromfavs=usefavs)
         if i is not None and i["nm"] == name:
             self.tileimage2 = i.copy()
             if self.tileimage2["tp"] != "pattern" and render:

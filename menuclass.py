@@ -5,8 +5,8 @@ import pyperclip
 import ujson
 from render import *
 
-inputfile = ''
-filepath = path2levels
+# inputfile = ''
+# filepath = path2levels
 
 
 def rotatepoint(point, angle):
@@ -100,17 +100,6 @@ class Menu:
         print("Level saved!")
         self.recaption()
 
-    def addfolder(self, folder):
-        global filepath
-        filepath += "/" + folder + "/"
-        self.message = "ab"
-
-    def goback(self):
-        global filepath
-        p = Path(filepath)
-        filepath = str(p.parent.absolute())
-        self.message = "ab"
-
     def asksaveasfilename(self, defaultextension=None):
         if defaultextension is None:
             defaultextension = [".wep"]
@@ -122,13 +111,24 @@ class Menu:
         label = widgets.Label(self.surface, labeltext, [50, 0], black, 30)
         label.resize()
 
+        def addfolder(folder):
+            global filepath
+            filepath += "/" + folder.text + "/"
+            self.message = "ab"
+
+        def goback():
+            global filepath
+            p = Path(filepath)
+            filepath = str(p.parent.absolute())
+            self.message = "ab"
+
         def appendbuttons():
             global filepath
             widgets.resetpresses()
             f = os.listdir(filepath)
             f.reverse()
             buttons.clear()
-            buttons.append(widgets.Button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=self.goback,
+            buttons.append(widgets.Button(self.surface, pg.Rect([0, 20, 50, 5]), color2, "..", onpress=goback,
                                           tooltip="Go back"))
             count = 1
             for file in f:
@@ -142,7 +142,7 @@ class Menu:
                     elif os.path.isdir(os.path.join(filepath, file)):
                         if y > 0:
                             buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
-                                                          onpress=self.addfolder, tooltip="Folder"))
+                                                          onpress=addfolder, tooltip="Folder"))
                         count += 1
             for button in buttons:
                 button.resize()
@@ -246,13 +246,42 @@ class Menu:
             print("it's not a number")
             return defaultnumber
 
-    def foundthis(self, button):
-        global inputfile
-        print(button)
-        inputfile = button.text + "\n"
+    def askstr(self, q, savelevel=True, defaulttext=""):
+        if savelevel:
+            self.savef()
+        i = ''
+        r = True
+        while r:
+            self.surface.fill(color)
+            lws = "(level was saved):" if savelevel else ":"
+            widgets.fastmts(self.surface, q + lws, 0, 0, fontsize=50)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return None
+                if event.type == pg.KEYDOWN:
+                    if event.unicode in allleters:
+                        i += event.unicode
+                    elif event.key == pg.K_BACKSPACE:
+                        i = i[:-1]
+                    elif event.key == pg.K_RETURN:
+                        r = False
+                    elif event.key == pg.K_ESCAPE:
+                        return None
+            widgets.fastmts(self.surface, i, 0, 50, fontsize=50)
+            pg.display.flip()
+            pg.display.update()
+        # i = input(q + "(leave blank for cancel): ")
+        if i == "":
+            return defaulttext
+        try:
+            return i
+        except ValueError:
+            print("some issue ig")
+            return defaulttext
 
     def find(self, filelist: dict, q):
         global inputfile
+        inputfile = ""
         buttons = []
         slider = 0
         label = widgets.Label(self.surface,
@@ -261,6 +290,10 @@ class Menu:
         label.resize()
         widgets.bol = True
         widgets.keybol = True
+
+        def foundthis(button):
+            global inputfile
+            inputfile = button.text + "\n"
 
         def appendbuttons():
             buttons.clear()
@@ -273,7 +306,7 @@ class Menu:
                 if inputfile in item.lower() or inputfile in cat.lower():
                     if count2 >= slider:
                         buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + 5 * count, 50, 5]), color2, item,
-                                                      onpress=self.foundthis, tooltip=cat))
+                                                      onpress=foundthis, tooltip=cat))
                         count += 1
                     count2 += 1
             for button in buttons:

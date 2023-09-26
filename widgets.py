@@ -378,7 +378,7 @@ class Slider:
 
 
 class Selector():
-    def __init__(self, surface: pg.Surface, menu, data, selectorid, favouritesfile = None):
+    def __init__(self, surface: pg.Surface, menu, data, selectorid, favouritesfile=None):
         self.data: ItemData = data
         self.buttonslist: list[Button, ] = []
         self.menu = menu
@@ -389,6 +389,7 @@ class Selector():
         self.itemrect.topleft = self.bigbuttonrect.bottomleft
 
         self.bigbutton = Button(surface, self.bigbuttonrect, white, "")
+        self.favsbutton: Button = None
 
         self.currentcategory = 0
         self.currentitem = 0
@@ -426,6 +427,7 @@ class Selector():
         try:
             file = open(self.favouritefile, "r")
         except FileNotFoundError:
+            print("File not found!!!")
             return
         lines = file.readlines()
         self._favourites = ItemData()
@@ -435,7 +437,7 @@ class Selector():
             if len(line) <= 0:
                 continue
             if line[0] == "#":
-                if catdata["name"] != "":
+                if len(catdata["name"]) > 0:
                     self._favourites.append(catdata)
                 catdata = {"name": line[1:], "color": pg.color.THECOLORS["black"], "items": []}
             else:
@@ -443,14 +445,56 @@ class Selector():
                 if tile is None:
                     print(f"couldn't load tile: {line} in category {catdata['name']}")
                     continue
+                tile["category"] = catdata["name"]
                 catdata["items"].append(tile)
-        self._favourites.append(catdata)
+        if len(catdata["name"]) > 0:
+            self._favourites.append(catdata)
+
+    def savefavourites(self):
+        if self.favouritefile is None:
+            return
+        with open(self.favouritefile, "w") as file:
+            for indx, cat in enumerate(self._favourites.categories):
+                file.write(f"#{cat}\n")
+                for item in self._favourites.data[indx]["items"]:
+                    file.write(f'{item["nm"]}\n')
 
     def resize(self):
         for i in self.buttonslist:
             i.resize()
         self.bigbutton.resize()
+        if self.favsbutton is not None:
+            self.favsbutton.resize()
         self.restrict()
+
+    def addtofavs(self):
+        if self._favourites.isempty():
+            self.loadfavorites()
+        if self.show != "items":
+            return
+        tile = self._favourites[self.selecteditem["nm"]]
+        if tile is not None:
+            print("Tile is already in favourites in category " + tile["category"])
+            return
+        cats = {}
+        for indx, catname in enumerate(self._favourites.categories):
+            print(indx, catname, self._favourites[indx])
+            cats[catname] = "\n".join([i["nm"] for i in self._favourites[indx]["items"]])
+        cats["New category"] = "creates a new category"
+        foundcat = self.menu.find(cats, "Select a category")
+        if foundcat is None:
+            return
+        if foundcat == "New category":
+            cat = self.menu.askstr("Name of category")
+            if cat is None:
+                print("Canceled")
+                return
+            self._favourites.addcat(cat, white)
+            foundcat = cat
+        item = self.selecteditem.copy()
+        item["category"] = foundcat
+        self._favourites[self._favourites.categories.index(foundcat)]["items"].append(item)
+        self.savefavourites()
 
     def items(self):
         self.restrict()
@@ -466,9 +510,16 @@ class Selector():
         self.catsnum = len(self.data)
 
         self.show = "items"
-        self.bigbutton = Button(self.surface, self.bigbuttonrect, settings["global"]["color"], catdata["name"],
+        rect: pg.Rect = copy.deepcopy(self.bigbuttonrect)
+        rect.w = math.ceil(self.bigbuttonrect.w * .8)
+
+        self.bigbutton = Button(self.surface, rect, settings["global"]["color"], catdata["name"],
                                 tooltip=self.menu.returnkeytext("Open category list(<[-changematshow]>)"),
                                 onpress=self.catswap)
+        rect2: pg.rect = pg.Rect(rect.topright, pg.Vector2(math.floor(self.bigbuttonrect.w * .2), self.bigbuttonrect.h))
+        self.favsbutton = Button(self.surface, rect2, settings["global"]["color"], "F", ["icons.png", [5, 0]],
+                                 tooltip=self.menu.returnkeytext("Add selected item to favourites(<[-showfavs]>)"),
+                                 onpress=self.addtofavs)
         for count, item in enumerate(catdata["items"]):
             rect = self.itemrect.copy()
             rect = rect.move(*(self.buttonoffset * count).xy)
@@ -481,6 +532,7 @@ class Selector():
     def categories(self):
         self.restrict()
         self.buttonslist = []
+        self.favsbutton = None
         if self.show == "items":
             self.currentitem = self.currentcategory % self.menu.settings["category_count"]
             self.currentcategory = self.currentcategory // self.menu.settings["category_count"]
@@ -510,7 +562,8 @@ class Selector():
             self.categories()
         else:
             self.items()
-        #self.recreate()
+
+    # self.recreate()
 
     def favourites(self):
         self.restrict()
@@ -524,10 +577,16 @@ class Selector():
         self.catsnum = len(self._favourites.categories)
 
         self.show = "favs"
-        self.bigbutton = Button(self.surface, self.bigbuttonrect, settings["global"]["color"],
+        rect: pg.Rect = copy.deepcopy(self.bigbuttonrect)
+        rect.w = math.ceil(self.bigbuttonrect.w * .8)
+        self.bigbutton = Button(self.surface, rect, settings["global"]["color"],
                                 self._favourites.categories[self.currentcategory],
                                 tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"),
                                 onpress=self.catswap)
+        rect2: pg.rect = pg.Rect(rect.topright, pg.Vector2(math.floor(self.bigbuttonrect.w * .2), self.bigbuttonrect.h))
+        self.favsbutton = Button(self.surface, rect2, settings["global"]["color"], "F", ["icons.png", [5, 0]],
+                                 tooltip=self.menu.returnkeytext("Add selected item to favourites(<[-showfavs]>)"),
+                                 onpress=self.addtofavs)
         for count, item in enumerate(self._favourites[self.currentcategory]["items"]):
             rect = self.itemrect.copy()
             rect = rect.move(*(self.buttonoffset * count).xy)
@@ -554,7 +613,13 @@ class Selector():
         for button in self.buttonslist:
             button.blitshadow()
         self.bigbutton.blitshadow()
+
+        if self.favsbutton is not None:
+            self.favsbutton.blitshadow()
         self.bigbutton.blit(sum(pg.display.get_window_size()) // 100)
+
+        if self.favsbutton is not None:
+            self.favsbutton.blit()
         for button in self.buttonslist:
             button.blit(sum(pg.display.get_window_size()) // 120)
 
@@ -586,6 +651,8 @@ class Selector():
                     h *= self.menu.size
                     self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
                 break
+        if self.favsbutton is not None:
+            self.favsbutton.blittooltip()
 
     def up(self):
         self.currentitem = (self.currentitem - 1) % self.itemsnum
@@ -626,18 +693,24 @@ class Selector():
         self.show = "items"
         self.recreate()
 
-    def setbyname(self, name, dorecreate=True):
+    def setbyname(self, name, dorecreate=True, fromfavs=True):
+        if self.show == "favs" and fromfavs:
+            tile = self._favourites[name]
+            self.currentcategory = self._favourites.categories.index(tile["category"])
+            self.currentitem = self._favourites[self.currentcategory]["items"].index(tile)
+            if dorecreate:
+                self.recreate()
+            return
         tile = self.data[name]
         self.currentcategory = self.data.categories.index(tile["category"])
-        self.currentitem = tile["cat"][1] - 1
+        self.currentitem = self.data[self.currentcategory]["items"].index(tile)
         self.show = "items"
         if dorecreate:
             self.recreate()
 
     def restrict(self):
-        self.currentitem = restrict(self.currentitem, 0, self.itemsnum)
-        print(self.currentcategory, self.catsnum)
-        self.currentcategory = restrict(self.currentcategory, 0, self.catsnum)
+        self.currentitem = restrict(self.currentitem, 0, self.itemsnum - 1)
+        self.currentcategory = restrict(self.currentcategory, 0, self.catsnum - 1)
 
     @property
     def selecteditem(self):
@@ -651,4 +724,6 @@ class Selector():
         for i in self.buttonslist:
             if i.onmouseover():
                 return True
+        if self.favsbutton is not None:
+            return self.favsbutton.onmouseover() or self.bigbutton.onmouseover()
         return self.bigbutton.onmouseover()
