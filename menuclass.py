@@ -69,11 +69,6 @@ class Menu:
         self.unlock_keys()
         self.resize()
 
-    def setasname(self, name):
-        global inputfile
-        inputfile = name
-        self.message = "ab"
-
     def unlock_keys(self):
         self.uc = []
         for i in self.hotkeys["unlock_keys"]:
@@ -122,6 +117,11 @@ class Menu:
             filepath = str(p.parent.absolute())
             self.message = "ab"
 
+        def setasname(name):
+            global inputfile
+            inputfile = name.text
+            self.message = "ab"
+
         def appendbuttons():
             global filepath
             widgets.resetpresses()
@@ -137,7 +137,7 @@ class Menu:
                     if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
                         if y > 0:
                             buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
-                                                          onpress=self.setasname, tooltip="File"))
+                                                          onpress=setasname, tooltip="File"))
                         count += 1
                     elif os.path.isdir(os.path.join(filepath, file)):
                         if y > 0:

@@ -106,11 +106,10 @@ def makearr(col: list | pg.Vector2, mark):
     return f"{mark}({col[0]}, {col[1]})"
 
 
+
 class ItemData():
     def __init__(self):
         self.data = []
-        self._categories = []
-        self._colors = []
 
     def __getitem__(self, item):
         if type(item) is str:
@@ -135,33 +134,26 @@ class ItemData():
 
     @property
     def categories(self):
-        if not self._categories:
-            for i in self.data:
-                self._categories.append(i["name"])
-        return self._categories
+        return [i["name"] for i in self.data]
 
     @property
     def colors(self):
-        if not self._colors:
-            for i in self.data:
-                self._colors.append(i["color"])
-        return self._colors
+        return [i["color"] for i in self.data]
 
     def append(self, category_data):
         self.data.append(category_data)
-        self.categories.append(category_data["name"])
 
     def addcat(self, name, color):
         self.data.append({"name": name, "color": color, "items": []})
-        self.categories.append(name)
 
     def remove(self, category_data):
         self.data.remove(category_data)
-        self.categories.remove(category_data["name"])
 
     def insert(self, index, category_data):
         self.data.insert(index, category_data)
-        self.categories.insert(index, category_data["name"])
+
+    def pop(self, index):
+        self.data.pop(index)
 
     def __str__(self):
         return str(self.data)
@@ -177,13 +169,14 @@ def init_solve(files: list[str,]):
     output = ItemData()
     for file in files:
         s = open(file, "r").readlines()
-        category_data = []
+        category_data = {}
         item_counter = 0
         for i in s:
             i = i.strip()
             if len(i) > 1:
                 if i[0] == "-":
-                    output.append(category_data)
+                    if category_data:
+                        output.append(category_data)
                     js = tojson(i[1:])
                     category_data = {"name": js[0], "color": pg.Color(toarr(js[1], "color")), "items": []}
                     item_counter = 0
@@ -195,7 +188,7 @@ def init_solve(files: list[str,]):
                     category_data["items"].append(item)
                     item_counter += 1
         output.append(category_data)
-        output.remove([])
+        # output.remove([])
     return output
 
 

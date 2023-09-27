@@ -134,7 +134,10 @@
     	"K_s": "-dt",
     	"K_TAB": "-cleartool",
     	"K_SPACE": "-changetools",
-    	"K_h": "-showfavs",
+
+    	"K_x": "-showfavs",
+    	"K_x+": "-addtofavs",
+
     	"K_e": "-sad",
     	"K_q": "-copytile",
     	"K_f+": "-findtile",

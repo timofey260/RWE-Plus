@@ -374,6 +374,9 @@ class TE(MenuWithField):
         elif self.selector.show == "favs":
             self.set(buttondata["category"], buttondata["nm"])
 
+    def addtofavs(self):
+        self.selector.addtofavs()
+
     def set(self, cat, name, render=True, usefavs=True):
         self.tool = 0
         if usefavs and hasattr(self, "selector") and self.selector.show == "favs":
