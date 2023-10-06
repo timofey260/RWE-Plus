@@ -575,7 +575,7 @@ class MenuWithField(Menu):
 
         self.renderer = renderer
         self.items = renderer.tiles
-        self.props = renderer.props
+        self.props: ItemData = renderer.props
         self.propcolors = renderer.propcolors
 
         self.menu = name
@@ -1000,13 +1000,14 @@ class MenuWithField(Menu):
 
     def findprop(self, name, cat=None):
         if cat is not None:
-            for itemi, item in enumerate(self.props[cat]):
+            tile = self.props[cat, name]
+            index = self.props.getnameindex(self.props.categories.index(cat), name)
+            if index is not None and tile is not None:
+                return tile, [self.props.categories.index(tile["category"]), index]
+        for cati, cats in self.props.data:
+            for itemi, item in enumerate(cats["items"]):
                 if item["nm"] == name:
-                    return item, [list(self.props.keys()).index(cat), itemi]
-        for cati, cats in self.props.items():
-            for itemi, item in enumerate(cats):
-                if item["nm"] == name:
-                    return item, [list(self.props.keys()).index(cati), itemi]
+                    return item, [cati, itemi]
         item = {
             "nm": "notfound",
             "tp": "standard",

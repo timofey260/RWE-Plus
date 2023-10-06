@@ -30,7 +30,7 @@ def tojson(string: str):
         t = t[:-1]
     t = t.replace("#Data:", "#data:").replace("#Options:", "#options:") \
         .replace("[#", "{#").replace("point(", "\"point(") \
-        .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "\"void\"")
+        .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "0")
     count = 0
     m = list(t)
     brcount = 0
@@ -131,6 +131,13 @@ class ItemData():
                 if items["nm"] == name:
                     return items
         return None
+
+    def getnameindex(self, cat, name):
+        for i, v in enumerate(self.data[cat]["items"]):
+            if v["nm"] == name:
+                return i
+        return None
+
 
     @property
     def categories(self):

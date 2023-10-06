@@ -420,7 +420,7 @@ class Selector():
         self.resize()
 
     def loadfavorites(self):
-        print(f"loading {self.favouritefile}")
+        print(f"loading favourites from file: {self.favouritefile}")
         if self.favouritefile is None:
             return
         try:
@@ -440,11 +440,10 @@ class Selector():
                     self._favourites.append(catdata)
                 catdata = {"name": line[1:], "color": pg.color.THECOLORS["black"], "items": []}
             else:
-                tile = self.data[line]
+                tile = self.data[line].copy()
                 if tile is None:
                     print(f"couldn't load tile: {line} in category {catdata['name']}")
                     continue
-                tile["categorylink"] = tile["category"]
                 tile["category"] = catdata["name"]
                 catdata["items"].append(tile)
         if len(catdata["name"]) > 0:
@@ -458,7 +457,6 @@ class Selector():
                 file.write(f"#{cat}\n")
                 for item in self._favourites.data[indx]["items"]:
                     file.write(f'{item["nm"]}\n')
-        self.loadfavorites()
 
     def resize(self):
         for i in self.buttonslist:
@@ -495,6 +493,7 @@ class Selector():
             self._favourites.addcat(cat, white)
             foundcat = cat
         item = self.selecteditem.copy()
+        item["category"] = foundcat
         self._favourites[self._favourites.categories.index(foundcat)]["items"].append(item)
         self.savefavourites()
 
@@ -504,7 +503,11 @@ class Selector():
             self.currentcategory = self.currentitem + (self.currentcategory * self.menu.settings["category_count"])
             self.currentitem = 0
         elif self.show == "favs":
-            self.setbyname(self.selecteditem["nm"], dorecreate=False, fromfavs=False)
+            item = self.selecteditem
+            founditem = self.data[item["nm"]]
+            self.currentcategory = self.data.categories.index(founditem["category"])
+            self.currentitem = self.data.getnameindex(self.currentcategory, founditem["nm"])
+            self.setbyname(founditem["nm"], dorecreate=False, fromfavs=False)
         catdata = self.data[self.currentcategory]
 
         self.itemsnum = len(catdata["items"])
@@ -559,10 +562,17 @@ class Selector():
             rect = self.itemrect.copy()
             rect = rect.move(*(self.buttonoffset * count).xy)
             tooltip = "\n".join(i["nm"] for i in self.data[itemindx]["items"])
-            btn = Button(self.surface, rect, self.data.colors[itemindx], item, tooltip=tooltip, onpress=self.onclick)
+            btn = Button(self.surface, rect, self.data.colors[itemindx], item, tooltip=tooltip, onpress=self.selectcat)
             btn.buttondata = {"name": item, "tp": "cat", "index": itemindx}
             self.buttonslist.append(btn)
         self.resize()
+
+    def selectcat(self, buttondata: Button):
+        self.currentcategory = buttondata.buttondata["index"]
+        self.currentitem = 0
+        self.show = "items"
+        self.items()
+        self.onclick("set")
 
     def catswap(self, buttondata):
         if self.show == "items":
@@ -613,6 +623,7 @@ class Selector():
             self.currentcategory = 0
         if self._favourites.isempty():
             self.show = "items"
+        self.lastshow = ""
         self.currentitem = 0
         self.savefavourites()
         self.recreate()
@@ -624,7 +635,7 @@ class Selector():
     def onclick(self, button: Button | str):
         if type(button) is Button:
             self.callback(button.buttondata)
-        if type(button) is str and self.show != "cats" and button == "scroll":
+        if type(button) is str and self.show != "cats" and button == "set":
             self.callback(self.selecteditem)
 
     def blit(self):
@@ -663,36 +674,42 @@ class Selector():
                 if button.buttondata.get("preview"):
                     self.surface.blit(button.buttondata["preview"], mwfpos)
                 if button.buttondata.get("image"):
-                    w, h = button.buttondata["size"]
-                    w *= self.menu.size
-                    h *= self.menu.size
-                    self.surface.blit(pg.transform.scale(button.buttondata["image"], [w, h]), mwfpos)
+                    if button.buttondata.get("size"):
+                        w, h = button.buttondata["size"]
+                        w *= self.menu.size
+                        h *= self.menu.size
+                        self.surface.blit(pg.transform.scale(button.buttondata["image"], [w, h]), mwfpos)
+                    else:
+                        self.surface.blit(button.buttondata["images"][0], mwfpos)
                 if button.buttondata.get("images"):
-                    w, h = button.buttondata["size"]
-                    w *= self.menu.size
-                    h *= self.menu.size
-                    self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
+                    if button.buttondata.get("size"):
+                        w, h = button.buttondata["size"]
+                        w *= self.menu.size
+                        h *= self.menu.size
+                        self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
+                    else:
+                        self.surface.blit(button.buttondata["images"][0], mwfpos)
                 break
         if self.favsbutton is not None:
             self.favsbutton.blittooltip()
 
     def up(self):
         self.currentitem = (self.currentitem - 1) % self.itemsnum
-        self.onclick("scroll")
+        self.onclick("set")
 
     def down(self):
         self.currentitem = (self.currentitem + 1) % self.itemsnum
-        self.onclick("scroll")
+        self.onclick("set")
 
     def right(self):
         self.currentcategory = (self.currentcategory + 1) % self.catsnum
         self.recreate()
-        self.onclick("scroll")
+        self.onclick("set")
 
     def left(self):
         self.currentcategory = (self.currentcategory - 1) % self.catsnum
         self.recreate()
-        self.onclick("scroll")
+        self.onclick("set")
 
     def recreate(self):
         if (self.currentcategory == self.lastcategory and self.currentitem == self.lastitem and
@@ -721,12 +738,10 @@ class Selector():
             self.currentcategory = self._favourites.categories.index(tile["category"])
             self.currentitem = self._favourites[self.currentcategory]["items"].index(tile)
         elif self.show == "favs":
-            tile = self._favourites[name]
-            print(tile)
-            self.currentcategory = self.data.categories.index(tile["normcat"])
-            for i, item in enumerate(self.data[self.currentcategory]["items"]):
-                if item["nm"] == tile["nm"]:
-                    self.currentitem = i
+            print(name)
+            foundtile = self.data[name]
+            self.currentcategory = self.data.categories.index(foundtile["category"])
+            self.currentitem = self.data.getnameindex(self.currentcategory, foundtile["nm"])
         else:
             tile = self.data[name]
             self.currentcategory = self.data.categories.index(tile["category"])

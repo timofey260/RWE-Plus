@@ -366,13 +366,7 @@ class TE(MenuWithField):
         self.selector.favourites()
 
     def selectorset(self, buttondata):
-        if self.selector.show == "items":
-            #self.selector.setbyname(buttondata["nm"])
-            self.set(buttondata["category"], buttondata["nm"])
-        elif self.selector.show == "cats":
-            self.selector.setcat(buttondata["index"])
-        elif self.selector.show == "favs":
-            self.set(buttondata["category"], buttondata["nm"])
+        self.set(buttondata["category"], buttondata["nm"])
 
     def addtofavs(self):
         self.selector.addtofavs()
