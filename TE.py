@@ -360,7 +360,7 @@ class TE(MenuWithField):
         self.selector.up()
 
     def changematshow(self):
-        self.selector.catswap(None)
+        self.selector.catswap()
 
     def showfavs(self):
         self.selector.favourites()

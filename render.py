@@ -112,11 +112,11 @@ def quadtransform(quads, image: pg.Surface):
 
 
 class Renderer:
-    def __init__(self, data, tiles, props, propcolors, render=True):
-        self.tiles = tiles
-        self.props = props
+    def __init__(self, data: RWELevel, tiles: ItemData, props: ItemData, propcolors, render=True):
+        self.tiles: ItemData = tiles
+        self.props: ItemData = props
         self.propcolors = propcolors
-        self.data = data
+        self.data: RWELevel = data
         self.effect_index = 0
 
         self.lastlayer = 0

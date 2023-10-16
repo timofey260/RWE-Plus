@@ -228,7 +228,10 @@
 		"K_q": "-rotate_left",
 		"K_SPACE@": "rotate_speedup",
 
-    	"K_x": "pauseropephysics",
+    	"K_SPACE@@@": "pauseropephysics",
+
+    	"K_x": "-showfavs",
+    	"K_x+": "-addtofavs",
 
     	"K_SPACE@@": "cursor_propdepth_inverse",
     	"K_f+": "-findpropmenu"

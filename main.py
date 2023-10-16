@@ -1,9 +1,7 @@
-import traceback
 import requests
 from menus import *
 from tkinter.messagebox import askyesnocancel, askyesno
 import argparse
-from path_dict import PathDict
 from lingotojson import *
 from files import settings, hotkeys, path, application_path
 import time
@@ -234,7 +232,8 @@ def launch(level):
             if tag != gittag:
                 print("A new version of RWE+ is available!")
                 print(f"Current Version: {tag}, latest: {gittag}")
-                print("https://github.com/timofey260/RWE-Plus/releases/latest")
+                print("https://github.com/timofey260/RWE-Plus/releases/latest\n"
+                      f"Make sure you don't erase your RWE+ projects in {path2levels} and copy them somewhere!!!")
     except requests.exceptions.ConnectionError:
         print("Cannot find new RWE+ versions")
     except requests.exceptions.ReadTimeout:

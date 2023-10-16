@@ -1,6 +1,6 @@
 import ujson as json
 import webbrowser
-
+from path_dict import PathDict
 import pygame as pg
 import os
 import sys
@@ -82,6 +82,52 @@ inputpromtname = "RWE+ input"
 
 
 fonts: dict[[pg.font.Font, int], ...] = {}
+
+
+class RWELevel:
+    def __init__(self, data=None):
+        if data is None:
+            self.data = PathDict({})
+        else:
+            self.data = PathDict(data)
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    @property
+    def GE(self):
+        return self.data["GE"]
+
+    @property
+    def TE(self):
+        return self.data["TE"]
+
+    @property
+    def CE(self):
+        return self.data["CE"]
+
+    @property
+    def FE(self):
+        return self.data["FE"]
+
+    @property
+    def PE(self):
+        return self.data["PE"]
+
+    @property
+    def HK(self):
+        return self.data["HK"]
+
+    @property
+    def LP(self):
+        return self.data["LP"]
+
+    @property
+    def MN(self):
+        return self.data["MN"]
 
 
 def fs(sz):
@@ -217,6 +263,8 @@ def map(x, in_min, in_max, out_min, out_max):
 
 
 def deepcopy(data):
+    if data is RWELevel:
+        return RWELevel(json.loads(json.dumps(data.data.data)))
     return json.loads(json.dumps(data))
 
 def report():

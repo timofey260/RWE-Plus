@@ -47,7 +47,7 @@ class PE(MenuWithField):
         self.notes = []
 
         self.quads = [[0, 0], [0, 0], [0, 0], [0, 0]]
-        self.quadsnor = self.quads.copy() # quad's default position
+        self.quadsnor = self.quads.copy()  # quad's default position
         self.lastpos = pg.Vector2(0, 0)
 
         self.prop_settings = {}
@@ -63,13 +63,17 @@ class PE(MenuWithField):
 
         super().__init__(surface, "PE", renderer)
         self.drawprops = True
-        self.setprop(self.props[0]["items"][0]["nm"], self.props.categories[0])
         self.selector = widgets.Selector(surface, self, self.props, "s1", "props.txt")
         self.selector.callback = self.selectorset
+        self.setprop(self.props[0]["items"][0]["nm"], self.props.categories[0])
         self.resize()
         self.rfa()
 
+    def changematshow(self):
+        self.selector.catswap()
+
     def selectorset(self, buttondata):
+        print("set the prop")
         self.setprop(buttondata["nm"], buttondata["category"])
 
     def renderfield(self):
@@ -88,11 +92,6 @@ class PE(MenuWithField):
                 return self.propcolors[value]
             return value
 
-    def selectcat(self, name):
-        self.currentcategory = list(self.props.keys()).index(name)
-        self.toolindex = 0
-        self.rebuttons()
-
     def settingsupdate(self):
         self.settingslist = []
         for count, item in enumerate(self.prop_settings.items()):
@@ -104,7 +103,8 @@ class PE(MenuWithField):
             self.settingslist.append(btn)
         self.resize()
 
-    def changesettings(self, name):
+    def changesettings(self, button: widgets.Button):
+        name = button.text
         try:
             match name:
                 case "release":
@@ -404,14 +404,17 @@ class PE(MenuWithField):
         self.selector.left()
 
     def setprop(self, name, cat=None):
-        prop, ci = self.findprop(name, cat)
+        if hasattr(self, "selector") and self.selector.show == "favs":
+            prop = self.selector._favourites[cat, name]
+        else:
+            prop = self.props[cat, name]
+        if hasattr(self, "selector"):
+            self.selector.setbyname(name, fromfavs=True)
         if prop is None:
             print("Prop not found in memory! Try relaunch the app")
             return
         self.lastpos = 0
         self.selectedprop = prop.copy()
-        self.currentcategory = ci[0]
-        self.toolindex = ci[1]
         self.snap = "snapToGrid" in self.selectedprop["tags"]
         self.recaption()
         self.add_warning()
@@ -532,15 +535,11 @@ class PE(MenuWithField):
         self.quadsnor = self.quads.copy()
         self.updateproptransform()
 
-    def findpropmenu(self):
-        nd = {}
-        for cat, item in self.props.items():
-            for i in item:
-                nd[i["nm"]] = cat
-        name = self.find(nd, "Select a prop")
-        if name is None:
-            return
-        self.setprop(name)
+    def addtofavs(self):
+        self.selector.addtofavs()
+
+    def showfavs(self):
+        self.selector.favourites()
 
     def place(self, longpos=None):
         if not self.renderprop:
@@ -569,7 +568,7 @@ class PE(MenuWithField):
         if self.prop_settings.get("variation") is not None:
             if self.prop_settings["variation"] == 0:  # random
                 newpropsettings["variation"] = rnd.randint(1, len(self.selectedprop["images"]))
-        prop = [-self.depth, self.selectedprop["nm"], makearr([self.currentcategory + 1, self.toolindex + 1], "point"), quads2, {"settings": newpropsettings}]
+        prop = [-self.depth, self.selectedprop["nm"], makearr(self.selectedprop["cat"], "point"), quads2, {"settings": newpropsettings}]
         if self.selectedprop["tp"] == "rope":
             points = []
             for segment in self.ropeobject.segments:
@@ -617,6 +616,7 @@ class PE(MenuWithField):
             else:
                 self.quads[i][axis] -= pos
         self.updateproptransform()
+
     def stretchy_up(self):
         self.stretch(1, self.settings["stretch_speed"])
 

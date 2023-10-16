@@ -480,7 +480,6 @@ class Menu:
 
     def send(self, message):
         if message[0] == "-":
-            self.mpos = 1
             if hasattr(self, message[1:]):
                 getattr(self, message[1:])()
 

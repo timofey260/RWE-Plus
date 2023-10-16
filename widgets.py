@@ -574,7 +574,7 @@ class Selector():
         self.items()
         self.onclick("set")
 
-    def catswap(self, buttondata):
+    def catswap(self):
         if self.show == "items":
             self.categories()
         else:
@@ -738,7 +738,6 @@ class Selector():
             self.currentcategory = self._favourites.categories.index(tile["category"])
             self.currentitem = self._favourites[self.currentcategory]["items"].index(tile)
         elif self.show == "favs":
-            print(name)
             foundtile = self.data[name]
             self.currentcategory = self.data.categories.index(foundtile["category"])
             self.currentitem = self.data.getnameindex(self.currentcategory, foundtile["nm"])

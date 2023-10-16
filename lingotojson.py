@@ -1,7 +1,6 @@
 import copy
 import re
 import subprocess
-
 from files import *
 import math
 
@@ -64,8 +63,8 @@ def tojson(string: str):
         return {}
 
 
-def turntoproject(string: str):
-    proj = {}
+def turntoproject(string: str) -> RWELevel:
+    proj = RWELevel()
     lines = string.split("\n")
     print("Loading level...")
     proj["GE"] = eval(lines[0])  # geometry
@@ -416,6 +415,7 @@ def getprops(tiles: dict, window: pg.Surface):
             newitem["color"] = list(colr)
             newitem["category"] = solved[catnum]["name"]
             newitem["description"] = "Prop"
+            newitem["cat"] = [catnum + 1, indx + 1]
             solved_copy[catnum]["items"].append(newitem)
     # solved_copy["material"] = []
     # for cat in tiles:
@@ -483,7 +483,8 @@ def getprops(tiles: dict, window: pg.Surface):
                     "tags": ["tile"],
                     "layerExceptions": [],
                     "notes": ["Tile as prop"],
-                    "category": cat
+                    "category": cat,
+                    "cat": [catnum + 1, indx + 1]
                 })
                 count -= 1
     solved_copy[count2]["items"] = itemlist
