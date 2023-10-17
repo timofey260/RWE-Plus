@@ -22,11 +22,12 @@ class Menu:
         self.surface = surface
         self.menu = name
         self.renderer = renderer
-        self.data = renderer.data
-        self.datalast = deepcopy(renderer.data)
+        self.data: RWELevel = renderer.data
+        # self.datalast = deepcopy(renderer.data)
         self.settings = settings[self.menu]
         self.hotkeys = hotkeys[name]
         self.historybuffer = []
+        self.historyChanges = []
         self.uc = []
 
         self.recaption()
@@ -69,6 +70,14 @@ class Menu:
         self.unlock_keys()
         self.resize()
 
+    def changedata(self, path, value):
+        oldvalue = self.data[path]
+        tohisstory = [path, [value, oldvalue]]
+        if tohisstory not in self.historyChanges:
+            self.historyChanges.append(tohisstory)
+            self.data[path] = value
+            # print(tohisstory)
+
     def unlock_keys(self):
         self.uc = []
         for i in self.hotkeys["unlock_keys"]:
@@ -80,9 +89,11 @@ class Menu:
     def recaption(self):
         pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | v{tag} | {self.custom_info}")
 
-    def savef(self, saveas=False):
-        if self.data["path"] != "" and not saveas:
-            open(os.path.splitext(self.data["path"])[0] + ".wep", "w").write(json.dumps(self.data))
+    def savef(self, saveas=False, crashsave=False):
+        if crashsave:
+            open(path2levels + "AutoSave.wep", "w").write(json.dumps(self.data.data.data))
+        elif self.data["path"] != "" and not saveas:
+            open(os.path.splitext(self.data["path"])[0] + ".wep", "w").write(json.dumps(self.data.data.data))
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
             print(os.path.splitext(self.data["path"])[0] + ".wep")
         else:
@@ -399,20 +410,29 @@ class Menu:
         return False
 
     def updatehistory(self, paths):
+        """
         if self.data != self.datalast:
             h = [[]]
             for historypath in paths:
-                ch = PathDict(self.data)[*historypath]
+                ch = PathDict(self.data.data.data)[*historypath]
                 lastch = PathDict(self.datalast)[*historypath]
                 if ch != lastch:
                     h.append([historypath, [ch, lastch]])
             if len(h) > 0:
                 self.historybuffer.append(deepcopy(h))
             self.datalast = deepcopy(self.data)
+        """
+        if len(self.historyChanges) > 0:
+            self.historyChanges.insert(0, smallestchange(self.historyChanges))
+            self.historybuffer.append(self.historyChanges)
+            # print(self.historyChanges)
+            self.historyChanges = []
 
     def detecthistory(self, path, savedata=True):
+        #TODO this
+        '''
         if self.data != self.datalast:
-            pth = PathDict(self.data)[*path]
+            pth = PathDict(self.data.data.data)[*path]
             pthlast = PathDict(self.datalast)[*path]
             history = [path]
             for xindx, x in enumerate(pth):
@@ -422,6 +442,7 @@ class Menu:
                 self.historybuffer.append(deepcopy(history))
             if savedata:
                 self.datalast = deepcopy(self.data)
+        '''
 
     def non(self, *args):
         pass
@@ -736,20 +757,9 @@ class MenuWithField(Menu):
         super().send(message)
         match message:
             case "SU":
-                if not self.onfield:
-                    return
-                pos = self.pos
-                self.size += 1
-                self.offset -= pos - self.pos
-                self.renderfield()
+                self.scroll_up()
             case "SD":
-                if not self.onfield:
-                    return
-                if self.size - 1 > 0:
-                    pos = self.pos
-                    self.size -= 1
-                    self.offset -= pos - self.pos
-                    self.renderfield()
+                self.scroll_down()
             case "left":
                 self.offset.x += 1
             case "right":
@@ -758,6 +768,23 @@ class MenuWithField(Menu):
                 self.offset.y += 1
             case "down":
                 self.offset.y -= 1
+
+    def scroll_up(self):
+        if not self.onfield:
+            return
+        pos = self.pos
+        self.size += 1
+        self.offset -= pos - self.pos
+        self.renderfield()
+
+    def scroll_down(self):
+        if not self.onfield:
+            return
+        if self.size - 1 > 0:
+            pos = self.pos
+            self.size -= 1
+            self.offset -= pos - self.pos
+            self.renderfield()
 
     def detecthistory(self, path, savedata=True):
         super().detecthistory(path, savedata)

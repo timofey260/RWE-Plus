@@ -84,6 +84,23 @@ inputpromtname = "RWE+ input"
 fonts: dict[[pg.font.Font, int], ...] = {}
 
 
+def smallestchange(args: list[list]) -> list:
+    args2 = [i[0] for i in args]
+    currentMin = args2[0]
+    if len(args2) <= 0:
+        return []
+    for indx, i in enumerate(currentMin):
+        currentName = i
+        for item in args:
+            if item[0] == currentMin:
+                continue
+            if item[0][indx] != currentName:
+                for sorteditem in args:
+                    sorteditem[0] = sorteditem[0][indx:]
+                return currentMin[:indx]
+    return []
+
+
 class RWELevel:
     def __init__(self, data=None):
         if data is None:
@@ -263,7 +280,7 @@ def map(x, in_min, in_max, out_min, out_max):
 
 
 def deepcopy(data):
-    if data is RWELevel:
+    if type(data) is RWELevel:
         return RWELevel(json.loads(json.dumps(data.data.data)))
     return json.loads(json.dumps(data))
 

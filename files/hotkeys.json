@@ -108,6 +108,8 @@
     	"K_KP_PLUS": "-brushp",
     	"K_KP_MINUS": "-brushm",
 
+    	"K_LSHIFT": "brush_size_scroll",
+
     	"K_KP0": "-tool_circle",
     	"+K_KP0": "-tool_circle_hollow",
     	"K_KP1": "-tool_rect",

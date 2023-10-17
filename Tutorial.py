@@ -314,24 +314,9 @@ class TT(MenuWithField):
                 getattr(self, message[1:])()
         match message:
             case "SU":
-                print("scr")
-                if not self.onfield:
-                    return
-                if self.step > 1:
-                    pos = self.pos
-                    self.size += 1
-                    self.offset -= pos - self.pos
-                    self.renderfield()
+                self.scroll_up()
             case "SD":
-                print("scroll")
-                if not self.onfield:
-                    return
-                if self.step > 1:
-                    if self.size - 1 > 0:
-                        pos = self.pos
-                        self.size -= 1
-                        self.offset -= pos - self.pos
-                        self.renderfield()
+                self.scroll_down()
             case "left":
                 self.offset.x += 1
             case "right":
@@ -340,6 +325,25 @@ class TT(MenuWithField):
                 self.offset.y += 1
             case "down":
                 self.offset.y -= 1
+
+    def scroll_up(self):
+        if not self.onfield:
+            return
+        if self.step > 1:
+            pos = self.pos
+            self.size += 1
+            self.offset -= pos - self.pos
+            self.renderfield()
+
+    def scroll_down(self):
+        if not self.onfield:
+            return
+        if self.step > 1:
+            if self.size - 1 > 0:
+                pos = self.pos
+                self.size -= 1
+                self.offset -= pos - self.pos
+                self.renderfield()
 
     def rebuttons(self):
         self.buttonslist = []

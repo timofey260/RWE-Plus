@@ -89,13 +89,15 @@ def undohistory():
     print("Undo")
     lastsize = [surf.levelwidth, surf.levelheight]
     historyelem = undobuffer[-1]
-    pathdict = PathDict(surf.data)
+    print("elem: ", historyelem)
     for i in historyelem[1:]:
-        pathdict[*historyelem[0], *i[0]] = i[1][1]
-    surf.data = deepcopy(pathdict.data)
-    file = surf.data
-    surf.renderer.data = surf.data
-    surf.datalast = deepcopy(pathdict.data)
+        print(i, *historyelem[0], *i[0])
+        surf.data[*historyelem[0], *i[0]] = i[1][1]
+        # surf.data[*i[0]] = i[1][1]
+
+    # surf.data = deepcopy(surf.data)
+    # file = surf.data
+    # surf.renderer.data = surf.data
     redobuffer.append(deepcopy(undobuffer.pop()))
     if [surf.levelwidth, surf.levelheight] != lastsize:
         surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
@@ -162,7 +164,7 @@ def launchload(level):
         file["path"] = level
         file["dir"] = os.path.abspath(level)
     else:
-        file = json.load(open(level, "r"))
+        file = RWELevel(json.load(open(level, "r")))
         file["level"] = os.path.basename(level)
         file["path"] = level
         file["dir"] = os.path.abspath(level)
@@ -367,7 +369,7 @@ if __name__ == "__main__":
             f.write(traceback.format_exc())
             f.write("This is why RWE+ crashed^^^\nSorry")
             if settings["global"]["saveoncrash"]:
-                surf.savef()
+                surf.savef(crashsave=True)
                 raise
             traceback.print_exc()
             ex = askyesno("Crash!!!",

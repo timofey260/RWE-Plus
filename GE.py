@@ -80,6 +80,18 @@ class GE(MenuWithField):
     def TE(self):
         self.message = "TE"
 
+    def scroll_up(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.brushp()
+        else:
+            super().scroll_up()
+
+    def scroll_down(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.brushm()
+        else:
+            super().scroll_down()
+
     def blit(self):
         cellsize2 = [self.size, self.size]
         super().blit()
@@ -310,7 +322,7 @@ class GE(MenuWithField):
             for yp, yd in enumerate(xd):
                 vec = pg.Vector2(xp, yp)
                 dist = pos.distance_to(vec)
-                if dist <= self.brushsize and self.area[xp][yp]:
+                if dist <= self.brushsize - 0.5 and self.area[xp][yp]:
                     self.place(vec, False)
                     self.drawtile(vec, toolsized)
 
@@ -507,77 +519,43 @@ class GE(MenuWithField):
         self.placetile = 0.5
         self.mx = 0
 
-    def place(self, pos, render=True):
+    def place(self, pos, render=True, domirror=False):
         x = int(pos.x)
         y = int(pos.y)
-        self.mirrorplace(pos, render)
+        if self.mirrorp and domirror:
+            if self.mirrorpos[1] == 0:
+                x = self.mirrorpos[0] * 2 + (-x - 1)
+            else:
+                y = self.mirrorpos[0] * 2 + (-y - 1)
+        if self.mirrorp:
+            self.place(pos, render, True)
         if x >= self.levelwidth or y >= self.levelheight or x < 0 or y < 0:
             return
         self.area[x][y] = False
         if self.placetile != 0.1:  # dont place
             if self.placetile == 0.2:  # inverse
                 if self.data["GE"][x][y][self.layer][0] == 0:
-                    self.data["GE"][x][y][self.layer][0] = 1
+                    self.changedata(["GE", x, y, self.layer, 0], 1)
                 else:
-                    self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.data["GE"][x][y][self.layer][0])
+                    self.changedata(["GE", x, y, self.layer, 0],
+                                    self.reverseslope(self.data["GE"][x][y][self.layer][0]))
             elif self.placetile == 0.3:  # clear all
-                self.data["GE"][x][y] = [[0, []], [0, []], [0, []]]
+                self.changedata(["GE", x, y], [[0, []], [0, []], [0, []]])
             elif self.placetile == 0.4:  # shortcut entrance
-                self.data["GE"][x][y][self.layer][0] = 7
-                if 4 not in self.data["GE"][x][y][self.layer][1]:
-                    self.data["GE"][x][y][self.layer][1].append(4)
+                self.changedata(["GE", x, y, self.layer], [7, [4]])
             elif self.placetile == 0.5:  # clear layer
-                self.data["GE"][x][y][self.layer] = [0, []]
+                self.changedata(["GE", x, y, self.layer], [0, []])
             elif self.placetile == 0.6:  # clear upper
-                self.data["GE"][x][y][self.layer][1] = []
+                self.changedata(["GE", x, y, self.layer, 1], [])
             elif self.selectedtool in globalsettings["codes"].keys():  # else
                 if globalsettings["codes"][self.selectedtool] == 1:
-                    self.data["GE"][x][y][self.layer][0] = self.placetile + self.state
+                    self.changedata(["GE", x, y, self.layer, 0], self.placetile + self.state)
                 if globalsettings["codes"][self.selectedtool] == 0:
                     if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
-                        self.data["GE"][x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
+                        self.changedata(["GE", x, y, self.layer, 1], [*self.data["GE"][x][y][self.layer][1],
+                                                                      (abs(int(self.placetile))) + self.state])
             else:
-                self.data["GE"][x][y][self.layer][0] = self.placetile
-        if render:
-            self.render_geo_area()
-            self.rfa()
-
-    def mirrorplace(self, pos, render=False):
-        if not self.mirrorp:
-            return
-        x = int(pos.x)
-        y = int(pos.y)
-        if self.mirrorpos[1] == 0:
-            x = self.mirrorpos[0] * 2 + (-x - 1)
-        else:
-            y = self.mirrorpos[0] * 2 + (-y - 1)
-        if x >= self.levelwidth or y >= self.levelheight or x < 0 or y < 0:
-            return
-        self.area[x][y] = False
-        if self.placetile != 0.1:
-            if self.placetile == 0.2:
-                if self.data["GE"][x][y][self.layer][0] == 0:
-                    self.data["GE"][x][y][self.layer][0] = 1
-                else:
-                    self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.data["GE"][x][y][self.layer][0])
-            elif self.placetile == 0.3:
-                self.data["GE"][x][y] = [[0, []], [0, []], [0, []]]
-            elif self.placetile == 0.4:
-                self.data["GE"][x][y][self.layer][0] = 7
-                if 4 not in self.data["GE"][x][y][self.layer][1]:
-                    self.data["GE"][x][y][self.layer][1].append(4)
-            elif self.placetile == 0.5:
-                self.data["GE"][x][y][self.layer] = [0, []]
-            elif self.placetile == 0.6:
-                self.data["GE"][x][y][self.layer][1] = []
-            elif self.selectedtool in globalsettings["codes"].keys():
-                if globalsettings["codes"][self.selectedtool] == 1:
-                    self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.placetile + self.state)
-                if globalsettings["codes"][self.selectedtool] == 0:
-                    if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
-                        self.data["GE"][x][y][self.layer][1].append((abs(int(self.placetile))) + self.state)
-            else:
-                self.data["GE"][x][y][self.layer][0] = self.reverseslope(self.placetile)
+                self.changedata(["GE", x, y, self.layer, 0], self.placetile)
         if render:
             self.render_geo_area()
             self.rfa()
