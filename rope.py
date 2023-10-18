@@ -166,7 +166,7 @@ class RopeModel:
                 dir = MoveToPoint(self.segments[A]["pos"], terrainPos, 1)
                 dist = Diag(self.segments[A]["pos"], terrainPos) - 1
                 if dist < self.segRad:
-                    mov = dir * (dist - self.segRad) * 2
+                    mov = dir * (dist - self.segRad)
                     self.segments[A]["pos"] += mov
                     self.segments[A]["vel"] = Vector2(0, 0) # not a total fix
 

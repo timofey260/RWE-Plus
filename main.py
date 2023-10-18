@@ -89,9 +89,20 @@ def undohistory():
     print("Undo")
     lastsize = [surf.levelwidth, surf.levelheight]
     historyelem = undobuffer[-1]
+    '''
+    Undo element data:
+    [
+        [path in level data],
+        *[ history step
+            [path to level data],
+            what changed(after),
+            from what changed(before)
+        ], and other history steps...
+    ]
+    '''
     print("elem: ", historyelem)
     for i in historyelem[1:]:
-        print(i, *historyelem[0], *i[0])
+        # print(*historyelem[0], *i[0])
         surf.data[*historyelem[0], *i[0]] = i[1][1]
         # surf.data[*i[0]] = i[1][1]
 

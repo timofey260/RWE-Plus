@@ -61,6 +61,7 @@ e = json.load(open(path + "effects.json", "r"))
 tooltiles = loadimage(path + globalsettings["tooltiles"])
 toolmenu = loadimage(path + globalsettings["toolmenu"])
 
+load_error_count = 0
 
 tag = "2.5.0"
 
@@ -113,38 +114,6 @@ class RWELevel:
 
     def __setitem__(self, key, value):
         self.data[key] = value
-
-    @property
-    def GE(self):
-        return self.data["GE"]
-
-    @property
-    def TE(self):
-        return self.data["TE"]
-
-    @property
-    def CE(self):
-        return self.data["CE"]
-
-    @property
-    def FE(self):
-        return self.data["FE"]
-
-    @property
-    def PE(self):
-        return self.data["PE"]
-
-    @property
-    def HK(self):
-        return self.data["HK"]
-
-    @property
-    def LP(self):
-        return self.data["LP"]
-
-    @property
-    def MN(self):
-        return self.data["MN"]
 
 
 def fs(sz):
@@ -290,6 +259,21 @@ def report():
 
 def github():
     webbrowser.open("https://github.com/timofey260/RWE-Plus")
+
+
+def log_to_load_log(message, error=False, nl=True):
+    global load_error_count
+    with open(application_path + "\\loadLog.txt", "a") as load_log:
+        load_log.write(f"{'[ERROR]: ' if error else ''}{message}")
+        if nl:
+            load_log.write("\n")
+    print(message)
+    if error:
+        load_error_count += 1
+
+
+def errorcount_get():
+    return load_error_count
 
 
 effects = solveeffects(e)

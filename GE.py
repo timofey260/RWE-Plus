@@ -115,7 +115,7 @@ class GE(MenuWithField):
             toolsized = pg.transform.scale(self.toolrender,
                                            pg.Vector2(self.toolrender.get_size()) / image1size * self.size)
 
-            self.labels[1].set_text(f"X: {posoffset.x}, Y: {posoffset.y}, Z: {self.layer + 1}")
+            self.labels[1].set_text(f"X: {int(posoffset.x)}, Y: {int(posoffset.y)}, Z: {self.layer + 1}")
             if self.selectedtool in globalsettings["codes"].keys():
                 if type(self.placetile) == int:
                     if globalsettings["codes"][self.selectedtool] == 1:

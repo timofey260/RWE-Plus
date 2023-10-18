@@ -1,4 +1,5 @@
 import copy
+import json.decoder
 import re
 import subprocess
 from files import *
@@ -27,9 +28,15 @@ def tojson(string: str):
     t = string
     if closebracketscount > openbracketscount:
         t = t[:-1]
-    t = t.replace("#Data:", "#data:").replace("#Options:", "#options:") \
-        .replace("[#", "{#").replace("point(", "\"point(") \
-        .replace("rect(", "\"rect(").replace("color(", "\"color(").replace(")\"", ")").replace(")", ")\"").replace("void", "0")
+    t = t.replace("#Data:", "#data:") \
+        .replace("#Options:", "#options:") \
+        .replace("[#", "{#") \
+        .replace("point(", "\"point(") \
+        .replace("rect(", "\"rect(") \
+        .replace("color(", "\"color(") \
+        .replace(")\"", ")") \
+        .replace(")", ")\"") \
+        .replace("void", "0")
     count = 0
     m = list(t)
     brcount = 0
@@ -105,7 +112,6 @@ def makearr(col: list | pg.Vector2, mark):
     return f"{mark}({col[0]}, {col[1]})"
 
 
-
 class ItemData():
     def __init__(self):
         self.data = []
@@ -177,22 +183,37 @@ def init_solve(files: list[str,]):
         s = open(file, "r").readlines()
         category_data = {}
         item_counter = 0
-        for i in s:
+        findcategory = True  # if true, all non-category lines will be ignored until a category line is found
+        for ln, i in enumerate(s):
             i = i.strip()
             if len(i) > 1:
                 if i[0] == "-":
-                    if category_data:
-                        output.append(category_data)
-                    js = tojson(i[1:])
-                    category_data = {"name": js[0], "color": pg.Color(toarr(js[1], "color")), "items": []}
-                    item_counter = 0
-                else:
-                    js = tojson(i)
-                    item = {}
-                    for p, val in js.items():
-                        item[p] = val
-                    category_data["items"].append(item)
-                    item_counter += 1
+                    try:
+                        if category_data:
+                            output.append(category_data)
+                        js = tojson(i[1:])
+                        category_data = {"name": js[0], "color": pg.Color(toarr(js[1], "color")), "items": []}
+                        item_counter = 0
+                        findcategory = False
+                    except json.JSONDecodeError:
+                        log_to_load_log(
+                            f"Failed to convert init CATEGORY line \"{i}\" (line number: {ln}) in file \"{file}\"! Skipping line and all subsequent tiles!",
+                            True)
+                        findcategory = True
+                        continue
+                elif not findcategory:
+                    try:
+                        js = tojson(i)
+                        item = {}
+                        for p, val in js.items():
+                            item[p] = val
+                        category_data["items"].append(item)
+                        item_counter += 1
+                    except json.JSONDecodeError:
+                        log_to_load_log(
+                        f"Failed to convert init ITEM line \"{i}\" (line number: {ln}) in file \"{file}\"! Skipping line!",
+                        True)
+                        continue
         output.append(category_data)
         # output.remove([])
     return output

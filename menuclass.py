@@ -422,27 +422,40 @@ class Menu:
                 self.historybuffer.append(deepcopy(h))
             self.datalast = deepcopy(self.data)
         """
-        if len(self.historyChanges) > 0:
-            self.historyChanges.insert(0, smallestchange(self.historyChanges))
-            self.historybuffer.append(self.historyChanges)
-            # print(self.historyChanges)
-            self.historyChanges = []
+        if len(self.historyChanges) <= 0:
+            return
+        self.historyChanges.insert(0, smallestchange(self.historyChanges))
+        self.historybuffer.append(self.historyChanges)
+        # print(self.historyChanges)
+        self.historyChanges = []
 
     def detecthistory(self, path, savedata=True):
-        #TODO this
-        '''
-        if self.data != self.datalast:
-            pth = PathDict(self.data.data.data)[*path]
-            pthlast = PathDict(self.datalast)[*path]
-            history = [path]
-            for xindx, x in enumerate(pth):
-                if x != pthlast[xindx]:
-                    history.append([[xindx], [x, pthlast[xindx]]])
-            if len(history) > 0:
-                self.historybuffer.append(deepcopy(history))
-            if savedata:
-                self.datalast = deepcopy(self.data)
-        '''
+        if len(self.historyChanges) <= 0:
+            return
+        # sch = smallestchange(self.historyChanges)
+        # grouping data, recreating the past
+        xposes = []
+        for i in self.historyChanges:
+            for p in path:
+                i[0].remove(p)
+            if i[0][0] not in xposes:
+                xposes.append(i[0][0])
+        beforerows = []
+        afterrows = []
+        for i in xposes:
+            # print([*path, i])
+            afterrows.append(self.data[*path, i])
+            lastdata = PathDict(deepcopy(self.data[*path, i]))
+            for indx, item in enumerate(self.historyChanges):
+                if item[0][0] == i:
+                    lastdata[item[0][1:]] = item[1][1]
+            beforerows.append(lastdata.data)
+        self.historyChanges = []
+        for indx, i in enumerate(xposes):
+            self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
+        self.historyChanges.insert(0, [*path])
+        self.historybuffer.append(self.historyChanges)
+        self.historyChanges = []
 
     def non(self, *args):
         pass
@@ -785,14 +798,6 @@ class MenuWithField(Menu):
             self.size -= 1
             self.offset -= pos - self.pos
             self.renderfield()
-
-    def detecthistory(self, path, savedata=True):
-        super().detecthistory(path, savedata)
-        self.renderer.data = self.data
-
-    def updatehistory(self, paths):
-        super().updatehistory(paths)
-        self.renderer.data = self.data
 
     def render_geo_area(self):
         self.renderer.geo_render_area(self.area, self.layer)

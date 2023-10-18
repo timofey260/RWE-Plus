@@ -175,8 +175,10 @@ class CE(MenuWithField):
             self.updatehistory([["CM"]])
 
     def addcamera(self):
-        self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
-        self.data["CM"]["quads"].append([[0, 0], [0, 0], [0, 0], [0, 0]])
+        # self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
+        # self.data["CM"]["quads"].append([[0, 0], [0, 0], [0, 0], [0, 0]])
+        self.changedata(["CM", "cameras"], [self.data["CM"]["cameras"], makearr([0, 0], "point")])
+        self.changedata(["CM", "quads"], [self.data["CM"]["quads"], [[0, 0], [0, 0], [0, 0], [0, 0]]])
         self.heldindex = len(self.data["CM"]["cameras"]) - 1
         self.held = True
         self.camoffset = pg.Vector2(0, 0)
