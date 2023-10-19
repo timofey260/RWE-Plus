@@ -1,3 +1,5 @@
+import traceback
+
 from menuclass import *
 
 
@@ -376,6 +378,8 @@ class GE(MenuWithField):
             self.renderer.geo_render_area(self.area, self.layer)
             self.rfa()
         except:
+            traceback.print_exc()
+            log_to_load_log(traceback.format_exc(), True)
             print("Error pasting data!")
 
     def s0(self):

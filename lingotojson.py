@@ -398,8 +398,8 @@ def getprops(tiles: dict, window: pg.Surface):
                     h = math.floor((hs / len(item["repeatL"])))
                     if item.get("sz") is not None:
                         sz = toarr(item["sz"], "point")
-                        w = min(sz[0] * image1size, ws)
-                        h = sz[1] * image1size
+                        w = min(sz[0] * propsize, ws)
+                        h = sz[1] * propsize
 
                     cons = 0.4
                     wh = pg.Color("#ffffff")
@@ -467,7 +467,7 @@ def getprops(tiles: dict, window: pg.Surface):
                 # returnimage.fill(pg.Color(255, 255, 255))
                 # returnimage.blit(tile["image"], pg.Vector2(spritesize, spritesize) * tile["bfTiles"])
                 # returnimage.set_colorkey(pg.Color(255, 255, 255))
-                size = (pg.Vector2(tile["size"]) + pg.Vector2(tile["bfTiles"], tile["bfTiles"]) * 2) * image1size
+                size = (pg.Vector2(tile["size"]) + pg.Vector2(tile["bfTiles"], tile["bfTiles"]) * 2) * propsize
                 returnimage = pg.Surface(size)
                 returnimage.fill(pg.Color(255, 255, 255))
                 try:
@@ -489,7 +489,7 @@ def getprops(tiles: dict, window: pg.Surface):
                             errorimg = pg.transform.scale(notfound, size)
                             errorimg.set_colorkey(pg.Color(255, 255, 255))
                             returnimage.blit(errorimg, [0, 0])
-                returnimage = pg.transform.scale(returnimage, pg.Vector2(returnimage.get_size()) / image1size * spritesize)
+                returnimage = pg.transform.scale(returnimage, pg.Vector2(returnimage.get_size()) / propsize * spritesize)
                 returnimage.set_colorkey(pg.Color(255, 255, 255))
                 itemlist.append({
                     "nm": tile["nm"],

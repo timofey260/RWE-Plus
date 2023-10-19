@@ -73,10 +73,14 @@ class Menu:
     def changedata(self, path, value):
         oldvalue = self.data[path]
         tohisstory = [path, [value, oldvalue]]
-        if tohisstory not in self.historyChanges:
-            self.historyChanges.append(tohisstory)
-            self.data[path] = value
-            # print(tohisstory)
+        for indx, i in enumerate(self.historyChanges):
+            if i[0] == tohisstory[0]:
+                self.historyChanges[indx][1][1] = value
+                self.data[path] = value
+                # print("changed existing data")
+                return
+        self.historyChanges.append(tohisstory)
+        self.data[path] = value
 
     def unlock_keys(self):
         self.uc = []
@@ -425,7 +429,7 @@ class Menu:
         if len(self.historyChanges) <= 0:
             return
         self.historyChanges.insert(0, smallestchange(self.historyChanges))
-        self.historybuffer.append(self.historyChanges)
+        self.historybuffer.append(deepcopy(self.historyChanges))
         # print(self.historyChanges)
         self.historyChanges = []
 
@@ -454,7 +458,7 @@ class Menu:
         for indx, i in enumerate(xposes):
             self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
         self.historyChanges.insert(0, [*path])
-        self.historybuffer.append(self.historyChanges)
+        self.historybuffer.append(deepcopy(self.historyChanges))
         self.historyChanges = []
 
     def non(self, *args):

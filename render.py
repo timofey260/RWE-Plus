@@ -47,6 +47,7 @@ white = pg.Color([255, 255, 255])
 gray = pg.Color([110, 110, 110])
 darkgray = pg.Color([80, 80, 80])
 purple = pg.Color([255, 0, 255])
+yellow = pg.Color([255, 255, 0])
 alpha = dc
 
 col8 = [
@@ -56,9 +57,6 @@ col8 = [
 ]
 
 col4 = [[0, -1], [-1, 0], [1, 0], [0, 1]]
-
-color = pg.Color(settings["global"]["color"])
-color2 = pg.Color(settings["global"]["color2"])
 
 renderedimage = pg.transform.scale(tooltiles, [
     (tooltiles.get_width() / globalsettings["tilesize"][0]) * image1size,
@@ -124,7 +122,12 @@ class Renderer:
         self.size = image1size
 
         if render:
-            size = [len(data["GE"]) * image1size, len(data["GE"][0]) * image1size]
+            size = [self.levelwidth * image1size, self.levelheight * image1size]
+            self.geo_surfs = [
+                pg.Surface(size),
+                pg.Surface(size),
+                pg.Surface(size)
+            ]
             self.surf_geo = pg.Surface(size)
             self.geolayers = [True, True, True]
             self.tilelayers = [True, True, True]
@@ -138,6 +141,11 @@ class Renderer:
     def set_surface(self, size=None):
         if size is None:  # auto
             size = [self.levelwidth * image1size, self.levelheight * image1size]
+        self.geo_surfs = [
+            pg.Surface(size),
+            pg.Surface(size),
+            pg.Surface(size)
+        ]
         self.surf_geo = pg.Surface(size)
         self.geolayers = [True, True, True]
         self.tilelayers = [True, True, True]
@@ -446,7 +454,9 @@ class Renderer:
                 propcolor = toarr(self.findprop(prop[1])[0]["previewColor"], "color")  # wires
                 for point in prop[4]["points"]:
                     px, py = toarr(point, "point")
-                    pg.draw.circle(self.surf_props, propcolor, [px, py], 5)
+                    px = px / propsize * image1size
+                    py = py / propsize * image1size
+                    pg.draw.circle(self.surf_props, propcolor, [px, py], image1size / 3)
 
     def rerendereffect(self):
         self.rendereffect(self.effect_index)

@@ -1,6 +1,4 @@
 import traceback
-
-import widgets
 from menuclass import *
 from lingotojson import *
 import random
@@ -323,6 +321,7 @@ class TE(MenuWithField):
             self.rfa()
         except:
             traceback.print_exc()
+            log_to_load_log(traceback.format_exc(), True)
             print("Error pasting data!")
 
     def findcat(self, itemname):
@@ -394,7 +393,7 @@ class TE(MenuWithField):
             self.recaption()
             return
 
-    def test_cols(self, x, y):
+    def test_cols(self, x, y) -> bool:
         force_geo = self.findparampressed("force_geometry") or self.findparampressed("force_place")
         w, h = self.tileimage["size"]
         sp = self.tileimage["cols"][0]
@@ -509,38 +508,49 @@ class TE(MenuWithField):
                     continue
                 if "material" in self.tileimage["tags"]:
                     self.area[xpos][ypos] = False
-                    self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
-                                                                           "data": self.tileimage["nm"]}
+                    self.changedata(["TE", "tlMatrix", xpos, ypos, self.layer], {"tp": "material",
+                                                                           "data": self.tileimage["nm"]})
+                    # self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "material",
+                    #                                                        "data": self.tileimage["nm"]}
                 elif xpos == px and ypos == py:
                     self.area[xpos][ypos] = False
-                    self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
-                                                                           "data": [p, self.tileimage["nm"]]}
+                    self.changedata(["TE", "tlMatrix", xpos, ypos, self.layer], {"tp": "tileHead",
+                                                                           "data": [p, self.tileimage["nm"]]})
+                    # self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileHead",
+                    #                                                        "data": [p, self.tileimage["nm"]]}
                 elif csp != -1:
                     p = makearr([px + 1, py + 1], "point")
                     # self.area[xpos][ypos] = False
-                    self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
-                                                                           "data": [p, self.layer + 1]}
+                    self.changedata(["TE", "tlMatrix", xpos, ypos, self.layer], {"tp": "tileBody",
+                                                                           "data": [p, self.layer + 1]})
+                    # self.data["TE"]["tlMatrix"][xpos][ypos][self.layer] = {"tp": "tileBody",
+                    #                                                        "data": [p, self.layer + 1]}
                 if fg and csp != -1 or fg and "material" in self.tileimage["tags"]:
                     if csp == -1:
                         csp = 1
                     self.area[xpos][ypos] = False
-                    self.data["GE"][xpos][ypos][self.layer][0] = csp
+                    self.changedata(["GE", xpos, ypos, self.layer, 0], csp)
+                    # self.data["GE"][xpos][ypos][self.layer][0] = csp
 
                 if sp2 != 0:
                     csp = sp2[x2 * h + y2]
                     if self.layer + 1 <= 2 and csp != -1:
                         p = makearr([px + 1, py + 1], "point")
-                        self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1] = {"tp": "tileBody",
-                                                                                   "data": [p, self.layer + 1]}
+                        self.changedata(["TE", "tlMatrix", xpos, ypos, self.layer + 1], {"tp": "tileBody",
+                                                                                   "data": [p, self.layer + 1]})
+                        # self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1] = {"tp": "tileBody",
+                        #                                                            "data": [p, self.layer + 1]}
                         if fg:
-                            self.data["GE"][xpos][ypos][self.layer + 1][0] = csp
+                            self.changedata(["GE", xpos, ypos, self.layer + 1, 0], csp)
+                            # self.data["GE"][xpos][ypos][self.layer + 1][0] = csp
         self.mpos = 1
         #if fg:
         #    self.rfa()
 
     def sad(self):
         if "material" in self.tileimage["tags"]:
-            self.data["TE"]["defaultMaterial"] = self.tileimage["nm"]
+            self.changedata(["TE", "defaultMaterial"], self.tileimage["nm"])
+            # self.data["TE"]["defaultMaterial"] = self.tileimage["nm"]
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
     def cleartool(self):

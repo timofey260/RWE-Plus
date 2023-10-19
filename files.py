@@ -68,7 +68,8 @@ tag = "2.5.0"
 ofstop = 15
 ofsleft = 15
 
-image1size = 20
+propsize = 20
+image1size = globalsettings["rendertilesize"]
 spritesize = 16
 image2sprite = spritesize / image1size
 sprite2image = image1size / spritesize

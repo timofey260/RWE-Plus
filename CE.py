@@ -61,7 +61,7 @@ class CE(MenuWithField):
                         endpos = pg.Vector2(xpos, ypos) / image1size * self.size + v
                         pg.draw.line(self.surface, purple, startpos, endpos, 3)
                 val = makearr(val, "point")
-                self.data["CM"]["cameras"][self.heldindex] = val
+                self.changedata(["CM", "camera", self.heldindex], val)
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
@@ -79,8 +79,7 @@ class CE(MenuWithField):
                     qlist = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
                     mouse = pg.Vector2(pg.mouse.get_pos()) - qlist[quadindx]
                     r, o = mouse.rotate(90).as_polar()
-                    self.data["CM"]["quads"][self.heldindex][quadindx] = \
-                        [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)]
+                    self.changedata(["CM", "quads", self.heldindex, quadindx], [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)])
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.setcursor()
@@ -115,6 +114,7 @@ class CE(MenuWithField):
             self.heldindex += 1
             self.data["CM"]["cameras"].insert(self.heldindex, c)
             self.data["CM"]["quads"].insert(self.heldindex, q)
+            # TODO fix this stuff
             self.updatehistory(["CM"])
 
     def camdown(self):
@@ -124,6 +124,7 @@ class CE(MenuWithField):
             self.heldindex -= 1
             self.data["CM"]["cameras"].insert(self.heldindex, c)
             self.data["CM"]["quads"].insert(self.heldindex, q)
+            # TODO fix this stuff
             self.updatehistory(["CM"])
 
     def copycamera(self):
@@ -177,8 +178,8 @@ class CE(MenuWithField):
     def addcamera(self):
         # self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
         # self.data["CM"]["quads"].append([[0, 0], [0, 0], [0, 0], [0, 0]])
-        self.changedata(["CM", "cameras"], [self.data["CM"]["cameras"], makearr([0, 0], "point")])
-        self.changedata(["CM", "quads"], [self.data["CM"]["quads"], [[0, 0], [0, 0], [0, 0], [0, 0]]])
+        self.changedata(["CM", "cameras"], [*self.data["CM"]["cameras"], makearr([0, 0], "point")])
+        self.changedata(["CM", "quads"], [*self.data["CM"]["quads"], [[0, 0], [0, 0], [0, 0], [0, 0]]])
         self.heldindex = len(self.data["CM"]["cameras"]) - 1
         self.held = True
         self.camoffset = pg.Vector2(0, 0)

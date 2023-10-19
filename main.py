@@ -100,7 +100,7 @@ def undohistory():
         ], and other history steps...
     ]
     '''
-    print("elem: ", historyelem)
+    # print("elem: ", historyelem)
     for i in historyelem[1:]:
         # print(*historyelem[0], *i[0])
         surf.data[*historyelem[0], *i[0]] = i[1][1]
@@ -127,13 +127,11 @@ def redohistory():
     print("Redo")
     lastsize = [surf.levelwidth, surf.levelheight]
     historyelem = redobuffer[-1]
-    pathdict = PathDict(surf.data)
+
     for i in historyelem[1:]:
-        pathdict[*historyelem[0], *i[0]] = i[1][0]
-    surf.data = deepcopy(pathdict.data)
-    file = surf.data
-    surf.renderer.data = surf.data
-    surf.datalast = deepcopy(pathdict.data)
+        # print(*historyelem[0], *i[0])
+        surf.data[*historyelem[0], *i[0]] = i[1][0]
+
     undobuffer.append(deepcopy(redobuffer.pop()))
     if [surf.levelwidth, surf.levelheight] != lastsize:
         surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
@@ -359,35 +357,35 @@ if __name__ == "__main__":
                         help="Renders levels with drizzle.")
     # parser.parse_args()
     args = parser.parse_args()
-    if args.new:
-        launch(-1)
-    if args.renderfiles is not None:
-        s = f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\""
-        subprocess.run([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", *args.renderfiles], shell=True)
-        # os.system(s)
-        if not islinux:
-            os.system("start " + resolvepath(path2renderedlevels))
-        exit(0)
-    if args.filename is not None:
-        try:
+    try:
+        if args.new:
+            launch(-1)
+        if args.renderfiles is not None:
+            s = f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}\""
+            subprocess.run([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", *args.renderfiles], shell=True)
+            # os.system(s)
+            if not islinux:
+                os.system("start " + resolvepath(path2renderedlevels))
+            exit(0)
+        if args.filename is not None:
             launch(args.filename)
-        except FileNotFoundError:
-            print("File not found!")
+        else:
+            loadmenu()
+    except FileNotFoundError:
+        print("File not found!")
+        raise
+    except Exception as e:
+        # extra save level in case of eny crashes
+        f = open(application_path + "\\CrashLog.txt", "w")
+        f.write(traceback.format_exc())
+        f.write("This is why RWE+ crashed^^^\nSorry")
+        if settings["global"]["saveoncrash"]:
+            surf.savef(crashsave=True)
             raise
-        except Exception as e:
-            # extra save level in case of eny crashes
-            f = open(application_path + "\\CrashLog.txt", "w")
-            f.write(traceback.format_exc())
-            f.write("This is why RWE+ crashed^^^\nSorry")
-            if settings["global"]["saveoncrash"]:
-                surf.savef(crashsave=True)
-                raise
-            traceback.print_exc()
-            ex = askyesno("Crash!!!",
-                          "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to save "
-                          "Level?")
-            if ex:
-                surf.savef()
-            raise
-    else:
-        loadmenu()
+        traceback.print_exc()
+        ex = askyesno("Crash!!!",
+                      "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to save "
+                      "Level?")
+        if ex:
+            surf.savef()
+        raise
