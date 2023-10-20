@@ -120,7 +120,7 @@ class FE(MenuWithField):
                     data1 = [i[rect.y:rect.w + rect.y] for i in data1]
                     pyperclip.copy(str(data1))
                     print("Copied!")
-                self.updatehistory([["FE", "effects", self.selectedeffect, "mtrx"]])
+                self.updatehistory()
                 #self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
                 self.mousp = True
                 self.renderfield()
@@ -135,7 +135,7 @@ class FE(MenuWithField):
                         self.paint(posoffset[0], posoffset[1], -1)
                         self.mmove = False
             elif bp[2] == 0 and not self.mousp2 and (self.mousp and self.mousp1):
-                self.updatehistory([["FE", "effects", self.selectedeffect, "mtrx"]])
+                self.updatehistory()
                 self.mousp2 = True
                 self.renderfield()
                 self.renderer.rerendereffect()
@@ -191,7 +191,7 @@ class FE(MenuWithField):
 
     def duplicate(self):
         self.data["FE"]["effects"].append(copy.deepcopy(self.data["FE"]["effects"][self.selectedeffect]))
-        self.updatehistory([["FE", "effects"]])
+        self.updatehistory()
         self.rebuttons()
 
     def copytool(self):
@@ -304,7 +304,7 @@ class FE(MenuWithField):
                 if se < 0:
                     se = 0
                 self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
-                self.updatehistory([["FE"]])
+                self.updatehistory()
                 self.selectedeffect = se
                 self.rebuttons()
                 self.makeparams()
@@ -314,7 +314,7 @@ class FE(MenuWithField):
                 se = self.selectedeffect + 1
                 if se < len(self.data["FE"]["effects"]):
                     self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
-                    self.updatehistory([["FE"]])
+                    self.updatehistory()
                     self.selectedeffect = se
                     self.rebuttons()
                     self.makeparams()
@@ -322,7 +322,7 @@ class FE(MenuWithField):
                 return
 
         self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = text
-        self.updatehistory([["FE", "effects", self.selectedeffect, "options", self.paramindex, 2]])
+        self.updatehistory()
         self.chtext()
 
     def changeseed(self):
@@ -333,7 +333,7 @@ class FE(MenuWithField):
             if 0 <= value <= 500:
                 print("Seed changed!")
             self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = value
-            self.updatehistory([["FE", "effects", self.selectedeffect, "options", self.paramindex, 2]])
+            self.updatehistory()
             self.makeparams()
             return
         except ValueError:
@@ -412,7 +412,7 @@ class FE(MenuWithField):
             print("No elements in list!")
         self.selectedeffect = 0
         self.paramindex = 0
-        self.updatehistory([["FE"]])
+        self.updatehistory()
         self.rebuttons()
         self.makeparams()
 
@@ -443,7 +443,7 @@ class FE(MenuWithField):
                     self.innew = False
                     self.selectedeffect = len(self.data["FE"]["effects"]) - 1
                     self.recaption()
-                    self.updatehistory([["FE"]])
+                    self.updatehistory()
                     self.renderfield()
                     self.rebuttons()
                     return

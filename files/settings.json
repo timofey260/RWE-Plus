@@ -21,6 +21,11 @@
 	"tilesize": [100, 100],
 	"rendertilesize": 20,
 
+	"debugmode": true,
+
+	"snap_error": 50,
+	"saveoncrash": true,
+
 	"historylimit": 50,
 	"autosavedelay": 120,
 	"matsize": [6.25, 7.5],

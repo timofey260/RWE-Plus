@@ -2,7 +2,7 @@ import render
 from menuclass import *
 from lingotojson import *
 
-error = settings["global"]["snap_error"] # snap error
+error = globalsettings["snap_error"] # snap error
 
 class CE(MenuWithField):
     def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
@@ -61,7 +61,7 @@ class CE(MenuWithField):
                         endpos = pg.Vector2(xpos, ypos) / image1size * self.size + v
                         pg.draw.line(self.surface, purple, startpos, endpos, 3)
                 val = makearr(val, "point")
-                self.changedata(["CM", "camera", self.heldindex], val)
+                self.changedata(["CM", "cameras", self.heldindex], val)
 
             if bp[0] == 1 and self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = False
@@ -80,10 +80,13 @@ class CE(MenuWithField):
                     mouse = pg.Vector2(pg.mouse.get_pos()) - qlist[quadindx]
                     r, o = mouse.rotate(90).as_polar()
                     self.changedata(["CM", "quads", self.heldindex, quadindx], [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)])
+                    # self.data["CM", "quads", self.heldindex, quadindx] = [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)]
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.setcursor()
-                self.detecthistory(["CM", "quads", self.heldindex])
+                if self.mode == "edit":
+                    self.updatehistory()
+                # self.detecthistory(["CM", "quads", self.heldindex])
                 self.mousp = True
                 self.rfa()
 
@@ -109,23 +112,17 @@ class CE(MenuWithField):
 
     def camup(self):
         if self.held and self.heldindex + 1 < len(self.data["CM"]["cameras"]):
-            c = self.data["CM"]["cameras"].pop(self.heldindex)
-            q = self.data["CM"]["quads"].pop(self.heldindex)
+            self.historymove(["CM", "cameras"], self.heldindex, 1)
+            self.historymove(["CM", "quads"], self.heldindex, self.heldindex + 1)
             self.heldindex += 1
-            self.data["CM"]["cameras"].insert(self.heldindex, c)
-            self.data["CM"]["quads"].insert(self.heldindex, q)
-            # TODO fix this stuff
-            self.updatehistory(["CM"])
+            self.updatehistory()
 
     def camdown(self):
         if self.held and self.heldindex - 1 >= 0:
-            c = self.data["CM"]["cameras"].pop(self.heldindex)
-            q = self.data["CM"]["quads"].pop(self.heldindex)
+            self.historymove(["CM", "cameras"], self.heldindex, 1)
+            self.historymove(["CM", "quads"], self.heldindex, self.heldindex - 1)
             self.heldindex -= 1
-            self.data["CM"]["cameras"].insert(self.heldindex, c)
-            self.data["CM"]["quads"].insert(self.heldindex, q)
-            # TODO fix this stuff
-            self.updatehistory(["CM"])
+            self.updatehistory()
 
     def copycamera(self):
         if self.held:
@@ -137,8 +134,8 @@ class CE(MenuWithField):
                 geodata = eval(pyperclip.paste())
                 if type(geodata) != list or len(pyperclip.paste()) <= 2:
                     return
-                self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
-                self.data["CM"]["quads"].append(geodata)
+                self.historyappend(["CM", "cameras"], makearr([0, 0], "point"))
+                self.historyappend(["CM", "quads"], geodata)
                 self.held = True
                 self.heldindex = len(self.data["CM"]["cameras"]) - 1
                 self.detecthistory(["CM"])
@@ -154,7 +151,7 @@ class CE(MenuWithField):
         elif not pressed and self.pressed[indx]:
             self.pressed[indx] = False
             i = self.closestcameraindex()
-            self.updatehistory([["CM", "quads", i]])
+            self.updatehistory()
 
     def pickupcamera(self):
         mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size
@@ -166,24 +163,22 @@ class CE(MenuWithField):
 
     def placecamera(self):
         self.held = False
-        self.updatehistory([["CM"]])
+        self.updatehistory()
 
     def deletecamera(self):
         if len(self.data["CM"]["cameras"]) > 0 and self.heldindex < len(self.data["CM"]["cameras"]) and self.held:
-            self.data["CM"]["cameras"].pop(self.heldindex)
-            self.data["CM"]["quads"].pop(self.heldindex)
+            self.historypop(["CM", "cameras"], self.heldindex)
+            self.historypop(["CM", "quads"], self.heldindex)
             self.held = False
-            self.updatehistory([["CM"]])
+            self.updatehistory()
 
     def addcamera(self):
-        # self.data["CM"]["cameras"].append(makearr([0, 0], "point"))
-        # self.data["CM"]["quads"].append([[0, 0], [0, 0], [0, 0], [0, 0]])
-        self.changedata(["CM", "cameras"], [*self.data["CM"]["cameras"], makearr([0, 0], "point")])
-        self.changedata(["CM", "quads"], [*self.data["CM"]["quads"], [[0, 0], [0, 0], [0, 0], [0, 0]]])
+        self.historyappend(["CM", "cameras"], makearr([0, 0], "point"))
+        self.historyappend(["CM", "quads"], [[0, 0], [0, 0], [0, 0], [0, 0]])
         self.heldindex = len(self.data["CM"]["cameras"]) - 1
         self.held = True
         self.camoffset = pg.Vector2(0, 0)
-        self.updatehistory([["CM"]])
+        self.updatehistory()
 
     def closestcameraindex(self):
         mpos = pg.Vector2(pg.mouse.get_pos())
@@ -203,28 +198,29 @@ class CE(MenuWithField):
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
-            self.data["CM"]["quads"][cam][quadindx][1] = round(min(self.data["CM"]["quads"][cam][quadindx][1] + self.settings["addspeed"], 1), 4)
+            self.changedata(["CM", "quads", cam, quadindx, 1],
+                            round(min(self.data["CM"]["quads"][cam][quadindx][1] + self.settings["addspeed"], 1), 4))
 
     def adddown(self):  # ddddddddddd
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
-            self.data["CM"]["quads"][cam][quadindx][1] = round(
-                max(self.data["CM"]["quads"][cam][quadindx][1] - self.settings["addspeed"], 0), 4)
+            self.changedata(["CM", "quads", cam, quadindx, 1], round(
+                max(self.data["CM"]["quads"][cam][quadindx][1] - self.settings["addspeed"], 0), 4))
 
     def addleft(self):
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
-            self.data["CM"]["quads"][cam][quadindx][0] = math.floor(self.data["CM"]["quads"][cam][quadindx][0] -
-                                                          self.settings["rotatespeed"]) % 360
+            self.changedata(["CM", "quads", cam, quadindx, 0],
+                            math.floor(self.data["CM"]["quads"][cam][quadindx][0] - self.settings["rotatespeed"]) % 360)
 
     def addright(self):
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
-            self.data["CM"]["quads"][cam][quadindx][0] = math.ceil(
-                self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360
+            self.changedata(["CM", "quads", cam, quadindx, 0],
+                            math.ceil(self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360)
 
     @property
     def custom_info(self):

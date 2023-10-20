@@ -100,15 +100,24 @@ def undohistory():
         ], and other history steps...
     ]
     '''
-    # print("elem: ", historyelem)
+    print("elem: ", historyelem)
     for i in historyelem[1:]:
-        # print(*historyelem[0], *i[0])
+        print(i)
+        if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
+            match i[0][0]:
+                case ".insert": # insert on redo, pop on undo
+                    surf.data[*historyelem[0], *i[0][1:]].pop(i[1])
+                    continue
+                case ".append": # append on redo, pop on undo
+                    surf.data[*historyelem[0], *i[0][1:]].pop(-1)
+                    continue
+                case ".pop": # pop on redo, insert on undo
+                    surf.data[*historyelem[0], *i[0][1:]].insert(i[1], i[2])
+                    continue
+                case ".move": # pop and insert on redo, pop and insert on undo
+                    surf.data[*historyelem[0], *i[0][1:]].insert(i[1], surf.data[*historyelem[0], *i[0][1:]].pop(i[2]))
+                    continue
         surf.data[*historyelem[0], *i[0]] = i[1][1]
-        # surf.data[*i[0]] = i[1][1]
-
-    # surf.data = deepcopy(surf.data)
-    # file = surf.data
-    # surf.renderer.data = surf.data
     redobuffer.append(deepcopy(undobuffer.pop()))
     if [surf.levelwidth, surf.levelheight] != lastsize:
         surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
@@ -129,7 +138,21 @@ def redohistory():
     historyelem = redobuffer[-1]
 
     for i in historyelem[1:]:
-        # print(*historyelem[0], *i[0])
+        print(i)
+        if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
+            match i[0][0]:
+                case ".insert":  # insert on redo, pop on undo
+                    surf.data[*historyelem[0], *i[0][1:]].insert(i[1], i[2])
+                    continue
+                case ".append":  # append on redo, pop on undo
+                    surf.data[*historyelem[0], *i[0][1:]].append(i[1])
+                    continue
+                case ".pop":  # pop on redo, insert on undo
+                    surf.data[*historyelem[0], *i[0][1:]].pop(i[1])
+                    continue
+                case ".move":  # pop and insert on redo, pop and insert on undo
+                    surf.data[*historyelem[0], *i[0][1:]].insert(i[2], surf.data[*historyelem[0], *i[0][1:]].pop(i[1]))
+                    continue
         surf.data[*historyelem[0], *i[0]] = i[1][0]
 
     undobuffer.append(deepcopy(redobuffer.pop()))
@@ -379,7 +402,7 @@ if __name__ == "__main__":
         f = open(application_path + "\\CrashLog.txt", "w")
         f.write(traceback.format_exc())
         f.write("This is why RWE+ crashed^^^\nSorry")
-        if settings["global"]["saveoncrash"]:
+        if globalsettings["saveoncrash"] and not globalsettings["debugmode"]:
             surf.savef(crashsave=True)
             raise
         traceback.print_exc()

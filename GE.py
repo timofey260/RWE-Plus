@@ -175,7 +175,7 @@ class GE(MenuWithField):
                             count += 1
                 if len(paths) > 0:
                     if count < 20: # if we changed more than 20 pixels, changing history save method
-                        self.updatehistory(paths)
+                        self.updatehistory()
                     else:
                         self.detecthistory(["GE"])
                 self.render_geo_area()

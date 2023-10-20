@@ -132,13 +132,13 @@ class LP(MenuWithField):
                     widgets.fastmts(self.surface, f"X:{int(chx)}, Y:{int(chy)}", mpos.x, mpos.y, white)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.tool == "env":
-                    self.updatehistory([["WL", "waterLevel"]])
+                    self.updatehistory()
                 if self.tool == "size":
                     if self.border != [0, 0, self.levelwidth, self.levelheight]:
                         self.cuteverydata(self.border)
                         self.border = [0, 0, self.levelwidth, self.levelheight]
 
-                    self.updatehistory([["EX2", "extraTiles"]])
+                    self.updatehistory()
                     self.heldpoint = ""
                 self.recaption()
                 self.mousp = True
@@ -199,7 +199,7 @@ class LP(MenuWithField):
 
     def chparam(self, cat, name):
         self.data[cat][name] = 1 - self.data[cat][name]
-        self.updatehistory([[cat, name]])
+        self.updatehistory()
 
     def chinput(self, cat, name, inputdesc):
         try:
@@ -224,7 +224,7 @@ class LP(MenuWithField):
 
     def nowater(self):
         self.data["WL"]["waterLevel"] = -1
-        self.updatehistory([["WL", "waterLevel"]])
+        self.updatehistory()
 
     def cuteverydata(self, data):
         x, y, w, h = data
@@ -241,7 +241,7 @@ class LP(MenuWithField):
         self.recount_image()
         self.data["EX2"]["size"] = makearr([self.levelwidth, self.levelheight], "point")
         print("Done!")
-        self.updatehistory([[]])
+        self.updatehistory()
         self.renderer.data = self.data
         self.renderer.set_surface([image1size * self.levelwidth, image1size * self.levelheight])
         self.renderer.render_all(self.layer)
@@ -306,7 +306,7 @@ class LP(MenuWithField):
 
     def waterlayer(self):
         self.data["WL"]["waterInFront"] = 1 - self.data["WL"]["waterInFront"]
-        self.updatehistory([["WL", "waterInFront"]])
+        self.updatehistory()
 
     def recount_image(self):
         try:

@@ -88,12 +88,14 @@ fonts: dict[[pg.font.Font, int], ...] = {}
 
 def smallestchange(args: list[list]) -> list:
     args2 = [i[0] for i in args]
-    currentMin = args2[0]
     if len(args2) <= 0:
         return []
+    currentMin = args2[0]
     for indx, i in enumerate(currentMin):
         currentName = i
         for item in args:
+            if item[0][0] in [".index", ".pop", ".append", ".insert"]:
+                return []
             if item[0] == currentMin:
                 continue
             if item[0][indx] != currentName:

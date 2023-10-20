@@ -18,8 +18,6 @@
 		"secondarylayeralpha": 50,
 		"tiles_primarylayeralpha": 255,
 		"tiles_secondarylayeralpha": 100,
-		"snap_error": 50,
-		"saveoncrash": false,
 		"colors": {
 			"cursor": [255, 0, 0],
 			"cursor2": [50, 0, 255],

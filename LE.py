@@ -124,7 +124,7 @@ class LE(MenuWithField):
             pass
         elif not pressed and self.pressed[indx]:
             self.pressed[indx] = False
-            self.updatehistory([[self.menu]])
+            self.updatehistory()
 
     def updateshadowhistory(self):
         if self.oldshadow != self.field2.field:

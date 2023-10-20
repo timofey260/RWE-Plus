@@ -218,7 +218,7 @@ class PE(MenuWithField):
                         self.data["PR"]["props"].pop(near)
                         self.renderer.props_full_render()
                         self.rfa()
-                        self.updatehistory([["PR", "props"]])
+                        self.updatehistory()
                 elif self.copymode:
                     self.modpress = True
                     if len(self.data["PR"]["props"]) > 0:
@@ -580,7 +580,7 @@ class PE(MenuWithField):
         self.applytags()
         self.renderer.props_full_render()
         self.rfa()
-        self.updatehistory([["PR", "props"]])
+        self.updatehistory()
 
     def rotate_right(self):
         if self.findparampressed("rotate_speedup"):

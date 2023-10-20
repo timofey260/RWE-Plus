@@ -72,12 +72,11 @@ class Menu:
 
     def changedata(self, path, value):
         oldvalue = self.data[path]
-        tohisstory = [path, [value, oldvalue]]
+        tohisstory = deepcopy([path, [value, oldvalue]])
         for indx, i in enumerate(self.historyChanges):
             if i[0] == tohisstory[0]:
-                self.historyChanges[indx][1][1] = value
+                self.historyChanges[indx][1][0] = value
                 self.data[path] = value
-                # print("changed existing data")
                 return
         self.historyChanges.append(tohisstory)
         self.data[path] = value
@@ -413,30 +412,32 @@ class Menu:
                 return True
         return False
 
-    def updatehistory(self, paths):
-        """
-        if self.data != self.datalast:
-            h = [[]]
-            for historypath in paths:
-                ch = PathDict(self.data.data.data)[*historypath]
-                lastch = PathDict(self.datalast)[*historypath]
-                if ch != lastch:
-                    h.append([historypath, [ch, lastch]])
-            if len(h) > 0:
-                self.historybuffer.append(deepcopy(h))
-            self.datalast = deepcopy(self.data)
-        """
+    def historyinsert(self, path, value, index):
+        self.historyChanges.append([[".insert", *path], index, value])
+        self.data[path].insert(index, value)
+
+    def historyappend(self, path, value):
+        self.historyChanges.append([[".append", *path], value])
+        self.data[path].append(value)
+
+    def historypop(self, path, index):
+        self.historyChanges.append([[".pop", *path], index, self.data[*path, index]])
+        self.data[path].pop(index)
+
+    def historymove(self, path, index, move):
+        self.historyChanges.append([[".move", *path], index, move])
+        self.data[path].insert(move, self.data[path].pop(index))
+
+    def updatehistory(self):
         if len(self.historyChanges) <= 0:
             return
         self.historyChanges.insert(0, smallestchange(self.historyChanges))
-        self.historybuffer.append(deepcopy(self.historyChanges))
-        # print(self.historyChanges)
+        self.historybuffer.append(self.historyChanges)
         self.historyChanges = []
 
     def detecthistory(self, path, savedata=True):
         if len(self.historyChanges) <= 0:
             return
-        # sch = smallestchange(self.historyChanges)
         # grouping data, recreating the past
         xposes = []
         for i in self.historyChanges:
@@ -455,11 +456,11 @@ class Menu:
                     lastdata[item[0][1:]] = item[1][1]
             beforerows.append(lastdata.data)
         self.historyChanges = []
+        bf = []
         for indx, i in enumerate(xposes):
-            self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
-        self.historyChanges.insert(0, [*path])
-        self.historybuffer.append(deepcopy(self.historyChanges))
-        self.historyChanges = []
+            bf.append([[i], [afterrows[indx], beforerows[indx]]])
+        bf.insert(0, [*path])
+        self.historybuffer.append(bf)
 
     def non(self, *args):
         pass
