@@ -100,8 +100,10 @@ def undohistory():
         ], and other history steps...
     ]
     '''
+    elem = historyelem[1:]
+    elem.reverse()
     print("elem: ", historyelem)
-    for i in historyelem[1:]:
+    for i in elem:
         print(i)
         if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
             match i[0][0]:
@@ -137,7 +139,9 @@ def redohistory():
     lastsize = [surf.levelwidth, surf.levelheight]
     historyelem = redobuffer[-1]
 
-    for i in historyelem[1:]:
+    elem = historyelem[1:]
+    elem.reverse()
+    for i in elem:
         print(i)
         if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
             match i[0][0]:

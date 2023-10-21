@@ -441,10 +441,11 @@ class Menu:
         # grouping data, recreating the past
         xposes = []
         for i in self.historyChanges:
-            for p in path:
-                i[0].remove(p)
-            if i[0][0] not in xposes:
-                xposes.append(i[0][0])
+            if path[0] == i[0]:
+                for p in path:
+                    i[0].remove(p)
+                if i[0][0] not in xposes:
+                    xposes.append(i[0][0])
         beforerows = []
         afterrows = []
         for i in xposes:
@@ -456,11 +457,11 @@ class Menu:
                     lastdata[item[0][1:]] = item[1][1]
             beforerows.append(lastdata.data)
         self.historyChanges = []
-        bf = []
         for indx, i in enumerate(xposes):
-            bf.append([[i], [afterrows[indx], beforerows[indx]]])
-        bf.insert(0, [*path])
-        self.historybuffer.append(bf)
+            self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
+        self.historyChanges.insert(0, [*path])
+        self.historybuffer.append(self.historyChanges)
+        self.historyChanges = []
 
     def non(self, *args):
         pass
