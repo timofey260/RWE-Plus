@@ -2,13 +2,13 @@ from menuclass import *
 
 
 class HK(Menu):
-    def __init__(self, surface: pg.surface.Surface, renderer, openmenu="MN"):
+    def __init__(self, process, openmenu="MN"):
         self.menu = "HK"
         self.m = openmenu
         self.keys = json.load(open(path + "hotkeystip.json"))
         self.scroll = 0
 
-        super().__init__(surface, renderer, "HK")
+        super().__init__(process, "HK")
         self.fontsize = self.labels[0].fontsize
         self.load_menu(openmenu)
 
@@ -32,17 +32,15 @@ class HK(Menu):
         self.labels[0].set_text(text)
         self.labels[1].set_text(text2)
 
-    def send(self, message):
-        super().send(message)
-        match message:
-            case "SD":
-                if self.scroll + 1 <= self.labels[1].text.count("\n"):
-                    self.scroll += 1
-                self.load_menu(self.m)
-            case "SU":
-                if self.scroll - 1 > -1:
-                    self.scroll -= 1
-                self.load_menu(self.m)
+    def scroll_up(self):
+        if self.scroll - 1 > -1:
+            self.scroll -= 1
+        self.load_menu(self.m)
+
+    def scroll_down(self):
+        if self.scroll + 1 <= self.labels[1].text.count("\n"):
+            self.scroll += 1
+        self.load_menu(self.m)
 
     def MN(self):
         self.load_menu("MN")

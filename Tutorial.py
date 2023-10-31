@@ -2,8 +2,8 @@ from menuclass import *
 
 
 class TT(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer: Renderer):
-        super().__init__(surface, "TT", renderer)
+    def __init__(self, process):
+        super().__init__(process, "TT")
         self.matshow = None
         self.buttonslist = []
         self.step = -1
@@ -313,10 +313,6 @@ class TT(MenuWithField):
             if hasattr(self, message[1:]):
                 getattr(self, message[1:])()
         match message:
-            case "SU":
-                self.scroll_up()
-            case "SD":
-                self.scroll_down()
             case "left":
                 self.offset.x += 1
             case "right":

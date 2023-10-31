@@ -1,8 +1,8 @@
 from menuclass import *
 
 class load(Menu):
-    def __init__(self, surface: pg.surface.Surface, renderer):
-        super().__init__(surface, renderer, "LD")
+    def __init__(self, process):
+        super().__init__(process, "LD")
 
     def send(self, message):
         self.message = message
@@ -11,13 +11,16 @@ class load(Menu):
         super().blit(30)
 
     def open(self):
-        self.message = "open"
+        self.owner.recievemessage("open")
+        # self.message = "open"
 
     def new(self):
-        self.message = "new"
+        self.owner.recievemessage("new")
+        # self.message = "new"
 
     def tutorial(self):
-        self.message = "tutorialRWE"
+        self.owner.recievemessage("tutorial")
+        # self.message = "tutorialRWE"
 
     def report(self):
         report()

@@ -15,13 +15,14 @@ class ProcessManager:
         self.fullscreen = settings["global"]["fullscreen"]
         loadi = loadimage(f"{path}load.png")
         self.window = pg.display.set_mode(loadi.get_size(), flags=pg.NOFRAME)
-        pg.display.set_icon(loadimage(path + "icon.png"))
         self.window.blit(loadi, [0, 0])
+
+        pg.display.set_icon(loadimage(path + "icon.png"))
         pg.display.flip()
         pg.display.update()
-        self.items = inittolist(self.window)
+        self.tiles = inittolist(self.window)
         self.propcolors = getcolors()
-        self.props = getprops(self.items, self.window)
+        self.props = getprops(self.tiles, self.window)
         self.width = settings["global"]["width"]
         self.height = settings["global"]["height"]
         self.window = pg.display.set_mode([self.width, self.height], flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
@@ -43,11 +44,32 @@ class ProcessManager:
 
     def update(self):
         if len(self.processes) > 0:
-            self.processes[self.currentproccess].update()
+            try:
+                self.mainprocess.update()
+
+                pg.display.flip()
+                pg.display.update()
+            except Exception as e:
+                # extra save level in case of eny crashes
+                f = open(application_path + "\\CrashLog.txt", "w")
+                f.write(traceback.format_exc())
+                f.write("This is why RWE+ crashed^^^\nSorry")
+                if globalsettings["saveoncrash"] and not globalsettings["debugmode"]:
+                    self.saveall(True)
+                    raise
+                traceback.print_exc()
+                ex = askyesno("Crash!!!",
+                              "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to "
+                              "save All Levels you opened?")
+                if ex:
+                    self.saveall()
+                raise
 
     def newprocess(self, level):
-        if (level != -1 and os.path.exists(level)) or level == -1:
+        if level != -1 and os.path.exists(level):
             self.processes.append(LevelProcess(self, level))
+        else:
+            self.processes.append(LevelProcess(self, level, True))
 
     def closeprocess(self, process):
         self.processes.remove(process)
@@ -60,20 +82,41 @@ class ProcessManager:
         for i in self.processes:
             i.menu.savef(crashsave)
 
+    def fullscreen(self):
+        self.fullscreen = not self.fullscreen
+        self.surface = pg.display.set_mode([self.width, self.height],
+                                           flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
+
+    def printprocesses(self):
+        print(", ".join([str(i) for i in self.processes]))
+
+    @property
+    def mainprocess(self):
+        return self.processes[self.currentproccess]
+
 
 class LevelProcess:
     def __init__(self, manager: ProcessManager, file: str|int, demo=False):
+        self.run = None
         print("Switched to new process")
+        self.demo = demo
         self.manager = manager
         self.surface = manager.window
         self.launchload(file)
         self.file2 = deepcopy(self.file)
-        self.renderer = Renderer(self.file, manager.items, manager.props, manager.propcolors)
-        self.renderer.render_all(0)
         self.undobuffer = []
         self.redobuffer = []
         self.savetimer = time.time()
-        self.menu: Menu | MenuWithField = None
+        self.renderer = Renderer(self.file, manager.tiles, manager.props, manager.propcolors)
+        self.renderer.render_all(0)
+        if demo:
+            self.menu: Menu | MenuWithField = load(self)
+        else:
+            self.menu: Menu | MenuWithField = MN(self)
+        manager.printprocesses()
+
+    def __str__(self):
+        return f'({self.file["level"]} with {self.menu.menu})'
 
     def closeprocess(self):
         self.manager.closeprocess(self)
@@ -82,7 +125,7 @@ class LevelProcess:
         if self.file2 != self.file:
             ex = askyesnocancel("Exit from RWE+", "Do you want to save Changes?")
             if ex:
-                surf.savef()
+                self.menu.savef()
                 self.closeprocess()
             elif ex is None:
                 return
@@ -113,13 +156,58 @@ class LevelProcess:
         self.redobuffer = []
 
     def recievemessage(self, message):
-        pass
+        match message:
+            case "undo":
+                self.undohistory()
+            case "redo":
+                self.redohistory()
+            case "%":
+                self.menu = HK(self, self.menu.menu)
+            case "quit":
+                self.asktoexit()
+            case "fc":
+                self.manager.fullscreen()
+                self.menu.resize()
+            case "save":
+                self.menu.savef()
+                self.file2 = deepcopy(self.file)
+            case "saveas":
+                self.menu.saveasf()
+                self.file2 = deepcopy(self.file)
+            case "savetxt":
+                self.menu.savef_txt()
+                self.file2 = deepcopy(self.file)
+            case "newnewProcess":
+                self.manager.newprocess(-1)
+            case "new":
+                self.__init__(self.manager, -1)
+            case "openNewProcess":
+                file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                if file is not None and os.path.exists(file):
+                    self.manager.newprocess(file)
+            case "open":
+                file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                if file is not None and os.path.exists(file):
+                    self.__init__(self.manager, file)
+            case "tutorial":
+                file = turntoproject(open(path2tutorial + "tutorial.txt", "r").read())
+                file["path"] = "tutorial"
+                self.renderer = Renderer(file, None, None, None, True)
+                self.menu = TT(self)
+            case "load":
+                self.menu = load(self)
+            case _:
+                if message in menulist:
+                    self.menu = getattr(sys.modules[__name__], message)(self)
+                else:
+                    self.menu.send(message)
+        
 
     def undohistory(self):
         if len(self.undobuffer) == 0:
             return
         print("Undo")
-        lastsize = [surf.levelwidth, surf.levelheight]
+        lastsize = [self.menu.levelwidth, self.menu.levelheight]
         historyelem = self.undobuffer[-1]
         '''
         Undo element data:
@@ -140,34 +228,34 @@ class LevelProcess:
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
                 match i[0][0]:
                     case ".insert":  # insert on redo, pop on undo
-                        surf.data[*historyelem[0], *i[0][1:]].pop(i[1])
+                        self.menu.data[*historyelem[0], *i[0][1:]].pop(i[1])
                         continue
                     case ".append":  # append on redo, pop on undo
-                        surf.data[*historyelem[0], *i[0][1:]].pop(-1)
+                        self.menu.data[*historyelem[0], *i[0][1:]].pop(-1)
                         continue
                     case ".pop":  # pop on redo, insert on undo
-                        surf.data[*historyelem[0], *i[0][1:]].insert(i[1], i[2])
+                        self.menu.data[*historyelem[0], *i[0][1:]].insert(i[1], i[2])
                         continue
                     case ".move":  # pop and insert on redo, pop and insert on undo
-                        surf.data[*historyelem[0], *i[0][1:]].insert(i[1],
-                                                                     surf.data[*historyelem[0], *i[0][1:]].pop(i[2]))
+                        self.menu.data[*historyelem[0], *i[0][1:]].insert(i[1],
+                                                                     self.menu.data[*historyelem[0], *i[0][1:]].pop(i[2]))
                         continue
-            surf.data[*historyelem[0], *i[0]] = i[1][1]
+            self.menu.data[*historyelem[0], *i[0]] = i[1][1]
         self.redobuffer.append(deepcopy(self.undobuffer.pop()))
-        if [surf.levelwidth, surf.levelheight] != lastsize:
-            surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
-        surf.onundo()
-        if MenuWithField in type(surf).__bases__:
-            surf.renderer.render_all(surf.layer)
-            surf.rfa()
-            if hasattr(surf, "rebuttons"):
-                surf.rebuttons()
+        if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
+            self.menu.renderer.set_self.menuace([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+        self.menu.onundo()
+        if MenuWithField in type(self.menu).__bases__:
+            self.menu.renderer.render_all(self.menu.layer)
+            self.menu.rfa()
+            if hasattr(self.menu, "rebuttons"):
+                self.menu.rebuttons()
 
     def redohistory(self):
         if len(self.redobuffer) == 0:
             return
         print("Redo")
-        lastsize = [surf.levelwidth, surf.levelheight]
+        lastsize = [self.menu.levelwidth, self.menu.levelheight]
         historyelem = self.redobuffer[-1]
 
         elem = historyelem[1:]
@@ -177,29 +265,29 @@ class LevelProcess:
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
                 match i[0][0]:
                     case ".insert":  # insert on redo, pop on undo
-                        surf.data[*historyelem[0], *i[0][1:]].insert(i[1], i[2])
+                        self.menu.data[*historyelem[0], *i[0][1:]].insert(i[1], i[2])
                         continue
                     case ".append":  # append on redo, pop on undo
-                        surf.data[*historyelem[0], *i[0][1:]].append(i[1])
+                        self.menu.data[*historyelem[0], *i[0][1:]].append(i[1])
                         continue
                     case ".pop":  # pop on redo, insert on undo
-                        surf.data[*historyelem[0], *i[0][1:]].pop(i[1])
+                        self.menu.data[*historyelem[0], *i[0][1:]].pop(i[1])
                         continue
                     case ".move":  # pop and insert on redo, pop and insert on undo
-                        surf.data[*historyelem[0], *i[0][1:]].insert(i[2],
-                                                                     surf.data[*historyelem[0], *i[0][1:]].pop(i[1]))
+                        self.menu.data[*historyelem[0], *i[0][1:]].insert(i[2],
+                                                                     self.menu.data[*historyelem[0], *i[0][1:]].pop(i[1]))
                         continue
-            surf.data[*historyelem[0], *i[0]] = i[1][0]
+            self.menu.data[*historyelem[0], *i[0]] = i[1][0]
 
         self.undobuffer.append(deepcopy(self.redobuffer.pop()))
-        if [surf.levelwidth, surf.levelheight] != lastsize:
-            surf.renderer.set_surface([image1size * surf.levelwidth, image1size * surf.levelheight])
-        surf.onredo()
-        if MenuWithField in type(surf).__bases__:
-            surf.renderer.render_all(surf.layer)
-            surf.rfa()
-            if hasattr(surf, "rebuttons"):
-                surf.rebuttons()
+        if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
+            self.menu.renderer.set_self.menuace([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+        self.menu.onredo()
+        if MenuWithField in type(self.menu).__bases__:
+            self.menu.renderer.render_all(self.menu.layer)
+            self.menu.rfa()
+            if hasattr(self.menu, "rebuttons"):
+                self.menu.rebuttons()
 
     def keypress(self):
         pressed = ""
@@ -212,16 +300,16 @@ class LevelProcess:
             if int(i.find("+") != -1) - int(ctrl) == 0:
                 if pg.key.get_pressed()[getattr(pg, key)]:
                     pressed = hotkeys["global"][i]
-        for i in hotkeys[surf.menu].keys():
+        for i in hotkeys[self.menu.menu].keys():
             key = i.replace("@", "").replace("+", "")
             if i == "unlock_keys":
                 continue
             if int(i.find("+") != -1) - int(ctrl) == 0:
                 if pg.key.get_pressed()[getattr(pg, key)]:
-                    pressed = hotkeys[surf.menu][i]
-                    surf.send(pressed)
-        if len(pressed) > 0 and pressed[0] == "/" and surf.menu != "LD":
-            surf.message = pressed[1:]
+                    pressed = hotkeys[self.menu.menu][i]
+                    self.menu.send(pressed)
+        if len(pressed) > 0 and pressed[0] == "/" and self.menu.menu != "LD":
+            self.menu.message = pressed[1:]
         match pressed.lower():
             case "undo":
                 self.undohistory()
@@ -230,22 +318,21 @@ class LevelProcess:
             case "quit":
                 self.asktoexit()
             case "reload":
-                surf.reload()
+                self.menu.reload()
             case "save":
-                surf.savef()
+                self.menu.savef()
                 self.file2 = deepcopy(self.file)
             case "new":
                 print("New")
-                surf.savef()
-                run = False
+                self.menu.savef()
+                self.run = False
             case "open":
-                self.manager.openlevel(surf.asksaveasfilename(defaultextension=[".txt", ".wep"]))
+                self.manager.openlevel(self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"]))
 
     def launch(self, level):
         self.manager.newprocess(level)
 
     def doevents(self, dropfile=True):
-        global surf, render
         for event in pg.event.get():
             match event.type:
                 case pg.DROPFILE:
@@ -257,7 +344,7 @@ class LevelProcess:
                 case pg.QUIT:
                     self.asktoexit()
                 case pg.WINDOWRESIZED:
-                    surf.resize()
+                    self.menu.resize()
                 case pg.KEYDOWN:
                     if event.key not in self.manager.keys:
                         if widgets.keybol:
@@ -269,61 +356,26 @@ class LevelProcess:
                             widgets.keybol = True
                 case pg.MOUSEBUTTONDOWN:
                     if event.button == 4:
-                        surf.send("SU")
+                        self.menu.scroll_up()
                     elif event.button == 5:
-                        surf.send("SD")
+                        self.menu.scroll_down()
 
     def update(self):
         self.doevents()
-        if self.menu.message != "":
-            match self.menu.message:
-                case "undo":
-                    self.undohistory()
-                case "redo":
-                    self.redohistory()
-                case "%":
-                    self.menu = HK(self.surface, self.renderer, self.menu.menu)
-                case "quit":
-                    self.asktoexit()
-                case "fc":
-                    self.manager.fullscreen = not self.manager.fullscreen
-                    window = pg.display.set_mode([self.manager.width, self.manager.height], flags=pg.RESIZABLE | (pg.FULLSCREEN * self.manager.fullscreen))
-                    # pg.display.toggle_fullscreen()
-                    self.menu.resize()
-                case "save":
-                    self.menu.savef()
-                    self.file2 = deepcopy(self.file)
-                case "saveas":
-                    self.menu.saveasf()
-                    self.file2 = deepcopy(self.file)
-                case "savetxt":
-                    self.menu.savef_txt()
-                    self.file2 = deepcopy(self.file)
-                case _:
-                    if self.menu.message in menulist:
-                        surf = getattr(sys.modules[__name__], self.menu.message)(self)
-                    else:
-                        self.menu.send(self.menu.message)
-            surf.message = ""
-        if len(surf.historybuffer) > 0:
-            surf.historybuffer.reverse()
-            undobuffer.extend(surf.historybuffer)
-            surf.historybuffer = []
-            redobuffer = []
-            undobuffer = undobuffer[-globalsettings["historylimit"]:]
+        if len(self.menu.historybuffer) > 0:  #TODO remove this(if possible)
+            self.menu.historybuffer.reverse()
+            self.undobuffer.extend(self.menu.historybuffer)
+            self.menu.historybuffer = []
+            self.redobuffer = []
+            self.undobuffer = self.undobuffer[-globalsettings["historylimit"]:]
 
         if not pg.key.get_pressed()[pg.K_LCTRL]:
-            for i in surf.uc:
+            for i in self.menu.uc:
                 if pg.key.get_pressed()[i]:
-                    keypress(window)
-        if settings[surf.menu].get("menucolor") is not None:
-            window.fill(pg.color.Color(settings[surf.menu]["menucolor"]))
-        else:
-            window.fill(pg.color.Color(settings["global"]["color"]))
-        surf.blit()
-        if 1 < globalsettings["autosavedelay"] < time.time() - savetimer:
+                    self.keypress()
+        self.menu.blit()
+        if 1 < globalsettings["autosavedelay"] < time.time() - self.savetimer:
             print("Autosaving...")
-            surf.savef()
-            savetimer = time.time()
-        pg.display.flip()
-        pg.display.update()
+            self.menu.savef()
+            self.savetimer = time.time()
+        self.manager.window.blit(self.surface, [0, 0])

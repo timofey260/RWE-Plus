@@ -9,7 +9,7 @@ from render import *
 class Menu:
     def __init__(self, process, name):
         self.owner = process
-        self.surface = process.surface
+        self.surface: pg.surface = process.surface
         self.menu = name
         self.renderer = process.renderer
         self.data: RWELevel = process.file
@@ -59,6 +59,12 @@ class Menu:
 
         self.unlock_keys()
         self.resize()
+
+    def scroll_up(self):
+        pass
+
+    def scroll_down(self):
+        pass
 
     def changedata(self, path, value):
         oldvalue = self.data[path]
@@ -375,6 +381,10 @@ class Menu:
             turntolingo(self.data, open(savedest, "w"))
 
     def blit(self, fontsize=None):
+        if settings[self.menu].get("menucolor") is not None:
+            self.surface.fill(pg.color.Color(settings[self.menu.menu]["menucolor"]))
+        else:
+            self.surface.fill(pg.color.Color(settings["global"]["color"]))
         if not self.touchesanything:
             self.setcursor()
         if settings["global"]["doublerect"]:
@@ -765,10 +775,6 @@ class MenuWithField(Menu):
     def send(self, message):
         super().send(message)
         match message:
-            case "SU":
-                self.scroll_up()
-            case "SD":
-                self.scroll_down()
             case "left":
                 self.offset.x += 1
             case "right":
