@@ -4,8 +4,8 @@ import random
 
 
 class MN(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer: Renderer):
-        super().__init__(surface, "MN", renderer)
+    def __init__(self, process, renderer: Renderer):
+        super().__init__(process, "MN", renderer)
         tips = set(open(path + "tips.txt", "r").readlines())
         self.tips = list(tips)
         self.mousp = True

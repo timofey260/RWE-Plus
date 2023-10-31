@@ -5,24 +5,14 @@ import pyperclip
 import ujson
 from render import *
 
-# inputfile = ''
-# filepath = path2levels
-
-
-def rotatepoint(point, angle):
-    px, py = point
-    angle = math.radians(angle)
-    qx = math.cos(angle) * px - math.sin(angle) * py
-    qy = math.sin(angle) * px + math.cos(angle) * py
-    return pg.Vector2([qx, qy])
-
 
 class Menu:
-    def __init__(self, surface: pg.surface.Surface, renderer, name):
-        self.surface = surface
+    def __init__(self, process, name):
+        self.owner = process
+        self.surface = process.surface
         self.menu = name
-        self.renderer = renderer
-        self.data: RWELevel = renderer.data
+        self.renderer = process.renderer
+        self.data: RWELevel = process.file
         # self.datalast = deepcopy(renderer.data)
         self.settings = settings[self.menu]
         self.hotkeys = hotkeys[name]
@@ -609,13 +599,13 @@ class Menu:
 
 
 class MenuWithField(Menu):
-    def __init__(self, surface: pg.Surface, name, renderer: render.Renderer, renderall=True):
-        super(MenuWithField, self).__init__(surface, renderer, name)
+    def __init__(self, process, name, renderall=True):
+        super(MenuWithField, self).__init__(process, name)
 
-        self.renderer = renderer
-        self.items = renderer.tiles
-        self.props: ItemData = renderer.props
-        self.propcolors = renderer.propcolors
+        self.renderer = process.renderer
+        self.items = process.manager.tiles
+        self.props: ItemData = process.manager.props
+        self.propcolors = process.manager.propcolors
 
         self.menu = name
 

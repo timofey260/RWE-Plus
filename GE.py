@@ -4,7 +4,7 @@ from menuclass import *
 
 
 class GE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer):
+    def __init__(self, process):
         self.state = 0
         self.mx = 0
 
@@ -27,7 +27,7 @@ class GE(MenuWithField):
         self.fillshape2 = "rect"  # rect, rect-hollow, circle, circle-hollow, line
         self.brushsize = 1
 
-        super().__init__(surface, "GE", renderer)
+        super().__init__(process, "GE")
         self.emptyarea()
         self.air()
         self.rs()
@@ -132,7 +132,7 @@ class GE(MenuWithField):
                     self.levelheight * self.size]
             pg.draw.rect(self.field.field, border, rect, self.size // image1size + 1)
             if (0 <= posoffset.x < self.levelwidth) and (0 <= posoffset.y < self.levelheight):
-                tilename = settings["GE"]["names"][
+                tilename = globalsettings["blocknames"][
                     str(self.data["GE"][int(posoffset.x)][int(posoffset.y)][self.layer][0])]
                 self.labels[0].set_text(
                     f"Tile: {tilename} {self.data['GE'][int(posoffset.x)][int(posoffset.y)][self.layer]}")

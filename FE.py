@@ -29,6 +29,7 @@ class FE(MenuWithField):
 
         super().__init__(surface, "FE", renderer)
         #self.fieldadd.set_colorkey(None)
+        self.selector = widgets.Selector(surface, self, self.props, "s1", "props.txt")
         self.fieldadd.set_alpha(200)
         self.makeparams()
         self.rfa()

@@ -4,6 +4,7 @@ from path_dict import PathDict
 import pygame as pg
 import os
 import sys
+import math
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
@@ -103,6 +104,14 @@ def smallestchange(args: list[list]) -> list:
                     sorteditem[0] = sorteditem[0][indx:]
                 return currentMin[:indx]
     return []
+
+
+def rotatepoint(point, angle):
+    px, py = point
+    angle = math.radians(angle)
+    qx = math.cos(angle) * px - math.sin(angle) * py
+    qy = math.sin(angle) * px + math.cos(angle) * py
+    return pg.Vector2([qx, qy])
 
 
 class RWELevel:

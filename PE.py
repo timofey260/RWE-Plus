@@ -160,6 +160,10 @@ class PE(MenuWithField):
         self.labels[0].set_text(self.labels[0].originaltext + "\n".join(self.notes))
         self.selector.blit()
         mpos = pg.Vector2(pg.mouse.get_pos())
+        for button in self.settingslist:
+            button.blitshadow()
+        for button in self.settingslist:
+            button.blit(sum(pg.display.get_window_size()) // 120)
         if self.onfield or any(self.helds):
 
             realpos = mpos - self.field.rect.topleft
@@ -173,6 +177,10 @@ class PE(MenuWithField):
             self.delmode = self.findparampressed("delete_mode")
             self.copymode = self.findparampressed("copy_mode")
             self.renderprop = not self.delmode and not self.copymode
+            if self.copymode:
+                widgets.fastmts(self.surface, "Copy prop", mpos.x - 200, mpos.y, white)
+            elif self.delmode:
+                widgets.fastmts(self.surface, "Delete prop", mpos.x - 200, mpos.y, white)
             if self.lastpos != mpos and self.selectedprop["tp"] == "rope":
                 self.lastpos = mpos.copy()
                 ropepos = (mpos - pg.Vector2(self.field.rect.topleft)) / self.size * image1size - pg.Vector2(self.xoffset, self.yoffset) * image1size
@@ -215,7 +223,7 @@ class PE(MenuWithField):
                     self.modpress = True
                     if len(self.data["PR"]["props"]) > 0:
                         *_, near = self.find_nearest(*posoffset)
-                        self.data["PR"]["props"].pop(near)
+                        self.historypop(["PR", "props"], near)
                         self.renderer.props_full_render()
                         self.rfa()
                         self.updatehistory()
@@ -323,6 +331,8 @@ class PE(MenuWithField):
                         pos2 = (near / spritesize + ofc) * self.size + self.field.rect.topleft
                         pg.draw.line(self.surface, red, mpos, pos2, 10)
             self.movemiddle(bp)
+        for button in self.settingslist:
+            button.blittooltip()
         self.selector.blittooltip()
 
     def find_nearest(self, x, y):
@@ -576,7 +586,8 @@ class PE(MenuWithField):
                 point = makearr([round(point[0], 4), round(point[1], 4)], "point")
                 points.append(point)
             prop[4]["points"] = points
-        self.data["PR"]["props"].append(prop.copy())
+        self.historyappend(["PR", "props"], prop.copy())
+        # self.data["PR"]["props"].append(prop.copy())
         self.applytags()
         self.renderer.props_full_render()
         self.rfa()
@@ -584,15 +595,15 @@ class PE(MenuWithField):
 
     def rotate_right(self):
         if self.findparampressed("rotate_speedup"):
-            self.rotate(self.settings["rotate_speedup"])
+            self.rotate(globalsettings["PErotate_speedup"])
         else:
-            self.rotate(self.settings["rotate_speed"])
+            self.rotate(globalsettings["PErotate_speed"])
 
     def rotate_left(self):
         if self.findparampressed("rotate_speedup"):
-            self.rotate(-self.settings["rotate_speedup"])
+            self.rotate(-globalsettings["PErotate_speedup"])
         else:
-            self.rotate(-self.settings["rotate_speed"])
+            self.rotate(-globalsettings["PErotate_speed"])
 
     def rotate0(self):
         self.transform_reset()
@@ -618,16 +629,16 @@ class PE(MenuWithField):
         self.updateproptransform()
 
     def stretchy_up(self):
-        self.stretch(1, self.settings["stretch_speed"])
+        self.stretch(1, globalsettings["PEstretch_speed"])
 
     def stretchy_down(self):
-        self.stretch(1, -self.settings["stretch_speed"])
+        self.stretch(1, -globalsettings["PEstretch_speed"])
 
     def stretchx_up(self):
-        self.stretch(0, self.settings["stretch_speed"])
+        self.stretch(0, globalsettings["PEstretch_speed"])
 
     def stretchx_down(self):
-        self.stretch(0, -self.settings["stretch_speed"])
+        self.stretch(0, -globalsettings["PEstretch_speed"])
 
     @property
     def custom_info(self):

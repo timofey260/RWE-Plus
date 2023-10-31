@@ -223,18 +223,7 @@
 			["X: 0, Y: 0", [10, 94], [255, 255, 255], 25],
 			["Replace air: ", [10, 91], [255, 255, 255], 25],
 			["LMB - Place\nRMB - Fill\nMMB - Move", [10, 7], [170, 170, 170], 25]
-		],
-		"names": {
-			"0": "Air",
-			"1": "Solid",
-			"2": "Slope NE",
-			"3": "Slope NW",
-			"4": "Slope SE",
-			"5": "Slope SW",
-			"6": "Platform",
-			"7": "Shortcut entrance",
-			"9": "Glass"
-		}
+		]
 	}, 
 	"TE":
 	{
@@ -271,7 +260,6 @@
 			["Default material: ", [0, 90], [0, 0, 0], 25],
 			["LMB - Place tile\nRMB - Fill\nMMB - Move", [28, 80], [255, 255, 255], 25]
 		],
-		"itemsize": 2,
 		"menucolor": [120, 120, 120]
 	},
 
@@ -370,9 +358,7 @@
 			["Total cameras: %2d", [0, 97], [255, 255, 255], 25],
 			["LMB - Select camera/Edit\nMMB - Move", [6, 90], [255, 255, 255], 25]
 		],
-		"menucolor": [120, 120, 120],
-		"addspeed": 0.01,
-		"rotatespeed": 0.03
+		"menucolor": [120, 120, 120]
 
 	},
 	"LP": {
@@ -452,11 +438,7 @@
 		"menucolor": [120, 120, 120],
 
 		"elements_as_tiles_count": 20,
-		"elements_as_tiles_color": [110, 110, 110],
-
-		"rotate_speed": 0.1,
-		"rotate_speedup": 1,
-		"stretch_speed": 0.3
+		"elements_as_tiles_color": [110, 110, 110]
 	},
 	"HK": {
 		"buttons": 

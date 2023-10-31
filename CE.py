@@ -199,28 +199,28 @@ class CE(MenuWithField):
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
             self.changedata(["CM", "quads", cam, quadindx, 1],
-                            round(min(self.data["CM"]["quads"][cam][quadindx][1] + self.settings["addspeed"], 1), 4))
+                            round(min(self.data["CM"]["quads"][cam][quadindx][1] + globalsettings["CEaddspeed"], 1), 4))
 
     def adddown(self):  # ddddddddddd
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
             self.changedata(["CM", "quads", cam, quadindx, 1], round(
-                max(self.data["CM"]["quads"][cam][quadindx][1] - self.settings["addspeed"], 0), 4))
+                max(self.data["CM"]["quads"][cam][quadindx][1] - globalsettings["CEaddspeed"], 0), 4))
 
     def addleft(self):
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
             self.changedata(["CM", "quads", cam, quadindx, 0],
-                            math.floor(self.data["CM"]["quads"][cam][quadindx][0] - self.settings["rotatespeed"]) % 360)
+                            math.floor(self.data["CM"]["quads"][cam][quadindx][0] - globalsettings["CErotatespeed"]) % 360)
 
     def addright(self):
         if not self.held:
             cam = self.closestcameraindex()
             quadindx = self.getquad(cam)
             self.changedata(["CM", "quads", cam, quadindx, 0],
-                            math.ceil(self.data["CM"]["quads"][cam][quadindx][0] + self.settings["rotatespeed"]) % 360)
+                            math.ceil(self.data["CM"]["quads"][cam][quadindx][0] + globalsettings["CErotatespeed"]) % 360)
 
     @property
     def custom_info(self):
