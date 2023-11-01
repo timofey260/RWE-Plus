@@ -2,7 +2,6 @@ import copy
 import render
 import widgets
 import pyperclip
-import ujson
 from render import *
 
 
@@ -13,10 +12,8 @@ class Menu:
         self.menu = name
         self.renderer = process.renderer
         self.data: RWELevel = process.file
-        # self.datalast = deepcopy(renderer.data)
         self.settings = settings[self.menu]
         self.hotkeys = hotkeys[name]
-        self.historybuffer = []
         self.historyChanges = []
         self.uc = []
 
@@ -60,6 +57,9 @@ class Menu:
         self.unlock_keys()
         self.resize()
 
+    def sendtoowner(self, message):
+        self.owner.recievemessage(message)
+
     def scroll_up(self):
         pass
 
@@ -83,7 +83,7 @@ class Menu:
             self.uc.append(getattr(pg, i))
 
     def watch_keys(self):
-        self.message = "%"
+        self.sendtoowner("%")
 
     def recaption(self):
         pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | v{tag} | {self.custom_info}")
@@ -108,29 +108,30 @@ class Menu:
     def asksaveasfilename(self, defaultextension=None):
         if defaultextension is None:
             defaultextension = [".wep"]
-        global inputfile, filepath
+        global inputfile, filepath, append
         filepath = path2levels
         buttons = []
         slider = 0
         labeltext = "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit\n"
         label = widgets.Label(self.surface, labeltext, [50, 0], black, 30)
         label.resize()
+        append = True
 
         def addfolder(folder):
-            global filepath
+            global filepath, append
             filepath += "/" + folder.text + "/"
-            self.message = "ab"
+            append = True
 
         def goback():
-            global filepath
+            global filepath, append
             p = Path(filepath)
             filepath = str(p.parent.absolute())
-            self.message = "ab"
+            append = True
 
         def setasname(name):
-            global inputfile
+            global inputfile, append
             inputfile = name.text
-            self.message = "ab"
+            append = True
 
         def appendbuttons():
             global filepath
@@ -162,7 +163,6 @@ class Menu:
 
         inputfile = ''
         r = True
-        appendbuttons()
         while r:
             self.surface.fill(color)
             for button in buttons:
@@ -202,9 +202,8 @@ class Menu:
                 if event.type == pg.WINDOWRESIZED:
                     self.resize()
                     label.resize()
-            if self.message == "ab":
+            if append:
                 slider = 0
-                self.message = ''
                 appendbuttons()
             widgets.fastmts(self.surface, inputfile, 0, 50, fontsize=50)
             pg.display.flip()
@@ -290,7 +289,8 @@ class Menu:
             return defaulttext
 
     def find(self, filelist: dict, q):
-        global inputfile
+        global inputfile, append
+        append = True
         inputfile = ""
         buttons = []
         slider = 0
@@ -324,7 +324,6 @@ class Menu:
 
         inputfile = ''
         r = True
-        appendbuttons()
         while r:
             self.surface.fill(color)
             for button in buttons:
@@ -361,9 +360,8 @@ class Menu:
                 if event.type == pg.WINDOWRESIZED:
                     self.resize()
                     label.resize()
-            if self.message == "ab":
+            if append:
                 slider = 0
-                self.message = ''
                 appendbuttons()
             if "\n" in inputfile:
                 break
@@ -380,11 +378,13 @@ class Menu:
         if savedest != "":
             turntolingo(self.data, open(savedest, "w"))
 
-    def blit(self, fontsize=None):
+    def blitbefore(self):
         if settings[self.menu].get("menucolor") is not None:
-            self.surface.fill(pg.color.Color(settings[self.menu.menu]["menucolor"]))
+            self.surface.fill(pg.color.Color(settings[self.menu]["menucolor"]))
         else:
             self.surface.fill(pg.color.Color(settings["global"]["color"]))
+
+    def blit(self, fontsize=None):
         if not self.touchesanything:
             self.setcursor()
         if settings["global"]["doublerect"]:
@@ -428,12 +428,17 @@ class Menu:
         self.historyChanges.append([[".move", *path], index, move])
         self.data[path].insert(move, self.data[path].pop(index))
 
+    def addtohistory(self):
+        self.owner.undobuffer.append(self.historyChanges)
+        self.historyChanges = []
+        self.owner.redobuffer = []
+        self.owner.undobuffer = self.owner.undobuffer[-globalsettings["historylimit"]:]
+
     def updatehistory(self):
         if len(self.historyChanges) <= 0:
             return
         self.historyChanges.insert(0, smallestchange(self.historyChanges))
-        self.historybuffer.append(self.historyChanges)
-        self.historyChanges = []
+        self.addtohistory()
 
     def detecthistory(self, path, savedata=True):
         if len(self.historyChanges) <= 0:
@@ -441,7 +446,7 @@ class Menu:
         # grouping data, recreating the past
         xposes = []
         for i in self.historyChanges:
-            if path[0] == i[0]:
+            if path[0] == i[0][0]:
                 for p in path:
                     i[0].remove(p)
                 if i[0][0] not in xposes:
@@ -449,7 +454,6 @@ class Menu:
         beforerows = []
         afterrows = []
         for i in xposes:
-            # print([*path, i])
             afterrows.append(self.data[*path, i])
             lastdata = PathDict(deepcopy(self.data[*path, i]))
             for indx, item in enumerate(self.historyChanges):
@@ -460,8 +464,8 @@ class Menu:
         for indx, i in enumerate(xposes):
             self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
         self.historyChanges.insert(0, [*path])
-        self.historybuffer.append(self.historyChanges)
-        self.historyChanges = []
+        print(self.historyChanges)
+        self.addtohistory()
 
     def non(self, *args):
         pass
@@ -509,9 +513,6 @@ class Menu:
             i.resize()
         for i in self.labels:
             i.resize()
-
-    def sendsignal(self, message):
-        self.message = message
 
     def reload(self):
         global settings

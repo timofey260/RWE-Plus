@@ -14,7 +14,7 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--version", help="Shows current version and exits", action="version")
     parser.add_argument("--render", "-r", dest="renderfiles", metavar="file", nargs="*", type=str,
                         help="Renders levels with drizzle.")
-    # parser.parse_args()
+    # this code is as clean as main should be
     args = parser.parse_args()
     try:
         if args.new:

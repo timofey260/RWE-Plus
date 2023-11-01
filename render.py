@@ -110,11 +110,11 @@ def quadtransform(quads, image: pg.Surface):
 
 
 class Renderer:
-    def __init__(self, data: RWELevel, tiles: ItemData, props: ItemData, propcolors, render=True):
-        self.tiles: ItemData = tiles
-        self.props: ItemData = props
-        self.propcolors = propcolors
-        self.data: RWELevel = data
+    def __init__(self, process, render=True):
+        self.tiles: ItemData = process.manager.tiles
+        self.props: ItemData = process.manager.props
+        self.propcolors = process.manager.propcolors
+        self.data: RWELevel = process.file
         self.effect_index = 0
 
         self.lastlayer = 0
@@ -123,11 +123,7 @@ class Renderer:
 
         if render:
             size = [self.levelwidth * image1size, self.levelheight * image1size]
-            self.geo_surfs = [
-                pg.Surface(size),
-                pg.Surface(size),
-                pg.Surface(size)
-            ]
+            # self.f = pg.Surface(size)
             self.surf_geo = pg.Surface(size)
             self.geolayers = [True, True, True]
             self.tilelayers = [True, True, True]
@@ -141,11 +137,6 @@ class Renderer:
     def set_surface(self, size=None):
         if size is None:  # auto
             size = [self.levelwidth * image1size, self.levelheight * image1size]
-        self.geo_surfs = [
-            pg.Surface(size),
-            pg.Surface(size),
-            pg.Surface(size)
-        ]
         self.surf_geo = pg.Surface(size)
         self.geolayers = [True, True, True]
         self.tilelayers = [True, True, True]

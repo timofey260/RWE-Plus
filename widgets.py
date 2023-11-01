@@ -291,7 +291,7 @@ class Window:
 
 
 class Label:
-    def __init__(self, surface: pg.surface.Surface, text, pos, color, fontsize=15):
+    def __init__(self, surface: pg.surface.Surface, text: str, pos: pg.Vector2, color, fontsize=15):
         self.surface = surface
         self.text = text
         self.originaltext = text
@@ -768,3 +768,32 @@ class Selector():
         if self.favsbutton is not None:
             return self.favsbutton.onmouseover() or self.bigbutton.onmouseover()
         return self.bigbutton.onmouseover()
+
+
+class Notification:
+    def __init__(self, surface: pg.Surface, message: str):
+        self.surface = surface
+        self.message = message
+        self.pos = pg.Vector2()
+        self.anim = 0
+        self.messagelabel = Label(surface, message, self.pos, white, 30)
+        padding = 20
+        self.pos.update([-self.messagelabel.textimage.get_width() - padding * 2, padding])
+        self.startpos = copy.deepcopy(self.pos)
+        self.endpos = pg.Vector2(padding, self.pos.y)
+        self.delete = False
+
+    def blit(self):
+        ranim = self.anim / 100
+        if self.anim < 100:
+            self.pos = self.startpos.lerp(self.endpos, 1 - (1 - ranim) ** 3)
+        elif 500 < self.anim < 600:
+            ranim = (self.anim - 500) / 100
+            self.pos = self.endpos.lerp(self.startpos, ranim ** 3)
+        elif self.anim > 600:
+            self.delete = True
+        self.anim += 1
+        pg.draw.rect(self.surface, gray, pg.Rect.inflate(
+            pg.Rect([self.pos, self.messagelabel.textimage.get_size()]), 20, 20), border_radius=20)
+        self.messagelabel.pos = self.pos
+        self.messagelabel.blit()

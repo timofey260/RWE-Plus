@@ -32,13 +32,13 @@ blocks = [
 
 class TE(MenuWithField):
 
-    def __init__(self, surface: pg.Surface, renderer: render.Renderer):
+    def __init__(self, process):
         self.menu = "TE"
         self.tool = 0  # 0 - place, 1 - destroy, 2 - copy
 
         self.matshow = False
 
-        self.items: ItemData = renderer.tiles
+        self.items: ItemData = process.renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
         self.items.insert(0, {"name": "special", "color": black, "items": p["patterns"]})
         for indx, pattern in enumerate(p["patterns"]):
@@ -56,12 +56,12 @@ class TE(MenuWithField):
         self.lastfg = False
         self.brushsize = 1
 
-        super().__init__(surface, "TE", renderer, False)
+        super().__init__(process, "TE", False)
         self.drawtiles = True
         self.set("materials 0", "Standard")
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
-        self.selector = widgets.Selector(surface, self, self.items, "s1", "tiles.txt")
+        self.selector = widgets.Selector(self.surface, self, self.items, "s1", "tiles.txt")
         self.selector.callback = self.selectorset
 
         self.rfa()
@@ -501,7 +501,10 @@ class TE(MenuWithField):
                                [x * self.size, y * self.size])
         for x2 in range(w):
             for y2 in range(h):
-                csp = sp[x2 * h + y2]
+                try:
+                    csp = sp[x2 * h + y2]
+                except:
+                    csp = -1
                 xpos = int(x + x2)
                 ypos = int(y + y2)
                 if xpos >= self.levelwidth or ypos >= self.levelheight or xpos < 0 or ypos < 0:

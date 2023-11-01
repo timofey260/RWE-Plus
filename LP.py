@@ -22,10 +22,10 @@ cursorlist = {
 }
 
 class LP(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer: Renderer):
+    def __init__(self, process):
         self.sliders = []
         self.tool = ""  # env, size
-        super().__init__(surface, "LP", renderer)
+        super().__init__(process, "LP")
         for i in self.settings["sliders"]:
             self.sliders.append(widgets.Slider(
                 self.surface,

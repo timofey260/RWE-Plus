@@ -26,11 +26,11 @@ values = {
 
 
 class PE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer):
+    def __init__(self, process):
         self.menu = "PE"
 
-        self.props: ItemData = renderer.props
-        self.propcolors = renderer.propcolors
+        self.props: ItemData = process.manager.props
+        self.propcolors = process.manager.propcolors
 
         self.reset_settings()
         self.settingslist = []
@@ -61,9 +61,9 @@ class PE(MenuWithField):
         self.renderprop = True
         self.modpress = False
 
-        super().__init__(surface, "PE", renderer)
+        super().__init__(process, "PE")
         self.drawprops = True
-        self.selector = widgets.Selector(surface, self, self.props, "s1", "props.txt")
+        self.selector = widgets.Selector(self.surface, self, self.props, "s1", "props.txt")
         self.selector.callback = self.selectorset
         self.setprop(self.props[0]["items"][0]["nm"], self.props.categories[0])
         self.resize()

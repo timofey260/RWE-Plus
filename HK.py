@@ -21,7 +21,10 @@ class HK(Menu):
         for key, func in hotkeys[self.m].items():
             if key == "unlock_keys":
                 continue
-            desc = self.keys[self.m][func]
+            try:
+                desc = self.keys[self.m][func]
+            except KeyError:
+                desc = "???"
             tx = pg.key.name(getattr(pg, key.replace("@", "").replace("+", ""))).title() + "\n"
             tx2 = desc+"\n"
             if "+" in key:
@@ -77,7 +80,7 @@ class HK(Menu):
         self.load_menu(self.m)
 
     def goback(self):
-        self.message = self.m
+        self.sendtoowner(self.m)
 
     def edit(self):
         if islinux:

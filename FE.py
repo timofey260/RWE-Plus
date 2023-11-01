@@ -4,7 +4,7 @@ import random
 
 
 class FE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer):
+    def __init__(self, process):
         self.menu = "FE"
 
         self.currentcategory = 0
@@ -27,9 +27,9 @@ class FE(MenuWithField):
 
         self.copymode = False
 
-        super().__init__(surface, "FE", renderer)
+        super().__init__(process, "FE")
         #self.fieldadd.set_colorkey(None)
-        self.selector = widgets.Selector(surface, self, self.props, "s1", "props.txt")
+        self.selector = widgets.Selector(self.surface, self, self.props, "s1", "props.txt")
         self.fieldadd.set_alpha(200)
         self.makeparams()
         self.rfa()

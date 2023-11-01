@@ -26,28 +26,28 @@ class MN(MenuWithField):
         self.rfa()
 
     def GE(self):
-        self.message = "GE"
+        self.sendtoowner("GE")
 
     def TE(self):
-        self.message = "TE"
+        self.sendtoowner("TE")
 
     def LE(self):
-        self.message = "LE"
+        self.sendtoowner("LE")
 
     def FE(self):
-        self.message = "FE"
+        self.sendtoowner("FE")
 
     def CE(self):
-        self.message = "CE"
+        self.sendtoowner("CE")
 
     def LP(self):
-        self.message = "LP"
+        self.sendtoowner("LP")
 
     def PE(self):
-        self.message = "PE"
+        self.sendtoowner("PE")
 
     def HK(self):
-        self.message = "HK"
+        self.sendtoowner("HK")
 
     def save(self):
         self.savef()
@@ -63,7 +63,7 @@ class MN(MenuWithField):
         renderlevel(self.data)
 
     def quit(self):
-        self.message = "quit"
+        self.sendtoowner("quit")
 
     def nexttip(self):
         self.labels[0].set_text(self.returnkeytext(random.choice(self.tips).replace("\n", "").replace("\\n", "\n")))

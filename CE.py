@@ -5,10 +5,10 @@ from lingotojson import *
 error = globalsettings["snap_error"] # snap error
 
 class CE(MenuWithField):
-    def __init__(self, surface: pg.surface.Surface, renderer: render.Renderer):
+    def __init__(self, process):
         self.menu = "CE"
         self.mode = "move"  # move, edit
-        super().__init__(surface, "CE", renderer, renderall=False)
+        super().__init__(process, "CE", renderall=False)
 
         self.held = False
         self.heldindex = 0

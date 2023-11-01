@@ -3,9 +3,9 @@ from menuclass import *
 
 class LE(MenuWithField):
 
-    def __init__(self, surface: pg.surface.Surface, renderer):
+    def __init__(self,process):
         self.menu = "LE"
-        super().__init__(surface, "LE", renderer)
+        super().__init__(process, "LE")
         self.field2 = widgets.Window(self.surface, self.settings["d1"])
         self.field3 = self.field2.copy()
 

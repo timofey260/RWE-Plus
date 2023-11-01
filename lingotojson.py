@@ -220,6 +220,10 @@ def init_solve(files: list[str,]):
 
 
 def inittolist(window: pg.Surface):
+    def printmessage(message):
+        surf = f.render(message, True, pg.color.THECOLORS["white"], None)
+        pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
+        window.blit(surf, [0, 0])
     inv = settings["TE"]["LEtiles"]
     tilefiles = [path2graphics + i for i in globalsettings["tileinits"]]
     solved = init_solve(tilefiles)
@@ -232,9 +236,7 @@ def inittolist(window: pg.Surface):
         colr = catitem["color"]
         solved_copy[catnum]["items"] = []
         for indx, item in enumerate(items):
-            surf = f.render(f"Loading tile {item['nm']}...", True, pg.color.THECOLORS["white"], None)
-            pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
-            window.blit(surf, [0, 0])
+            printmessage(f"Loading tile {item['nm']}...")
             pg.display.update()
             try:
                 img = loadimage(f"{path2graphics}{item['nm']}.png")
@@ -315,6 +317,7 @@ def inittolist(window: pg.Surface):
             preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)
         preview.set_colorkey(pg.Color(255, 255, 255))
+        printmessage(f"Loading material {k}")
         solved_copy[matcatcount]["items"].append(
             {
                 "nm": k,
@@ -335,6 +338,7 @@ def inittolist(window: pg.Surface):
             matcatcount += 1
             matcat = f"materials {matcatcount}"
             solved_copy.insert(matcatcount, {"name": matcat, "color": pg.Color(0, 0, 0), "items": []})
+    printmessage("All tiles loaded!")
     return solved_copy
 
 
@@ -363,6 +367,10 @@ def getcolors():
 
 def getprops(tiles: dict, window: pg.Surface):
     # turning tiles to props and then add them to all other props
+    def printmessage(message):
+        surf = f.render(message, True, pg.color.THECOLORS["white"], None)
+        pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
+        window.blit(surf, [0, 0])
     propfiles = [path2props + i for i in globalsettings["propinits"]]
     propfiles.append(path + "additionprops.txt")
     solved = init_solve(propfiles)
@@ -373,9 +381,7 @@ def getprops(tiles: dict, window: pg.Surface):
         colr = catitem["color"]
         solved_copy[catnum]["items"] = []
         for indx, item in enumerate(items):
-            surf = f.render(f"Loading prop {item['nm']}...", True, pg.color.THECOLORS["white"], None)
-            pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
-            window.blit(surf, [0, 0])
+            printmessage(f"Loading prop {item['nm']}...")
             pg.display.update()
             try:
                 img = loadimage(path2props + item["nm"] + ".png")
@@ -441,6 +447,7 @@ def getprops(tiles: dict, window: pg.Surface):
     # solved_copy["material"] = []
     # for cat in tiles:
     #     pass
+    printmessage("Loading tiles as props")
     count = 0
     count2 = 0
     title = ""
@@ -491,6 +498,7 @@ def getprops(tiles: dict, window: pg.Surface):
                             returnimage.blit(errorimg, [0, 0])
                 returnimage = pg.transform.scale(returnimage, pg.Vector2(returnimage.get_size()) / propsize * spritesize)
                 returnimage.set_colorkey(pg.Color(255, 255, 255))
+                printmessage(f"Loading tile as prop {tile['nm']}...")
                 itemlist.append({
                     "nm": tile["nm"],
                     "tp": "standard",
@@ -509,10 +517,11 @@ def getprops(tiles: dict, window: pg.Surface):
                 })
                 count -= 1
     solved_copy[count2]["items"] = itemlist
+    printmessage("All props loaded!")
     return solved_copy
 
 
-def turntolingo(string: dict, file):
+def turntolingo(string: RWELevel|dict, file):
     with file as fl:
         fl.write(str(string["GE"]) + "\r")
         fl.write(tolingo(string["TE"]) + "\r")

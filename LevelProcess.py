@@ -26,6 +26,7 @@ class ProcessManager:
         self.width = settings["global"]["width"]
         self.height = settings["global"]["height"]
         self.window = pg.display.set_mode([self.width, self.height], flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
+        self.notifications: list[widgets.Notification] = []
 
         os.system("cls")
         try:
@@ -41,14 +42,12 @@ class ProcessManager:
             print("Cannot find new RWE+ versions")
         except requests.exceptions.ReadTimeout:
             print("Cannot find new RWE+ versions")
+        self.notify("Everything loaded successfully!")
 
     def update(self):
         if len(self.processes) > 0:
             try:
                 self.mainprocess.update()
-
-                pg.display.flip()
-                pg.display.update()
             except Exception as e:
                 # extra save level in case of eny crashes
                 f = open(application_path + "\\CrashLog.txt", "w")
@@ -64,6 +63,12 @@ class ProcessManager:
                 if ex:
                     self.saveall()
                 raise
+        if len(self.notifications) > 0:
+            self.notifications[0].blit()
+            if self.notifications[0].delete:
+                self.notifications.pop(0)
+        pg.display.flip()
+        pg.display.update()
 
     def newprocess(self, level):
         if level != -1 and os.path.exists(level):
@@ -82,9 +87,9 @@ class ProcessManager:
         for i in self.processes:
             i.menu.savef(crashsave)
 
-    def fullscreen(self):
+    def openfullscreen(self):
         self.fullscreen = not self.fullscreen
-        self.surface = pg.display.set_mode([self.width, self.height],
+        self.window = pg.display.set_mode([self.width, self.height],
                                            flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
 
     def printprocesses(self):
@@ -93,6 +98,9 @@ class ProcessManager:
     @property
     def mainprocess(self):
         return self.processes[self.currentproccess]
+
+    def notify(self, message):
+        self.notifications.append(widgets.Notification(self.window, message))
 
 
 class LevelProcess:
@@ -107,7 +115,7 @@ class LevelProcess:
         self.undobuffer = []
         self.redobuffer = []
         self.savetimer = time.time()
-        self.renderer = Renderer(self.file, manager.tiles, manager.props, manager.propcolors)
+        self.renderer = Renderer(self)
         self.renderer.render_all(0)
         if demo:
             self.menu: Menu | MenuWithField = load(self)
@@ -166,7 +174,7 @@ class LevelProcess:
             case "quit":
                 self.asktoexit()
             case "fc":
-                self.manager.fullscreen()
+                self.manager.openfullscreen()
                 self.menu.resize()
             case "save":
                 self.menu.savef()
@@ -177,7 +185,7 @@ class LevelProcess:
             case "savetxt":
                 self.menu.savef_txt()
                 self.file2 = deepcopy(self.file)
-            case "newnewProcess":
+            case "newProcess":
                 self.manager.newprocess(-1)
             case "new":
                 self.__init__(self.manager, -1)
@@ -192,7 +200,7 @@ class LevelProcess:
             case "tutorial":
                 file = turntoproject(open(path2tutorial + "tutorial.txt", "r").read())
                 file["path"] = "tutorial"
-                self.renderer = Renderer(file, None, None, None, True)
+                self.renderer = Renderer(self)
                 self.menu = TT(self)
             case "load":
                 self.menu = load(self)
@@ -201,7 +209,6 @@ class LevelProcess:
                     self.menu = getattr(sys.modules[__name__], message)(self)
                 else:
                     self.menu.send(message)
-        
 
     def undohistory(self):
         if len(self.undobuffer) == 0:
@@ -309,7 +316,7 @@ class LevelProcess:
                     pressed = hotkeys[self.menu.menu][i]
                     self.menu.send(pressed)
         if len(pressed) > 0 and pressed[0] == "/" and self.menu.menu != "LD":
-            self.menu.message = pressed[1:]
+            self.recievemessage(pressed[1:])
         match pressed.lower():
             case "undo":
                 self.undohistory()
@@ -362,20 +369,14 @@ class LevelProcess:
 
     def update(self):
         self.doevents()
-        if len(self.menu.historybuffer) > 0:  #TODO remove this(if possible)
-            self.menu.historybuffer.reverse()
-            self.undobuffer.extend(self.menu.historybuffer)
-            self.menu.historybuffer = []
-            self.redobuffer = []
-            self.undobuffer = self.undobuffer[-globalsettings["historylimit"]:]
-
+        self.menu.blitbefore()
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in self.menu.uc:
                 if pg.key.get_pressed()[i]:
                     self.keypress()
         self.menu.blit()
-        if 1 < globalsettings["autosavedelay"] < time.time() - self.savetimer:
+        if 1 < globalsettings["autosavedelay"] < time.time() - self.savetimer and not self.demo:
             print("Autosaving...")
             self.menu.savef()
             self.savetimer = time.time()
-        self.manager.window.blit(self.surface, [0, 0])
+            print("Saved!")

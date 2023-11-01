@@ -1,5 +1,6 @@
 from menuclass import *
 
+
 class load(Menu):
     def __init__(self, process):
         super().__init__(process, "LD")
@@ -11,15 +12,15 @@ class load(Menu):
         super().blit(30)
 
     def open(self):
-        self.owner.recievemessage("open")
+        self.sendtoowner("open")
         # self.message = "open"
 
     def new(self):
-        self.owner.recievemessage("new")
+        self.sendtoowner("new")
         # self.message = "new"
 
     def tutorial(self):
-        self.owner.recievemessage("tutorial")
+        self.sendtoowner("tutorial")
         # self.message = "tutorialRWE"
 
     def report(self):
