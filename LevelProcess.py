@@ -45,24 +45,25 @@ class ProcessManager:
         self.notify("Everything loaded successfully!")
 
     def update(self):
-        if len(self.processes) > 0:
-            try:
-                self.mainprocess.update()
-            except Exception as e:
-                # extra save level in case of eny crashes
-                f = open(application_path + "\\CrashLog.txt", "w")
-                f.write(traceback.format_exc())
-                f.write("This is why RWE+ crashed^^^\nSorry")
-                if globalsettings["saveoncrash"] and not globalsettings["debugmode"]:
-                    self.saveall(True)
-                    raise
-                traceback.print_exc()
-                ex = askyesno("Crash!!!",
-                              "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to "
-                              "save All Levels you opened?")
-                if ex:
-                    self.saveall()
+        if len(self.processes) <= 0:
+            exit()
+        try:
+            self.mainprocess.update()
+        except Exception as e:
+            # extra save level in case of eny crashes
+            f = open(application_path + "\\CrashLog.txt", "w")
+            f.write(traceback.format_exc())
+            f.write("This is why RWE+ crashed^^^\nSorry")
+            if globalsettings["saveoncrash"] and not globalsettings["debugmode"]:
+                self.saveall(True)
                 raise
+            traceback.print_exc()
+            ex = askyesno("Crash!!!",
+                          "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to "
+                          "save All Levels you opened?")
+            if ex:
+                self.saveall()
+            raise
         if len(self.notifications) > 0:
             self.notifications[0].blit()
             if self.notifications[0].delete:
@@ -130,7 +131,7 @@ class LevelProcess:
         self.manager.closeprocess(self)
 
     def asktoexit(self):
-        if self.file2 != self.file:
+        if self.file2 != self.file and not self.demo:
             ex = askyesnocancel("Exit from RWE+", "Do you want to save Changes?")
             if ex:
                 self.menu.savef()

@@ -375,7 +375,7 @@ class Menu:
 
     def savef_txt(self):
         savedest = self.asksaveasfilename(defaultextension=[".txt"])
-        if savedest != "":
+        if savedest != "" and savedest is not None:
             turntolingo(self.data, open(savedest, "w"))
 
     def blitbefore(self):

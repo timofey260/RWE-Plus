@@ -466,16 +466,21 @@ class TE(MenuWithField):
         py = y + int((h * .5) + .5) - 1
         if px >= self.levelwidth or py >= self.levelheight or px < 0 or py < 0:
             return
+        # if self.findparampressed("movepreview"):
+        #     if prev:
+        #         pg.draw.rect(self.surface, black, [self.field.rect.x, self.field.rect.y, w * self.size, h * self.size], 0)
+        #     else:
+        #         px = (x + self.xoffset) * self.size + self.field.rect.x
+        #         py = (y + self.yoffset) * self.size + self.field.rect.y
+        #         pg.draw.rect(self.surface, black, [px, py, w * self.size, h * self.size], 0)
         if self.findparampressed("movepreview"):
-            if prev:
-                pg.draw.rect(self.surface, black, [self.field.rect.x, self.field.rect.y, w * self.size, h * self.size], 0)
-            else:
-                px = (x + self.xoffset) * self.size + self.field.rect.x
-                py = (y + self.yoffset) * self.size + self.field.rect.y
-                pg.draw.rect(self.surface, black, [px, py, w * self.size, h * self.size], 0)
+            return
         for x2 in range(w):
             for y2 in range(h):
-                csp = sp[x2 * h + y2]
+                try:
+                    csp = sp[x2 * h + y2]
+                except:
+                    csp = -1
                 printtile(0, layer1)
                 if sp2 != 0:
                     try:
