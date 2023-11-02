@@ -82,6 +82,7 @@ wladd = 5.7  # addition to water level
 bignum = 9999999  # just a big number
 
 inputpromtname = "RWE+ input"
+debugmode = globalsettings["debugmode"]
 
 
 fonts: dict[[pg.font.Font, int], ...] = {}

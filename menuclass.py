@@ -16,8 +16,9 @@ class Menu:
         self.hotkeys = hotkeys[name]
         self.historyChanges = []
         self.uc = []
+        self.saved = True
 
-        self.recaption()
+        # self.recaption()
         print("Entered " + self.menu)
 
         self.mousp = False
@@ -86,7 +87,10 @@ class Menu:
         self.sendtoowner("%")
 
     def recaption(self):
-        pg.display.set_caption(f"{self.data['path']} | RWE+: {self.menu} | v{tag} | {self.custom_info}")
+        pg.display.set_caption(f"RWE+: {self.menu} | "
+                               f"{self.data['level']}{'' if self.saved else '*'} | "
+                               f"v{tag} | "
+                               f"{self.custom_info}")
 
     def savef(self, saveas=False, crashsave=False):
         if crashsave:
@@ -103,6 +107,7 @@ class Menu:
                 self.data["path"] = savedest
                 self.data["dir"] = os.path.abspath(savedest)
         print("Level saved!")
+        self.saved = True
         self.recaption()
 
     def asksaveasfilename(self, defaultextension=None):
@@ -204,6 +209,7 @@ class Menu:
                     label.resize()
             if append:
                 slider = 0
+                append = False
                 appendbuttons()
             widgets.fastmts(self.surface, inputfile, 0, 50, fontsize=50)
             pg.display.flip()
@@ -430,6 +436,7 @@ class Menu:
 
     def addtohistory(self):
         self.owner.undobuffer.append(self.historyChanges)
+        self.saved = False
         self.historyChanges = []
         self.owner.redobuffer = []
         self.owner.undobuffer = self.owner.undobuffer[-globalsettings["historylimit"]:]

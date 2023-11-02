@@ -106,8 +106,10 @@
             "?Good luck at making your own levels with it\nClick next to close tutorial"
 		],
 		"findmenu_text": "type what you want",
-		"catpos": [5, 20, 22, 4],
-		"itempos": [5, 24, 22, 2],
+		"s1": {
+			"catpos": [5, 20, 22, 4],
+			"itempos": [0, 2, 22, 2]
+		},
 		"d1":
 		{
 			"rect": [25, 20, 65, 70],
@@ -140,7 +142,7 @@
 			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "Save as .wep project"],
 			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "Save as official level editor file"],
 			["Next tip", [90, 76, 10, 10], [90, 90, 90], "nexttip", "non", "Just next tip)"],
-			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)"],
+			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close current RWE+ process(<[quit]>)"],
 
 			["?", [68, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 		],
@@ -243,8 +245,10 @@
 			["GE", [95, 0, 5, 6], [100, 100, 100], "GE", "non", "Go to geometry editor"]
 			
 		],
-		"catpos": [4, 6, 22, 4],
-		"itempos": [4, 10, 22, 2],
+		"s1": {
+			"catpos": [4, 6, 22, 4],
+			"itempos": [0, 2, 22, 2]
+		},
 		"d1":{
 			"rect": [28, 2, 70, 96],
 			"color": [90, 90, 90],
@@ -305,9 +309,10 @@
 			["...", [24, 2, 4, 4], [100, 100, 100], "findeffect", "non", "Browse(<[-findeffect]>)"]
 			
 		],
-
-		"catpos": [2, 6, 22, 4],
-		"itempos": [2, 10, 22, 2],
+		"s1": {
+			"catpos": [2, 6, 22, 4],
+			"itempos": [2, 10, 22, 2]
+		},
 
 		"itempos2": [2, 64, 22, 2],
 
@@ -404,12 +409,15 @@
 			["...", [24, 2, 4, 4], [100, 100, 100], "findpropmenu", "non", "Browse(<[-findpropmenu]>)"]
 			
 		],
+		"s1": {
+			"catpos": [2, 6, 22, 4],
+			"itempos": [0, 2, 22, 2]
+		},
 
-		"catpos": [2, 6, 22, 4],
-		"itempos": [2, 10, 22, 2],
-
-		"settingspos": [2, 68, 22, 2],
-		"settingscolor": [90, 90, 90],
+		"s2": {
+			"settingspos": [2, 68, 22, 2],
+			"settingscolor": [90, 90, 90]
+		},
 
 		"paramspos": [32, 68],
 		"seedchange_size": [10, 10],
@@ -430,11 +438,7 @@
 		"menucolor": [120, 120, 120],
 
 		"elements_as_tiles_count": 20,
-		"elements_as_tiles_color": [110, 110, 110],
-
-		"rotate_speed": 0.1,
-		"rotate_speedup": 1,
-		"stretch_speed": 0.3
+		"elements_as_tiles_color": [110, 110, 110]
 	},
 	"HK": {
 		"buttons": 

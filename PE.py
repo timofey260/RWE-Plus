@@ -204,7 +204,8 @@ class PE(MenuWithField):
             s = [self.findparampressed("stretch_topleft"),
                  self.findparampressed("stretch_topright"),
                  self.findparampressed("stretch_bottomright"),
-                 self.findparampressed("stretch_bottomleft")]
+                 self.findparampressed("stretch_bottomleft")
+                ]
 
             qd = quadsize(self.quads)
             mosts = qd[2]
@@ -224,7 +225,7 @@ class PE(MenuWithField):
                     if len(self.data["PR"]["props"]) > 0:
                         *_, near = self.find_nearest(*posoffset)
                         self.historypop(["PR", "props"], near)
-                        self.renderer.props_full_render()
+                        self.renderer.props_full_render(self.layer)
                         self.rfa()
                         self.updatehistory()
                 elif self.copymode:
@@ -480,9 +481,9 @@ class PE(MenuWithField):
                     self.prop_settings["variation"] = 0 if random else 1
 
                 if random:
-                    notes.append(f"Will put down a random variation.\nA specific variation can be selected from settings.\n")
+                    notes.append("Will put down a random variation.\nA specific variation can be selected from settings.\n")
                 else:
-                    notes.append(f"This prop comes with many variations.\nWhich variation can be selected from settings.\n")
+                    notes.append("This prop comes with many variations.\nWhich variation can be selected from settings.\n")
         elif self.selectedprop['tp'] == "rope":
                 self.prop_settings["release"] = 0
         elif self.selectedprop["tp"] in ["variedDecal", "variedSoft"]:
@@ -589,7 +590,7 @@ class PE(MenuWithField):
         self.historyappend(["PR", "props"], prop.copy())
         # self.data["PR"]["props"].append(prop.copy())
         self.applytags()
-        self.renderer.props_full_render()
+        self.renderer.props_full_render(self.layer)
         self.rfa()
         self.updatehistory()
 

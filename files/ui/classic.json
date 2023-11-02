@@ -142,7 +142,7 @@
 			["Save As...", [80, 0, 10, 10], [90, 90, 90], "saveas", "non", "Save as .wep project", ["editors.png", [4, 1]]],
 			["Save as txt", [70, 0, 10, 10], [90, 90, 90], "saveastxt", "non", "Save as official level editor file"],
 			["Next tip", [90, 76, 10, 10], [90, 90, 90], "nexttip", "non", "Just next tip)"],
-			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close RWE+(<[quit]>)", ["editors.png", [5, 1]]],
+			["Quit", [90, 20, 10, 10], [90, 90, 90], "quit", "non", "Close current RWE+ process(<[quit]>)", ["editors.png", [5, 1]]],
 
 			["?", [68, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 		],

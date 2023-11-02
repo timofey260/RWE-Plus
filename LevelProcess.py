@@ -54,16 +54,20 @@ class ProcessManager:
             f = open(application_path + "\\CrashLog.txt", "w")
             f.write(traceback.format_exc())
             f.write("This is why RWE+ crashed^^^\nSorry")
-            if globalsettings["saveoncrash"] and not globalsettings["debugmode"]:
+            if globalsettings["saveoncrash"] and not debugmode:
                 self.saveall(True)
                 raise
             traceback.print_exc()
             ex = askyesno("Crash!!!",
-                          "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\nDo you want to "
-                          "save All Levels you opened?")
+                          "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\n"
+                          "Do you want to save current level you opened?")
             if ex:
-                self.saveall()
-            raise
+                try:
+                    self.mainprocess.menu.savef(True)
+                except:
+                    print("Cannot save!!! sorry")
+                    self.closeprocess(self.mainprocess)
+                    raise e
         if len(self.notifications) > 0:
             self.notifications[0].blit()
             if self.notifications[0].delete:
@@ -74,15 +78,22 @@ class ProcessManager:
     def newprocess(self, level):
         if level != -1 and os.path.exists(level):
             self.processes.append(LevelProcess(self, level))
+            self.currentproccess = len(self.processes) - 1
         else:
             self.processes.append(LevelProcess(self, level, True))
+            self.currentproccess = len(self.processes) - 1
+        self.printprocesses()
+        self.mainprocess.menu.recaption()
+        self.notify("Created new Process!")
 
     def closeprocess(self, process):
         self.processes.remove(process)
+        self.currentproccess = min(self.currentproccess, len(self.processes) - 1)
+        self.mainprocess.menu.recaption()
 
     def openlevel(self, level):
         self.newprocess(level)
-        print("Open")
+        self.notify("Opened level new Process!")
 
     def saveall(self, crashsave=False):
         for i in self.processes:
@@ -100,8 +111,15 @@ class ProcessManager:
     def mainprocess(self):
         return self.processes[self.currentproccess]
 
-    def notify(self, message):
-        self.notifications.append(widgets.Notification(self.window, message))
+    def notify(self, *args):
+        self.notifications.append(widgets.Notification(self.window, ''.join(args)))
+
+    def swichprocess(self):
+        widgets.keybol = True
+        self.currentproccess = (self.currentproccess + 1) % len(self.processes)
+        self.mainprocess.menu.recaption()
+        # print("swiched process to ", str(self.mainprocess))
+        self.notify("swiched process to ", str(self.mainprocess))
 
 
 class LevelProcess:
@@ -122,10 +140,12 @@ class LevelProcess:
             self.menu: Menu | MenuWithField = load(self)
         else:
             self.menu: Menu | MenuWithField = MN(self)
-        manager.printprocesses()
 
     def __str__(self):
-        return f'({self.file["level"]} with {self.menu.menu})'
+        if self.file["level"] == "":
+            return f'(Unnamed with {self.menu.menu})'
+        else:
+            return f'({self.file["level"]} with {self.menu.menu})'
 
     def closeprocess(self):
         self.manager.closeprocess(self)
@@ -188,6 +208,10 @@ class LevelProcess:
                 self.file2 = deepcopy(self.file)
             case "newProcess":
                 self.manager.newprocess(-1)
+            case "swichprocess":
+                self.manager.swichprocess()
+            case "RELOAD":
+                self.menu.reload()
             case "new":
                 self.__init__(self.manager, -1)
             case "openNewProcess":
@@ -206,7 +230,7 @@ class LevelProcess:
             case "load":
                 self.menu = load(self)
             case _:
-                if message in menulist:
+                if message in menulist and self.menu.menu != "LD":
                     self.menu = getattr(sys.modules[__name__], message)(self)
                 else:
                     self.menu.send(message)
@@ -316,26 +340,9 @@ class LevelProcess:
                 if pg.key.get_pressed()[getattr(pg, key)]:
                     pressed = hotkeys[self.menu.menu][i]
                     self.menu.send(pressed)
-        if len(pressed) > 0 and pressed[0] == "/" and self.menu.menu != "LD":
+        if len(pressed) > 0 and pressed[0] == "/":
             self.recievemessage(pressed[1:])
-        match pressed.lower():
-            case "undo":
-                self.undohistory()
-            case "redo":
-                self.redohistory()
-            case "quit":
-                self.asktoexit()
-            case "reload":
-                self.menu.reload()
-            case "save":
-                self.menu.savef()
-                self.file2 = deepcopy(self.file)
-            case "new":
-                print("New")
-                self.menu.savef()
-                self.run = False
-            case "open":
-                self.manager.openlevel(self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"]))
+            return
 
     def launch(self, level):
         self.manager.newprocess(level)
@@ -380,4 +387,4 @@ class LevelProcess:
             print("Autosaving...")
             self.menu.savef()
             self.savetimer = time.time()
-            print("Saved!")
+            self.manager.notify("Autosaved!")

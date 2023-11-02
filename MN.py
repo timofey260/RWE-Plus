@@ -12,6 +12,7 @@ class MN(MenuWithField):
         self.mousp1 = True
         self.mousp2 = True
         self.tips.remove("\n")
+        self.owner.demo = False
         self.nexttip()
         self.resize()
 

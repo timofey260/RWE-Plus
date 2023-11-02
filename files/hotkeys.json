@@ -14,13 +14,13 @@
   	  	"K_7": "/PE",
   	  	"K_8": "/LP",
   	  	"K_9": "/HK",
-  	  	"K_0+": "RELOAD",
-  	  	"K_s+": "save",
-  	  	"K_o+": "open",
-  	  	"K_n+": "new",
+  	  	"K_0+": "/RELOAD",
+  	  	"K_s+": "/save",
+  	  	"K_o+": "/openNewProcess",
+  	  	"K_n+": "/newProcess",
   	  	"K_F11": "/fc",
-  	  	"K_z+": "undo",
-  	  	"K_y+": "redo",
+  	  	"K_z+": "/undo",
+  	  	"K_y+": "/redo",
 
   	  	"K_ESCAPE": "/MN",
   	  	"K_1+": "/-togglegeo",
@@ -36,7 +36,8 @@
     	"K_l": "/-swichlayers",
     	"K_l+": "/-swichlayers_back",
     	"K_F1": "/-togglelayervisible",
-    	"K_F2": "/-toggletileslayervisible"
+    	"K_F2": "/-toggletileslayervisible",
+    	"K_TAB+": "/swichprocess"
   	},
   	"LD": {
   		"unlock_keys": [],

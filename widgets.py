@@ -792,7 +792,7 @@ class Notification:
             self.pos = self.endpos.lerp(self.startpos, ranim ** 3)
         elif self.anim > 600:
             self.delete = True
-        self.anim += 1
+        self.anim += 2
         pg.draw.rect(self.surface, gray, pg.Rect.inflate(
             pg.Rect([self.pos, self.messagelabel.textimage.get_size()]), 20, 20), border_radius=20)
         self.messagelabel.pos = self.pos

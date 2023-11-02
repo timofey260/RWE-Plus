@@ -387,7 +387,7 @@ class TE(MenuWithField):
                 self.tileimage["image"] = pg.transform.scale(self.tileimage2["image"],
                                                              [self.size * self.tileimage2["size"][0],
                                                               self.size * self.tileimage2["size"][1]])
-                self.tileimage["image"].set_colorkey(None)
+                self.tileimage["image"].set_colorkey(white)
             else:
                 self.tileimage = self.tileimage2.copy()
             self.recaption()

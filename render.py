@@ -261,7 +261,7 @@ class Renderer:
         self.lastlayer = layer
         self.geo_full_render(layer)
         self.tiles_full_render(layer)
-        self.props_full_render()
+        self.props_full_render(layer)
         if len(self.data["FE"]["effects"]):
             self.rendereffect(0)
 
@@ -415,7 +415,8 @@ class Renderer:
         }
         return item, [0, 0]
 
-    def props_full_render(self):
+    def props_full_render(self, layer):
+        self.lastlayer = layer
         self.surf_props.fill(dc)
         for indx, prop in enumerate(self.data["PR"]["props"]):
             var = 0
@@ -439,8 +440,9 @@ class Renderer:
             surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
             surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
             surf.set_colorkey(white)
-            surf.set_alpha(190)
-            self.surf_props.blit(surf, [mostleft / spritesize * image1size, mosttop / spritesize * image1size])
+            alph = map(abs(layer - -prop[0] / 10), 3, 0, 40, 190)
+            surf.set_alpha(alph)
+            self.surf_props.blit(surf, [mostleft * sprite2image, mosttop * sprite2image])
             if prop[4].get("points") is not None:
                 propcolor = toarr(self.findprop(prop[1])[0]["previewColor"], "color")  # wires
                 for point in prop[4]["points"]:
