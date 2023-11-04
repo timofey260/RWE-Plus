@@ -189,11 +189,12 @@ class Button:
                      settings["global"]["doublerectoffsety"] / 100 * invglow)
         pg.draw.rect(self.surface, self.col2, r2, 0, settings["global"]["roundbuttons"])
 
-    def blittooltip(self):
+    def blittooltip(self, blittext=True):
         if not self.visible:
             return False
         if self.onmouseover():
-            textblit(self.surface, self.tooltipimage, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, False)
+            if blittext:
+                textblit(self.surface, self.tooltipimage, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, False)
             # mts(self.surface, self.tooltip, pg.mouse.get_pos()[0], pg.mouse.get_pos()[1] - 20, white, centered=False)
             return True
         return False
@@ -419,6 +420,12 @@ class Selector():
         self.items()
         self.resize()
 
+    def reload_data(self, data):
+        self.data = data
+        self.currentcategory = 0
+        self.currentitem = 0
+        self.items()
+
     def loadfavorites(self):
         print(f"loading favourites from file: {self.favouritefile}")
         if self.favouritefile is None:
@@ -639,7 +646,8 @@ class Selector():
             self.callback(self.selecteditem)
 
     def blit(self):
-        pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy,
+        if len(self.buttonslist) > 0:
+            pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy,
                                                                              [self.buttonslist[0].rect.w,
                                                                               len(self.buttonslist[:-1]) *
                                                                               self.buttonslist[0].rect.h + 1]))
@@ -657,11 +665,12 @@ class Selector():
             button.blit(sum(pg.display.get_window_size()) // 120)
 
     def blittooltip(self):
-        cir = [self.buttonslist[self.currentitem].rect.x + 3,
-               self.buttonslist[self.currentitem].rect.y + self.buttonslist[self.currentitem].rect.h / 2]
-        pg.draw.circle(self.surface, render.cursor, cir, self.buttonslist[self.currentitem].rect.h / 2)
+        if len(self.buttonslist) > 0:
+            cir = [self.buttonslist[self.currentitem].rect.x + 3,
+                   self.buttonslist[self.currentitem].rect.y + self.buttonslist[self.currentitem].rect.h / 2]
+            pg.draw.circle(self.surface, render.cursor, cir, self.buttonslist[self.currentitem].rect.h / 2)
         for button in self.buttonslist:
-            if button.blittooltip():
+            if button.blittooltip(False):
                 mwfpos = button.rect.topright
                 import menuclass
                 import TE
@@ -689,6 +698,7 @@ class Selector():
                         self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
                     else:
                         self.surface.blit(button.buttondata["images"][0], mwfpos)
+                button.blittooltip()
                 break
         if self.favsbutton is not None:
             self.favsbutton.blittooltip()

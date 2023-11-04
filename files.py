@@ -138,29 +138,6 @@ def fs(sz):
         return fonts[sz]
 
 
-def solveeffects(effects):
-    ef = []
-    for cat in effects["effects"]:
-        efcat = {"nm": cat["nm"], "color": cat["color"], "efs": []}
-        for effect in cat["efs"]:
-            d = {**effects["defaultproperties"], **effect}
-            if "options" not in d:
-                d["options"] = []
-            if "preview" in d:
-                d["preview"] = loadimage(path2effectPreviews + d["preview"] + ".png")
-            for i in effects["defaultparams"]:
-                d["options"].append(i)
-            for indx, option in enumerate(d["options"]):
-                if option[0].lower() == "layers": # idk why, but it is what it is
-                    l = d["options"].pop(indx)
-                    d["options"].insert(1, l)
-                    break
-            efcat["efs"].append(d)
-        ef.append(efcat)
-    # print(ef)
-    return ef
-
-
 def plotLineLow(pointa: pg.Vector2, pointb: pg.Vector2, callback):
     if pointa.x > pointb.x:
         pointa, pointb = pointb, pointa
@@ -287,6 +264,3 @@ def log_to_load_log(message, error=False, nl=True):
 
 def errorcount_get():
     return load_error_count
-
-
-effects = solveeffects(e)

@@ -521,6 +521,30 @@ def getprops(tiles: dict, window: pg.Surface):
     return solved_copy
 
 
+def solveeffects(effects):
+    ef = ItemData()
+    for cat in effects["effects"]:
+        efcat = {"name": cat["nm"], "color": cat["color"], "items": []}
+        for effect in cat["efs"]:
+            d = {**effects["defaultproperties"], **effect}
+            if "options" not in d:
+                d["options"] = []
+            if "preview" in d:
+                d["preview"] = loadimage(path2effectPreviews + d["preview"] + ".png")
+            for i in effects["defaultparams"]:
+                d["options"].append(i)
+            for indx, option in enumerate(d["options"]):
+                if option[0].lower() == "layers": # idk why, but it is what it is
+                    l = d["options"].pop(indx)
+                    d["options"].insert(1, l)
+                    break
+            d["color"] = cat["color"]
+            d["description"] = "\n".join(str(i) for i in d["options"])
+            efcat["items"].append(d)
+        ef.append(efcat)
+    return ef
+
+
 def turntolingo(string: RWELevel|dict, file):
     with file as fl:
         fl.write(str(string["GE"]) + "\r")

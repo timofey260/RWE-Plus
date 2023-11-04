@@ -23,6 +23,7 @@ class ProcessManager:
         self.tiles = inittolist(self.window)
         self.propcolors = getcolors()
         self.props = getprops(self.tiles, self.window)
+        self.effects = solveeffects(e)
         self.width = settings["global"]["width"]
         self.height = settings["global"]["height"]
         self.window = pg.display.set_mode([self.width, self.height], flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))

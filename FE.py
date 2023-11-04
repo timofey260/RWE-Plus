@@ -12,14 +12,13 @@ class FE(MenuWithField):
         self.selectedeffect = 0
         self.paramindex = 0
 
-        self.matshow = False
 
         self.mpos = [0, 0]
         self.mmove = False
 
         self.innew = True # if you in new effects tab or in added effects tab
+        self.effects = process.manager.effects
 
-        self.buttonslist = [] # effects to be added
         self.buttonslist2 = [] # added effects
         self.params = [] # parameters of effects as buttons
 
@@ -29,7 +28,8 @@ class FE(MenuWithField):
 
         super().__init__(process, "FE")
         #self.fieldadd.set_colorkey(None)
-        self.selector = widgets.Selector(self.surface, self, self.props, "s1", "props.txt")
+        self.selector = widgets.Selector(self.surface, self, self.effects, "s1", "effects.txt")
+        self.selector.callback = self.selectorset
         self.fieldadd.set_alpha(200)
         self.makeparams()
         self.rfa()
@@ -37,29 +37,21 @@ class FE(MenuWithField):
         self.blit()
         self.resize()
 
+    def selectorset(self, buttondata):
+        print(buttondata)
+        self.addeffect(buttondata["nm"])
+
     def blit(self):
-        pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[:-1][0].xy,
-                                                                             [self.buttonslist[:-1][0].rect.w,
-                                                                              len(self.buttonslist[:-1]) *
-                                                                              self.buttonslist[:-1][0].rect.h + 1]))
         ts = sum(pg.display.get_window_size()) // 120
         super().blit()
-        for i in self.buttonslist:
-            i.blitshadow()
         for i in self.buttonslist2:
             i.blitshadow()
         for i in self.params:
             i.blitshadow()
-        self.buttonslist[-1].blit(sum(pg.display.get_window_size()) // 100)
+        self.selector.blit()
 
         for i in self.params:
             i.blit()
-        for i in self.buttonslist[:-1]:
-            i.blit(ts)
-            if i.onmouseover():
-                effect = self.geteffect(i.text)
-                if effect is not None and effect.get("preview"):
-                    self.surface.blit(effect["preview"], i.rect.bottomright)
         for i in self.buttonslist2:
             i.blit(ts)
             if i.onmouseover():
@@ -70,13 +62,7 @@ class FE(MenuWithField):
                                                               self.surface.get_height()-effect["preview"].get_height()])
                     else:
                         self.surface.blit(effect["preview"], i.rect.bottomright)
-
-        cir = [self.buttonslist[self.currentindex].rect.x + 3,
-               self.buttonslist[self.currentindex].rect.y + self.buttonslist[self.currentindex].rect.h / 2]
-        if self.innew:
-            pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.currentindex].rect.h / 2)
-        else:
-            pg.draw.circle(self.surface, cursor2, cir, self.buttonslist[self.currentindex].rect.h / 2)
+        #TODO color cursor changing
         if len(self.buttonslist2) > 0:
             cir2 = [self.buttonslist2[self.selectedeffect].rect.x + 3,
                     self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
@@ -142,35 +128,20 @@ class FE(MenuWithField):
                 self.renderer.rerendereffect()
 
             self.movemiddle(bp)
-        for i in self.buttonslist:
-            i.blittooltip()
+        self.selector.blittooltip()
         for i in self.buttonslist2:
             i.blittooltip()
         for i in self.buttons:
             i.blittooltip()
 
     def geteffect(self, text):
-        for cat in effects:
-            for c, i in enumerate(cat["efs"]):
+        for cat in self.effects:
+            for c, i in enumerate(cat["items"]):
                 if i["nm"] == text:
                     return i
         return None
 
     def rebuttons(self):
-        self.buttonslist = []
-        self.matshow = False
-        btn2 = None
-        for count, item in enumerate(effects[self.currentcategory]["efs"]):
-            cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], effects[self.currentcategory]["nm"], onpress=self.cats,
-                                  tooltip=self.returnkeytext("Select category(<[-changematshow]>)"))
-
-            rect = pg.rect.Rect(self.settings["itempos"])
-            rect = rect.move(0, rect.h * count)
-            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.addeffect)
-            self.buttonslist.append(btn)
-        if btn2 is not None:
-            self.buttonslist.append(btn2)
 
         self.buttonslist2 = []
         #instead of scroll
@@ -217,46 +188,6 @@ class FE(MenuWithField):
             self.rfa()
         except:
             print("Error pasting data!")
-
-    def cats(self):
-        self.buttonslist = []
-        self.settignslist = []
-        self.matshow = True
-        btn2 = None
-        for count, item in enumerate(effects):
-            cat = pg.rect.Rect(self.settings["catpos"])
-            btn2 = widgets.Button(self.surface, cat, settings["global"]["color"], "Categories",
-                                  onpress=self.changematshow)
-            rect = pg.rect.Rect(self.settings["itempos"])
-            rect = rect.move(0, rect.h * count)
-            col = item["color"]
-            if col is None:
-                col = gray
-            if count == self.currentcategory:
-                col = darkgray
-            btn = widgets.Button(self.surface, rect, col, item["nm"], onpress=self.selectcat)
-            self.buttonslist.append(btn)
-        if btn2 is not None:
-            self.buttonslist.append(btn2)
-        self.resize()
-
-    def changematshow(self):
-        if self.matshow:
-            self.currentcategory = self.currentindex
-            self.currentindex = 0
-            self.rebuttons()
-        else:
-            self.currentindex = self.currentcategory
-            self.innew = True
-            self.cats()
-
-    def selectcat(self, name):
-        for indx, effect in enumerate(effects):
-            if effect["nm"] == name:
-                self.currentcategory = indx
-                self.currentindex = 0
-                self.rebuttons()
-                return
 
     def makeparams(self):
         self.params = []
@@ -342,8 +273,8 @@ class FE(MenuWithField):
 
     def findeffect(self):
         nd = {}
-        for cat in effects:
-            for item in cat["efs"]:
+        for cat in self.effects:
+            for item in cat["items"]:
                 nd[item["nm"]] = cat["nm"]
         name = self.find(nd, "Select a prop")
         if name is None:
@@ -362,28 +293,15 @@ class FE(MenuWithField):
 
     def nextcat(self):
         self.innew = True
-        self.currentindex = 0
-        if self.currentcategory + 1 >= len(effects):
-            self.currentcategory = 0
-            self.rebuttons()
-            return
-        self.currentcategory += 1
-        self.rebuttons()
+        self.selector.right()
     def prevcat(self):
         self.innew = True
-        self.currentindex = 0
-        if self.currentcategory - 1 < 0:
-            self.currentcategory = len(effects) - 1
-            self.rebuttons()
-            return
-        self.currentcategory -= 1
-        self.rebuttons()
+        self.selector.left()
 
     def resize(self):
         super().resize()
         if hasattr(self, "field"):
-            for i in self.buttonslist:
-                i.resize()
+            self.selector.resize()
             for i in self.buttonslist2:
                 i.resize()
             self.makeparams()
@@ -405,7 +323,8 @@ class FE(MenuWithField):
 
     def deleteeffect(self):
         try:
-            self.data["FE"]["effects"].pop(self.selectedeffect)
+            self.historypop(["FE", "effects"], deepcopy(self.selectedeffect))
+            # self.data["FE"]["effects"].pop(self.selectedeffect)
             if self.draweffects > len(self.data['FE']['effects']):
                 self.draweffects = 0
                 self.rfa()
@@ -419,14 +338,14 @@ class FE(MenuWithField):
 
     def addordeleteselectedeffect(self):
         if self.innew:
-            self.addeffect(self.buttonslist[self.currentindex].text)
+            self.addeffect(self.selector.selecteditem["nm"]) #TODO fix this
             return
         self.deleteeffect()
 
     def addeffect(self, text):
         self.innew = True
-        for cat in effects:
-            for effect in cat["efs"]:
+        for cat in self.effects:
+            for effect in cat["items"]:
                 if effect["nm"] == text:
                     image = effect.get("preview")
                     if image:
@@ -440,7 +359,8 @@ class FE(MenuWithField):
                     for n, i in enumerate(ef["options"]):
                         if i[0].lower() == "seed":
                             ef["options"][n][2] = random.randint(0, 500)
-                    self.data["FE"]["effects"].append(ef.copy())
+                    self.historyappend(["FE", "effects"], ef.copy())
+                    # self.data["FE"]["effects"].append(ef.copy())
                     self.innew = False
                     self.selectedeffect = len(self.data["FE"]["effects"]) - 1
                     self.recaption()
@@ -474,7 +394,8 @@ class FE(MenuWithField):
 
                     if val == 100:
                         val = 100
-                    self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = round(val)
+                    self.changedata(["FE", "effects", self.selectedeffect, 'mtrx', xp, yp], round(val))
+                    # self.data["FE"]["effects"][self.selectedeffect]['mtrx'][xp][yp] = round(val)
 
         self.rf3()
 
@@ -482,8 +403,7 @@ class FE(MenuWithField):
         self.brushsize += 1
 
     def bsdown(self):
-        if self.brushsize - 1 > 0:
-            self.brushsize -= 1
+        self.brushsize = widgets.restrict(self.brushsize, 1, bignum)
 
     def innewtab(self):
         self.innew = True
@@ -493,9 +413,7 @@ class FE(MenuWithField):
 
     def scrl_up_new(self):
         self.innewtab()
-        self.currentindex -= 1
-        if self.currentindex < 0:
-            self.currentindex = len(self.buttonslist) - 2
+        self.selector.up()
 
     def scrl_up_menu(self):
         self.notinnewtab()
@@ -506,9 +424,7 @@ class FE(MenuWithField):
 
     def scrl_down_new(self):
         self.innewtab()
-        self.currentindex += 1
-        if self.currentindex > len(self.buttonslist) - 2:
-            self.currentindex = 0
+        self.selector.down()
 
     def scrl_down_menu(self):
         self.notinnewtab()
@@ -522,11 +438,18 @@ class FE(MenuWithField):
             self.scrl_up_new()
             return
         self.scrl_up_menu()
+
     def scrl_down(self):
         if self.innew:
             self.scrl_down_new()
             return
         self.scrl_down_menu()
+
+    def onundo(self):
+        self.selectedeffect = widgets.restrict(self.selectedeffect, 0, len(self.data["FE"]["effects"]) - 1)
+
+    def onredo(self):
+        self.onundo()
 
     @property
     def custom_info(self):
