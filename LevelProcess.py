@@ -283,6 +283,7 @@ class LevelProcess:
             self.menu.rfa()
             if hasattr(self.menu, "rebuttons"):
                 self.menu.rebuttons()
+        self.manager.notify("Done undo")
 
     def redohistory(self):
         if len(self.redobuffer) == 0:
@@ -321,6 +322,7 @@ class LevelProcess:
             self.menu.rfa()
             if hasattr(self.menu, "rebuttons"):
                 self.menu.rebuttons()
+        self.manager.notify("Done redo")
 
     def keypress(self):
         pressed = ""

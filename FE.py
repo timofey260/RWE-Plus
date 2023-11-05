@@ -7,20 +7,11 @@ class FE(MenuWithField):
     def __init__(self, process):
         self.menu = "FE"
 
-        self.currentcategory = 0
-        self.currentindex = 0
-        self.selectedeffect = 0
-        self.paramindex = 0
-
-
         self.mpos = [0, 0]
         self.mmove = False
 
         self.innew = True # if you in new effects tab or in added effects tab
         self.effects = process.manager.effects
-
-        self.buttonslist2 = [] # added effects
-        self.params = [] # parameters of effects as buttons
 
         self.brushsize = 5
 
@@ -29,51 +20,111 @@ class FE(MenuWithField):
         super().__init__(process, "FE")
         #self.fieldadd.set_colorkey(None)
         self.selector = widgets.Selector(self.surface, self, self.effects, "s1", "effects.txt")
+        self.activeeffects = widgets.Selector(self.surface, self, self.generate_activeeffects(), "s2")
+        self.paramsselector = widgets.Selector(self.surface, self, self.generate_params(), "s3")
+
         self.selector.callback = self.selectorset
+        self.selector.callbackafterchange = False
+        self.paramsselector.callbackafterchange = False
+        self.paramsselector.drawrect = False
+        self.activeeffects.callback = self.activeeffectsset
+        self.paramsselector.callback = self.paramscallback
         self.fieldadd.set_alpha(200)
-        self.makeparams()
+        # self.makeparams()
         self.rfa()
-        self.rebuttons()
+        #self.rebuttons()
         self.blit()
         self.resize()
+        self.chtext()
+
+    def remakeparams(self):
+        self.paramsselector.reload_data(self.generate_params())
+        self.chtext()
+
+    def remakeactive(self):
+        self.activeeffects.reload_data(self.generate_activeeffects())
+        self.remakeparams()
+
+    def paramscallback(self, buttondata):
+        self.paramsselector.setbybuttondata(buttondata)
+        self.changeparam(buttondata["nm"])
+        self.chtext()
+        self.paramsselector.reload_data(self.generate_params(), False)
+
+    def activeeffectsset(self, buttondata):
+        self.notinnewtab()
+        self.activeeffects.setbybuttondata(buttondata)
+        self.remakeparams()
+        self.activeeffects.reload_data(self.generate_activeeffects(), False)
+        self.renderfield()
+
+    def generate_params(self) -> ItemData:
+        data = ItemData()
+        # print(self.activeeffects.selecteditem)
+        for i, option in enumerate(self.data["FE"]["effects"][self.activeeffects.selecteditem['param']]["options"]):
+            items = []
+            for opi, optionname in enumerate(option[1]):
+                items.append({
+                    "nm": optionname,
+                    "color": darkgray if option[2] == optionname else gray,
+                    "description": "",
+                    "param": i,
+                    "category": option[0],
+                    "selected": option[2] == optionname
+                })
+            if option[0].lower() == "seed":
+                items.append({
+                    "nm": "Change seed",
+                    "color": gray,
+                    "description": "Click to change seed",
+                    "param": i,
+                    "category": option[0],
+                    "selected": True
+                })
+            selectedi = str(option[2])
+            data.append({"name": option[0], "color": gray, "items": items, "descvalue": selectedi})
+        # print(data)
+        return data
+
+    def generate_activeeffects(self) -> ItemData:
+        data = ItemData()
+        items_in_cat = 0
+        datacat = {"name": "1", "color": gray, "items": []}
+        for i, effect in enumerate(self.data["FE"]["effects"]):
+            foundeffect: dict = self.effects[effect["nm"]]
+            appenddata = {
+                "nm": effect["nm"],
+                "color": gray,
+                "param": i,
+                "description": foundeffect["description"],
+                "category": datacat["name"]
+            }
+            if foundeffect.get("preview", None) is not None:
+                appenddata["preview"] = foundeffect["preview"]
+            datacat["items"].append(appenddata)
+            items_in_cat += 1
+            if items_in_cat > self.settings["category_count"]:
+                data.append(datacat)
+                datacat = {"name": str(len(data) + 1), "color": gray, "items": []}
+                items_in_cat = 0
+        data.append(datacat)
+        return data
 
     def selectorset(self, buttondata):
-        print(buttondata)
         self.addeffect(buttondata["nm"])
+        self.selector.setbyname(buttondata["nm"])
 
     def blit(self):
-        ts = sum(pg.display.get_window_size()) // 120
-        super().blit()
-        for i in self.buttonslist2:
-            i.blitshadow()
-        for i in self.params:
-            i.blitshadow()
+        # super().blit()
         self.selector.blit()
+        self.activeeffects.blit()
+        self.paramsselector.blit()
 
-        for i in self.params:
-            i.blit()
-        for i in self.buttonslist2:
-            i.blit(ts)
-            if i.onmouseover():
-                effect = self.geteffect(i.text)
-                if effect is not None and effect.get("preview"):
-                    if effect["preview"].get_height() + i.rect.y > self.surface.get_height():
-                        self.surface.blit(effect["preview"], [i.rect.x + i.rect.w,
-                                                              self.surface.get_height()-effect["preview"].get_height()])
-                    else:
-                        self.surface.blit(effect["preview"], i.rect.bottomright)
-        #TODO color cursor changing
-        if len(self.buttonslist2) > 0:
-            cir2 = [self.buttonslist2[self.selectedeffect].rect.x + 3,
-                    self.buttonslist2[self.selectedeffect].rect.y + self.buttonslist2[self.selectedeffect].rect.h / 2]
-
-            if self.innew:
-                pg.draw.circle(self.surface, cursor2, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
-            else:
-                pg.draw.circle(self.surface, cursor, cir2, self.buttonslist2[self.selectedeffect].rect.h / 2)
+        self.activeeffects.cursorcolor = blue if self.innew else red
+        self.selector.cursorcolor = red if self.innew else blue
         mpos = pg.Vector2(pg.mouse.get_pos())
         bp = self.getmouse
-
+        super().blit()
         if self.onfield and len(self.data["FE"]["effects"]) > 0:
             if not self.copymode:
                 pg.draw.circle(self.surface, cursor, mpos, self.brushsize * self.size, 4)
@@ -129,10 +180,8 @@ class FE(MenuWithField):
 
             self.movemiddle(bp)
         self.selector.blittooltip()
-        for i in self.buttonslist2:
-            i.blittooltip()
-        for i in self.buttons:
-            i.blittooltip()
+        self.paramsselector.blittooltip()
+        self.activeeffects.blittooltip()
 
     def geteffect(self, text):
         for cat in self.effects:
@@ -141,30 +190,9 @@ class FE(MenuWithField):
                     return i
         return None
 
-    def rebuttons(self):
-
-        self.buttonslist2 = []
-        #instead of scroll
-        split2 = self.settings["itempos2"][1] + self.settings["itempos2"][3] * len(self.data["FE"]["effects"]) >= 100
-        count2 = 0
-        for count, item in enumerate(self.data["FE"]["effects"]):
-            rect = pg.rect.Rect(self.settings["itempos2"])
-            rect = rect.move(0, rect.h * count)
-            if rect.y >= 100 and split2:
-                rect = rect.move(rect.width / 2, 0)
-                rect.y = self.settings["itempos2"][1] + self.settings["itempos2"][3] * count2
-                count2 += 1
-            if split2:
-                rect.width = rect.width / 2
-            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), item["nm"], onpress=self.selectmouseeffect)
-            self.buttonslist2.append(btn)
-        self.resize()
-        self.chtext()
-
     def duplicate(self):
         self.data["FE"]["effects"].append(copy.deepcopy(self.data["FE"]["effects"][self.selectedeffect]))
         self.updatehistory()
-        self.rebuttons()
 
     def copytool(self):
         self.copymode = not self.copymode
@@ -189,84 +217,65 @@ class FE(MenuWithField):
         except:
             print("Error pasting data!")
 
-    def makeparams(self):
-        self.params = []
-        self.chtext()
-        if len(self.data["FE"]["effects"]) == 0:
-            return
-        ws = pg.display.get_window_size()
-        addspace = self.settings["additionspace"] / 100 * ws[0]
-        ppos = self.settings["paramspos"]
-
-        if len(self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][1]) < 1:
-            rect = pg.Rect([ppos, self.settings["seedchange_size"]])
-            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), "Set seed",
-                                 onpress=self.changeseed)
-            btn.resize()
-            self.params.append(btn)
-            return
-
-        for c, i in enumerate(self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][1]):
-            w, h = fs(sum(pg.display.get_window_size()) // 70)[0].size(i)
-            try:
-                rect = pg.Rect(self.params[-1].rect.topright[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
-            except IndexError:
-                rect = pg.Rect(ppos[0] / 100 * ws[0], ppos[1] / 100 * ws[1], w + addspace, h + addspace)
-            btn = widgets.Button(self.surface, rect, pg.Color(settings["global"]["color2"]), i, onpress=self.changeparam)
-            self.params.append(btn)
-        self.buttons[self.settings['currentparamindex']].set_text(str(self.paramindex))
-
     def chtext(self):
         if len(self.data["FE"]["effects"]) > 0:
-            self.labels[0].set_text(self.labels[0].originaltext % (self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][0], self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2]))
-            self.labels[1].set_text(self.labels[1].originaltext + self.data["FE"]["effects"][self.selectedeffect]["nm"])
+            self.labels[0].set_text(self.labels[0].originaltext + self.data["FE"]["effects"][self.selectedeffect]["nm"])
             self.buttons[self.settings["currentparamindex"]].set_text(str(self.paramindex))
         else:
             self.labels[0].set_text("")
-            self.labels[1].set_text("")
             self.buttons[self.settings["currentparamindex"]].set_text("0")
 
-    def changeparam(self, text): # "Delete", "Move Back", "Move Forth"
-        match text:
-            case "Delete":
+    def changeparam(self, text: str): # "Delete", "Move Back", "Move Forth"
+        match text.lower():
+            case "delete":
                 self.deleteeffect()
                 return
-            case "Move Back":
+            case "move back":
                 se = self.selectedeffect - 1
                 if se < 0:
                     se = 0
-                self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
+                self.historymove(["FE", "effects"], self.selectedeffect, se)
+                # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
                 self.updatehistory()
-                self.selectedeffect = se
-                self.rebuttons()
-                self.makeparams()
+                self.activeeffects.currentitem = se
+                self.remakeactive()
                 self.renderer.rerendereffect()
                 return
-            case "Move Forth":
+            case "move forth":
                 se = self.selectedeffect + 1
                 if se < len(self.data["FE"]["effects"]):
-                    self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
+                    self.historymove(["FE", "effects"], self.selectedeffect, se)
+                    # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
                     self.updatehistory()
-                    self.selectedeffect = se
-                    self.rebuttons()
-                    self.makeparams()
+                    self.activeeffects.currentitem = se
+                    self.remakeactive()
                     self.renderer.rerendereffect()
                 return
+            case "change seed":
+                self.changeseed()
+                return
 
-        self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = text
+        # self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramsselector.currentitem][2] = text
+        self.changedata(["FE", "effects", self.selectedeffect, "options", self.paramsselector.currentcategory, 2], text)
         self.updatehistory()
         self.chtext()
 
     def changeseed(self):
         try:
             value = self.askint("Enter velue(type -1 for random)", False)
+            if value is None:
+                print("Abort")
+            print(value)
             if value == -1:
-                self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
+                self.changedata(["FE", "effects", self.selectedeffect, "options", self.paramindex, 2], random.randint(0, 500))
+                # self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = random.randint(0, 500)
             if 0 <= value <= 500:
                 print("Seed changed!")
-            self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = value
+            # self.data["FE"]["effects"][self.selectedeffect]["options"][self.paramindex][2] = value
+            self.changedata(["FE", "effects", self.selectedeffect, "options", self.paramindex, 2], value)
             self.updatehistory()
-            self.makeparams()
+            self.chtext()
+            self.paramsselector.data = self.generate_params()
             return
         except ValueError:
             print("Invalid input!")
@@ -275,25 +284,24 @@ class FE(MenuWithField):
         nd = {}
         for cat in self.effects:
             for item in cat["items"]:
-                nd[item["nm"]] = cat["nm"]
+                nd[item["nm"]] = cat["name"]
         name = self.find(nd, "Select a prop")
         if name is None:
             return
         self.addeffect(name)
 
     def prevparam(self):
-        if self.paramindex - 1 >= 0:
-            self.paramindex -= 1
-        self.makeparams()
+        self.paramsselector.left()
+        self.chtext()
 
     def nextparam(self):
-        if self.paramindex + 1 < len(self.data["FE"]["effects"][self.selectedeffect]["options"]):
-            self.paramindex += 1
-        self.makeparams()
+        self.paramsselector.right()
+        self.chtext()
 
     def nextcat(self):
         self.innew = True
         self.selector.right()
+
     def prevcat(self):
         self.innew = True
         self.selector.left()
@@ -302,19 +310,19 @@ class FE(MenuWithField):
         super().resize()
         if hasattr(self, "field"):
             self.selector.resize()
-            for i in self.buttonslist2:
-                i.resize()
-            self.makeparams()
+            self.activeeffects.resize()
+            self.paramsselector.resize()
 
     def renderfield(self):
         super().renderfield()
         self.fieldadd.set_alpha(200)
         self.rf3()
         self.recaption()
-        self.makeparams()
+        #if hasattr(self, "selector"):
+        #    self.remakeactive()
 
     def rf3(self):
-        if len(self.data["FE"]["effects"]) > 0:
+        if len(self.data["FE"]["effects"]) > 0 and hasattr(self, "selector"):
             fillcol = mixcol_empty
             if self.draweffects != 0:
                 fillcol = pg.Color(mixcol_empty.r, mixcol_empty.g, mixcol_empty.b, 0)
@@ -330,11 +338,10 @@ class FE(MenuWithField):
                 self.rfa()
         except IndexError:
             print("No elements in list!")
-        self.selectedeffect = 0
-        self.paramindex = 0
+        self.activeeffects.currentitem = 0
+        self.paramsselector.currentitem = 0
         self.updatehistory()
-        self.rebuttons()
-        self.makeparams()
+        self.remakeactive()
 
     def addordeleteselectedeffect(self):
         if self.innew:
@@ -362,21 +369,12 @@ class FE(MenuWithField):
                     self.historyappend(["FE", "effects"], ef.copy())
                     # self.data["FE"]["effects"].append(ef.copy())
                     self.innew = False
-                    self.selectedeffect = len(self.data["FE"]["effects"]) - 1
+                    self.activeeffects.currentitem = len(self.data["FE"]["effects"]) - 1
                     self.recaption()
                     self.updatehistory()
                     self.renderfield()
-                    self.rebuttons()
+                    self.remakeactive()
                     return
-
-    def selectmouseeffect(self):
-        self.innew = False
-        for indx, i in enumerate(self.buttonslist2):
-            if i.onmouseover():
-                self.selectedeffect = indx
-                self.paramindex = 0
-                self.renderfield()
-                return
 
     def paint(self, x, y, st):
         currenteffect = self.data["FE"]["effects"][self.selectedeffect]["nm"]
@@ -417,9 +415,7 @@ class FE(MenuWithField):
 
     def scrl_up_menu(self):
         self.notinnewtab()
-        self.selectedeffect -= 1
-        if self.selectedeffect < 0:
-            self.selectedeffect = len(self.data["FE"]["effects"]) - 1
+        self.activeeffects.up()
         self.renderfield()
 
     def scrl_down_new(self):
@@ -428,9 +424,7 @@ class FE(MenuWithField):
 
     def scrl_down_menu(self):
         self.notinnewtab()
-        self.selectedeffect += 1
-        if self.selectedeffect > len(self.data["FE"]["effects"]) - 1:
-            self.selectedeffect = 0
+        self.activeeffects.down()
         self.renderfield()
 
     def scrl_up(self):
@@ -446,15 +440,31 @@ class FE(MenuWithField):
         self.scrl_down_menu()
 
     def onundo(self):
-        self.selectedeffect = widgets.restrict(self.selectedeffect, 0, len(self.data["FE"]["effects"]) - 1)
+        self.remakeactive()
 
     def onredo(self):
-        self.onundo()
+        self.remakeactive()
+
+    @property
+    def touchesanything(self):
+        return super().touchesanything or getattr(self, "activeeffects").touchesanything \
+                or getattr(self, "paramsselector").touchesanything
+
+    @property
+    def selectedeffect(self):
+        return self.activeeffects.selecteditem["param"]
+
+    @property
+    def paramindex(self):
+        return self.paramsselector.selecteditem["param"]
 
     @property
     def custom_info(self):
         try:
-            return f"{super().custom_info} | Selected effect: {self.data['FE']['effects'][self.selectedeffect]['nm']}[{self.selectedeffect}]"
+            if hasattr(self, "selector"):
+                return f"{super().custom_info} | Selected effect: {self.data['FE']['effects'][self.selectedeffect]['nm']}[{self.selectedeffect}]"
+            else:
+                return super().custom_info()
         except TypeError:
             return super().custom_info
         except IndexError:

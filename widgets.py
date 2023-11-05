@@ -380,6 +380,9 @@ class Slider:
 
 class Selector():
     def __init__(self, surface: pg.Surface, menu, data, selectorid, favouritesfile=None):
+        self.cursorcolor = pg.Color(255, 0, 0)
+        self.drawrect = True
+        self.callbackafterchange = True
         self.data: ItemData = data
         self.buttonslist: list[Button, ] = []
         self.menu = menu
@@ -389,7 +392,7 @@ class Selector():
         self.bigbuttonrect = pg.Rect(self.menu.settings[selectorid]["catpos"])
         self.itemrect.topleft = self.bigbuttonrect.bottomleft
 
-        self.bigbutton = Button(surface, self.bigbuttonrect, white, "")
+        self.bigbutton = None  # Button(surface, self.bigbuttonrect, white, "")
         self.favsbutton: Button = None
 
         self.currentcategory = 0
@@ -414,16 +417,18 @@ class Selector():
             name,
             color,
             items:
-            {nm, description, data}
+            {nm, description, data},
+            descvalue - optional, big button value
         }, ...]
         '''
         self.items()
         self.resize()
 
-    def reload_data(self, data):
+    def reload_data(self, data: ItemData, discardselected=True):
         self.data = data
-        self.currentcategory = 0
-        self.currentitem = 0
+        if discardselected:
+            self.currentcategory = 0
+            self.currentitem = 0
         self.items()
 
     def loadfavorites(self):
@@ -468,7 +473,8 @@ class Selector():
     def resize(self):
         for i in self.buttonslist:
             i.resize()
-        self.bigbutton.resize()
+        if self.bigbutton is not None:
+            self.bigbutton.resize()
         if self.favsbutton is not None:
             self.favsbutton.resize()
         self.restrict()
@@ -506,6 +512,8 @@ class Selector():
 
     def items(self):
         self.buttonslist = []
+        if self.data.isempty():
+            return
         if self.show == "cats":
             self.currentcategory = self.currentitem + (self.currentcategory * self.menu.settings["category_count"])
             self.currentitem = 0
@@ -520,20 +528,24 @@ class Selector():
         self.itemsnum = len(catdata["items"])
         self.catsnum = len(self.data)
 
-        self.show = "items"
         rect: pg.Rect = copy.deepcopy(self.bigbuttonrect)
-        rect.w = math.ceil(self.bigbuttonrect.w * .8)
+        self.show = "items"
+        if self.favouritefile is not None:
+            rect.w = math.ceil(self.bigbuttonrect.w * .8)
 
         self.bigbutton = Button(self.surface, rect, settings["global"]["color"], catdata["name"],
-                                tooltip=self.menu.returnkeytext("Open category list(<[-changematshow]>)"),
+                                tooltip=catdata.get("descvalue", self.menu.returnkeytext("Open category list(<[-changematshow]>)")),
                                 onpress=self.catswap)
         rect2: pg.rect = pg.Rect(rect.topright, pg.Vector2(math.floor(self.bigbuttonrect.w * .2), self.bigbuttonrect.h))
-        if self._favourites[self.selecteditem["nm"]] is not None:
+        if self.itemsnum == 0:
+            self.resize()
+            return
+        if self._favourites[self.selecteditem["nm"]] is not None and self.favouritefile is not None:
             self.favsbutton = Button(self.surface, rect2, settings["global"]["color"], "F",
                                      ["icons.png", [4, 0]],
                                      tooltip=self.menu.returnkeytext("Remove selected item from favourites(<[-addtofavs]>)"),
                                      onpress=self.addtofavs)
-        else:
+        elif self.favouritefile is not None:
             self.favsbutton = Button(self.surface, rect2, settings["global"]["color"], "F",
                                      ["icons.png", [5, 0]],
                                      tooltip=self.menu.returnkeytext("Add selected item to favourites(<[-addtofavs]>)"),
@@ -560,6 +572,7 @@ class Selector():
 
         self.show = "cats"
         self.bigbutton = Button(self.surface, self.bigbuttonrect, settings["global"]["color"],
+                                "categories" if self.catsnum <= 1 else
                                 "categories " + str(self.currentcategory),
                                 tooltip=self.menu.returnkeytext("Select category(<[-changematshow]>)"),
                                 onpress=self.catswap)
@@ -642,23 +655,23 @@ class Selector():
     def onclick(self, button: Button | str):
         if type(button) is Button:
             self.callback(button.buttondata)
-        if type(button) is str and self.show != "cats" and button == "set":
+        if type(button) is str and self.show != "cats" and button == "set" and self.callbackafterchange:
             self.callback(self.selecteditem)
 
     def blit(self):
-        if len(self.buttonslist) > 0:
+        if len(self.buttonslist) > 0 and self.drawrect:
             pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy,
                                                                              [self.buttonslist[0].rect.w,
                                                                               len(self.buttonslist[:-1]) *
                                                                               self.buttonslist[0].rect.h + 1]))
         for button in self.buttonslist:
             button.blitshadow()
-        self.bigbutton.blitshadow()
-
+        if self.bigbutton is not None:
+            self.bigbutton.blitshadow()
         if self.favsbutton is not None:
             self.favsbutton.blitshadow()
-        self.bigbutton.blit(sum(pg.display.get_window_size()) // 100)
-
+        if self.bigbutton is not None:
+            self.bigbutton.blit(sum(pg.display.get_window_size()) // 100)
         if self.favsbutton is not None:
             self.favsbutton.blit()
         for button in self.buttonslist:
@@ -668,7 +681,7 @@ class Selector():
         if len(self.buttonslist) > 0:
             cir = [self.buttonslist[self.currentitem].rect.x + 3,
                    self.buttonslist[self.currentitem].rect.y + self.buttonslist[self.currentitem].rect.h / 2]
-            pg.draw.circle(self.surface, render.cursor, cir, self.buttonslist[self.currentitem].rect.h / 2)
+            pg.draw.circle(self.surface, self.cursorcolor, cir, min(self.buttonslist[self.currentitem].rect.h / 2, 15))
         for button in self.buttonslist:
             if button.blittooltip(False):
                 mwfpos = button.rect.topright
@@ -702,6 +715,8 @@ class Selector():
                 break
         if self.favsbutton is not None:
             self.favsbutton.blittooltip()
+        if self.bigbutton is not None:
+            self.bigbutton.blittooltip()
 
     def up(self):
         self.currentitem = (self.currentitem - 1) % self.itemsnum
@@ -759,6 +774,9 @@ class Selector():
         if dorecreate:
             self.recreate()
 
+    def setbybuttondata(self, object):
+        self.currentitem = self.data[self.currentcategory]["items"].index(object)
+
     def restrict(self):
         self.currentitem = restrict(self.currentitem, 0, self.itemsnum - 1)
         self.currentcategory = restrict(self.currentcategory, 0, self.catsnum - 1)
@@ -775,9 +793,11 @@ class Selector():
         for i in self.buttonslist:
             if i.onmouseover():
                 return True
-        if self.favsbutton is not None:
-            return self.favsbutton.onmouseover() or self.bigbutton.onmouseover()
-        return self.bigbutton.onmouseover()
+        if self.favsbutton is not None and self.favsbutton.onmouseover():
+            return True
+        if self.bigbutton is not None:
+            return self.bigbutton.onmouseover()
+        return False
 
 
 class Notification:

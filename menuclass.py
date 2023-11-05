@@ -58,7 +58,7 @@ class Menu:
         self.unlock_keys()
         self.resize()
 
-    def sendtoowner(self, message):
+    def sendtoowner(self, message: str):
         self.owner.recievemessage(message)
 
     def scroll_up(self):
@@ -67,7 +67,7 @@ class Menu:
     def scroll_down(self):
         pass
 
-    def changedata(self, path, value):
+    def changedata(self, path: list, value):
         oldvalue = self.data[path]
         tohisstory = deepcopy([path, [value, oldvalue]])
         for indx, i in enumerate(self.historyChanges):
@@ -227,7 +227,7 @@ class Menu:
             print("it's not a string")
             return None
 
-    def askint(self, q, savelevel=True, defaultnumber=0):
+    def askint(self, q: str, savelevel=True, defaultnumber=0):
         if savelevel:
             self.savef()
         i = ''
@@ -261,7 +261,7 @@ class Menu:
             print("it's not a number")
             return defaultnumber
 
-    def askstr(self, q, savelevel=True, defaulttext=""):
+    def askstr(self, q: str, savelevel=True, defaulttext=""):
         if savelevel:
             self.savef()
         i = ''
@@ -633,7 +633,6 @@ class MenuWithField(Menu):
         self.drawprops = False
         self.draweffects = False
         self.drawgrid = False
-        self.selectedeffect = 0
 
         self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
 
