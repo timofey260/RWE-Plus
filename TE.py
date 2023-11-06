@@ -61,7 +61,7 @@ class TE(MenuWithField):
         self.set("materials 0", "Standard")
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
-        self.selector = widgets.Selector(self.surface, self, self.items, "s1", "tiles.txt")
+        self.selector = widgets.Selector(self, self.items, "s1", "tiles.txt")
         self.selector.callback = self.selectorset
 
         self.rfa()

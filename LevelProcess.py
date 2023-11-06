@@ -29,6 +29,10 @@ class ProcessManager:
         self.window = pg.display.set_mode([self.width, self.height], flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
         self.notifications: list[widgets.Notification] = []
 
+        self.selectprocess = False
+        self.processbuttons: list[widgets.Button] = []
+        self.processscroll = 0
+
         os.system("cls")
         try:
             request = requests.get("https://api.github.com/repos/timofey260/RWE-Plus/releases/latest", timeout=2)
@@ -45,9 +49,70 @@ class ProcessManager:
             print("Cannot find new RWE+ versions")
         self.notify("Everything loaded successfully!")
 
+    def gotoselectprocess(self):
+        self.selectprocess = True
+        self.processbuttons = []
+        widgets.resetpresses()
+        for indx, process in enumerate(self.processes):
+            process: LevelProcess
+            x = indx % 3 * 33
+            y = (indx // 3 - self.processscroll) * 33
+            self.processbuttons.append(widgets.Button(self.window, pg.Rect([x, y, 33, 33]), gray, process.file["level"],
+                                                      tooltip=process.file["path"],
+                                                      icon=process.renderer.surf_geo,
+                                                      onpress=self.gotoprocess))
+            self.processbuttons[-1].buttondata = indx
+        for i in self.processbuttons:
+            i.resize()
+
+    def gotoprocess(self, button: widgets.Button):
+        self.selectprocess = False
+        self.currentproccess = button.buttondata
+        self.processbuttons = []
+
+    def processesmenuupdate(self):
+        self.window.fill(color)
+        for i in self.processbuttons:
+            i.blitshadow()
+        for i in self.processbuttons:
+            i.blit()
+        for i in self.processbuttons:
+            if i.blittooltip():
+                break
+        for event in pg.event.get():
+            match event.type:
+                case pg.KEYDOWN:
+                    if event.key in [pg.K_RETURN, pg.K_ESCAPE]:
+                        self.selectprocess = False
+                        self.processbuttons = []
+                        return
+                case pg.MOUSEBUTTONDOWN:
+                    if event.button == 4:
+                        self.processscroll = max(self.processscroll - 1, 0)
+                        self.gotoselectprocess()
+                    elif event.button == 5:
+                        self.processscroll = min(self.processscroll + 1, len(self.processbuttons) // 3)
+                        self.gotoselectprocess()
+
+        if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
+            widgets.enablebuttons = True
+
     def update(self):
         if len(self.processes) <= 0:
             exit()
+        if self.selectprocess:
+            self.processesmenuupdate()
+        else:
+            self.mainprocessupdate()
+
+        if len(self.notifications) > 0:
+            self.notifications[0].blit()
+            if self.notifications[0].delete:
+                self.notifications.pop(0)
+        pg.display.flip()
+        pg.display.update()
+
+    def mainprocessupdate(self):
         try:
             self.mainprocess.update()
         except Exception as e:
@@ -69,12 +134,6 @@ class ProcessManager:
                     print("Cannot save!!! sorry")
                     self.closeprocess(self.mainprocess)
                     raise e
-        if len(self.notifications) > 0:
-            self.notifications[0].blit()
-            if self.notifications[0].delete:
-                self.notifications.pop(0)
-        pg.display.flip()
-        pg.display.update()
 
     def newprocess(self, level):
         if level != -1 and os.path.exists(level):
@@ -117,20 +176,22 @@ class ProcessManager:
 
     def swichprocess(self):
         widgets.keybol = True
-        self.currentproccess = (self.currentproccess + 1) % len(self.processes)
-        self.mainprocess.menu.recaption()
-        # print("swiched process to ", str(self.mainprocess))
-        self.notify("swiched process to ", str(self.mainprocess))
+        self.gotoselectprocess()
+        pg.display.set_caption("RWE+ | Process select")
+        self.notify("Opened process select")
 
 
 class LevelProcess:
     def __init__(self, manager: ProcessManager, file: str|int, demo=False):
-        self.run = None
         print("Switched to new process")
-        self.demo = demo
         self.manager = manager
+        try:
+            self.launchload(file)
+        except FileNotFoundError:
+            self.manager.notify(f"File {file} not found! Action stopped")
+            return
+        self.demo = demo
         self.surface = manager.window
-        self.launchload(file)
         self.file2 = deepcopy(self.file)
         self.undobuffer = []
         self.redobuffer = []
@@ -138,7 +199,7 @@ class LevelProcess:
         self.renderer = Renderer(self)
         self.renderer.render_all(0)
         if demo:
-            self.menu: Menu | MenuWithField = load(self)
+            self.menu: Menu | MenuWithField = LoadMenu(self)
         else:
             self.menu: Menu | MenuWithField = MN(self)
 
@@ -177,13 +238,24 @@ class LevelProcess:
             self.file["level"] = os.path.basename(level)
             self.file["path"] = level
             self.file["dir"] = os.path.abspath(level)
+            self.addrecent(level)
         else:
             self.file = RWELevel(json.load(open(level, "r")))
             self.file["level"] = os.path.basename(level)
             self.file["path"] = level
             self.file["dir"] = os.path.abspath(level)
+            self.addrecent(level)
         self.undobuffer = []
         self.redobuffer = []
+
+    def addrecent(self, file):
+        data = json.load(open(path + "recentProjects.json", "r"))
+        filename = os.path.basename(file)
+        for i, item in enumerate(data["files"]):
+            if item["path"] == file:
+                data["files"].pop(i)
+        data["files"].insert(0, {"path": file, "name": filename})
+        json.dump(data, open(path + "recentProjects.json", "w"), indent=4)
 
     def recievemessage(self, message):
         match message:
@@ -229,7 +301,7 @@ class LevelProcess:
                 self.renderer = Renderer(self)
                 self.menu = TT(self)
             case "load":
-                self.menu = load(self)
+                self.menu = LoadMenu(self)
             case _:
                 if message in menulist and self.menu.menu != "LD":
                     self.menu = getattr(sys.modules[__name__], message)(self)

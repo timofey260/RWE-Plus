@@ -539,7 +539,8 @@ def solveeffects(effects):
                     d["options"].insert(1, l)
                     break
             d["color"] = cat["color"]
-            d["description"] = "\n".join(str(i) for i in d["options"])
+            d["description"] = effect.get("description", "no description found") + "\n"
+            d["description"] += "\n".join(str(i) for i in d["options"])
             d["category"] = efcat["name"]
             efcat["items"].append(d)
         ef.append(efcat)

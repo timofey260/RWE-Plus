@@ -372,7 +372,7 @@ class GE(MenuWithField):
                     ypos = -self.yoffset + yi + int(pa.y)
                     if (self.replaceair and y[0] == 0) or not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
-                    self.data["GE"][xpos][ypos][self.layer] = y
+                    self.changedata(["GE", xpos, ypos, self.layer], y)
                     self.area[xpos][ypos] = False
             self.detecthistory(["GE"])
             self.renderer.geo_render_area(self.area, self.layer)

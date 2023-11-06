@@ -63,7 +63,7 @@ class PE(MenuWithField):
 
         super().__init__(process, "PE")
         self.drawprops = True
-        self.selector = widgets.Selector(self.surface, self, self.props, "s1", "props.txt")
+        self.selector = widgets.Selector(self, self.props, "s1", "props.txt")
         self.selector.callback = self.selectorset
         self.setprop(self.props[0]["items"][0]["nm"], self.props.categories[0])
         self.resize()

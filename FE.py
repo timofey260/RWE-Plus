@@ -11,7 +11,7 @@ class FE(MenuWithField):
         self.mmove = False
 
         self.innew = True # if you in new effects tab or in added effects tab
-        self.effects = process.manager.effects
+        self.effects: ItemData = process.manager.effects
 
         self.brushsize = 5
 
@@ -19,9 +19,9 @@ class FE(MenuWithField):
 
         super().__init__(process, "FE")
         #self.fieldadd.set_colorkey(None)
-        self.selector = widgets.Selector(self.surface, self, self.effects, "s1", "effects.txt")
-        self.activeeffects = widgets.Selector(self.surface, self, self.generate_activeeffects(), "s2")
-        self.paramsselector = widgets.Selector(self.surface, self, self.generate_params(), "s3")
+        self.selector = widgets.Selector(self, self.effects, "s1", "effects.txt")
+        self.activeeffects = widgets.Selector(self, self.generate_activeeffects(), "s2")
+        self.paramsselector = widgets.Selector(self, self.generate_params(), "s3")
 
         self.selector.callback = self.selectorset
         self.selector.callbackafterchange = False
@@ -191,7 +191,7 @@ class FE(MenuWithField):
         return None
 
     def duplicate(self):
-        self.data["FE"]["effects"].append(copy.deepcopy(self.data["FE"]["effects"][self.selectedeffect]))
+        self.historyappend(["FE", "effects"], copy.deepcopy(self.data["FE"]["effects"][self.selectedeffect]))
         self.updatehistory()
 
     def copytool(self):
@@ -211,7 +211,8 @@ class FE(MenuWithField):
                     ypos = -self.yoffset + yi + int(pa.y)
                     if not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
-                    self.data["FE"]["effects"][self.selectedeffect]["mtrx"][xpos][ypos] = y
+                    self.changedata(["FE", "effects", self.selectedeffect, "mtrx", xpos, ypos], y)
+                    # self.data["FE"]["effects"][self.selectedeffect]["mtrx"][xpos][ypos] = y
             self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
             self.rfa()
         except:

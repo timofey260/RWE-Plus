@@ -3,6 +3,7 @@ import render
 import widgets
 import pyperclip
 from render import *
+import time
 
 
 class Menu:
@@ -150,15 +151,20 @@ class Menu:
             for file in f:
                 if inputfile.lower() in file.lower():
                     y = 5 * count - slider * 5
-                    if os.path.isfile(os.path.join(filepath, file)) and os.path.splitext(file)[1] in defaultextension:
+                    filepth = os.path.join(filepath, file)
+                    _, ext = os.path.splitext(file)
+
+                    if os.path.isfile(filepth) and ext in defaultextension:
                         if y > 0:
+                            desc = f"File {file}\nUpdated: {filetime(filepth)}"
                             buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
-                                                          onpress=setasname, tooltip="File"))
+                                                          onpress=setasname, tooltip=desc))
                         count += 1
-                    elif os.path.isdir(os.path.join(filepath, file)):
+                    elif os.path.isdir(filepth):
                         if y > 0:
+                            desc = f"Folder {filepth}\nUpdated: {filetime(filepth)}"
                             buttons.append(widgets.Button(self.surface, pg.Rect([0, 20 + y, 50, 5]), color2, file,
-                                                          onpress=addfolder, tooltip="Folder"))
+                                                          onpress=addfolder, tooltip=desc))
                         count += 1
             for button in buttons:
                 button.resize()
@@ -402,7 +408,7 @@ class Menu:
             i.blit(fontsize)
         for i in self.buttons:
             if i.blittooltip():
-                continue
+                break
         if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
             widgets.enablebuttons = True
 
@@ -524,7 +530,7 @@ class Menu:
     def reload(self):
         global settings
         settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
-        self.__init__(self.surface, self.data, self.menu)
+        self.__init__(self.owner)
 
     def send(self, message):
         if message[0] == "-":

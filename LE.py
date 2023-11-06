@@ -175,9 +175,9 @@ class LE(MenuWithField):
     def save(self):
         if self.data["path"] == "":
             level = self.asksaveasfilename(defaultextension=[".wep"])
-            self.data["level"] = os.path.basename(level)
-            self.data["path"] = level
-            self.data["dir"] = os.path.abspath(level)
+            self.changedata(["level"], os.path.basename(level))
+            self.changedata(["path"], level)
+            self.changedata(["dir"], os.path.abspath(level))
             self.message = "save"
             lev = os.path.splitext(self.data["path"])[0] + ".png"
             pg.image.save(self.field2.field, lev)
@@ -254,16 +254,16 @@ class LE(MenuWithField):
         self.retile()
 
     def fp(self):
-        self.data[self.menu]["flatness"] = min(self.data[self.menu]["flatness"] + 1, 10)
+        self.changedata(["LE", "flatness"], min(self.data["LE"]["flatness"] + 1, 10))
 
     def fm(self):
-        self.data[self.menu]["flatness"] = max(self.data[self.menu]["flatness"] - 1, 1)
+        self.changedata(["LE", "flatness"], min(self.data["LE"]["flatness"] - 1, 10))
 
     def lp(self):
-        self.data[self.menu]["lightAngle"] = self.data[self.menu]["lightAngle"] + 1
+        self.changedata(["LE", "lightAngle"], self.data["LE"]["lightAngle"] + 1)
 
     def lm(self):
-        self.data[self.menu]["lightAngle"] = self.data[self.menu]["lightAngle"] - 1
+        self.changedata(["LE", "lightAngle"], self.data["LE"]["lightAngle"] - 1)
 
     def lightmod(self):
         if self.mode:

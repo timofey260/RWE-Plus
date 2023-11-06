@@ -5,6 +5,7 @@ import pygame as pg
 import os
 import sys
 import math
+import time
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
@@ -83,9 +84,14 @@ bignum = 9999999  # just a big number
 
 inputpromtname = "RWE+ input"
 debugmode = globalsettings["debugmode"]
+timeformat = globalsettings["time_format"]
 
 
 fonts: dict[[pg.font.Font, int], ...] = {}
+
+
+def filetime(filepath) -> str:
+    return time.strftime(timeformat, time.gmtime(os.path.getmtime(filepath)))
 
 
 def smallestchange(args: list[list]) -> list:

@@ -106,7 +106,7 @@ class Button:
 
         self.icon = None
         self.loadicon = icon
-        if icon is not None:
+        if type(icon) is list:
             cut = [icon[1][0] * settings["global"]["size"], icon[1][1] * settings["global"]["size"],
                    settings["global"]["size"], settings["global"]["size"]]
             image = loadimage(path + icon[0]).subsurface(cut)
@@ -114,6 +114,10 @@ class Button:
             size = [wh, wh]
             image = pg.transform.scale(image, size)
             self.icon = image
+        elif type(icon) is pg.Surface:
+            wh = icon.get_height() / settings["global"]["size"] * (rect.height / 100 * surface.get_height())
+            size = [wh, wh]
+            self.icon = pg.transform.scale(icon, size)
         self.onpress = onpress
         self.onrelease = onrelease
         self.bol = True
@@ -206,8 +210,7 @@ class Button:
         h = self.lastrect.h / 100 * self.surface.get_height() + 1
         self.rect.update(x, y, w, h)
         self.set_text(self.text)
-
-        if self.icon is not None:
+        if type(self.loadicon) is list:
             cut = [self.loadicon[1][0] * settings["global"]["size"], self.loadicon[1][1] * settings["global"]["size"],
                    settings["global"]["size"], settings["global"]["size"]]
             image = loadimage(path + self.loadicon[0]).subsurface(cut)
@@ -215,6 +218,8 @@ class Button:
             size = [wh, wh]
             image = pg.transform.scale(image, size)
             self.icon = image
+        elif type(self.loadicon) is pg.Surface:
+            self.icon = pg.transform.scale(self.loadicon, self.rect.size)
         self.set_text(self.text, self.fontsize)
 
     def onmouseover(self):
@@ -379,7 +384,7 @@ class Slider:
 
 
 class Selector():
-    def __init__(self, surface: pg.Surface, menu, data, selectorid, favouritesfile=None):
+    def __init__(self, menu, data, selectorid, favouritesfile=None):
         self.cursorcolor = pg.Color(255, 0, 0)
         self.drawrect = True
         self.callbackafterchange = True
@@ -400,7 +405,7 @@ class Selector():
         self.lastcategory = 0
         self.lastitem = 0
 
-        self.surface = surface
+        self.surface = menu.surface
         self.favouritefile = files.resolvepath(files.path2favs + favouritesfile) if favouritesfile is not None else None
 
         self.pos = pg.Vector2()
@@ -822,7 +827,7 @@ class Notification:
             self.pos = self.endpos.lerp(self.startpos, ranim ** 3)
         elif self.anim > 600:
             self.delete = True
-        self.anim += 2
+        self.anim += 1
         pg.draw.rect(self.surface, gray, pg.Rect.inflate(
             pg.Rect([self.pos, self.messagelabel.textimage.get_size()]), 20, 20), border_radius=20)
         self.messagelabel.pos = self.pos
