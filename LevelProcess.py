@@ -26,7 +26,8 @@ class ProcessManager:
         self.effects = solveeffects(e)
         self.width = settings["global"]["width"]
         self.height = settings["global"]["height"]
-        self.window = pg.display.set_mode([self.width, self.height], flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
+        self.window = pg.display.set_mode([self.width, self.height],
+                                          flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
         self.notifications: list[widgets.Notification] = []
 
         self.selectprocess = False
@@ -162,7 +163,7 @@ class ProcessManager:
     def openfullscreen(self):
         self.fullscreen = not self.fullscreen
         self.window = pg.display.set_mode([self.width, self.height],
-                                           flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
+                                          flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
 
     def printprocesses(self):
         print(", ".join([str(i) for i in self.processes]))
@@ -182,7 +183,7 @@ class ProcessManager:
 
 
 class LevelProcess:
-    def __init__(self, manager: ProcessManager, file: str|int, demo=False):
+    def __init__(self, manager: ProcessManager, file: str | int, demo=False):
         print("Switched to new process")
         self.manager = manager
         try:
@@ -327,9 +328,9 @@ class LevelProcess:
         '''
         elem = historyelem[1:]
         elem.reverse()
-        print("elem: ", historyelem)
+        # print("elem: ", historyelem)
         for i in elem:
-            print(i)
+            # print(i)
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
                 match i[0][0]:
                     case ".insert":  # insert on redo, pop on undo
@@ -343,12 +344,14 @@ class LevelProcess:
                         continue
                     case ".move":  # pop and insert on redo, pop and insert on undo
                         self.menu.data[*historyelem[0], *i[0][1:]].insert(i[1],
-                                                                     self.menu.data[*historyelem[0], *i[0][1:]].pop(i[2]))
+                                                                          self.menu.data[
+                                                                              *historyelem[0], *i[0][1:]].pop(i[2]))
                         continue
             self.menu.data[*historyelem[0], *i[0]] = i[1][1]
         self.redobuffer.append(deepcopy(self.undobuffer.pop()))
+        print([self.menu.levelwidth, self.menu.levelheight], lastsize)
         if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
-            self.menu.renderer.set_self.menuace([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+            self.menu.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
         self.menu.onundo()
         if MenuWithField in type(self.menu).__bases__:
             self.menu.renderer.render_all(self.menu.layer)
@@ -367,7 +370,7 @@ class LevelProcess:
         elem = historyelem[1:]
         elem.reverse()
         for i in elem:
-            print(i)
+            # print(i)
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
                 match i[0][0]:
                     case ".insert":  # insert on redo, pop on undo
@@ -381,13 +384,14 @@ class LevelProcess:
                         continue
                     case ".move":  # pop and insert on redo, pop and insert on undo
                         self.menu.data[*historyelem[0], *i[0][1:]].insert(i[2],
-                                                                     self.menu.data[*historyelem[0], *i[0][1:]].pop(i[1]))
+                                                                          self.menu.data[
+                                                                              *historyelem[0], *i[0][1:]].pop(i[1]))
                         continue
             self.menu.data[*historyelem[0], *i[0]] = i[1][0]
 
         self.undobuffer.append(deepcopy(self.redobuffer.pop()))
         if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
-            self.menu.renderer.set_self.menuace([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+            self.menu.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
         self.menu.onredo()
         if MenuWithField in type(self.menu).__bases__:
             self.menu.renderer.render_all(self.menu.layer)

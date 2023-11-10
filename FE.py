@@ -37,25 +37,24 @@ class FE(MenuWithField):
         self.resize()
         self.chtext()
 
-    def remakeparams(self):
-        self.paramsselector.reload_data(self.generate_params())
+    def remakeparams(self, discardselected=True):
+        self.paramsselector.reload_data(self.generate_params(), discardselected)
         self.chtext()
 
-    def remakeactive(self):
-        self.activeeffects.reload_data(self.generate_activeeffects())
+    def remakeactive(self, discardselected=True):
+        self.activeeffects.reload_data(self.generate_activeeffects(), discardselected)
         self.remakeparams()
 
     def paramscallback(self, buttondata):
         self.paramsselector.setbybuttondata(buttondata)
         self.changeparam(buttondata["nm"])
         self.chtext()
-        self.paramsselector.reload_data(self.generate_params(), False)
+        self.remakeparams(False)
 
     def activeeffectsset(self, buttondata):
         self.notinnewtab()
         self.activeeffects.setbybuttondata(buttondata)
-        self.remakeparams()
-        self.activeeffects.reload_data(self.generate_activeeffects(), False)
+        self.remakeactive(False)
         self.renderfield()
 
     def generate_params(self) -> ItemData:
@@ -339,14 +338,14 @@ class FE(MenuWithField):
                 self.rfa()
         except IndexError:
             print("No elements in list!")
-        self.activeeffects.currentitem = 0
-        self.paramsselector.currentitem = 0
+        # self.activeeffects.currentitem = 0
+        # self.paramsselector.currentitem = 0
         self.updatehistory()
-        self.remakeactive()
+        self.remakeactive(False)
 
     def addordeleteselectedeffect(self):
         if self.innew:
-            self.addeffect(self.selector.selecteditem["nm"]) #TODO fix this
+            self.addeffect(self.selector.selecteditem["nm"])
             return
         self.deleteeffect()
 
@@ -370,11 +369,11 @@ class FE(MenuWithField):
                     self.historyappend(["FE", "effects"], ef.copy())
                     # self.data["FE"]["effects"].append(ef.copy())
                     self.innew = False
-                    self.activeeffects.currentitem = len(self.data["FE"]["effects"]) - 1
+                    self.activeeffects.currentitem = len(self.data["FE"]["effects"])
                     self.recaption()
                     self.updatehistory()
                     self.renderfield()
-                    self.remakeactive()
+                    self.remakeactive(False)
                     return
 
     def paint(self, x, y, st):

@@ -1,0 +1,12 @@
+-Additional Community Materials
+[#nm:"GlassOutline", #color:color(190, 190, 190), #block:[#repeatL:[1,8,1], #rnd:1, #tags:[]], #slope:[#repeatL:[1,8,1], #rnd:1, #tags:[]], #floor:[#repeatL:[5,1,3,1], #rnd:1, #bfTiles:0, #tags:[]]]
+[#nm:"BigBrickMat", #color:color(185, 0, 16), #texture:[#sz:point(2, 2), #repeatL:[1,1,1,7], #tags:["textureOnFloor"]]]
+[#nm:"VentWall", #color:color(245, 67, 87), #block:[#repeatL:[1,1,8], #rnd:1, #tags:[]], #slope:[#repeatL:[1,1,8], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:0, #tags:[]], #texture:[#sz:point(1, 4), #repeatL:[4,1,1,1,3], #tags:[]]]
+
+[#nm:"RidgedMetal", #color:color(255, 160, 200), #block:[#repeatL:[1,9], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:[]], #texture:[#sz:point(2, 2), #repeatL:[1,1], #tags:[]]]
+[#nm:"ConcreteBricks", #color:color(230, 255, 255), #block:[#repeatL:[1,9], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:[]], #texture:[#sz:point(12, 12), #repeatL:[1,1], #tags:[]]]
+[#nm:"MetalSlatVertical", #color:color(180, 200, 255), #block:[#repeatL:[1,9], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:[]], #texture:[#sz:point(10, 10), #repeatL:[1,1], #tags:[]]]
+[#nm:"MetalSlatHorizontal", #color:color(180, 200, 255), #block:[#repeatL:[1,9], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:[]], #texture:[#sz:point(10, 10), #repeatL:[1,1], #tags:[]]]
+[#nm:"IndustrialGrate", #color:color(20, 20, 120), #block:[#repeatL:[10], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:[]], #texture:[#sz:point(4, 4), #repeatL:[1,1], #tags:[]]]
+[#nm:"EffectColorMatA", #color:color(255, 0, 255), #block:[#repeatL:[1,9], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:["effectColorA"]], #texture:[#sz:point(20, 20), #repeatL:[1,1], #tags:["effectColorA"]]]
+[#nm:"EffectColorMatB", #color:color(0, 255, 255), #block:[#repeatL:[1,9], #rnd:1, #tags:[]], #slope:[#repeatL:[1,9], #rnd:1, #tags:[]], #floor:[#repeatL:[6,1,1,1,1], #rnd:1, #bfTiles:1, #tags:["effectColorB"]], #texture:[#sz:point(20, 20), #repeatL:[1,1], #tags:["effectColorB"]]]

@@ -1,5 +1,5 @@
 -["Cogs and Gears", color(180, 255, 255)]
-[#nm:"CogA1", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(3,3), #repeatL:[1,1,2], #tags:["randomRotat"], #layerExceptions:[], #notes:[]] --now these comments work
+[#nm:"CogA1", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(3,3), #repeatL:[1,1,2], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
 [#nm:"CogA2", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(7,7), #repeatL:[1,1,2], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
 [#nm:"CogA3", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(11,11), #repeatL:[1,1,1,1], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
 [#nm:"CogB1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(5,5), #repeatL:[2,3], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
@@ -106,8 +106,8 @@
 [#nm:"AiScreenCorner", #tp:"standard", #colorTreatment:"standard", #sz:point(5,5), #repeatL:[1,1,1,1,1,1,1,1], #tags:[], #layerExceptions:[], #notes:[]]
 
 [#nm:"AiChamberCorner", #tp:"standard", #colorTreatment:"standard", #sz:point(5,5), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
-[#nm:"AiChamberSide1", #tp:"standard", #colorTreatment:"standard", #sz:point(3,1), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
-[#nm:"AiChamberSide2", #tp:"standard", #colorTreatment:"standard", #sz:point(3,1), #repeatL:[1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"AiChamberSide1", #tp:"standard", #colorTreatment:"standard", #sz:point(1,3), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"AiChamberSide2", #tp:"standard", #colorTreatment:"standard", #sz:point(1,3), #repeatL:[1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
 
 [#nm:"AI screen Top", #tp:"standard", #colorTreatment:"standard", #sz:point(29,21), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
 [#nm:"AI screen Bottom", #tp:"standard", #colorTreatment:"standard", #sz:point(29,23), #repeatL:[1,1,1,1,1,1,1,1,2], #tags:[], #layerExceptions:[], #notes:[]]
@@ -151,5 +151,134 @@
 [#nm:"ComplexLeaves10x10", #tp:"variedStandard", #colorTreatment:"standard", #bevel:10, #sz:point(10,10), #repeatL:[1,1,1,1,1,1,1,1,1,1], #vars:20, #random:1, #colorize:0, #tags:["randomFlipX"], #layerExceptions:[], #notes:[]]
 [#nm:"ComplexLeaves20x20", #tp:"variedStandard", #colorTreatment:"standard", #bevel:10, #sz:point(20,20), #repeatL:[1,1,1,1,1,1,1,1,1,1], #vars:10, #random:1, #colorize:0, #tags:[], #layerExceptions:[], #notes:[]]
 
--["SLUGFLEX", color(255, 255, 255)]
-[#nm:"SlugFlex", #tp:"standard", #colorTreatment:"standard", #sz:point(18,31), #repeatL:[3], #tags:[], #layerExceptions:[], #notes:["SEXY"], #Sexiness: 1000]
+-["LB Fans And Wind Turbines", color(150, 255, 255)]
+[#nm:"FanA1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanA1-B", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanA2", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanA2-B", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanA3", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanA4", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanA5", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB1-B", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB2", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB2-B", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB2-C", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB3", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB3-B", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanB4", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanC1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"FanC2", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"WindTurbine1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"WindTurbine2", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,2,1], #tags:[], #layerExceptions:[], #notes:[]]
+
+[#nm:"Big Wind Turbine", #tp:"coloredSoft", #pxlSize:point(425, 478), #depth:6, #round:1, #contourExp:1, #selfShade:1, #highLightBorder:1.0, #depthAffectHilites:0.2, #shadowBorder:0.8, #smoothShading:5, #colorize:0, #tags:["randomRotat"], #notes:[]]
+[#nm:"Giant Wind Turbine", #tp:"coloredSoft", #pxlSize:point(2125, 2390), #depth:6, #round:1, #contourExp:1, #selfShade:1, #highLightBorder:1.0, #depthAffectHilites:0.2, #shadowBorder:0.8, #smoothShading:5, #colorize:0, #tags:["randomRotat"], #notes:[]]
+[#nm:"Giant Wind Turbine Center", #tp:"coloredSoft", #pxlSize:point(2125, 2390), #depth:6, #round:1, #contourExp:1, #selfShade:1, #highLightBorder:1.0, #depthAffectHilites:0.2, #shadowBorder:0.8, #smoothShading:5, #colorize:0, #tags:[], #notes:[]]
+[#nm:"Giant Wind Turbine Wing", #tp:"coloredSoft", #pxlSize:point(2125, 2390), #depth:6, #round:1, #contourExp:1, #selfShade:1, #highLightBorder:1.0, #depthAffectHilites:0.2, #shadowBorder:0.8, #smoothShading:5, #colorize:0, #tags:[], #notes:[]]
+
+[#nm:"Rotating Fan Frame", #tp:"standard", #colorTreatment:"bevel", #bevel:3, #sz:point(22,22), #repeatL:[1], #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+
+
+-["LB Plants", color(80, 255, 80)]
+[#nm:"Cabinet plants", #tp:"variedSoft", #pxlSize:point(100, 180), #vars:5, #random:0, #depth:6, #round:0, #contourExp:1, #selfShade:1, #highLightBorder:1.0, #depthAffectHilites:0.6, #shadowBorder:0.8, #smoothShading:5, #colorize:1, #tags:["postEffects"], #notes:[]]
+[#nm:"Cabinet plants 2", #tp:"variedSoft", #pxlSize:point(100, 180), #vars:3, #random:0, #depth:6, #round:0, #contourExp:1, #selfShade:1, #highLightBorder:1.0, #depthAffectHilites:0.6, #shadowBorder:0.8, #smoothShading:5, #colorize:1, #tags:["postEffects"], #notes:[]]
+
+[#nm:"WeirdBigPlant", #tp:"standard", #colorTreatment:"standard", #bevel:1, #sz:point(7, 9), #repeatL:[1,1,1], #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"PropGrowers", #tp:"variedStandard", #colorTreatment:"standard", #bevel:1, #sz:point(12, 20), #repeatL:[1,1,1,1,1], #vars:4, #random:1, #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"FS Tree 1", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(25, 25), #repeatL:[3], #vars:3, #random:0, #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"FS Tree 2", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(25, 25), #repeatL:[3], #vars:2, #random:1, #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"FS Tree 3", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(25, 25), #repeatL:[3], #vars:2, #random:1, #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"FS Tree 4", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(25, 25), #repeatL:[3], #vars:2, #random:1, #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Liana", #tp:"standard", #colorTreatment:"standard", #sz:point(9, 5), #repeatL:[1], #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Color A Liana", #tp:"standard", #colorTreatment:"standard", #sz:point(9, 5), #repeatL:[1], #tags:["effectColorA", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Color B Liana", #tp:"standard", #colorTreatment:"standard", #sz:point(9, 5), #repeatL:[1], #tags:["effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Small Weird Cactus", #tp:"standard", #colorTreatment:"bevel", #bevel:0, #sz:point(2, 2), #repeatL:[2,2,2,2,2], #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Big Weird Cactus", #tp:"standard", #colorTreatment:"bevel", #bevel:0, #sz:point(6, 4), #repeatL:[2,2,2,2,2,2,2,2], #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Color A Bell Flower", #tp:"standard", #colorTreatment:"standard", #sz:point(2,2), #repeatL:[1], #tags:["effectColorA", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Color B Bell Flower", #tp:"standard", #colorTreatment:"standard", #sz:point(2,2), #repeatL:[1], #tags:["effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Bell Flower", #tp:"standard", #colorTreatment:"standard", #sz:point(2,2), #repeatL:[1], #tags:["notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"StarRoot", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(5,5), #repeatL:[1], #vars:12, #random:1, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"SmallRootTree", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(5,5), #repeatL:[1], #vars:9, #random:1, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"CageShroom", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(3,3), #repeatL:[1], #vars:12, #random:1, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"BulbShroom", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(3,3), #repeatL:[1], #vars:18, #random:1, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+
+-["LB Misc", color(80, 255, 80)]
+[#nm:"Faceless Fountain", #tp:"variedSoft", #pxlSize:point(320, 340), #vars:6, #random:0, #depth:10, #round:0, #contourExp:1, #selfShade:0, #highLightBorder:1.0, #depthAffectHilites:0, #shadowBorder:0.8, #smoothShading:5, #colorize:0, #tags:[], #notes:[]]
+
+[#nm:"Stained Glass Window", #tp:"standard", #colorTreatment:"standard", #sz:point(10,17), #repeatL:[1], #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Circular Sign B GridSnap", #tp:"standard", #colorTreatment:"standard", #sz:point(6,6), #repeatL:[1,1,1], #tags:["Circular Sign B", "snapToGrid", "notTrashProp"], #layerExceptions:[], #notes:["Obsolete : use Grid Snap Type button instead."]]
+[#nm:"Circular Sign B", #tp:"standard", #colorTreatment:"standard", #sz:point(6,6), #repeatL:[1,1,1], #tags:["Circular Sign B", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Big Pole Ornation", #tp:"standard", #colorTreatment:"standard", #sz:point(10, 8), #repeatL:[4,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"WeirdCog1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(6,6), #repeatL:[1,1,1], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
+[#nm:"WeirdWheel1", #tp:"standard", #colorTreatment:"bevel", #bevel:2, #sz:point(5,5), #repeatL:[1,1,1], #tags:["randomRotat"], #layerExceptions:[], #notes:[]]
+
+
+-["LB Destruction", color(80, 255, 80)]
+[#nm:"DestructionDR1", #tp:"antimatter", #depth:5, #contourExp:1.7, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"DestructionDR2", #tp:"antimatter", #depth:5, #contourExp:1.7, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"DestructionDR3", #tp:"antimatter", #depth:5, #contourExp:1.7, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+
+[#nm:"CracksDR1", #tp:"antimatter", #depth:8, #contourExp:2.2, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"CracksDR2", #tp:"antimatter", #depth:8, #contourExp:2.2, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"CracksDR3", #tp:"antimatter", #depth:8, #contourExp:2.2, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+
+[#nm:"SandyErode", #tp:"antimatter", #depth:8, #contourExp:1.7, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+
+[#nm:"WaterErode1", #tp:"antimatter", #depth:8, #contourExp:2.0, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"WaterErode2", #tp:"antimatter", #depth:5, #contourExp:2.2, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"WaterErode3", #tp:"antimatter", #depth:8, #contourExp:1.7, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+[#nm:"WaterErode4", #tp:"antimatter", #depth:8, #contourExp:1.7, #tags:["randomRotat", "randomFlipX", "randomFlipY"], #notes:[]]
+
+
+-["LB City", color(80, 255, 80)]
+[#nm:"Roof Antenna", #tp:"standard", #colorTreatment:"standard", #sz:point(7, 9), #repeatL:[1,1,1,1,1], #tags:[], #layerExceptions:[], #notes:[]]
+
+[#nm:"Ball Cage Lamp", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 3), #repeatL:[1,1,1,4,1,1,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"Ball Cage Lamp Color A", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 3), #repeatL:[1,1,1,4,1,1,1], #tags:["effectColorA", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Ball Cage Lamp Color B", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 3), #repeatL:[1,1,1,4,1,1,1], #tags:["effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Street Lamp", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 16), #repeatL:[1,1,1,2,12,1], #tags:["notTrashProp"], #layerExceptions:[], #notes:["This prop takes 2 layers."]]
+[#nm:"Street Lamp Color A", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 16), #repeatL:[1,1,1,2,12,1], #tags:["effectColorA", "notTrashProp"], #layerExceptions:[], #notes:["This prop takes 2 layers."]]
+[#nm:"Street Lamp Color B", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 16), #repeatL:[1,1,1,2,12,1], #tags:["effectColorB", "notTrashProp"], #layerExceptions:[], #notes:["This prop takes 2 layers."]]
+
+[#nm:"Indoor City Lamp", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 3), #repeatL:[1,1,1,1,2,1,1,1,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"Indoor City Lamp Color A", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 3), #repeatL:[1,1,1,1,2,1,1,1,1], #tags:["effectColorA", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Indoor City Lamp Color B", #tp:"standard", #colorTreatment:"standard", #sz:point(3, 3), #repeatL:[1,1,1,1,2,1,1,1,1], #tags:["effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Big Indoor City Lamp", #tp:"standard", #colorTreatment:"standard", #sz:point(6, 6), #repeatL:[1,1,1,1,2,1,1,1,1], #tags:[], #layerExceptions:[], #notes:[]]
+[#nm:"Big Indoor City Lamp Color A", #tp:"standard", #colorTreatment:"standard", #sz:point(6, 6), #repeatL:[1,1,1,1,2,1,1,1,1], #tags:["effectColorA", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Big Indoor City Lamp Color B", #tp:"standard", #colorTreatment:"standard", #sz:point(6, 6), #repeatL:[1,1,1,1,2,1,1,1,1], #tags:["effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+
+-["LB Christmas", color(80, 255, 80)]
+[#nm:"Big Candy Cane", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(5,8), #repeatL:[1,1,1,1,4], #vars:9, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Medium Candy Cane", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(5,8), #repeatL:[1,1,1,1,3], #vars:9, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Small Candy Cane", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(5,8), #repeatL:[1,1,1,1,2], #vars:9, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+[#nm:"Ribbon Knot 1", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(10,8), #repeatL:[1,2,2], #vars:3, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Ribbon Knot 2", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(7,7), #repeatL:[1,2,2], #vars:3, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+[#nm:"Ribbon Part", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(4,4), #repeatL:[2], #vars:3, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[]]
+
+
+-["Trans flag", color(80, 255, 80)]
+[#nm:"TransFlag", #tp:"variedStandard", #colorTreatment:"standard", #sz:point(5, 5), #repeatL:[1], #vars:2, #random:0, #tags:["effectColorA", "effectColorB", "notTrashProp"], #layerExceptions:[], #notes:[RETURN & QUOTE & "Hold love in your hearts and show kindness to others." & QUOTE & " (Wrayk quote)" & RETURN]]
+
+
+-["Colored UG Shrooms", color(80, 255, 80)]
+[#nm:"UG_SHROOM_L_CLRA", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorA"], #layerExceptions:[], #notes:[]]
+[#nm:"UG_SHROOM_R_CLRA", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorA"], #layerExceptions:[], #notes:[]]
+[#nm:"UG_SHROOM_L_CLRB", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorB"], #layerExceptions:[], #notes:[]]
+[#nm:"UG_SHROOM_R_CLRB", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorB"], #layerExceptions:[], #notes:[]]

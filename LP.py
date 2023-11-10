@@ -66,7 +66,9 @@ class LP(MenuWithField):
         self.labels[2].set_text(
             self.labels[2].originaltext % (self.data["WL"]["waterLevel"], str(self.data["WL"]["waterInFront"]==1)))
         for n, i in enumerate(self.sliders):
-            self.data[self.settings["sliders"][n][4][0]][self.settings["sliders"][n][4][1]] = round(i.value)
+            if self.data[self.settings["sliders"][n][4][0]][self.settings["sliders"][n][4][1]] != round(i.value): # dam it's big
+                self.changedata([self.settings["sliders"][n][4][0], self.settings["sliders"][n][4][1]], round(i.value))
+                # self.data[self.settings["sliders"][n][4][0]][self.settings["sliders"][n][4][1]] = round(i.value)
 
         if self.onfield:
             bp = self.getmouse
@@ -93,7 +95,8 @@ class LP(MenuWithField):
                     self.moveoffset = pos
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.tool == "env":
-                    self.data["WL"]["waterLevel"] = max(int(self.moveoffset.y - posoffset.y), 0)
+                    self.changedata(["WL", "waterLevel"], max(int(self.moveoffset.y - posoffset.y), 0))
+                    # self.data["WL"]["waterLevel"] = max(int(self.moveoffset.y - posoffset.y), 0)
                 elif self.tool == "size":
                     w = self.levelwidth
                     h = self.levelheight
@@ -128,7 +131,8 @@ class LP(MenuWithField):
                         self.border[2] = max(int(self.moveoffset.x + posoffset.x), bx)
                         chx = self.border[2]
 
-                    self.data["EX2"]["extraTiles"] = self.btiles
+                    self.changedata(["EX2", "extraTiles"], self.btiles)
+                    # self.data["EX2"]["extraTiles"] = self.btiles
                     widgets.fastmts(self.surface, f"X:{int(chx)}, Y:{int(chy)}", mpos.x, mpos.y, white)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.tool == "env":
@@ -167,14 +171,14 @@ class LP(MenuWithField):
                  ["bright",        pg.Vector2(right,   centery), pg.Vector2(bt[2]+po.x, centery)],
                  ["bbottombright", pg.Vector2(right,   bottom),  pg.Vector2(bt[2]+po.x, bt[3]+po.y)],
 
-                 ["ltoplleft", pg.Vector2(0, 0), pg.Vector2(-po.x, -po.y)],
-                 ["lleft", pg.Vector2(0, cy), pg.Vector2(-po.x, cy)],
-                 ["lbottomlleft", pg.Vector2(0, self.levelheight), pg.Vector2(-po.x, hmp)],
-                 ["ltop", pg.Vector2(cx, 0), pg.Vector2(cx, -po.y)],
-                 ["lbottom", pg.Vector2(cx, self.levelheight), pg.Vector2(centerx, hmp)],
-                 ["ltoplright", pg.Vector2(self.levelwidth, 0), pg.Vector2(wmp, -po.y)],
-                 ["lright", pg.Vector2(self.levelwidth, cy), pg.Vector2(wmp, centery)],
-                 ["lbottomlright", pg.Vector2(self.levelwidth, self.levelheight), pg.Vector2(wmp, hmp)]
+                 ["ltoplleft",     pg.Vector2(0,               0),                pg.Vector2(-po.x,   -po.y)],
+                 ["lleft",         pg.Vector2(0,               cy),               pg.Vector2(-po.x,   cy)],
+                 ["lbottomlleft",  pg.Vector2(0,               self.levelheight), pg.Vector2(-po.x,   hmp)],
+                 ["ltop",          pg.Vector2(cx,              0),                pg.Vector2(cx,      -po.y)],
+                 ["lbottom",       pg.Vector2(cx,              self.levelheight), pg.Vector2(centerx, hmp)],
+                 ["ltoplright",    pg.Vector2(self.levelwidth, 0),                pg.Vector2(wmp,     -po.y)],
+                 ["lright",        pg.Vector2(self.levelwidth, cy),               pg.Vector2(wmp,     centery)],
+                 ["lbottomlright", pg.Vector2(self.levelwidth, self.levelheight), pg.Vector2(wmp,     hmp)]
 
                  ]
         nearestindex = 0
@@ -198,13 +202,15 @@ class LP(MenuWithField):
             i.resize()
 
     def chparam(self, cat, name):
-        self.data[cat][name] = 1 - self.data[cat][name]
+        self.changedata([cat, name], 1 - self.data[cat][name])
+        # self.data[cat][name] = 1 - self.data[cat][name]
         self.updatehistory()
 
     def chinput(self, cat, name, inputdesc):
         try:
             i = self.askint(f"{inputdesc}({self.data[cat][name]})")
-            self.data[cat][name] = i
+            self.changedata([cat, name], i)
+            # self.data[cat][name] = i
         except ValueError:
             print("Invalid input!")
 
@@ -223,7 +229,8 @@ class LP(MenuWithField):
         self.recaption()
 
     def nowater(self):
-        self.data["WL"]["waterLevel"] = -1
+        self.changedata(["WL", "waterLevel"], -1)
+        # self.data["WL"]["waterLevel"] = -1
         self.updatehistory()
 
     def cuteverydata(self, data):
@@ -231,18 +238,21 @@ class LP(MenuWithField):
         if x is None or y is None or w is None or h is None:
             print("Not changed")
             return
-        self.data["GE"] = self.cutdata(x, y, w, h, self.data["GE"], [[1, []], [1, []], [1, []]])
+        self.cutdata(["GE"], x, y, w, h, [[1, []], [1, []], [1, []]])
+        # self.data["GE"] = self.cutdata(x, y, w, h, self.data["GE"], [[1, []], [1, []], [1, []]])
         self.cuttiles(x, y, w, h)
         for num, effect in enumerate(self.data["FE"]["effects"]):
-            self.data["FE"]["effects"][num]["mtrx"] = self.cutdata(x, y, w, h, effect["mtrx"], 0)
+            self.cutdata(["FE", "effects", num, "mtrx"], x, y, w, h, 0)
+            # self.data["FE"]["effects"][num]["mtrx"] = self.cutdata(x, y, w, h, effect["mtrx"], 0)
         self.recount()
         self.resizeprops(x, y, w, h)
         self.resizeimage(x, y, w, h)
         self.recount_image()
-        self.data["EX2"]["size"] = makearr([self.levelwidth, self.levelheight], "point")
+        self.changedata(["EX2", "size"], makearr([self.levelwidth, self.levelheight], "point"))
+        # self.data["EX2"]["size"] = makearr([self.levelwidth, self.levelheight], "point")
         print("Done!")
         self.updatehistory()
-        self.renderer.data = self.data
+        # self.renderer.data = self.data
         self.renderer.set_surface([image1size * self.levelwidth, image1size * self.levelheight])
         self.renderer.render_all(self.layer)
 
@@ -275,7 +285,8 @@ class LP(MenuWithField):
                 if x > w * image1size and y > h * image1size:
                     c += 1
                 if c == 4:
-                    self.data["PR"]["props"].pop(indx)
+                    self.historypop(["PR", "props"], indx)
+                    # self.data["PR"]["props"].pop(indx)
             if prop[4].get("points") is not None:
                 newp = []
                 for points in prop[4]["points"]:
@@ -283,14 +294,16 @@ class LP(MenuWithField):
                     p[0] += x * image1size
                     p[1] += y * image1size
                     newp.append(makearr(p, "point"))
-                self.data["PR"]["props"][indx][4]["points"] = newp
-            self.data["PR"]["props"][indx][3] = newq
+                self.changedata(["PR", "props", indx, 4, "points"], newp)
+                # self.data["PR"]["props"][indx][4]["points"] = newp
+            self.changedata(["PR", "props", indx, 3], newq)
+            # self.data["PR"]["props"][indx][3] = newq
 
     def cuttiles(self, x, y, w, h):
-        cutted = self.cutdata(x, y, w, h, self.data["TE"]["tlMatrix"], [{"tp": "default", "data": 0},
+        self.cutdata(["TE", "tlMatrix"], x, y, w, h, [{"tp": "default", "data": 0},
                                                                         {"tp": "default", "data": 0},
                                                                         {"tp": "default", "data": 0}])
-        for xp, xv in enumerate(cutted):
+        for xp, xv in enumerate(self.data["TE"]["tlMatrix"]):
             for yp, yv in enumerate(xv):
                 for layer, item in enumerate(yv):
                     if item["tp"] == "tileBody":
@@ -298,14 +311,17 @@ class LP(MenuWithField):
                         dat[0] -= x
                         dat[1] -= y
                         if dat[0] < 0 or dat[1] < 0 or dat[0] > self.levelwidth or dat[1] > self.levelheight:
-                            cutted[xp][yp][layer] = {"tp": "default", "data": 0}
+                            self.changedata(["TE", "tlMatrix", xp, yp, layer], {"tp": "default", "data": 0})
+                            # cutted[xp][yp][layer] = {"tp": "default", "data": 0}
                         else:
-                            cutted[xp][yp][layer]["data"][0] = makearr(dat, "point")
-
-        self.data["TE"]["tlMatrix"] = cutted
+                            self.changedata(["TE", "tlMatrix", xp, yp, layer, "data", 0], makearr(dat, "point"))
+                            # cutted[xp][yp][layer]["data"][0] = makearr(dat, "point")
+        # self.changedata(["TE", "tlMatrix"], cutted)
+        # self.data["TE"]["tlMatrix"] = cutted
 
     def waterlayer(self):
-        self.data["WL"]["waterInFront"] = 1 - self.data["WL"]["waterInFront"]
+        self.changedata(["WL", "waterInFront"], 1 - self.data["WL"]["waterInFront"])
+        # self.data["WL"]["waterInFront"] = 1 - self.data["WL"]["waterInFront"]
         self.updatehistory()
 
     def recount_image(self):
@@ -315,37 +331,48 @@ class LP(MenuWithField):
         except FileNotFoundError:
             self.shadowfield = None
 
-    def cutdata(self, x, y, w, h, array, default_instance):
-        arr = array
+    def cutdata(self, path, x, y, w, h, default_instance):
         if x >= 0:
             for _ in range(x):
-                arr.insert(0, [deepcopy(default_instance) for _ in range(len(arr[0]))])
+                self.historyinsert(0, path, [deepcopy(default_instance) for _ in range( self.data[path][0] )])
+                # arr.insert(0, [deepcopy(default_instance) for _ in range(len(arr[0]))])
         else:
-            arr = arr[-x:]
+            for _ in range(x):
+                self.historypop(path, -1)
+            # arr = arr[-x:]
 
         if w != 0:
             if w < self.gw:
-                arr = arr[:w]
+                for _ in range(len(self.data[path]) - w):
+                    self.historypop(path, -1)
+                # arr = arr[:w]
             else:
                 for _ in range(w - self.gw):
-                    arr.append([deepcopy(default_instance) for _ in range(len(arr[0]))])
+                    self.historyappend(path, [deepcopy(default_instance) for _ in range(len(self.data[path][0]))])
+                    # arr.append([deepcopy(default_instance) for _ in range(len(arr[0]))])
 
         if y >= 0:
-            for i in range(len(arr)):
+            for i in range(len(self.data[path])):
                 for _ in range(y):
-                    arr[i].insert(0, deepcopy(default_instance))
+                    self.historyinsert([*path, i], deepcopy(default_instance), 0)
+                    # arr[i].insert(0, deepcopy(default_instance))
         else:
-            for i in range(len(arr)):
-                arr[i] = arr[i][-y:]
+            for i in range(len(self.data[path])):
+                for _ in range(y):
+                    self.historypop([*path, i], -1)
+                # arr[i] = arr[i][-y:]
 
         if h != 0:
-            for i in range(len(arr)):
+            for i in range(len(self.data[path])):
                 if h < self.gh:
-                    arr[i] = arr[i][:h]
+                    for _ in range(len(self.data[path][i]) - h):
+                        self.historypop([*path, i], -1)
+                    # arr[i] = arr[i][:h]
                 else:
                     for _ in range(h - self.gh):
-                        arr[i].append(deepcopy(default_instance))
-        return arr
+                        self.historyappend([*path, i], deepcopy(default_instance))
+                        # arr[i].append(deepcopy(default_instance))
+        # return arr
 
     def cutmanually(self):
         try:
@@ -363,7 +390,8 @@ class LP(MenuWithField):
             y = self.askint(f"({self.btiles[1]})Top", False, self.btiles[1])
             w = self.askint(f"({self.btiles[2]})Right", False, self.btiles[2])
             h = self.askint(f"({self.btiles[3]})Bottom", False, self.btiles[3])
-            self.data["EX2"]["extraTiles"] = [x, y, w, h]
+            self.changedata(["EX2", "extraTiles"], [x, y, w, h])
+            # self.data["EX2"]["extraTiles"] = [x, y, w, h]
             self.btiles = self.data["EX2"]["extraTiles"]
         except ValueError:
             print("Error: non valid answer")

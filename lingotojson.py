@@ -364,6 +364,61 @@ def getcolors():
         cols.append(l)
     return cols
 
+def addprop(item, img):
+    img.set_colorkey(pg.color.Color(255, 255, 255))
+
+    images = []
+    if item.get("vars") is not None:
+        item["vars"] = max(item["vars"], 1)
+
+    ws, hs = img.get_size()
+    if item.get("pxlSize") is not None:
+        w, h = toarr(item["pxlSize"], "point")
+    else:
+        w, h = ws, hs
+        if item.get("vars") is not None:
+            w = round(ws / item["vars"])
+        if item.get("repeatL") is not None:
+            h = math.floor((hs / len(item["repeatL"])))
+            if item.get("sz") is not None:
+                sz = toarr(item["sz"], "point")
+                w = min(sz[0] * propsize, ws)
+                h = sz[1] * propsize
+
+            cons = 0.4
+            wh = pg.Color("#ffffff")
+            gr = pg.Color("#dddddd")
+            bl = pg.Color("#000000")
+
+            vars = 1
+            if item.get("vars") is not None:
+                vars = item["vars"]
+
+            for varindx in range(vars):
+                curcol = gr
+
+                for iindex, _ in enumerate(item["repeatL"]):
+                    # print(img, item["nm"], varindx * w, hs - h, w, h)
+                    curcol = curcol.lerp(bl, cons)
+                    rect = pg.Rect(varindx * w, (len(item["repeatL"]) - 1 - iindex) * h, w, h + 1)
+                    rect = rect.clip(pg.Rect(0, 0, ws, hs))
+                    try:
+                        ss = img.subsurface(rect).copy()
+                    except ValueError:
+                        continue
+
+                    pxl = pg.PixelArray(ss)
+                    pxl.replace(bl, curcol)
+                    ss = pxl.make_surface()
+                    ss.set_colorkey(wh)
+                    img.blit(ss, [0, hs - h])
+
+    if item.get("vars") is not None:
+        for iindex in range(item["vars"]):
+            images.append(img.subsurface(iindex * w, 0, w, h))
+    else:
+        images.append(img.subsurface(0, hs - h, w, h))
+    return images
 
 def getprops(tiles: dict, window: pg.Surface):
     # turning tiles to props and then add them to all other props
@@ -385,65 +440,20 @@ def getprops(tiles: dict, window: pg.Surface):
             pg.display.update()
             try:
                 img = loadimage(path2props + item["nm"] + ".png")
+                images = addprop(item, img)
+                newitem = solved[catnum]["items"][indx]
+                newitem["images"] = images
+                newitem["color"] = list(colr)
+                newitem["category"] = solved[catnum]["name"]
+                newitem["description"] = "Prop"
+                newitem["cat"] = [catnum + 1, indx + 1]
+                solved_copy[catnum]["items"].append(newitem)
             except FileNotFoundError:
+                log_to_load_log(f"Failed to load prop image {item['nm']}, skip", True)
                 continue
-            img.set_colorkey(pg.color.Color(255, 255, 255))
-
-            images = []
-            if item.get("vars") is not None:
-                item["vars"] = max(item["vars"], 1)
-
-            ws, hs = img.get_size()
-            if item.get("pxlSize") is not None:
-                w, h = toarr(item["pxlSize"], "point")
-            else:
-                w, h = ws, hs
-                if item.get("vars") is not None:
-                    w = round(ws / item["vars"])
-                if item.get("repeatL") is not None:
-                    h = math.floor((hs / len(item["repeatL"])))
-                    if item.get("sz") is not None:
-                        sz = toarr(item["sz"], "point")
-                        w = min(sz[0] * propsize, ws)
-                        h = sz[1] * propsize
-
-                    cons = 0.4
-                    wh = pg.Color("#ffffff")
-                    gr = pg.Color("#dddddd")
-                    bl = pg.Color("#000000")
-
-                    vars = 1
-                    if item.get("vars") is not None:
-                        vars = item["vars"]
-
-                    for varindx in range(vars):
-                        curcol = gr
-
-                        for iindex, _ in enumerate(item["repeatL"]):
-                            # print(img, item["nm"], varindx * w, hs - h, w, h)
-                            curcol = curcol.lerp(bl, cons)
-                            rect = pg.Rect(varindx * w, (len(item["repeatL"]) - 1 - iindex) * h, w, h + 1)
-                            rect = rect.clip(pg.Rect(0, 0, ws, hs))
-                            ss = img.subsurface(rect).copy()
-
-                            pxl = pg.PixelArray(ss)
-                            pxl.replace(bl, curcol)
-                            ss = pxl.make_surface()
-                            ss.set_colorkey(wh)
-                            img.blit(ss, [0, hs - h])
-
-            if item.get("vars") is not None:
-                for iindex in range(item["vars"]):
-                    images.append(img.subsurface(iindex * w, 0, w, h))
-            else:
-                images.append(img.subsurface(0, hs - h, w, h))
-            newitem = solved[catnum]["items"][indx]
-            newitem["images"] = images
-            newitem["color"] = list(colr)
-            newitem["category"] = solved[catnum]["name"]
-            newitem["description"] = "Prop"
-            newitem["cat"] = [catnum + 1, indx + 1]
-            solved_copy[catnum]["items"].append(newitem)
+            except ValueError:
+                log_to_load_log(f"Failed to load prop {item['nm']}, skip", True)
+                continue
     # solved_copy["material"] = []
     # for cat in tiles:
     #     pass
