@@ -199,22 +199,22 @@ class TE(MenuWithField):
                     for y in range(int(rect.h)):
                         for x in range(int(rect.w)):
                             if x == 0 and y == 0:
-                                self.set(self.blocks["cat"], self.blocks["NW"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["NW"], False, False)
                             elif x == rect.w - 1 and y == 0:
-                                self.set(self.blocks["cat"], self.blocks["NE"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["NE"], False, False)
                             elif x == 0 and y == rect.h - 1:
-                                self.set(self.blocks["cat"], self.blocks["SW"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["SW"], False, False)
                             elif x == rect.w - 1 and y == rect.h - 1:
-                                self.set(self.blocks["cat"], self.blocks["SE"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["SE"], False, False)
 
                             elif x == 0:
-                                self.set(self.blocks["cat"], self.blocks["W"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["W"], False, False)
                             elif y == 0:
-                                self.set(self.blocks["cat"], self.blocks["N"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["N"], False, False)
                             elif x == rect.w - 1:
-                                self.set(self.blocks["cat"], self.blocks["E"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["E"], False, False)
                             elif y == rect.h - 1:
-                                self.set(self.blocks["cat"], self.blocks["S"], usefavs=False)
+                                self.set(self.blocks["cat"], self.blocks["S"], False, False)
                             else:
                                 continue
                             self.place(x + rect.x, y + rect.y)
@@ -237,7 +237,7 @@ class TE(MenuWithField):
                             n = 0
                             if len(ch["tiles"]) > 1:
                                 n = x % len(ch["tiles"]) - 1
-                            self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n])
+                            self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n], render=False)
                             self.place(x + rect.x, y + rect.y)
                     self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
                     self.set(savedcat, savedtool)
@@ -611,6 +611,33 @@ class TE(MenuWithField):
                 self.set(tile["category"], tile["nm"])
                 return
         print("couldn't find tile")
+
+    def detecthistory(self, path, savedata=True):
+        if len(self.historyChanges) <= 0:
+            return
+        # grouping data, recreating the past
+        xposes = []
+        for i in self.historyChanges:
+            if path[0] == i[0][0]:
+                for p in path:
+                    i[0].remove(p)
+                if i[0][0] not in xposes:
+                    xposes.append(i[0][0])
+        beforerows = []
+        afterrows = []
+        for i in xposes:
+            afterrows.append(self.data[*path, i])
+            lastdata = PathDict(deepcopy(self.data[*path, i]))
+            for indx, item in enumerate(self.historyChanges):
+                if item[0][0] == i:
+                    lastdata[item[0][1:]] = item[1][1]
+            beforerows.append(lastdata.data)
+        self.historyChanges = []
+        for indx, i in enumerate(xposes):
+            self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
+        self.historyChanges.insert(0, [])
+        # print(self.historyChanges)
+        self.addtohistory()
 
     @property
     def custom_info(self):

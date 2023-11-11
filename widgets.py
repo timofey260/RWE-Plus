@@ -692,9 +692,6 @@ class Selector():
                 mwfpos = button.rect.topright
                 import menuclass
                 import TE
-                if type(self.menu) is TE.TE and button.buttondata.get("printcols", False):
-                    m: TE.TE = self.menu
-                    m.printcols(0, 0, button.buttondata, True)
                 if issubclass(type(self.menu), menuclass.MenuWithField):
                     mwf: menuclass.MenuWithField = self.menu
                     mwfpos = mwf.field.rect.topleft
@@ -716,6 +713,9 @@ class Selector():
                         self.surface.blit(pg.transform.scale(button.buttondata["images"][0], [w, h]), mwfpos)
                     else:
                         self.surface.blit(button.buttondata["images"][0], mwfpos)
+                if type(self.menu) is TE.TE and button.buttondata.get("printcols", False):
+                    m: TE.TE = self.menu
+                    m.printcols(0, 0, button.buttondata, True)
                 button.blittooltip()
                 break
         if self.favsbutton is not None:

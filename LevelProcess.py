@@ -329,7 +329,7 @@ class LevelProcess:
         '''
         elem = historyelem[1:]
         elem.reverse()
-        # print("elem: ", historyelem)
+        print("elem: ", historyelem)
         for i in elem:
             # print(i)
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
