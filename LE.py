@@ -23,7 +23,6 @@ class LE(MenuWithField):
         self.redohistory = []
         self.oldshadow = self.field2.field.copy()
 
-        self.message = ''
         self.n = 0
 
         self.imagerect = [375, 375]
@@ -178,7 +177,7 @@ class LE(MenuWithField):
             self.changedata(["level"], os.path.basename(level))
             self.changedata(["path"], level)
             self.changedata(["dir"], os.path.abspath(level))
-            self.message = "save"
+            self.sendtoowner("save")
             lev = os.path.splitext(self.data["path"])[0] + ".png"
             pg.image.save(self.field2.field, lev)
         else:

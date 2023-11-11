@@ -173,6 +173,7 @@ class ProcessManager:
         return self.processes[self.currentproccess]
 
     def notify(self, *args):
+        print(*args)
         self.notifications.append(widgets.Notification(self.window, ''.join(args)))
 
     def swichprocess(self):
@@ -349,7 +350,6 @@ class LevelProcess:
                         continue
             self.menu.data[*historyelem[0], *i[0]] = i[1][1]
         self.redobuffer.append(deepcopy(self.undobuffer.pop()))
-        print([self.menu.levelwidth, self.menu.levelheight], lastsize)
         if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
             self.menu.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
         self.menu.onundo()

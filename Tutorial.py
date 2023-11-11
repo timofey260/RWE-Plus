@@ -143,7 +143,7 @@ class TT(MenuWithField):
     def next(self):
         self.step += 1
         if self.step >= len(self.settings["textlines"]):
-            self.message = "load"
+            self.sendtoowner("load")
             return
         textline = self.settings["textlines"][self.step]
         firstchar = textline[0]
@@ -275,7 +275,7 @@ class TT(MenuWithField):
             self.buttons[0].enabled = True
             self.showstep()
         else:
-            self.message = "load"
+            self.sendtoowner("load")
 
     def swichlayers(self):
         if self.step in [3, 11]:

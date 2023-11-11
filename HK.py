@@ -7,6 +7,7 @@ class HK(Menu):
         self.m = openmenu
         self.keys = json.load(open(path + "hotkeystip.json"))
         self.scroll = 0
+        self.lines = 0
 
         super().__init__(process, "HK")
         self.fontsize = self.labels[0].fontsize
@@ -18,7 +19,13 @@ class HK(Menu):
             self.scroll = 0
         text = self.m + "\n"
         text2 = "\n"
+        scc = self.scroll
+        self.lines = 0
         for key, func in hotkeys[self.m].items():
+            self.lines += 1
+            if scc >= 0:
+                scc -= 1
+                continue
             if key == "unlock_keys":
                 continue
             try:
@@ -31,7 +38,6 @@ class HK(Menu):
                 tx = "Ctrl + " + tx
             text += tx
             text2 += tx2
-
         self.labels[0].set_text(text)
         self.labels[1].set_text(text2)
 
@@ -41,7 +47,7 @@ class HK(Menu):
         self.load_menu(self.m)
 
     def scroll_down(self):
-        if self.scroll + 1 <= self.labels[1].text.count("\n"):
+        if self.scroll + 1 < self.lines - 1:
             self.scroll += 1
         self.load_menu(self.m)
 

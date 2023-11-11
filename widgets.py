@@ -66,7 +66,7 @@ def textblit(window: pg.Surface, screen_text: pg.Surface, x: int | float, y: int
     if centered:
         window.blit(screen_text, [x - screen_text.get_width() / 2, y - screen_text.get_height() / 2])
     else:
-        ypos = min(y, window.get_height() - screen_text.get_height())
+        ypos = min(y, window.get_height() - screen_text.get_height()) if centered else y
         if x + screen_text.get_width() < window.get_width():
             window.blit(screen_text, [x, ypos])
         elif x - screen_text.get_width() > 0:

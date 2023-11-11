@@ -201,15 +201,25 @@
 			["RA", [0, 42, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"],
 			["CT", [4, 42, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]],
 
-			["Pencil", [0, 50, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil", ["fillmethods.png", [5, 0]]],
-			["Brush", [5, 50, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush", ["fillmethods.png", [6, 0]]],
-			["Fill", [10, 50, 5, 6], [100, 100, 100], "tool_fill", "non", "Change LMB to fill", ["fillmethods.png", [0, 0]]],
+			["Pencil", [0, 50, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil(<[-tool_pencil]>)", ["fillmethods.png", [5, 0]]],
+			["Brush", [5, 50, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush(<[-tool_brush]>)", ["fillmethods.png", [6, 0]]],
+			["Fill", [10, 50, 5, 6], [100, 100, 100], "tool_fill", "non", "Change LMB to fill(<[-tool_fill]>)", ["fillmethods.png", [0, 0]]],
+			["Line", [0, 56, 5, 6], [100, 100, 100], "tool_line", "non", "Change LMB to line(<[-tool_line]>)", ["fillmethods.png", [7, 0]]],
+			["Rect", [5, 56, 5, 6], [100, 100, 100], "tool_rect", "non", "Change LMB to rect(<[-tool_rect]>)", ["fillmethods.png", [1, 0]]],
+			["Rect-\nhollow", [10, 56, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change LMB to hollow rect(<[-tool_rect_hollow]>)", ["fillmethods.png", [2, 0]]],
+			["Circle", [5, 62, 5, 6], [100, 100, 100], "tool_circle", "non", "Change LMB to circle(<[-tool_circle]>)", ["fillmethods.png", [3, 0]]],
+			["Circle-\nhollow", [10, 62, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change LMB to hollow circle(<[-tool_circle_hollow]>)", ["fillmethods.png", [4, 0]]],
 
-			["Line", [0, 58, 5, 6], [100, 100, 100], "tool_line", "non", "Change RMB to line", ["fillmethods.png", [7, 0]]],
-			["Rect", [5, 58, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect", ["fillmethods.png", [1, 0]]],
-			["Rect-\nhollow", [10, 58, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change RMB to hollow rect", ["fillmethods.png", [2, 0]]],
-			["Circle", [5, 64, 5, 6], [100, 100, 100], "tool_circle", "non", "Change RMB to circle", ["fillmethods.png", [3, 0]]],
-			["Circle-\nhollow", [10, 64, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle", ["fillmethods.png", [4, 0]]],
+			["Pencil", [0, 70, 5, 6], [100, 100, 100], "tool2_pencil", "non", "Change RMB to pencil(<[-tool2_pencil]>)", ["fillmethods.png", [5, 0]]],
+			["Brush", [5, 70, 5, 6], [100, 100, 100], "tool2_brush", "non", "Change RMB to brush(<[-tool2_brush]>)", ["fillmethods.png", [6, 0]]],
+			["Fill", [10, 70, 5, 6], [100, 100, 100], "tool2_fill", "non", "Change RMB to fill(<[-tool2_fill]>)", ["fillmethods.png", [0, 0]]],
+			["Line", [0, 76, 5, 6], [100, 100, 100], "tool2_line", "non", "Change RMB to line(<[-tool2_line]>)", ["fillmethods.png", [7, 0]]],
+			["Rect", [5, 76, 5, 6], [100, 100, 100], "tool2_rect", "non", "Change RMB to rect(<[-tool2_rect]>)", ["fillmethods.png", [1, 0]]],
+			["Rect-\nhollow", [10, 76, 5, 6], [100, 100, 100], "tool2_rect_hollow", "non", "Change RMB to hollow rect(<[-tool2_rect_hollow]>)", ["fillmethods.png", [2, 0]]],
+			["Circle", [5, 82, 5, 6], [100, 100, 100], "tool2_circle", "non", "Change RMB to circle(<[-tool2_circle]>)", ["fillmethods.png", [3, 0]]],
+			["Circle-\nhollow", [10, 82, 5, 6], [100, 100, 100], "tool2_circle_hollow", "non", "Change RMB to hollow circle(<[-tool2_circle_hollow]>)", ["fillmethods.png", [4, 0]]],
+
+
 			["TE", [95, 0, 5, 6], [100, 100, 100], "TE", "non", "Go to tile editor(<[/TE]>)"]
 		],
 		"d1":
@@ -219,7 +229,7 @@
 			"border": [150, 150, 150]
 		}, 
 		"labels":[
-			["Tile: ", [0, 79], [255, 255, 255], 30],
+			["Tile: ", [0, 90], [255, 255, 255], 30],
 			["X: 0, Y: 0", [0, 97], [255, 255, 255], 25],
 			["Replace air: ", [0, 94], [255, 255, 255], 25],
 			["LMB - Place\nRMB - Fill\nMMB - Move", [18, 2], [255, 255, 255], 25]
@@ -238,7 +248,7 @@
 	}, 
 	"TE":
 	{
-		"category_count": 30,
+		"category_count": 25,
 		"LEtiles": true,
 		"buttons": [
 			[">", [92, 2, 4, 4], [100, 100, 100], "rt", "non", "Next category(<[-rt]>)", ["arrows.png", [0, 0]]],
@@ -256,8 +266,10 @@
 			["GE", [0, 0, 5, 6], [100, 100, 100], "GE", "non", "Go to geometry editor"]
 			
 		],
-		"catpos": [73, 6, 23, 4],
-		"itempos": [73, 10, 23, 2],
+		"s1": {
+			"catpos": [73, 6, 23, 4],
+			"itempos": [0, 2, 23, 2]
+		},
 		"d1":{
 			"rect": [2, 2, 70, 96],
 			"color": [90, 90, 90],
@@ -310,26 +322,26 @@
 			["^", [74, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
 
 
-			["^", [2, 65, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
-			["0", [2, 71, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
-			["v", [2, 77, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
+			["^", [2, 65, 4, 9], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
+			["v", [2, 74, 4, 9], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
 			["CT", [2, 83, 4, 6], [100, 100, 100], "copytool", "non", "Copy effect zone(<[-copytool]>)", ["geometry.png", [1, 2]]],
 			["PS", [2, 89, 4, 6], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
 			["...", [96, 2, 4, 4], [100, 100, 100], "findeffect", "non", "Browse(<[-findeffect]>)"]
 		],
-
-		"catpos": [74, 6, 22, 4],
-		"itempos": [74, 10, 22, 2],
-
-		"itempos2": [74, 64, 22, 2],
-
-		"currentparamindex": 9,
-
-		"paramspos": [7, 68],
-		"seedchange_size": [10, 10],
-
-		"additionspace": 5,
+		"s1": {
+			"catpos": [74, 6, 22, 4],
+			"itempos": [0, 2, 22, 2]
+		},
+		"s2": {
+			"catpos": [74, 64, 22, 3],
+			"itempos": [0, 2, 22, 2]
+		},
+		"s3": {
+			"catpos": [7, 64, 10, 10],
+			"itempos": [10, 0, 10, 10]
+		},
+		"category_count": 10,
 
 		"d1":{
 			"rect": [2, 2, 70, 62],
@@ -337,7 +349,6 @@
 			"border": [150, 150, 150]
 		},
 		"labels": [
-			["%1s: %10s", [7, 64], [255, 255, 255], 25],
 			["Selected effect: ", [0, 97], [255, 255, 255], 25],
 			["LMB - Paint\nRMB - Erase\nMMB - Move", [2, 2], [255, 255, 255], 25]
 		],
@@ -419,17 +430,15 @@
 			["...", [96, 2, 4, 4], [100, 100, 100], "findpropmenu", "non", "Browse(<[-findpropmenu]>)"]
 			
 		],
+		"s1": {
+			"catpos": [74, 6, 22, 4],
+			"itempos": [0, 2, 22, 2]
+		},
 
-		"catpos": [74, 6, 22, 4],
-		"itempos": [74, 10, 22, 2],
-
-		"settingspos": [74, 68, 22, 2],
-		"settingscolor": [90, 90, 90],
-
-		"hide": [5],
-
-		"paramspos": [72, 68],
-		"seedchange_size": [10, 10],
+		"s2": {
+			"settingspos": [74, 68, 22, 2],
+			"settingscolor": [90, 90, 90]
+		},
 
 		"d1":{
 			"rect": [2, 2, 70, 62],

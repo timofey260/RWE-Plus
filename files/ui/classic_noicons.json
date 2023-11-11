@@ -57,6 +57,11 @@
 			["Report", [50, 40, 50, 30], [70, 70, 70], "report", "non", "Report a bug"],
 			["Github", [50, 70, 50, 30], [70, 70, 70], "github", "non", "Go to RWE+ github"]
 		],
+		"s1": {
+			"catpos": [0, 5, 100, 6],
+			"itempos": [0, 5, 100, 5]
+		},
+		"category_count": 20,
 		"labels": [
 		]
 	},
@@ -201,15 +206,24 @@
 			["RA", [0, 84, 4, 6], [100, 100, 100], "replacestate", "non", "Replace air(<[-replacestate]>).\nIf enabled, not replaces air blocks"],
 			["CT", [4, 84, 4, 6], [100, 100, 100], "s0", "cutlayer", "Cut layer(<[-cutlayer]>)", ["geometry.png", [3, 5]]],
 
-			["Pencil", [10, 0, 5, 6], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil(<[-tool_pencil]>)", ["fillmethods.png", [5, 0]]],
-			["Brush", [15, 0, 5, 6], [100, 100, 100], "tool_brush", "non", "Change LMB to brush(<[-tool_brush]>)", ["fillmethods.png", [6, 0]]],
-			["Fill", [20, 0, 5, 6], [100, 100, 100], "tool_fill", "non", "Change LMB to fill(<[-tool_fill]>)", ["fillmethods.png", [0, 0]]],
+			["Pencil", [10, 0, 5, 3], [100, 100, 100], "tool_pencil", "non", "Change LMB to pencil(<[-tool_pencil]>)", ["fillmethods.png", [5, 0]]],
+			["Brush", [15, 0, 5, 3], [100, 100, 100], "tool_brush", "non", "Change LMB to brush(<[-tool_brush]>)", ["fillmethods.png", [6, 0]]],
+			["Fill", [20, 0, 5, 3], [100, 100, 100], "tool_fill", "non", "Change LMB to fill(<[-tool_fill]>)", ["fillmethods.png", [0, 0]]],
+			["Line", [25, 0, 5, 3], [100, 100, 100], "tool_line", "non", "Change LMB to line(<[-tool_line]>)", ["fillmethods.png", [7, 0]]],
+			["Rect", [30, 0, 5, 3], [100, 100, 100], "tool_rect", "non", "Change LMB to rect(<[-tool_rect]>)", ["fillmethods.png", [1, 0]]],
+			["Rect-\nhollow", [35, 0, 5, 3], [100, 100, 100], "tool_rect_hollow", "non", "Change LMB to hollow rect(<[-tool_rect_hollow]>)", ["fillmethods.png", [2, 0]]],
+			["Circle", [40, 0, 5, 3], [100, 100, 100], "tool_circle", "non", "Change LMB to circle(<[-tool_circle]>)", ["fillmethods.png", [3, 0]]],
+			["Circle-\nhollow", [45, 0, 5, 3], [100, 100, 100], "tool_circle_hollow", "non", "Change LMB to hollow circle(<[-tool_circle_hollow]>)", ["fillmethods.png", [4, 0]]],
 
-			["Line", [26, 0, 5, 6], [100, 100, 100], "tool_line", "non", "Change RMB to line(<[-tool_line]>)", ["fillmethods.png", [7, 0]]],
-			["Rect", [31, 0, 5, 6], [100, 100, 100], "tool_rect", "non", "Change RMB to rect(<[-tool_rect]>)", ["fillmethods.png", [1, 0]]],
-			["Rect-\nhollow", [36, 0, 5, 6], [100, 100, 100], "tool_rect_hollow", "non", "Change RMB to hollow rect(<[-tool_rect_hollow]>)", ["fillmethods.png", [2, 0]]],
-			["Circle", [41, 0, 5, 6], [100, 100, 100], "tool_circle", "non", "Change RMB to circle(<[-tool_circle]>)", ["fillmethods.png", [3, 0]]],
-			["Circle-\nhollow", [46, 0, 5, 6], [100, 100, 100], "tool_circle_hollow", "non", "Change RMB to hollow circle(<[-tool_circle_hollow]>)", ["fillmethods.png", [4, 0]]],
+			["Pencil", [10, 3, 5, 3], [100, 100, 100], "tool2_pencil", "non", "Change RMB to pencil(<[-tool2_pencil]>)", ["fillmethods.png", [5, 0]]],
+			["Brush", [15, 3, 5, 3], [100, 100, 100], "tool2_brush", "non", "Change RMB to brush(<[-tool2_brush]>)", ["fillmethods.png", [6, 0]]],
+			["Fill", [20, 3, 5, 3], [100, 100, 100], "tool2_fill", "non", "Change RMB to fill(<[-tool2_fill]>)", ["fillmethods.png", [0, 0]]],
+			["Line", [25, 3, 5, 3], [100, 100, 100], "tool2_line", "non", "Change RMB to line(<[-tool2_line]>)", ["fillmethods.png", [7, 0]]],
+			["Rect", [30, 3, 5, 3], [100, 100, 100], "tool2_rect", "non", "Change RMB to rect(<[-tool2_rect]>)", ["fillmethods.png", [1, 0]]],
+			["Rect-\nhollow", [35, 3, 5, 3], [100, 100, 100], "tool2_rect_hollow", "non", "Change RMB to hollow rect(<[-tool2_rect_hollow]>)", ["fillmethods.png", [2, 0]]],
+			["Circle", [40, 3, 5, 3], [100, 100, 100], "tool2_circle", "non", "Change RMB to circle(<[-tool2_circle]>)", ["fillmethods.png", [3, 0]]],
+			["Circle-\nhollow", [45, 3, 5, 3], [100, 100, 100], "tool2_circle_hollow", "non", "Change RMB to hollow circle(<[-tool2_circle_hollow]>)", ["fillmethods.png", [4, 0]]],
+
 			["TE", [95, 0, 5, 6], [100, 100, 100], "TE", "non", "Go to tile editor(<[/TE]>)"]
 		],
 		"d1":
@@ -300,9 +314,8 @@
 			["^", [2, 60, 4, 4], [100, 100, 100], "scrl_up_menu", "non", "Previous effect(<[-scrl_up]>)", ["arrows.png", [1, 0]]],
 
 
-			["^", [28, 64, 4, 6], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
-			["0", [28, 70, 4, 6], [100, 100, 100], "non", "non", "Current parameter"],
-			["v", [28, 76, 4, 6], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
+			["^", [28, 64, 4, 9], [100, 100, 100], "prevparam", "non", "Previous parameter(<[-prevparam]>)", ["arrows.png", [1, 0]]],
+			["v", [28, 73, 4, 9], [100, 100, 100], "nextparam", "non", "Next parameter(<[-nextparam]>)", ["arrows.png", [2, 0]]],
 			["CT", [28, 82, 4, 6], [100, 100, 100], "copytool", "non", "Copy effect zone(<[-copytool]>)", ["geometry.png", [1, 2]]],
 			["PS", [28, 88, 4, 6], [100, 100, 100], "pastedata", "non", "Paste(<[-pastedata]>)", ["geometry.png", [3, 6]]],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]],
@@ -311,17 +324,17 @@
 		],
 		"s1": {
 			"catpos": [2, 6, 22, 4],
-			"itempos": [2, 10, 22, 2]
+			"itempos": [0, 2, 22, 2]
 		},
-
-		"itempos2": [2, 64, 22, 2],
-
-		"currentparamindex": 10,
-
-		"paramspos": [32, 68],
-		"seedchange_size": [10, 10],
-
-		"additionspace": 5,
+		"s2": {
+			"catpos": [2, 64, 22, 3],
+			"itempos": [0, 2, 22, 2]
+		},
+		"s3": {
+			"catpos": [32, 64, 10, 10],
+			"itempos": [10, 0, 10, 10]
+		},
+		"category_count": 10,
 
 		"d1":{
 			"rect": [28, 2, 70, 62],
@@ -329,7 +342,6 @@
 			"border": [150, 150, 150]
 		},
 		"labels": [
-			["%1s: %10s", [32, 64], [255, 255, 255], 25],
 			["Selected effect: ", [28, 97], [255, 255, 255], 25],
 			["LMB - Paint\nRMB - Erase\nMMB - Move", [28, 2], [255, 255, 255], 25]
 		],
@@ -418,11 +430,6 @@
 			"settingspos": [2, 68, 22, 2],
 			"settingscolor": [90, 90, 90]
 		},
-
-		"paramspos": [32, 68],
-		"seedchange_size": [10, 10],
-
-		"hide": [5],
 
 		"d1":{
 			"rect": [28, 2, 70, 62],

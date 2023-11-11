@@ -76,7 +76,7 @@ class TE(MenuWithField):
         self.brushmode = False
 
     def GE(self):
-        self.message = "GE"
+        self.sendtoowner("GE")
 
     def blit(self):
         #pg.draw.rect(self.surface, settings["TE"]["menucolor"], pg.rect.Rect(self.buttonslist[0].xy, [self.buttonslist[0].rect.w, len(self.buttonslist[:-1]) * self.buttonslist[0].rect.h + 1]))
@@ -394,7 +394,8 @@ class TE(MenuWithField):
             return
 
     def test_cols(self, x, y) -> bool:
-        force_geo = self.findparampressed("force_geometry") or self.findparampressed("force_place")
+        force_place = self.findparampressed("force_place")
+        force_geo = self.findparampressed("force_geometry") or force_place
         w, h = self.tileimage["size"]
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]
@@ -406,7 +407,8 @@ class TE(MenuWithField):
         #    return False
         if "material" in self.tileimage["tags"]:
             return (self.data["GE"][x][y][self.layer][0] not in [0] or force_geo) \
-                and self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
+                and (self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] in ["default", "material"]
+                or force_place)
         for x2 in range(w):
             for y2 in range(h):
                 csp = sp[x2 * h + y2]
@@ -415,7 +417,8 @@ class TE(MenuWithField):
                 if xpos >= self.levelwidth or ypos >= self.levelheight or xpos < 0 or ypos < 0:
                     continue
                 if csp != -1:
-                    if self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]["tp"] != "default":
+                    tp = self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]["tp"]
+                    if tp != "default" and (not force_place or tp == "tileHead"):
                         return False
                     if self.data["GE"][xpos][ypos][self.layer][0] != csp and not force_geo:
                         return False
@@ -423,7 +426,8 @@ class TE(MenuWithField):
                     if self.layer + 1 <= 2:
                         csp2 = sp2[x2 * h + y2]
                         if csp2 != -1:
-                            if self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1]["tp"] != "default":
+                            tp = self.data["TE"]["tlMatrix"][xpos][ypos][self.layer + 1]["tp"]
+                            if tp != "default" and (not force_place or tp == "tileHead"):
                                 return False
                             if self.data["GE"][xpos][ypos][self.layer + 1][0] != csp2 and not force_geo:
                                 return False

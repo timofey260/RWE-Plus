@@ -73,7 +73,6 @@ class PE(MenuWithField):
         self.selector.catswap()
 
     def selectorset(self, buttondata):
-        print("set the prop")
         self.setprop(buttondata["nm"], buttondata["category"])
 
     def renderfield(self):

@@ -20,18 +20,13 @@ You can show any data in any editor by pressing\n<[/-togglegeo]>, <[/-toggletile
 Copy geometry, tiles, effects and cameras by pressing <[-copylayer]>, <[-copytool]>, <[-copytool]>, <[-copycamera]>
 Undo your mistakes by pressing <[undo]> or redo changes with <[redo]>\nUse <[-undoshadow]> and <[-redoshadow]> for shadow image
 Use "..." button to find props(<[-findpropmenu]>),\ntiles(<[-findtile]>) and effects(<[-findeffect]>) with search menu
+You can add any tile, prop or effect to favourites
 Toggle grid by pressing <[/-togglegrid]>
 Camera streshing can be done my mouse wit <[-edit]>
 
-Border/buffer tiles is zone, what renders collision of floors,\nbeams and entrances. Behind it, all stackable blocks won't work
-Did you know, wht every effect with 'layers' option,\n'layers' option is always in first index
-Tile editor is my best and i hate Prop editor
-Prop editor ropes are here! uwu
-Use tutorial if you have trouble with RWE+
 w\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne
 THIS IS NOT LE+
 
-bruh
 Welcome to RWE+
 Pizza time!
 Stop listing this tips, time to make a level now!

@@ -111,16 +111,24 @@
 
     	"K_LSHIFT": "brush_size_scroll",
 
-    	"K_KP0": "-tool_circle",
-    	"+K_KP0": "-tool_circle_hollow",
+    	"K_KP_PERIOD": "-tool_circle",
+    	"K_KP0": "-tool_circle_hollow",
     	"K_KP1": "-tool_rect",
-    	"+K_KP1": "-tool_rect_hollow",
-    	"K_KP2": "-tool_fill",
+    	"K_KP2": "-tool_rect_hollow",
+    	"K_KP3": "-tool_fill",
+    	"K_KP4": "-tool_line",
+    	"K_KP5": "-tool_pencil",
+    	"K_KP6": "-tool_brush",
 
-    	"K_KP_DIVIDE": "-tool_line",
-    	"K_KP_MULTIPLY": "-tool_pencil",
-    	"+K_KP_MULTIPLY": "-tool_brush"
-  	},
+		"+K_KP_PERIOD": "-tool2_circle",
+    	"+K_KP0": "-tool2_circle_hollow",
+    	"+K_KP1": "-tool2_rect",
+    	"+K_KP2": "-tool2_rect_hollow",
+    	"+K_KP3": "-tool2_fill",
+    	"+K_KP4": "-tool2_line",
+    	"+K_KP5": "-tool2_pencil",
+    	"+K_KP6": "-tool2_brush"
+    },
   	"TE": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],
 

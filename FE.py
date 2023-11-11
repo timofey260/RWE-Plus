@@ -43,7 +43,16 @@ class FE(MenuWithField):
 
     def remakeactive(self, discardselected=True):
         self.activeeffects.reload_data(self.generate_activeeffects(), discardselected)
-        self.remakeparams()
+        try:
+            self.remakeparams()
+        except IndexError:
+            if len(self.data["FE"]["effects"]) > 0:
+                self.activeeffects.currentitem = 0
+                self.activeeffects.currentcategory = 0
+                self.activeeffects.items()
+                self.remakeparams()
+            else:
+                pass
 
     def paramscallback(self, buttondata):
         self.paramsselector.setbybuttondata(buttondata)
@@ -60,6 +69,8 @@ class FE(MenuWithField):
     def generate_params(self) -> ItemData:
         data = ItemData()
         # print(self.activeeffects.selecteditem)
+        if len(self.data["FE"]["effects"]) <= 0:
+            return data
         for i, option in enumerate(self.data["FE"]["effects"][self.activeeffects.selecteditem['param']]["options"]):
             items = []
             for opi, optionname in enumerate(option[1]):
@@ -220,10 +231,8 @@ class FE(MenuWithField):
     def chtext(self):
         if len(self.data["FE"]["effects"]) > 0:
             self.labels[0].set_text(self.labels[0].originaltext + self.data["FE"]["effects"][self.selectedeffect]["nm"])
-            self.buttons[self.settings["currentparamindex"]].set_text(str(self.paramindex))
         else:
             self.labels[0].set_text("")
-            self.buttons[self.settings["currentparamindex"]].set_text("0")
 
     def changeparam(self, text: str): # "Delete", "Move Back", "Move Forth"
         match text.lower():
@@ -299,12 +308,16 @@ class FE(MenuWithField):
         self.chtext()
 
     def nextcat(self):
-        self.innew = True
-        self.selector.right()
+        if self.innew:
+            self.selector.right()
+        else:
+            self.activeeffects.right()
 
     def prevcat(self):
-        self.innew = True
-        self.selector.left()
+        if self.innew:
+            self.selector.left()
+        else:
+            self.activeeffects.left()
 
     def resize(self):
         super().resize()
@@ -372,8 +385,8 @@ class FE(MenuWithField):
                     self.activeeffects.currentitem = len(self.data["FE"]["effects"])
                     self.recaption()
                     self.updatehistory()
-                    self.renderfield()
                     self.remakeactive(False)
+                    self.renderfield()
                     return
 
     def paint(self, x, y, st):

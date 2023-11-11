@@ -332,46 +332,49 @@ class LP(MenuWithField):
             self.shadowfield = None
 
     def cutdata(self, path, x, y, w, h, default_instance):
+        # print(x, y, w, h, self.gw, self.gh, self.levelwidth, self.levelheight)
+        arr = deepcopy(self.data[path])
         if x >= 0:
             for _ in range(x):
-                self.historyinsert(0, path, [deepcopy(default_instance) for _ in range( self.data[path][0] )])
-                # arr.insert(0, [deepcopy(default_instance) for _ in range(len(arr[0]))])
+                # self.historyinsert(0, path, [deepcopy(default_instance) for _ in range( self.data[path][0] )])
+                arr.insert(0, [deepcopy(default_instance) for _ in range(len(arr[0]))])
         else:
-            for _ in range(x):
-                self.historypop(path, -1)
-            # arr = arr[-x:]
+            # for _ in range(x):
+            #     self.historypop(path, -1)
+            arr = arr[-x:]
 
-        if w != 0:
+        if w != 0 and w != self.gw:
             if w < self.gw:
-                for _ in range(len(self.data[path]) - w):
-                    self.historypop(path, -1)
-                # arr = arr[:w]
+                # for _ in range(len(self.data[path]) - w):
+                #     self.historypop(path, -1)
+                arr = arr[:w]
             else:
                 for _ in range(w - self.gw):
-                    self.historyappend(path, [deepcopy(default_instance) for _ in range(len(self.data[path][0]))])
-                    # arr.append([deepcopy(default_instance) for _ in range(len(arr[0]))])
+                    # self.historyappend(path, [deepcopy(default_instance) for _ in range(len(self.data[path][0]))])
+                    arr.append([deepcopy(default_instance) for _ in range(len(arr[0]))])
 
         if y >= 0:
-            for i in range(len(self.data[path])):
+            for i in range(len(arr)):
                 for _ in range(y):
-                    self.historyinsert([*path, i], deepcopy(default_instance), 0)
-                    # arr[i].insert(0, deepcopy(default_instance))
+                    # self.historyinsert([*path, i], deepcopy(default_instance), 0)
+                    arr[i].insert(0, deepcopy(default_instance))
         else:
-            for i in range(len(self.data[path])):
-                for _ in range(y):
-                    self.historypop([*path, i], -1)
-                # arr[i] = arr[i][-y:]
+            for i in range(len(arr)):
+                # for _ in range(y):
+                #     self.historypop([*path, i], -1)
+                arr[i] = arr[i][-y:]
 
-        if h != 0:
-            for i in range(len(self.data[path])):
+        if h != 0 and h != self.gh:
+            for i in range(len(arr)):
                 if h < self.gh:
-                    for _ in range(len(self.data[path][i]) - h):
-                        self.historypop([*path, i], -1)
-                    # arr[i] = arr[i][:h]
+                    # for _ in range(len(self.data[path][i]) - h):
+                    #     self.historypop([*path, i], -1)
+                    arr[i] = arr[i][:h]
                 else:
                     for _ in range(h - self.gh):
-                        self.historyappend([*path, i], deepcopy(default_instance))
-                        # arr[i].append(deepcopy(default_instance))
+                        # self.historyappend([*path, i], deepcopy(default_instance))
+                        arr[i].append(deepcopy(default_instance))
+        self.changedata(path, arr)
         # return arr
 
     def cutmanually(self):
@@ -404,3 +407,8 @@ class LP(MenuWithField):
     def onundo(self):
         self.border = [0, 0, self.levelwidth, self.levelheight]
         self.btiles = self.data["EX2"]["extraTiles"]
+        self.gw = self.levelwidth
+        self.gh = self.levelheight
+
+    def onredo(self):
+        self.onundo()

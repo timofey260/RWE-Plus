@@ -11,13 +11,13 @@ Generated using hotkeys to md converter
 * **7** - /PE - Prop Editor
 * **8** - /LP - Level Properties
 * **9** - /HK - Hotkeys
-* **ctrl + 0** - RELOAD - reloads UI
-* **ctrl + S** - save - Saves file
-* **ctrl + O** - open - Opens file
-* **ctrl + N** - new - Makes new file
+* **ctrl + 0** - /RELOAD - Reloads menu ui
+* **ctrl + S** - /save - Saves the level
+* **ctrl + O** - /openNewProcess - Opens level in new process
+* **ctrl + N** - /newProcess - Creates new process
 * **F11** - /fc - Fullscreen
-* **ctrl + Z** - undo - Undo
-* **ctrl + Y** - redo - Redo
+* **ctrl + Z** - /undo - Undo level changes
+* **ctrl + Y** - /redo - Redo level changes
 * **Escape** - /MN - Menu
 * **ctrl + 1** - /-togglegeo - Toggles geometry
 * **ctrl + 2** - /-toggletiles - Toggles tiles
@@ -33,6 +33,7 @@ Generated using hotkeys to md converter
 * **ctrl + L** - /-swichlayers_back - Switch layers back
 * **F1** - /-togglelayervisible - Toggles geometry layer
 * **F2** - /-toggletileslayervisible - Toggles tile layer
+* **ctrl + Tab** - /swichprocess - Swiches between processes
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -89,14 +90,23 @@ Generated using hotkeys to md converter
 * **-** - -brushm - decrease brush size
 * **[+]** - -brushp - Increase brush size
 * **[-]** - -brushm - decrease brush size
-* **[0]** - -tool_circle - Changes RMB to circle tool
-* **ctrl + [0]** - -tool_circle_hollow - Changes RMB to hollow circle tool
-* **[1]** - -tool_rect - Changes RMB to rectangle tool
-* **ctrl + [1]** - -tool_rect_hollow - Changes RMB to hollow rectangle tool
-* **[2]** - -tool_fill - Changes LMB to fill
-* **[/]** - -tool_line - Changes RMB to line
-* **[\*]** - -tool_pencil - Changes LMB to pencil
-* **ctrl + [\*]** - -tool_brush - Changes LMB to brush
+* **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
+* **[.]** - -tool_circle - Changes LMB to circle tool
+* **[0]** - -tool_circle_hollow - Changes LMB to hollow circle tool
+* **[1]** - -tool_rect - Changes LMB to rectangle tool
+* **[2]** - -tool_rect_hollow - Changes LMB to hollow rectangle tool
+* **[3]** - -tool_fill - Changes LMB to fill
+* **[4]** - -tool_line - Changes LMB to line
+* **[5]** - -tool_pencil - Changes LMB to pencil
+* **[6]** - -tool_brush - Changes LMB to brush
+* **ctrl + [.]** - -tool2_circle - Changes RMB to circle tool
+* **ctrl + [0]** - -tool2_circle_hollow - Changes RMB to hollow circle tool
+* **ctrl + [1]** - -tool2_rect - Changes RMB to rectangle tool
+* **ctrl + [2]** - -tool2_rect_hollow - Changes RMB to hollow rectangle tool
+* **ctrl + [3]** - -tool2_fill - Changes RMB to fill
+* **ctrl + [4]** - -tool2_line - Changes RMB to line
+* **ctrl + [5]** - -tool2_pencil - Changes RMB to pencil
+* **ctrl + [6]** - -tool2_brush - Changes RMB to brush
 ### TE
 * **G** - force_geometry - Forces geometry to tile
 * **F** - force_place - Places tile without checking geometry
@@ -109,6 +119,8 @@ Generated using hotkeys to md converter
 * **S** - -dt - Next tile
 * **Tab** - -cleartool - Clearing tool. removes any tiles
 * **Space** - -changetools - Change between clearing tool and placing tool
+* **X** - -showfavs - Shows favourites
+* **ctrl + X** - -addtofavs - Adds tile to favourites
 * **E** - -sad - Sets material as default
 * **Q** - -copytile - Copies tile in cursor
 * **ctrl + F** - -findtile - Opens find tile menu
@@ -145,7 +157,7 @@ Generated using hotkeys to md converter
 * **M** - -move - Enables move mode
 ### PE
 * **ctrl + Q** - -changematshow - Shows list of categories
-* **X** - pauseropephysics - Pauses rope physics
+* **X** - -showfavs - Shows favourites
 * **W** - -browse_prev - Previous prop
 * **A** - -cat_prev_propupdate - Previous category + update current prop
 * **S** - -browse_next - Next prop
@@ -171,6 +183,8 @@ Generated using hotkeys to md converter
 * **E** - -rotate_right - Rotates prop to right
 * **Q** - -rotate_left - Rotates prop to left
 * **Space** - rotate_speedup - Rotates prop to right
+* **Space** - pauseropephysics - Pauses rope physics
+* **ctrl + X** - -addtofavs - Adds prop to favourites
 * **Space** - cursor_propdepth_inverse - While pressed, press RMB to change depth down
 * **ctrl + F** - -findpropmenu - Opens find prop menu
 ### FE

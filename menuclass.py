@@ -27,7 +27,6 @@ class Menu:
         self.mousp2 = True
 
         self.size = image1size
-        self.message = ""
         self.buttons: list[widgets.Button, ...] = []
         self.labels: list[widgets.Label, ...] = []
 
@@ -103,11 +102,11 @@ class Menu:
         else:
             savedest = self.asksaveasfilename()
             if savedest != "" and savedest is not None:
-                open(savedest, "w").write(json.dumps(self.data))
+                open(savedest, "w").write(json.dumps(self.data.data.data))
                 self.data["level"] = os.path.basename(savedest)
                 self.data["path"] = savedest
                 self.data["dir"] = os.path.abspath(savedest)
-        print("Level saved!")
+        self.owner.manager.notify("Level Saved!")
         self.saved = True
         self.recaption()
 
@@ -477,7 +476,7 @@ class Menu:
         for indx, i in enumerate(xposes):
             self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
         self.historyChanges.insert(0, [*path])
-        print(self.historyChanges)
+        # print(self.historyChanges)
         self.addtohistory()
 
     def non(self, *args):
@@ -773,7 +772,6 @@ class MenuWithField(Menu):
 
     def swichlayers(self):
         self.layer = (self.layer + 1) % 3
-        self.mpos = 1
         self.renderer.render_all(self.layer)
         self.rfa()
 
@@ -781,7 +779,6 @@ class MenuWithField(Menu):
         self.layer -= 1
         if self.layer < 0:
             self.layer = 2
-        self.mpos = 1
         self.renderer.render_all(self.layer)
         self.rfa()
 
