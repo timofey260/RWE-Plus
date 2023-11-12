@@ -2,6 +2,7 @@ import copy
 import json.decoder
 import re
 import subprocess
+import json as jsonenc
 from files import *
 import math
 
@@ -87,11 +88,12 @@ def turntoproject(string: str) -> RWELevel:
 
 
 def tolingo(string: dict):
-    s = json.dumps(string)
+    s = jsonenc.dumps(string)
+    # print(s)
     t = s.replace("\"point(", "point(").replace("\"rect(", "rect(").replace("\"color(", "color(") \
         .replace(")\"", ")").replace("{", "[").replace("}", "]").replace("'", "")
     t = re.sub(r"\"([a-zA-Z]+[0-9]*)\":", r"#\1:", t)
-    #print(t)
+    # print(t)
     return t
 
 

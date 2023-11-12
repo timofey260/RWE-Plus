@@ -431,9 +431,12 @@ class Selector():
 
     def reload_data(self, data: ItemData, discardselected=True):
         self.data = data
-        if discardselected:
+        if discardselected or self.data.isempty():
             self.currentcategory = 0
             self.currentitem = 0
+        if not self.data.isempty():
+            self.currentcategory = restrict(self.currentcategory, 0, len(self.data.categories) - 1)
+            self.currentitem = restrict(self.currentitem, 0, len(self.data[self.currentcategory]["items"])  -1)
         self.items()
 
     def loadfavorites(self):
@@ -518,6 +521,8 @@ class Selector():
     def items(self):
         self.buttonslist = []
         if self.data.isempty():
+            self.itemsnum = 0
+            self.catsnum = 0
             return
         if self.show == "cats":
             self.currentcategory = self.currentitem + (self.currentcategory * self.menu.settings["category_count"])
@@ -724,19 +729,27 @@ class Selector():
             self.bigbutton.blittooltip()
 
     def up(self):
+        if self.itemsnum <= 0 or self.data.isempty():
+            return
         self.currentitem = (self.currentitem - 1) % self.itemsnum
         self.onclick("set")
 
     def down(self):
+        if self.itemsnum <= 0 or self.data.isempty():
+            return
         self.currentitem = (self.currentitem + 1) % self.itemsnum
         self.onclick("set")
 
     def right(self):
+        if self.catsnum <= 0 or self.data.isempty():
+            return
         self.currentcategory = (self.currentcategory + 1) % self.catsnum
         self.recreate()
         self.onclick("set")
 
     def left(self):
+        if self.catsnum <= 0 or self.data.isempty():
+            return
         self.currentcategory = (self.currentcategory - 1) % self.catsnum
         self.recreate()
         self.onclick("set")
@@ -803,6 +816,12 @@ class Selector():
         if self.bigbutton is not None:
             return self.bigbutton.onmouseover()
         return False
+
+    def selectlast(self):
+        self.items()
+        self.currentcategory = len(self.data) - 1
+        self.currentitem = len(self.data[self.currentcategory]["items"]) - 1
+        self.items()
 
 
 class Notification:

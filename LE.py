@@ -184,6 +184,24 @@ class LE(MenuWithField):
             lev = os.path.splitext(self.data["path"])[0] + ".png"
             pg.image.save(self.field2.field, lev)
 
+    def scroll_up(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.hp(False)  # too lazy to think about another solution so
+            self.wp(False)
+            self.hp(False)
+            self.wp()
+        else:
+            super().scroll_up()
+
+    def scroll_down(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.hm(False)
+            self.wm(False)
+            self.hm(False)
+            self.wm()
+        else:
+            super().scroll_down()
+
     def retile(self):
         self.tileimage2 = self.images[self.mode][self.selectedimage].copy()
         self.setwh()
@@ -224,33 +242,33 @@ class LE(MenuWithField):
         self.direction -= 1
         self.rotate()
 
-    def hp(self):
+    def hp(self, retile=True):
         self.imagerect[1] += 1
         if self.imagerect[1] == 0:
             self.imagerect[1] = 1
-        self.setwh()
-        self.retile()
+        if retile:
+            self.retile()
 
-    def hm(self):
+    def hm(self, retile=True):
         self.imagerect[1] -= 1
         if self.imagerect[1] == 0:
             self.imagerect[1] = -1
-        self.setwh()
-        self.retile()
+        if retile:
+            self.retile()
 
-    def wp(self):
+    def wp(self, retile=True):
         self.imagerect[0] += 1
         if self.imagerect[0] == 0:
             self.imagerect[0] = 1
-        self.setwh()
-        self.retile()
+        if retile:
+            self.retile()
 
-    def wm(self):
+    def wm(self, retile=True):
         self.imagerect[0] -= 1
         if self.imagerect[0] == 0:
             self.imagerect[0] = -1
-        self.setwh()
-        self.retile()
+        if retile:
+            self.retile()
 
     def fp(self):
         self.changedata(["LE", "flatness"], min(self.data["LE"]["flatness"] + 1, 10))

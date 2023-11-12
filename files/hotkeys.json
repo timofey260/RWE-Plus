@@ -161,7 +161,8 @@
     	"K_b": "-brush",
     	"K_p": "-pencil",
     	"K_c": "-pencil",
-    	"K_v": "-togglebrush"
+    	"K_v": "-togglebrush",
+    	"K_LSHIFT": "brush_size_scroll"
 
   	},
 	"CE": {
@@ -278,7 +279,8 @@
 		"K_e+": "-findeffect",
 
 		"K_x": "-deleteeffect",
-		"K_DELETE": "-deleteeffect"
+		"K_DELETE": "-deleteeffect",
+		"K_LSHIFT": "brush_size_scroll"
 
 
   	},
@@ -315,7 +317,8 @@
   		"K_a+": "-undoshadow",
   		"K_d+": "-redoshadow",
 
-    	"K_RETURN": "-save"
+    	"K_RETURN": "-save",
+    	"K_LSHIFT": "brush_size_scroll"
   	},
   	"LP": {
   		"unlock_keys": [],

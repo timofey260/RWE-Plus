@@ -131,7 +131,7 @@ class LP(MenuWithField):
                         self.border[2] = max(int(self.moveoffset.x + posoffset.x), bx)
                         chx = self.border[2]
 
-                    self.changedata(["EX2", "extraTiles"], self.btiles)
+                    self.changedata(["EX2", "extraTiles"], self.btiles, False)
                     # self.data["EX2"]["extraTiles"] = self.btiles
                     widgets.fastmts(self.surface, f"X:{int(chx)}, Y:{int(chy)}", mpos.x, mpos.y, white)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
@@ -250,8 +250,9 @@ class LP(MenuWithField):
         self.recount_image()
         self.changedata(["EX2", "size"], makearr([self.levelwidth, self.levelheight], "point"))
         # self.data["EX2"]["size"] = makearr([self.levelwidth, self.levelheight], "point")
-        print("Done!")
+        self.owner.manager.notify("Done!")
         self.updatehistory()
+        self.savef()
         # self.renderer.data = self.data
         self.renderer.set_surface([image1size * self.levelwidth, image1size * self.levelheight])
         self.renderer.render_all(self.layer)
@@ -374,7 +375,7 @@ class LP(MenuWithField):
                     for _ in range(h - self.gh):
                         # self.historyappend([*path, i], deepcopy(default_instance))
                         arr[i].append(deepcopy(default_instance))
-        self.changedata(path, arr)
+        self.changedata(path, arr, False)
         # return arr
 
     def cutmanually(self):
@@ -393,7 +394,7 @@ class LP(MenuWithField):
             y = self.askint(f"({self.btiles[1]})Top", False, self.btiles[1])
             w = self.askint(f"({self.btiles[2]})Right", False, self.btiles[2])
             h = self.askint(f"({self.btiles[3]})Bottom", False, self.btiles[3])
-            self.changedata(["EX2", "extraTiles"], [x, y, w, h])
+            self.changedata(["EX2", "extraTiles"], [x, y, w, h], False)
             # self.data["EX2"]["extraTiles"] = [x, y, w, h]
             self.btiles = self.data["EX2"]["extraTiles"]
         except ValueError:

@@ -271,18 +271,8 @@ class GE(MenuWithField):
                     vec = pg.Vector2(x, y)
                     self.place(vec + rect.topleft, False)
 
-        paths = []
-        count = 0
-        for xindex, xpos in enumerate(self.area):
-            for yindex, ypos in enumerate(xpos):
-                if not ypos:
-                    paths.append(["GE", xindex, yindex, self.layer])
-                    count += 1
-        if len(paths) > 0:
-            if count < 20:  # if we changed more than 20 pixels, changing history save method
-                self.updatehistory()
-            else:
-                self.detecthistory(["GE"])
+
+        self.detecthistory(["GE"])
         self.render_geo_area()
         self.rfa()
 

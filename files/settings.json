@@ -31,7 +31,7 @@
 
 	"historylimit": 50,
 	"autosavedelay": 120,
-	"matsize": [6.25, 7.5],
+	"matsize": [4, 6],
 	"matposes": {
 		"Standard": [148, 148, 148],
 		"Concrete": [148, 255, 255],

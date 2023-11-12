@@ -115,6 +115,7 @@ class ProcessManager:
 
     def mainprocessupdate(self):
         try:
+            self.currentproccess = widgets.restrict(self.currentproccess, 0, len(self.processes) - 1)
             self.mainprocess.update()
         except Exception as e:
             # extra save level in case of eny crashes
@@ -130,11 +131,16 @@ class ProcessManager:
                           "Do you want to save current level you opened?")
             if ex:
                 try:
-                    self.mainprocess.menu.savef(True)
+                    self.mainprocess.menu.savef()
                 except:
                     print("Cannot save!!! sorry")
                     self.closeprocess(self.mainprocess)
                     raise e
+            try:
+                self.mainprocess.update()
+            except:
+                self.saveall(True)
+                raise
 
     def newprocess(self, level):
         if level != -1 and os.path.exists(level):
@@ -149,8 +155,9 @@ class ProcessManager:
 
     def closeprocess(self, process):
         self.processes.remove(process)
-        self.currentproccess = min(self.currentproccess, len(self.processes) - 1)
-        self.mainprocess.menu.recaption()
+        self.currentproccess = widgets.restrict(self.currentproccess, 0, len(self.processes) - 1)
+        if len(self.processes) > 0:
+            self.mainprocess.menu.recaption()
 
     def openlevel(self, level):
         self.newprocess(level)
@@ -158,7 +165,7 @@ class ProcessManager:
 
     def saveall(self, crashsave=False):
         for i in self.processes:
-            i.menu.savef(crashsave)
+            i.menu.savef(crashsave=crashsave)
 
     def openfullscreen(self):
         self.fullscreen = not self.fullscreen
@@ -313,7 +320,6 @@ class LevelProcess:
     def undohistory(self):
         if len(self.undobuffer) == 0:
             return
-        print("Undo")
         lastsize = [self.menu.levelwidth, self.menu.levelheight]
         historyelem = self.undobuffer[-1]
         '''
@@ -329,7 +335,7 @@ class LevelProcess:
         '''
         elem = historyelem[1:]
         elem.reverse()
-        print("elem: ", historyelem)
+        # print("elem: ", historyelem)
         for i in elem:
             # print(i)
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
@@ -363,7 +369,6 @@ class LevelProcess:
     def redohistory(self):
         if len(self.redobuffer) == 0:
             return
-        print("Redo")
         lastsize = [self.menu.levelwidth, self.menu.levelheight]
         historyelem = self.redobuffer[-1]
 

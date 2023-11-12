@@ -40,9 +40,10 @@ class TE(MenuWithField):
 
         self.items: ItemData = process.renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
-        self.items.insert(0, {"name": "special", "color": black, "items": p["patterns"]})
-        for indx, pattern in enumerate(p["patterns"]):
-            self.items[0]["items"][indx]["cat"] = [len(self.items), indx + 1]
+        if "special" not in self.items.categories:
+            self.items.insert(0, {"name": "special", "color": black, "items": p["patterns"]})
+            for indx, pattern in enumerate(p["patterns"]):
+                self.items[0]["items"][indx]["cat"] = [len(self.items), indx + 1]
         self.blocks = p["blocks"]
         self.buttonslist = []
         self.brushmode = False
@@ -613,31 +614,51 @@ class TE(MenuWithField):
         print("couldn't find tile")
 
     def detecthistory(self, path, savedata=True):
-        if len(self.historyChanges) <= 0:
+        if savedata and path == ['TE', 'tlMatrix']:
+            super().detecthistory(path, savedata)
             return
-        # grouping data, recreating the past
+        if len(self.historyChanges) <= 0 or len(self.historyChanges) <= 30 and not savedata:
+            return
+        elif len(self.historyChanges) <= 30 and savedata:
+            self.updatehistory()
+            return
+        # no idea how it works but it works™
         xposes = []
         for i in self.historyChanges:
-            if path[0] == i[0][0]:
-                for p in path:
-                    i[0].remove(p)
-                if i[0][0] not in xposes:
-                    xposes.append(i[0][0])
+            if i[0][0] == path[0]:
+                if i[0][len(path)] in xposes:
+                    continue
+                xposes.append(i[0][len(path)])
         beforerows = []
         afterrows = []
         for i in xposes:
             afterrows.append(self.data[*path, i])
             lastdata = PathDict(deepcopy(self.data[*path, i]))
             for indx, item in enumerate(self.historyChanges):
-                if item[0][0] == i:
-                    lastdata[item[0][1:]] = item[1][1]
+                if item[0][0] == path[0] and item[0][len(path)] == i:
+                    lastdata[item[0][len(path)+1:]] = item[1][1]
+                    # print(lastdata[item[0][len(path)+1:]])
+                    self.historyChanges.remove(item)
             beforerows.append(lastdata.data)
-        self.historyChanges = []
+        if savedata:
+            self.historyChanges = []
         for indx, i in enumerate(xposes):
-            self.historyChanges.append([[i], [afterrows[indx], beforerows[indx]]])
-        self.historyChanges.insert(0, [])
+            self.historyChanges.append([[*path, i], [afterrows[indx], beforerows[indx]]])
+        self.historyChanges.insert(0, [*path] if savedata else [])
         # print(self.historyChanges)
         self.addtohistory()
+
+    def scroll_up(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.brushp()
+        else:
+            super().scroll_up()
+
+    def scroll_down(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.brushm()
+        else:
+            super().scroll_down()
 
     @property
     def custom_info(self):

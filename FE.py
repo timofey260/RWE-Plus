@@ -104,7 +104,7 @@ class FE(MenuWithField):
             foundeffect: dict = self.effects[effect["nm"]]
             appenddata = {
                 "nm": effect["nm"],
-                "color": gray,
+                "color": foundeffect["color"],
                 "param": i,
                 "description": foundeffect["description"],
                 "category": datacat["name"]
@@ -117,7 +117,8 @@ class FE(MenuWithField):
                 data.append(datacat)
                 datacat = {"name": str(len(data) + 1), "color": gray, "items": []}
                 items_in_cat = 0
-        data.append(datacat)
+        if len(datacat["items"]) > 0:
+            data.append(datacat)
         return data
 
     def selectorset(self, buttondata):
@@ -134,10 +135,17 @@ class FE(MenuWithField):
         self.selector.cursorcolor = red if self.innew else blue
         mpos = pg.Vector2(pg.mouse.get_pos())
         bp = self.getmouse
+        posoffset = self.posoffset
         super().blit()
         if self.onfield and len(self.data["FE"]["effects"]) > 0:
             if not self.copymode:
                 pg.draw.circle(self.surface, cursor, mpos, self.brushsize * self.size, 4)
+                try:
+                    widgets.fastmts(self.surface,
+                                    str(self.data["FE"]["effects"][self.selectedeffect]["mtrx"][int(posoffset.x)][int(posoffset.y)]),
+                                    mpos.x, mpos.y, white)
+                except IndexError:
+                    pass
 
             posoffset = self.posoffset
             pos2 = self.pos2
@@ -165,7 +173,7 @@ class FE(MenuWithField):
                 rect = self.vec2rect(self.rectdata[0], posoffset)
                 if self.copymode:
                     data1 = self.data["FE"]["effects"][self.selectedeffect]["mtrx"][rect.x:rect.w + rect.x]
-                    data1 = [i[rect.y:rect.w + rect.y] for i in data1]
+                    data1 = [i[rect.y:rect.h + rect.y] for i in data1]
                     pyperclip.copy(str(data1))
                     print("Copied!")
                 self.updatehistory()
@@ -202,6 +210,7 @@ class FE(MenuWithField):
 
     def duplicate(self):
         self.historyappend(["FE", "effects"], copy.deepcopy(self.data["FE"]["effects"][self.selectedeffect]))
+        self.remakeactive()
         self.updatehistory()
 
     def copytool(self):
@@ -221,6 +230,9 @@ class FE(MenuWithField):
                     ypos = -self.yoffset + yi + int(pa.y)
                     if not self.canplaceit(xpos, ypos, xpos, ypos):
                         continue
+                    if type(y) is not int:
+                        print("Failed to paste")
+                        break
                     self.changedata(["FE", "effects", self.selectedeffect, "mtrx", xpos, ypos], y)
                     # self.data["FE"]["effects"][self.selectedeffect]["mtrx"][xpos][ypos] = y
             self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
@@ -233,6 +245,12 @@ class FE(MenuWithField):
             self.labels[0].set_text(self.labels[0].originaltext + self.data["FE"]["effects"][self.selectedeffect]["nm"])
         else:
             self.labels[0].set_text("")
+
+    def changematshow(self):
+        if self.innew:
+            self.selector.catswap()
+        else:
+            self.activeeffects.catswap()
 
     def changeparam(self, text: str): # "Delete", "Move Back", "Move Forth"
         match text.lower():
@@ -294,7 +312,7 @@ class FE(MenuWithField):
         for cat in self.effects:
             for item in cat["items"]:
                 nd[item["nm"]] = cat["name"]
-        name = self.find(nd, "Select a prop")
+        name = self.find(nd, "Select an effect")
         if name is None:
             return
         self.addeffect(name)
@@ -307,13 +325,17 @@ class FE(MenuWithField):
         self.paramsselector.right()
         self.chtext()
 
-    def nextcat(self):
+    def nextcat(self, buttondata=None):
+        if buttondata is not None:
+            self.innewtab()
         if self.innew:
             self.selector.right()
         else:
             self.activeeffects.right()
 
-    def prevcat(self):
+    def prevcat(self, buttondata=None):
+        if buttondata is not None:
+            self.innewtab()
         if self.innew:
             self.selector.left()
         else:
@@ -376,16 +398,18 @@ class FE(MenuWithField):
                         ef = copy.deepcopy(effect)
                     mtrx = [[0 for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
                     ef["mtrx"] = mtrx
+                    ef["description"] = ""
+                    ef["category"] = ""
                     for n, i in enumerate(ef["options"]):
                         if i[0].lower() == "seed":
                             ef["options"][n][2] = random.randint(0, 500)
                     self.historyappend(["FE", "effects"], ef.copy())
                     # self.data["FE"]["effects"].append(ef.copy())
                     self.innew = False
-                    self.activeeffects.currentitem = len(self.data["FE"]["effects"])
                     self.recaption()
                     self.updatehistory()
                     self.remakeactive(False)
+                    self.activeeffects.selectlast()
                     self.renderfield()
                     return
 
@@ -414,7 +438,7 @@ class FE(MenuWithField):
         self.brushsize += 1
 
     def bsdown(self):
-        self.brushsize = widgets.restrict(self.brushsize, 1, bignum)
+        self.brushsize = widgets.restrict(self.brushsize - 1, 1, bignum)
 
     def innewtab(self):
         self.innew = True
@@ -452,11 +476,23 @@ class FE(MenuWithField):
             return
         self.scrl_down_menu()
 
+    def scroll_up(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.bsup()
+        else:
+            super().scroll_up()
+
+    def scroll_down(self):
+        if self.findparampressed("brush_size_scroll"):
+            self.bsdown()
+        else:
+            super().scroll_down()
+
     def onundo(self):
-        self.remakeactive()
+        self.remakeactive(False)
 
     def onredo(self):
-        self.remakeactive()
+        self.remakeactive(False)
 
     @property
     def touchesanything(self):

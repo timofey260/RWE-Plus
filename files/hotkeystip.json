@@ -122,7 +122,7 @@
         "-sad": "Sets material as default",
         "-copytile": "Copies tile in cursor",
         "-findtile": "Opens find tile menu",
-        "movepreview": "Preview of prop specs on black square",
+        "brush_size_scroll": "Hold to use scroll to change brush size",
         "-brushp": "Increase brush size",
         "-brushm": "decrease brush size",
         "-brush": "Enables Bruhs",
@@ -197,7 +197,8 @@
         "-copytool": "Copy tool",
         "-pastedata": "Paste effect area",
         "-findeffect": "Opens effect find menu",
-        "-deleteeffect": "Delete selected effect"
+        "-deleteeffect": "Delete selected effect",
+        "brush_size_scroll": "Hold to use scroll to change brush size"
     },
     "LE": {
         "-save": "Saves shadow",
@@ -217,7 +218,8 @@
         "-changedown": "Change image dowm",
         "-inverse": "Turns white image to black and vise versa",
         "-undoshadow": "Undo shadow image",
-        "-redoshadow": "Redo shadow image"
+        "-redoshadow": "Redo shadow image",
+        "brush_size_scroll": "Hold to use scroll to change brush size"
     },
     "LP": {
         "-changeborder": "Changes border, opened or walls",

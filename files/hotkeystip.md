@@ -124,7 +124,7 @@ Generated using hotkeys to md converter
 * **E** - -sad - Sets material as default
 * **Q** - -copytile - Copies tile in cursor
 * **ctrl + F** - -findtile - Opens find tile menu
-* **Left Shift** - movepreview - Preview of prop specs on black square
+* **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
 * **=** - -brushp - Increase brush size
 * **-** - -brushm - decrease brush size
 * **[+]** - -brushp - Increase brush size
@@ -207,6 +207,7 @@ Generated using hotkeys to md converter
 * **ctrl + E** - -findeffect - Opens effect find menu
 * **X** - -deleteeffect - Delete selected effect
 * **Delete** - -deleteeffect - Delete selected effect
+* **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
 ### LE
 * **Escape** - -save - Saves shadow
 * **ctrl + Q** - -lightmod - Makes pixels white
@@ -230,6 +231,7 @@ Generated using hotkeys to md converter
 * **ctrl + A** - -undoshadow - Undo shadow image
 * **ctrl + D** - -redoshadow - Redo shadow image
 * **Return** - -save - Saves shadow
+* **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
 ### LP
 * **B** - -changeborder - Changes border, opened or walls
 * **L** - -changelight - Changes sunlight

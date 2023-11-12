@@ -67,9 +67,11 @@ class Menu:
     def scroll_down(self):
         pass
 
-    def changedata(self, path: list, value):
+    def changedata(self, path: list, value, checkvalue=True):
         oldvalue = self.data[path]
         tohisstory = deepcopy([path, [value, oldvalue]])
+        if checkvalue and value == oldvalue:
+            return
         for indx, i in enumerate(self.historyChanges):
             if i[0] == tohisstory[0]:
                 self.historyChanges[indx][1][0] = value
@@ -94,7 +96,7 @@ class Menu:
 
     def savef(self, saveas=False, crashsave=False):
         if crashsave:
-            open(path2levels + "AutoSave.wep", "w").write(json.dumps(self.data.data.data))
+            open(f"{path2levels}AutoSave_{self.data.data.data.get('level', 'new')}.wep", "w").write(json.dumps(self.data.data.data))
         elif self.data["path"] != "" and not saveas:
             open(os.path.splitext(self.data["path"])[0] + ".wep", "w").write(json.dumps(self.data.data.data))
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
@@ -454,6 +456,9 @@ class Menu:
 
     def detecthistory(self, path, savedata=True):
         if len(self.historyChanges) <= 0:
+            return
+        elif len(self.historyChanges) <= 30:
+            self.updatehistory()
             return
         # grouping data, recreating the past
         xposes = []
@@ -981,7 +986,8 @@ class MenuWithField(Menu):
             name = val["data"][1]
             itm = self.items[name]
             if itm is None:
-                self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
+                self.changedata(["TE", "tlMatrix", mx, my, layer], {"tp": "default", "data": 0})
+                # self.data["TE"]["tlMatrix"][mx][my][layer] = {"tp": "default", "data": 0}
                 return
             backx = mx - int((itm["size"][0] * .5) + .5) + 1
             backy = my - int((itm["size"][1] * .5) + .5) + 1
@@ -1005,14 +1011,16 @@ class MenuWithField(Menu):
                     self.area[posx][posy] = False
                     if csp != -1:
                         # pg.draw.rect(self.fieldadd, red, [posx * self.size, posy * self.size, self.size, self.size])
-                        self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
+                        self.changedata(["TE", "tlMatrix", posx, posy, layer], {"tp": "default", "data": 0})
+                        # self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
                     if sp2 != 0:
                         try:
                             csp = sp2[x2 * h + y2]
                         except IndexError:
                             csp = -1
                         if csp != -1 and layer + 1 <= 2:
-                            self.data["TE"]["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
+                            self.changedata(["TE", "tlMatrix", posx, posy, layer + 1], {"tp": "default", "data": 0})
+                            # self.data["TE"]["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
 
         if not self.canplaceit(x, y, x, y):
             return
@@ -1026,8 +1034,10 @@ class MenuWithField(Menu):
                     clearitem(x, y, self.layer)
                 case "material":
                     self.area[x][y] = False
-                    self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
-        self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
+                    self.changedata(["TE", "tlMatrix", x, y, self.layer], {"tp": "default", "data": 0})
+                    # self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
+        self.changedata(["TE", "tlMatrix", x, y, self.layer], {"tp": "default", "data": 0})
+        # self.data["TE"]["tlMatrix"][x][y][self.layer] = {"tp": "default", "data": 0}
 
     def getcamerarect(self, cam):
         pos = pg.Vector2(toarr(cam, "point"))
