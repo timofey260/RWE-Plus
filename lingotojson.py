@@ -366,6 +366,7 @@ def getcolors():
         cols.append(l)
     return cols
 
+
 def addprop(item, img):
     img.set_colorkey(pg.color.Color(255, 255, 255))
 
@@ -421,6 +422,7 @@ def addprop(item, img):
     else:
         images.append(img.subsurface(0, hs - h, w, h))
     return images
+
 
 def getprops(tiles: dict, window: pg.Surface):
     # turning tiles to props and then add them to all other props

@@ -352,8 +352,8 @@ class PE(MenuWithField):
         return propnear, near, nindx
 
     def depth_up(self):
-        maxdepth = self.layer * 10 + 10
-        self.depth = (self.depth + 1) % maxdepth
+        depth = self.layer * 10
+        self.depth = (self.depth + 1 - depth) % 10 + depth
         self.add_warning()
 
     def depth_down(self):

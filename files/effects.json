@@ -28,12 +28,12 @@
 				["3D", ["Off", "On"], "Off"],
 				["Affect Gradients and Decals", ["Yes", "No"], "No"]
 			], "preview":"barnacles"},
-			{"nm": "Rubble", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
+			{"nm": "Rubble", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "rubble"},
 			{"nm": "DecalsOnlySlime", "tp": "standardErosion", "repeats": 130, "affectOpenAreas": 0.5, "options": 
-			[["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]}
+			[["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "decalsonlyslime"}
 		]},
 		{"nm": "Erosion", "color": [115, 60, 18], "efs": [
-			{"nm": "Roughen", "tp": "standardErosion", "repeats": 30, "affectOpenAreas": 0.05, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"roughten"},
+			{"nm": "Roughen", "tp": "standardErosion", "repeats": 30, "affectOpenAreas": 0.05, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"roughen"},
 			{"nm": "SlimeX3", "tp": "standardErosion", "repeats": 390, "affectOpenAreas": 0.5, "options": 
 			[
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
@@ -54,10 +54,10 @@
 			], "preview":"destructivemelt"},
 			{"nm": "Erode", "tp": "standardErosion", "repeats": 80, "affectOpenAreas": 0.5, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"erode"},
 			{"nm": "Super Erode", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"supererode"},
-			{"nm": "DaddyCoruption", "options": [
+			{"nm": "DaddyCorruption", "options": [
 				["Color", ["Color1", "Color2", "Dead"], "Color2"],
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]
-			], "preview":"daddycoruption"}
+			], "preview":"daddycorruption"}
 		]},
 		{"nm": "Artificial", "color": [110, 184, 204], "efs": [
 			{"nm": "Wires", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Fatness", ["1px", "2px", "3px", "random"], "2px"]], "preview":"wires"},
@@ -75,7 +75,7 @@
 		{"nm": "Plants2", "color": [30, 227, 86], "efs": [
 			{"nm": "Arm Growers", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"armgrowers"},
 			{"nm": "Horse Tails", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"horsetails"},
-			{"nm": "Circuit Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"circutplants"},
+			{"nm": "Circuit Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"circuitplants"},
 			{"nm": "Feather Plants", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"featherplants"},
 			{"nm": "Thorn Growers", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"thorngrowers"},
 			{"nm": "Rollers", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"rollers"},
@@ -83,16 +83,16 @@
 		]},
 		{"nm": "Plants3", "color": [12, 237, 23], "efs": [
 			{"nm": "Thick Roots", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"thickroots"},
-			{"nm": "Shadow Plants", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"Shadow Plants"}
+			{"nm": "Shadow Plants", "crossScreen": 1, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview":"shadowplants"}
 		]},
 		{"nm": "Plants (Individual)", "color": [14, 150, 20], "efs": [
-			{"nm": "Fungi Flowers", "options": [["Layers", ["1", "2", "3"], "1"]], "preview":"Fungi Flowers"},
-			{"nm": "Lighthouse Flowers", "options": [["Layers", ["1", "2", "3"], "1"]], "preview":"Lighthouse Flowers"},
-			{"nm": "Fern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"Fern"},
-			{"nm": "Giant Mushroom", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"Giant Mushroom"},
-			{"nm": "Sprawlbush", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"Sprawlbush"},
-			{"nm": "featherFern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"Feather Fern"},
-			{"nm": "Fungus Tree", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"Fungus Tree"}
+			{"nm": "Fungi Flowers", "options": [["Layers", ["1", "2", "3"], "1"]], "preview":"fungiflowers"},
+			{"nm": "Lighthouse Flowers", "options": [["Layers", ["1", "2", "3"], "1"]], "preview":"lighthouseflowers"},
+			{"nm": "Fern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"fern"},
+			{"nm": "Giant Mushroom", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"giantmushroom"},
+			{"nm": "Sprawlbush", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"sprawlbush"},
+			{"nm": "featherFern", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"featherfern"},
+			{"nm": "Fungus Tree", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"fungustree"}
 		]},
 		{"nm": "Paint Effects", "color": [90, 107, 91], "efs": [
 			{"nm": "BlackGoo"},
@@ -112,90 +112,90 @@
 			{"nm": "Colored Hang Roots", "crossScreen": 1, "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "hangroots"},
+			], "preview": "c_hangroots"},
 			{"nm": "Colored Thick Roots", "crossScreen": 1, "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "thickroots"},
+			], "preview": "c_thickroots"},
 			{"nm": "Colored Shadow Plants", "crossScreen": 1, "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Shadow Plants"},
+			], "preview": "c_shadowplants"},
 			{"nm": "Colored Lighthouse Flowers", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "1"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Lighthouse Flowers"},
+			], "preview": "c_lighthouseflowers"},
 			{"nm": "Colored Fungi Flowers", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "1"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Fungi Flowers"},
+			], "preview": "c_fungiflowers"},
 			{"nm": "Root Plants", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Root Plants"}
+			], "preview": "rootplants"}
 		]},
 		{"nm": "Drought Plants 2", "color": [45, 179, 80], "efs": [
 			{"nm": "Foliage", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Foliage"},
+			], "preview": "foliage"},
 			{"nm": "Mistletoe", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Mistletoe"},
+			], "preview": "mistletoe"},
 			{"nm": "High Fern", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "High Fern"},
+			], "preview": "highfern"},
 			{"nm": "High Grass", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "High Grass"},
+			], "preview": "highgrass"},
 			{"nm": "Little Flowers", "options": 
 			[
 				["Color", ["Color1", "Color2", "Dead"], "Color2"],
 				["Detail Color", ["Color1", "Color2", "Dead"], "Color2"],
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Rotate", ["Off", "On"], "Off"]
-			], "preview": "Little Flowers"},
+			], "preview": "littleflowers"},
 			{"nm": "Wastewater Mold", "options": [
 				["Color", ["Color1", "Color2", "Dead"], "Color2"],
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]
-			], "preview": "Wastewater Mold"}
+			], "preview": "wastewatermold"}
 		]},
 		{"nm": "Drought Plants 3", "color": [34, 133, 60], "efs": [
 			{"nm": "Spinets", "crossScreen": 1, "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Spinets"},
-			{"nm": "Small Springs", "options": [], "preview": "Small Springs"},
+			], "preview": "spinets"},
+			{"nm": "Small Springs", "options": [], "preview": "smallsprings"},
 			{"nm": "Mini Growers", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Mini Growers"},
+			], "preview": "minigrowers"},
 			{"nm": "Clovers", "repeats": 20, "affectOpenAreas": 0.2, "options": 
 			[
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
       			["3D", ["Off", "On"], "Off"],
       			["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Clovers"},
+			], "preview": "clovers"},
 			{"nm": "Reeds", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Reeds"},
+			], "preview": "reeds"},
 			{"nm": "Lavenders", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Lavenders"},
+			], "preview": "lavenders"},
 			{"nm": "Dense Mold", "options": [
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-			], "preview": "Dense Mold"}
+			], "preview": "densemold"}
 		]},
 		{"nm": "Drought Erosion", "color": [64, 11, 32], "efs": [
     		{"nm":"Corruption No Eye", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]
-    		]},
+    		], "preview": "corruptionnoeye"},
     		{"nm":"Ultra Super Erode", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
     		{"nm":"Impacts", "tp": "standardErosion", "repeats": 75, "affectOpenAreas": 0.05, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]}
     	]},
@@ -256,27 +256,27 @@
     		{"nm": "Left Facing Kelp", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-    		], "preview": "L Facing Kelp"},
+    		], "preview": "leftfacingkelp"},
     		{"nm": "Right Facing Kelp", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-    		], "preview": "R Facing Kelp"},
+    		], "preview": "rightfacingkelp"},
     		{"nm": "Mixed Facing Kelp", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-    		], "preview": "Mixed Facing Kelp"},
+    		], "preview": "mixedfacingkelp"},
     		{"nm": "Bubble Grower", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-    		], "preview": "Bubble Grower"},
+    		], "preview": "bubblegrower"},
     		{"nm": "Moss Wall", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-    		], "preview": "Moss Wall"},
+    		], "preview": "mosswall"},
     		{"nm": "Club Moss", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
 				["Color", ["Color1", "Color2", "Dead"], "Color2"]
-    		], "preview": "Club Moss"}
+    		], "preview": "clubmoss"}
     	]},
     	{"nm": "Leo Plants", "color": [255, 1, 96], "efs": [
     		{"nm": "Ivy", "crossScreen": 1, "options": 
@@ -286,10 +286,10 @@
     			["Color Intensity", ["High", "Medium", "Low", "None", "Random"], "Medium"],
     			["Fruit Density", ["High", "Medium", "Low", "None"], "None"],
     			["Leaf Density", [], 69]
-    		], "preview": "Ivy"}
+    		], "preview": "ivy"}
     	]},
     	{"nm": "Nautillo Plants", "color": [167, 120, 90], "efs": [
-    		{"nm": "Fuzzy Growers", "options": [], "preview": "Fuzzy Growers"}
+    		{"nm": "Fuzzy Growers", "options": [], "preview": "fuzzygrowers"}
     	]}
 	],
 	"maxstr": ["BlackGoo", "Fungi Flowers", "Lighthouse Flowers", "Colored Fungi Flowers", "Colored Lighthouse Flowers", "High Fern", "High Grass", "Fern", "Giant Mushroom", "Sprawlbush", "featherFern", "Fungus Tree", "Restore As Scaffolding", "Restore As Pipes", "Small Springs", "Super BlackGoo", "Stained Glass Properties"]

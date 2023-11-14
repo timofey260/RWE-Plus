@@ -102,15 +102,24 @@ class FE(MenuWithField):
         datacat = {"name": "1", "color": gray, "items": []}
         for i, effect in enumerate(self.data["FE"]["effects"]):
             foundeffect: dict = self.effects[effect["nm"]]
-            appenddata = {
-                "nm": effect["nm"],
-                "color": foundeffect["color"],
-                "param": i,
-                "description": foundeffect["description"],
-                "category": datacat["name"]
-            }
-            if foundeffect.get("preview", None) is not None:
-                appenddata["preview"] = foundeffect["preview"]
+            if foundeffect is None:
+                appenddata = {
+                    "nm": effect["nm"],
+                    "color": gray,
+                    "param": i,
+                    "description": "effect not found",
+                    "category": datacat["name"]
+                }
+            else:
+                appenddata = {
+                    "nm": effect["nm"],
+                    "color": foundeffect["color"],
+                    "param": i,
+                    "description": foundeffect["description"],
+                    "category": datacat["name"]
+                }
+                if foundeffect.get("preview", None) is not None:
+                    appenddata["preview"] = foundeffect["preview"]
             datacat["items"].append(appenddata)
             items_in_cat += 1
             if items_in_cat > self.settings["category_count"]:
@@ -258,24 +267,24 @@ class FE(MenuWithField):
                 self.deleteeffect()
                 return
             case "move back":
-                se = self.selectedeffect - 1
+                se = self.activeeffects.currentitem - 1
                 if se < 0:
                     se = 0
                 self.historymove(["FE", "effects"], self.selectedeffect, se)
                 # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
                 self.updatehistory()
                 self.activeeffects.currentitem = se
-                self.remakeactive()
+                self.remakeactive(False)
                 self.renderer.rerendereffect()
                 return
             case "move forth":
-                se = self.selectedeffect + 1
+                se = self.activeeffects.currentitem + 1
                 if se < len(self.data["FE"]["effects"]):
                     self.historymove(["FE", "effects"], self.selectedeffect, se)
                     # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
                     self.updatehistory()
                     self.activeeffects.currentitem = se
-                    self.remakeactive()
+                    self.remakeactive(False)
                     self.renderer.rerendereffect()
                 return
             case "change seed":
