@@ -27,6 +27,10 @@ class LoadMenu(Menu):
         data.append({"name": "Recent files", "color": gray, "items": items})
         weps = []
         txts = []
+        wepcount = 0
+        weppage = 1
+        txtcount = 0
+        txtpage = 1
         for root, dirs, files in os.walk(path2levels):
             for i, file in enumerate(files):
                 fpath = os.path.join(root, file)
@@ -40,10 +44,22 @@ class LoadMenu(Menu):
                 }
                 if ext.lower() == ".wep":
                     weps.append(dat)
+                    wepcount += 1
+                    if wepcount > globalsettings["recent_items_per_category"]:
+                        data.append({"name": f"All .wep files p{weppage}", "color": gray, "items": weps})
+                        weps = []
+                        weppage += 1
+                        wepcount = 0
                 elif ext.lower() == ".txt":
                     txts.append(dat)
-        data.append({"name": "All .wep files", "color": gray, "items": weps})
-        data.append({"name": "All .txt files", "color": gray, "items": txts})
+                    txtcount += 1
+                    if txtcount > globalsettings["recent_items_per_category"]:
+                        data.append({"name": f"All .txt files p{txtpage}", "color": gray, "items": txts})
+                        txts = []
+                        txtpage += 1
+                        txtcount = 0
+        data.append({"name": f"All .wep files p{weppage}", "color": gray, "items": weps})
+        data.append({"name": f"All .txt files p{txtpage}", "color": gray, "items": txts})
         return data
 
     def send(self, message):
@@ -73,6 +89,12 @@ class LoadMenu(Menu):
 
     def github(self):
         github()
+
+    def lt(self):
+        self.selector.left()
+
+    def rt(self):
+        self.selector.right()
 
     @property
     def touchesanything(self):

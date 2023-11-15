@@ -95,11 +95,11 @@
 			{"nm": "Fungus Tree", "options": [["Layers", ["1", "2", "3"], "1"], ["Color", ["Color1", "Color2", "Dead"], "Color2"]], "preview":"fungustree"}
 		]},
 		{"nm": "Paint Effects", "color": [90, 107, 91], "efs": [
-			{"nm": "BlackGoo"},
-			{"nm": "DarkSlime", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]}
+			{"nm": "BlackGoo", "preview": "blackgoo"},
+			{"nm": "DarkSlime", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "darkslime"}
 		]},
 		{"nm": "Restoration", "color": [186, 54, 91], "efs": [
-			{"nm": "Restore As Scaffolding", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
+			{"nm": "Restore As Scaffolding", "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "restoreasscaffolding"},
 			{"nm": "Ceramic Chaos", "options": [
 				["Colored", ["None", "White"], "White"],
 				["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]
@@ -196,18 +196,18 @@
     		{"nm":"Corruption No Eye", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]
     		], "preview": "corruptionnoeye"},
-    		{"nm":"Ultra Super Erode", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
-    		{"nm":"Impacts", "tp": "standardErosion", "repeats": 75, "affectOpenAreas": 0.05, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]}
+    		{"nm":"Ultra Super Erode", "tp": "standardErosion", "repeats": 60, "affectOpenAreas": 0.5, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "ultrasupererode"},
+    		{"nm":"Impacts", "tp": "standardErosion", "repeats": 75, "affectOpenAreas": 0.05, "options": [["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "impacts"}
     	]},
     	{"nm": "Drought Paint Effects", "color": [222, 222, 222], "efs": [
-    		{"nm": "Super BlackGoo", "options": []},
+    		{"nm": "Super BlackGoo", "options": [], "preview": "superblackgoo"},
     		{"nm": "Scales", "tp": "standardErosion", "repeats": 200, "affectOpenAreas": 0.5, "options": 
-    		[["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]]},
+    		[["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"]], "preview": "scales"},
     		{"nm": "Stained Glass Properties", "options": [
     			["Variation", ["1", "2", "3"], "1"],
     			["Color 1", ["EffectColor1", "EffectColor2", "None"], "EffectColor1"],
     			["Color 2", ["EffectColor1", "EffectColor2", "None"], "EffectColor2"]
-    		]}
+    		], "preview": "stainedglassproperties"}
     	]},
     	{"nm": "Drought Natural", "color": [153, 212, 53], "efs": [
     		{"nm": "Colored Barnacles", "repeats": 60, "affectOpenAreas": 0.3, "options": 
@@ -215,42 +215,42 @@
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["3D", ["Off", "On"], "Off"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "EffectColor2"]
-    		]},
+    		], "preview": "c_barnacles"},
     		{"nm": "Colored Rubble", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "EffectColor2"]
-    		]},
+    		], "preview": "c_rubble"},
     		{"nm": "Sand", "tp": "standardErosion", "repeats": 80, "affectOpenAreas": 0.5, "options": 
     		[
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "None"]
-    		]},
+    		], "preview": "sand"},
     		{"nm": "Fat Slime", "tp": "standardErosion", "repeats": 200, "affectOpenAreas": 0.5, "options": 
     		[
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["3D", ["Off", "On"], "Off"],
     			["Affect Gradients and Decals", ["Yes", "No"], "Yes"]
-    		]}
+    		], "preview": "fatslime"}
     	]},
     	{"nm": "Drought Artificial", "color": [48, 174, 194], "efs": [
     		{"nm": "Assorted Trash", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "None"]
-    		]},
+    		], "preview": "assortedtrash"},
     		{"nm": "Colored Wires", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["Fatness", ["1px", "2px", "3px", "random"], "2px"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "EffectColor2"]
-    		], "preview": "wires"},
+    		], "preview": "c_wires"},
     		{"nm": "Colored Chains", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["Size", ["Small", "FAT"], "Small"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "EffectColor2"]
-    		], "preview": "chains"},
+    		], "preview": "c_chains"},
     		{"nm": "Ring Chains", "options": [
     			["Layers", ["All", "1", "2", "3", "1:st and 2:nd", "2:nd and 3:rd"], "All"],
     			["Effect Color", ["EffectColor1", "EffectColor2", "None"], "None"]
-    		]}
+    		], "preview": "ringchains"}
     	]},
     	{"nm": "Dakras Plants", "color": [77, 45, 49], "efs": [
     		{"nm": "Left Facing Kelp", "options": [

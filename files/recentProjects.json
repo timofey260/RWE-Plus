@@ -1,12 +1,12 @@
 {
     "files": [
         {
-            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects.wep",
-            "name": "all_effects.wep"
-        },
-        {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects_2.wep",
             "name": "all_effects_2.wep"
+        },
+        {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects.wep",
+            "name": "all_effects.wep"
         },
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects_3.wep",

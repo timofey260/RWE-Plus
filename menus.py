@@ -8,5 +8,5 @@ from CE import * # NOQA
 from LP import * # NOQA
 from PE import * # NOQA
 from HK import * # NOQA
-from Tutorial import * # NOQA
-menulist = ["MN", "GE", "TE", "LD", "LE", "FE", "CE", "LP", "PE", "HK", "TT"]
+# from Tutorial import * # NOQA no more tutorial
+menulist = ["MN", "GE", "TE", "LD", "LE", "FE", "CE", "LP", "PE", "HK"]

@@ -44,7 +44,9 @@
   	  	"K_n": "new",
   	  	"K_n+": "new",
   	  	"K_o": "open",
-  	  	"K_o+": "open"
+  	  	"K_o+": "open",
+  	  	"K_d": "-rt",
+    	"K_a": "-lt"
   	},
   	"MN": {
   		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN"],

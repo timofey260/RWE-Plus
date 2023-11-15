@@ -477,11 +477,19 @@ class FE(MenuWithField):
         if self.innew:
             self.scrl_up_new()
             return
+        if self.activeeffects.currentitem == 0 and self.activeeffects.show == "items":
+            self.activeeffects.left()
+            self.activeeffects.currentitem = self.activeeffects.itemsnum - 1
+            return
         self.scrl_up_menu()
 
     def scrl_down(self):
         if self.innew:
             self.scrl_down_new()
+            return
+        if self.activeeffects.currentitem == self.activeeffects.itemsnum - 1 and self.activeeffects.show == "items":
+            self.activeeffects.right()
+            self.activeeffects.currentitem = 0
             return
         self.scrl_down_menu()
 
