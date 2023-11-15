@@ -81,9 +81,6 @@ class LoadMenu(Menu):
     def new(self):
         self.sendtoowner("new")
 
-    def tutorial(self):
-        self.sendtoowner("tutorial")
-
     def report(self):
         report()
 

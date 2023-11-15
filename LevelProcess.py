@@ -7,6 +7,7 @@ import requests
 
 class ProcessManager:
     def __init__(self):
+        global godres
         self.run = True
         self.processes: list[LevelProcess] = []
         self.currentproccess = 0
@@ -33,6 +34,7 @@ class ProcessManager:
         self.selectprocess = False
         self.processbuttons: list[widgets.Button] = []
         self.processscroll = 0
+        godres = pg.transform.scale(god, pg.display.get_window_size())
 
         os.system("cls")
         try:
@@ -304,11 +306,6 @@ class LevelProcess:
                 file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
                 if file is not None and os.path.exists(file):
                     self.__init__(self.manager, file)
-            case "tutorial":
-                file = turntoproject(open(path2tutorial + "tutorial.txt", "r").read())
-                file["path"] = "tutorial"
-                self.renderer = Renderer(self)
-                self.menu = TT(self)
             case "load":
                 self.menu = LoadMenu(self)
             case _:
@@ -443,6 +440,8 @@ class LevelProcess:
                 case pg.QUIT:
                     self.asktoexit()
                 case pg.WINDOWRESIZED:
+                    global godres
+                    godres = pg.transform.scale(god, pg.display.get_window_size())
                     self.menu.resize()
                 case pg.KEYDOWN:
                     if event.key not in self.manager.keys:
@@ -461,7 +460,10 @@ class LevelProcess:
 
     def update(self):
         self.doevents()
-        self.menu.blitbefore()
+        if globalsettings["godmode"]:
+            self.surface.blit(godres, [0, 0])
+        else:
+            self.menu.blitbefore()
         if not pg.key.get_pressed()[pg.K_LCTRL]:
             for i in self.menu.uc:
                 if pg.key.get_pressed()[i]:

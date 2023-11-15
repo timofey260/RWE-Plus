@@ -102,9 +102,14 @@ class Button:
         self.originaltext = text
         self.textimage = mts(self.originaltext, buttontextcolor, self.fontsize)
         self.tooltip = tooltip
-        self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
+        if files.globalsettings["godmode"]:
+            self.tooltipimage = pg.transform.scale(files.god, fs(self.fontsize)[0].size(self.tooltip))
+        else:
+            self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
 
         self.icon = None
+        if files.globalsettings["godmode"]:
+            icon = files.god
         self.loadicon = icon
         if type(icon) is list:
             cut = [icon[1][0] * settings["global"]["size"], icon[1][1] * settings["global"]["size"],
@@ -115,9 +120,7 @@ class Button:
             image = pg.transform.scale(image, size)
             self.icon = image
         elif type(icon) is pg.Surface:
-            wh = icon.get_height() / settings["global"]["size"] * (rect.height / 100 * surface.get_height())
-            size = [wh, wh]
-            self.icon = pg.transform.scale(icon, size)
+            self.icon = pg.transform.scale(icon, self.rect.size)
         self.onpress = onpress
         self.onrelease = onrelease
         self.bol = True
@@ -138,7 +141,10 @@ class Button:
             return
         if fontsize is not None and fontsize != self.fontsize:
             self.set_text(self.text, fontsize)
-            self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
+            if files.globalsettings["godmode"]:
+                self.tooltipimage = pg.transform.scale(files.god, fs(self.fontsize)[0].size(self.tooltip))
+            else:
+                self.tooltipimage = mts(self.tooltip, tooltipcolor, self.fontsize)
         cp = False
         if self.onmouseover():
             pg.mouse.set_cursor(pg.Cursor(pg.SYSTEM_CURSOR_HAND))
@@ -165,6 +171,12 @@ class Button:
             #    bol = True
             #    self.bol = True
             self.glow = max(0, self.glow - 1)
+        if files.globalsettings["godmode"]:
+            px = self.rect.w / 2 - self.icon.get_width() / 2
+            py = self.rect.h / 2 - self.icon.get_height() / 2
+            pos = [px + self.rect.x, py + self.rect.y]
+            self.surface.blit(self.icon, pos)
+            return
         paintcol = self.col.lerp(self.col2, self.glow / 100)
 
         pg.draw.rect(self.surface, paintcol, self.rect, 0, settings["global"]["roundbuttons"])
@@ -229,6 +241,8 @@ class Button:
         if text == self.tooltip:
             return
         self.tooltip = text
+        if files.globalsettings["godmode"]:
+            self.tooltipimage = pg.transform.scale(files.god, fs(self.fontsize)[0].size(self.tooltip))
         if fontsize is not None:
             self.tooltipimage = mts(text, tooltipcolor, self.fontsize)
             return
@@ -301,7 +315,10 @@ class Label:
         self.surface = surface
         self.text = text
         self.originaltext = text
-        self.textimage = mts(text, color, fontsize)
+        if files.globalsettings["godmode"]:
+            self.textimage = pg.transform.scale(files.god, fs(fontsize)[0].size(text))
+        else:
+            self.textimage = mts(text, color, fontsize)
         self.pos = copy.deepcopy(pos)
         self.posp = copy.deepcopy(pos)
         self.color = color
@@ -317,13 +334,19 @@ class Label:
     def resize(self):
         self.pos[0] = self.posp[0] / 100 * self.surface.get_width()
         self.pos[1] = self.posp[1] / 100 * self.surface.get_height()
-        self.textimage = mts(self.text, self.color, self.fontsize)
+        if files.globalsettings["godmode"]:
+            self.textimage = pg.transform.scale(files.god, fs(self.fontsize)[0].size(self.text))
+        else:
+            self.textimage = mts(self.text, self.color, self.fontsize)
 
     def set_text(self, text=None):
         if text is None:
             text = self.text
         self.text = text
-        self.textimage = mts(text, self.color, self.fontsize)
+        if files.globalsettings["godmode"]:
+            self.textimage = pg.transform.scale(files.god, fs(self.fontsize)[0].size(text))
+        else:
+            self.textimage = mts(self.text, self.color, self.fontsize)
 
 
 class Slider:

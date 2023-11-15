@@ -86,6 +86,10 @@ inputpromtname = "RWE+ input"
 debugmode = globalsettings["debugmode"]
 timeformat = globalsettings["time_format"]
 
+god = loadimage(path + globalsettings["godimage"])
+if god is None:
+    raise Exception("how dare you")
+godres = pg.Surface([0, 0])
 
 fonts: dict[[pg.font.Font, int], ...] = {}
 
@@ -135,7 +139,7 @@ class RWELevel:
         self.data[key] = value
 
 
-def fs(sz):
+def fs(sz) -> list[pg.font.Font, int]:
     if sz in fonts.keys():
         return fonts[sz]
     else:
