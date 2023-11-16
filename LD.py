@@ -75,6 +75,9 @@ class LoadMenu(Menu):
         super().blit()
         self.selector.blittooltip()
 
+    def tutorial(self):
+        tutorial()
+
     def open(self):
         self.sendtoowner("open")
 

@@ -53,6 +53,7 @@
 		[
 			["Open", [0, 0, 5, 4], [100, 100, 100], "open", "non", "Open project(<[open]>)"],
 			["New", [5, 0, 5, 4], [100, 100, 100], "new", "non", "New project(<[new]>)"],
+			["Tutorial", [11, 0, 6, 4], [90, 90, 90], "tutorial", "non", "Tutorial for new users"],
 			["Report", [80, 0, 10, 4], [70, 70, 70], "report", "non", "Report a bug"],
 			["Github", [90, 0, 10, 4], [70, 70, 70], "github", "non", "Go to RWE+ github"]
 		],

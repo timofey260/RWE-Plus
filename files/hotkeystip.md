@@ -39,6 +39,8 @@ Generated using hotkeys to md converter
 * **ctrl + N** - new - New file
 * **O** - open - Open file
 * **ctrl + O** - open - Open file
+* **D** - -rt - Next category
+* **A** - -lt - Previous category
 ### MN
 * **Q** - quit - Quits RWE+
 * **ctrl + R** - render - Renders file using Drizzle
@@ -205,7 +207,8 @@ Generated using hotkeys to md converter
 * **ctrl + C** - -copytool - Copy tool
 * **ctrl + V** - -pastedata - Paste effect area
 * **ctrl + E** - -findeffect - Opens effect find menu
-* **X** - -deleteeffect - Delete selected effect
+* **X** - -showfavs - Shows favourites
+* **ctrl + X** - -addtofavs - Adds prop to favourites
 * **Delete** - -deleteeffect - Delete selected effect
 * **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
 ### LE

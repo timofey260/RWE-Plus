@@ -261,6 +261,10 @@ def github():
     webbrowser.open("https://github.com/timofey260/RWE-Plus")
 
 
+def tutorial():
+    webbrowser.open("https://www.youtube.com/watch?v=8tFo_sWt3HI")
+
+
 def log_to_load_log(message, error=False, nl=True):
     global load_error_count
     with open(application_path + "\\loadLog.txt", "a") as load_log:

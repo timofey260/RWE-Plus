@@ -280,7 +280,9 @@
 
 		"K_e+": "-findeffect",
 
-		"K_x": "-deleteeffect",
+		"K_x": "-showfavs",
+    	"K_x+": "-addtofavs",
+
 		"K_DELETE": "-deleteeffect",
 		"K_LSHIFT": "brush_size_scroll"
 

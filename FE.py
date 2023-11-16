@@ -524,6 +524,12 @@ class FE(MenuWithField):
     def paramindex(self):
         return self.paramsselector.selecteditem["param"]
 
+    def addtofavs(self):
+        self.selector.addtofavs()
+
+    def showfavs(self):
+        self.selector.favourites()
+
     @property
     def custom_info(self):
         try:

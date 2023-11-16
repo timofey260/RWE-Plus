@@ -485,7 +485,7 @@ class Selector():
             else:
                 tile = self.data[line].copy()
                 if tile is None:
-                    print(f"couldn't load tile: {line} in category {catdata['name']}")
+                    print(f"couldn't load item: {line} in category {catdata['name']}")
                     continue
                 tile["category"] = catdata["name"]
                 catdata["items"].append(tile)
@@ -639,7 +639,7 @@ class Selector():
         if self._favourites.isempty():
             self.loadfavorites()
         if self._favourites.isempty():
-            print("No favourite tiles!!!")
+            print("No favourite items!!!")
             self.items()
             return
         self.buttonslist = []

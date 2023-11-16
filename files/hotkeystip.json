@@ -35,7 +35,9 @@
     },
     "LD": {
         "new": "New file",
-        "open": "Open file"
+        "open": "Open file",
+        "-rt": "Next category",
+        "-lt": "Previous category"
     },
     "MN": {
         "quit": "Quits RWE+",
@@ -197,6 +199,8 @@
         "-copytool": "Copy tool",
         "-pastedata": "Paste effect area",
         "-findeffect": "Opens effect find menu",
+        "-showfavs": "Shows favourites",
+        "-addtofavs": "Adds prop to favourites",
         "-deleteeffect": "Delete selected effect",
         "brush_size_scroll": "Hold to use scroll to change brush size"
     },
