@@ -1,3 +1,5 @@
+import math
+
 from menuclass import *
 import random as rnd
 from rope import RopeModel
@@ -301,8 +303,16 @@ class PE(MenuWithField):
                 if not any(self.helds):
                     if self.snap:
                         self.surface.blit(self.selectedimage, pos2)
+                        p = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size * 2
+                        p = pg.Vector2(math.floor(p.x), math.floor(p.y)) * image1size / 2
+                        p -= self.offset * image1size
+                        widgets.fastmts(self.surface, f"X: {p.x}, Y: {p.y}", mpos.x, mpos.y + 30, white)
                     else:
                         self.surface.blit(self.selectedimage, mpos - pg.Vector2(self.selectedimage.get_size()) / 2)
+                        p = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size * image1size
+                        p -= self.offset * image1size
+                        p = pg.Vector2(round(p.x, 2), round(p.y, 2))
+                        widgets.fastmts(self.surface, f"X: {p.x}, Y: {p.y}", mpos.x, mpos.y + 30, white)
                 else:
                     q2s = pg.Vector2(mosts[0], mosts[1])
                     self.surface.blit(self.selectedimage, self.helppoins + q2s)

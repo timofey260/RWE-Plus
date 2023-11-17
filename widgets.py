@@ -25,7 +25,7 @@ except KeyError:
     buttontextcolorlight = white
 
 
-def fastmts(window, text: str, x: int, y: int, col=None, fontsize=settings["global"]["fontsize"], centered=False):
+def fastmts(window, text: str, x: int | float, y: int | float, col=None, fontsize=settings["global"]["fontsize"], centered=False):
     if col is None:
         col = black
     fontr: pg.font.Font = fs(fontsize)[0]
