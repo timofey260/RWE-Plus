@@ -319,10 +319,12 @@ class Menu:
             inputfile = button.text + "\n"
 
         def appendbuttons():
+            global append
             buttons.clear()
             count = 1
             # newdict = {}
             count2 = 0
+            append = False
             for item, cat in filelist.items():
                 if 25 + 5 * count > 100:
                     break

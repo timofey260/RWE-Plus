@@ -217,7 +217,9 @@ class GE(MenuWithField):
         if fillshape in ["rect", "rect-hollow", "circle", "circle-hollow", "line"]:
             tx = f"{abs(int(rect.w / self.size))}, {abs(int(rect.h / self.size))}"
             widgets.fastmts(self.surface, tx, *mpos, white)
-        if fillshape in ["rect", "rect-hollow"] or self.selectedtool in ["CP", "CT", "SL"]:
+        if fillshape in ["rect", "rect-hollow"] or self.selectedtool in ["CP", "CT"]:
+            pg.draw.rect(self.surface, select, rect, 5)
+        elif fillshape in ["rect", "rect-hollow"] and self.selectedtool == "SL":
             pg.draw.rect(self.surface, select, rect, 5)
         elif fillshape in ["circle", "circle-hollow"]:
             pg.draw.ellipse(self.surface, select, rect, 5)
@@ -245,7 +247,7 @@ class GE(MenuWithField):
             data1 = [[y[self.layer] for y in x] for x in data1]
             pyperclip.copy(str(data1))
             print("Copied!")
-        elif self.selectedtool == "SL":
+        elif self.selectedtool == "SL" and fillshape in ["rect", "rect-hollow"]:
             rect = self.vec2rect(self.rectdata[0], posoffset)
             for x in range(int(rect.w)):
                 for y in range(int(rect.h)):

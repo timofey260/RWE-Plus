@@ -17,6 +17,8 @@ class LoadMenu(Menu):
         data = ItemData()
         items = []
         for i in self.recent["files"][:20]:
+            if not os.path.exists(i["path"]):
+                continue
             desc = f'Path: {i["path"]}\nLast modified: {filetime(i["path"])}'
             items.append({
                 "nm": i["name"],
@@ -34,6 +36,8 @@ class LoadMenu(Menu):
         for root, dirs, files in os.walk(path2levels):
             for i, file in enumerate(files):
                 fpath = os.path.join(root, file)
+                if not os.path.exists(fpath):
+                    continue
                 desc = f'Path: {fpath}\nLast modified: {filetime(fpath)}'
                 _, ext = os.path.splitext(file)
                 dat = {

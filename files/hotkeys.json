@@ -164,7 +164,7 @@
     	"K_p": "-pencil",
     	"K_c": "-pencil",
     	"K_v": "-togglebrush",
-    	"K_LSHIFT": "brush_size_scroll"
+    	"K_LSHIFT@": "brush_size_scroll"
 
   	},
 	"CE": {

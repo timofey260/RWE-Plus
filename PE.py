@@ -361,6 +361,19 @@ class PE(MenuWithField):
                 propnear = prop
         return propnear, near, nindx
 
+    def findpropmenu(self):
+        nd = {}
+        for catnum, item in enumerate(self.props.data):
+            cat = self.props.categories[catnum]
+            for i in item["items"]:
+                nd[i["nm"]] = cat
+        name = self.find(nd, "Select a tile")
+        if name is None:
+            return
+        item = self.props[name]
+        self.selector.setbyname(name)
+        self.setprop(name, item["category"])
+
     def depth_up(self):
         depth = self.layer * 10
         self.depth = (self.depth + 1 - depth) % 10 + depth
