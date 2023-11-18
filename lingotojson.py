@@ -402,7 +402,7 @@ def addprop(item: dict, img: pg.Surface):
                 for iindex, _ in enumerate(repeatl):
                     # print(img, item["nm"], varindx * w, h * (len(repeatl) - 1), w, h)
                     curcol = curcol.lerp(bl, cons)
-                    rect = pg.Rect(varindx * w, (len(repeatl) - 1 - iindex) * h, w, h)
+                    rect = pg.Rect(varindx * w, (len(repeatl) - 1 - iindex) * h, w, h + 1)
                     rect = rect.clip(pg.Rect(0, 0, ws, hs))
                     try:
                         ss = img.subsurface(rect).copy()

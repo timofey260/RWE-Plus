@@ -149,8 +149,10 @@ class TE(MenuWithField):
                         elif self.cols:
                             self.place(cposxo, cposyo, True)
                     elif self.tool == 1:
-                        self.destroy(posoffset.x, posoffset.y)
-                        pg.draw.rect(self.fieldadd, red, [posoffset.x * self.size, posoffset.y * self.size, self.size, self.size])
+                        if self.brushmode:
+                            self.brushdestroy(pg.Vector2(cposxo, cposyo))
+                        else:
+                            self.destroy(posoffset.x, posoffset.y)
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.detecthistory(["TE", "tlMatrix"], not fg)
                 if fg:
@@ -290,6 +292,21 @@ class TE(MenuWithField):
                     if dist <= self.brushsize and self.area[xp][yp]:
                         self.place(int(vec.x), int(vec.y), True)
 
+    def brushdestroy(self, pos: pg.Vector2):  # not optimal fix but today i'm lazy
+        if self.squarebrush:
+            for xp in range(self.brushsize):
+                for yp in range(self.brushsize):
+                    vecx = int(pos.x) + xp
+                    vecy = int(pos.y) + yp
+                    self.destroy(vecx, vecy)
+        else:
+            for xp, xd in enumerate(self.data["GE"]):
+                for yp, yd in enumerate(xd):
+                    vec = pg.Vector2(xp, yp)
+                    dist = pos.distance_to(vec)
+                    if dist <= self.brushsize and self.area[xp][yp]:
+                        self.destroy(xp, yp)
+
     def cats(self):
         self.selector.categories()
 
@@ -408,7 +425,7 @@ class TE(MenuWithField):
         #    return False
         if "material" in self.tileimage["tags"]:
             return (self.data["GE"][x][y][self.layer][0] not in [0] or force_geo) \
-                and (self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] in ["default", "material"]
+                and (self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
                 or force_place)
         for x2 in range(w):
             for y2 in range(h):

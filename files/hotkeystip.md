@@ -126,7 +126,7 @@ Generated using hotkeys to md converter
 * **E** - -sad - Sets material as default
 * **Q** - -copytile - Copies tile in cursor
 * **ctrl + F** - -findtile - Opens find tile menu
-* **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
+* **Left Shift** - movepreview - Shows tile preview without collisions
 * **=** - -brushp - Increase brush size
 * **-** - -brushm - decrease brush size
 * **[+]** - -brushp - Increase brush size
@@ -135,6 +135,7 @@ Generated using hotkeys to md converter
 * **P** - -pencil - Enables pencil
 * **C** - -pencil - Enables pencil
 * **V** - -togglebrush - Toggles betwen pencil and brush
+* **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
 ### CE
 * **D** - -addright - Rotates nearest edge of nearest camera clockwise
 * **Delete** - -deletecamera - Deletes the nearest placed camera

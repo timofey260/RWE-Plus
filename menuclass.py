@@ -459,7 +459,7 @@ class Menu:
     def detecthistory(self, path, savedata=True):
         if len(self.historyChanges) <= 0:
             return
-        elif len(self.historyChanges) <= 30:
+        elif len(self.historyChanges) <= 200:
             self.updatehistory()
             return
         # grouping data, recreating the past
@@ -974,7 +974,9 @@ class MenuWithField(Menu):
                 col = mix.lerp(mixcol_fill, cell / 100)
                 pg.draw.rect(field, col, [xp * size, yp * size, size, size], 0)
 
-    def destroy(self, xp, yp):
+    def destroy(self, xp, yp, render=True):
+        if render:
+            pg.draw.rect(self.fieldadd, red, [xp * self.size, yp * self.size, self.size, self.size])
         if xp > self.levelwidth - 1 or yp > self.levelheight - 1:
             return
         x = int(xp)

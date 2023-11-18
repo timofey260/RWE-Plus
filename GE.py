@@ -189,7 +189,7 @@ class GE(MenuWithField):
         if pg.key.get_pressed()[pg.K_LCTRL]:
             try:
                 geodata = eval(pyperclip.paste())
-                if type(geodata) != list:
+                if type(geodata) is not list:
                     return
                 pos = self.field.rect.topleft + (self.pos * self.size if self.onfield else pg.Vector2(0, 0))
                 rect = pg.Rect([pos, pg.Vector2(len(geodata), len(geodata[0])) * self.size])

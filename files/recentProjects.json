@@ -1,12 +1,20 @@
 {
     "files": [
         {
-            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects.wep",
-            "name": "all_effects.wep"
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_D05.txt",
+            "name": "SS_D05.txt"
         },
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\version_tests\\2.5.0_test.wep",
             "name": "2.5.0_test.wep"
+        },
+        {
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_E03.txt",
+            "name": "SS_E03.txt"
+        },
+        {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects.wep",
+            "name": "all_effects.wep"
         },
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\2.5.0test.wep",

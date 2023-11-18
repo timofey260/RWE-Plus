@@ -124,12 +124,13 @@
         "-sad": "Sets material as default",
         "-copytile": "Copies tile in cursor",
         "-findtile": "Opens find tile menu",
-        "brush_size_scroll": "Hold to use scroll to change brush size",
+        "movepreview": "Shows tile preview without collisions",
         "-brushp": "Increase brush size",
         "-brushm": "decrease brush size",
         "-brush": "Enables Bruhs",
         "-pencil": "Enables pencil",
-        "-togglebrush": "Toggles betwen pencil and brush"
+        "-togglebrush": "Toggles betwen pencil and brush",
+        "brush_size_scroll": "Hold to use scroll to change brush size"
     },
     "CE": {
         "-addright": "Rotates nearest edge of nearest camera clockwise",
