@@ -1,6 +1,10 @@
 {
     "files": [
         {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects.wep",
+            "name": "all_effects.wep"
+        },
+        {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\version_tests\\2.5.0_test.wep",
             "name": "2.5.0_test.wep"
         },
@@ -11,10 +15,6 @@
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
             "name": "SU_A25.wep"
-        },
-        {
-            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects.wep",
-            "name": "all_effects.wep"
         },
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects_2.wep",

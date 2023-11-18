@@ -226,6 +226,7 @@ def inittolist(window: pg.Surface):
         surf = f.render(message, True, pg.color.THECOLORS["white"], None)
         pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
         window.blit(surf, [0, 0])
+        pg.display.update()
     inv = settings["TE"]["LEtiles"]
     tilefiles = [path2graphics + i for i in globalsettings["tileinits"]]
     solved = init_solve(tilefiles)
@@ -239,7 +240,6 @@ def inittolist(window: pg.Surface):
         solved_copy[catnum]["items"] = []
         for indx, item in enumerate(items):
             printmessage(f"Loading tile {item['nm']}...")
-            pg.display.update()
             try:
                 img = loadimage(f"{path2graphics}{item['nm']}.png")
             except FileNotFoundError:
@@ -367,7 +367,7 @@ def getcolors():
     return cols
 
 
-def addprop(item, img):
+def addprop(item: dict, img: pg.Surface):
     img.set_colorkey(pg.color.Color(255, 255, 255))
 
     images = []
@@ -382,7 +382,8 @@ def addprop(item, img):
         if item.get("vars") is not None:
             w = round(ws / item["vars"])
         if item.get("repeatL") is not None:
-            h = math.floor((hs / len(item["repeatL"])))
+            repeatl = item.get("repeatL")
+            h = math.floor((hs / len(repeatl)))
             if item.get("sz") is not None:
                 sz = toarr(item["sz"], "point")
                 w = min(sz[0] * propsize, ws)
@@ -393,28 +394,27 @@ def addprop(item, img):
             gr = pg.Color("#dddddd")
             bl = pg.Color("#000000")
 
-            vars = 1
-            if item.get("vars") is not None:
-                vars = item["vars"]
+            vars = item.get("vars", 1)
 
             for varindx in range(vars):
                 curcol = gr
 
-                for iindex, _ in enumerate(item["repeatL"]):
-                    # print(img, item["nm"], varindx * w, hs - h, w, h)
+                for iindex, _ in enumerate(repeatl):
+                    # print(img, item["nm"], varindx * w, h * (len(repeatl) - 1), w, h)
                     curcol = curcol.lerp(bl, cons)
-                    rect = pg.Rect(varindx * w, (len(item["repeatL"]) - 1 - iindex) * h, w, h + 1)
+                    rect = pg.Rect(varindx * w, (len(repeatl) - 1 - iindex) * h, w, h)
                     rect = rect.clip(pg.Rect(0, 0, ws, hs))
                     try:
                         ss = img.subsurface(rect).copy()
                     except ValueError:
                         continue
 
-                    pxl = pg.PixelArray(ss)
-                    pxl.replace(bl, curcol)
-                    ss = pxl.make_surface()
+                    if item["colorTreatment"] == "bevel":
+                        pxl = pg.PixelArray(ss)
+                        pxl.replace(bl, curcol)
+                        ss = pxl.make_surface()
                     ss.set_colorkey(wh)
-                    img.blit(ss, [0, hs - h])
+                    img.blit(ss, [0, h * (len(repeatl) - 1)])
 
     if item.get("vars") is not None:
         for iindex in range(item["vars"]):
@@ -430,6 +430,7 @@ def getprops(tiles: dict, window: pg.Surface):
         surf = f.render(message, True, pg.color.THECOLORS["white"], None)
         pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
         window.blit(surf, [0, 0])
+        pg.display.update()
     propfiles = [path2props + i for i in globalsettings["propinits"]]
     propfiles.append(path + "additionprops.txt")
     solved = init_solve(propfiles)
@@ -441,7 +442,6 @@ def getprops(tiles: dict, window: pg.Surface):
         solved_copy[catnum]["items"] = []
         for indx, item in enumerate(items):
             printmessage(f"Loading prop {item['nm']}...")
-            pg.display.update()
             try:
                 img = loadimage(path2props + item["nm"] + ".png")
                 images = addprop(item, img)
@@ -526,7 +526,7 @@ def getprops(tiles: dict, window: pg.Surface):
                     "tags": ["tile"],
                     "layerExceptions": [],
                     "notes": ["Tile as prop"],
-                    "category": cat,
+                    "category": title,
                     "cat": [catnum + 1, indx + 1]
                 })
                 count -= 1
