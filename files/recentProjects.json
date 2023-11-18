@@ -1,6 +1,30 @@
 {
     "files": [
         {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
+            "name": "SU_A25.wep"
+        },
+        {
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_S03.txt",
+            "name": "SS_S03.txt"
+        },
+        {
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_S02.txt",
+            "name": "SS_S02.txt"
+        },
+        {
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_S01.txt",
+            "name": "SS_S01.txt"
+        },
+        {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\Hell\\HE_S01.wep",
+            "name": "HE_S01.wep"
+        },
+        {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\Hell\\he_e01.wep",
+            "name": "he_e01.wep"
+        },
+        {
             "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_D05.txt",
             "name": "SS_D05.txt"
         },
@@ -19,10 +43,6 @@
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\2.5.0test.wep",
             "name": "2.5.0test.wep"
-        },
-        {
-            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
-            "name": "SU_A25.wep"
         },
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\all_effects_2.wep",

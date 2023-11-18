@@ -124,25 +124,28 @@ class ProcessManager:
             f = open(application_path + "\\CrashLog.txt", "w")
             f.write(traceback.format_exc())
             f.write("This is why RWE+ crashed^^^\nSorry")
+            saved = False
             if globalsettings["saveoncrash"] and not debugmode:
                 self.saveall(True)
-                raise
+                saved = True
             traceback.print_exc()
-            ex = askyesno("Crash!!!",
-                          "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\n"
-                          "Do you want to save current level you opened?")
-            if ex:
+
+            if not saved:
+                ex = askyesno("Crash!!!",
+                             "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\n"
+                              "Do you want to save current level you opened?")
+                if ex:
+                    try:
+                        self.mainprocess.menu.savef()
+                    except:
+                        print("Cannot save!!! sorry")
+                        self.closeprocess(self.mainprocess)
+                        raise e
                 try:
-                    self.mainprocess.menu.savef()
+                    self.mainprocess.update()
                 except:
-                    print("Cannot save!!! sorry")
-                    self.closeprocess(self.mainprocess)
-                    raise e
-            try:
-                self.mainprocess.update()
-            except:
-                self.saveall(True)
-                raise
+                    self.saveall(True)
+                    raise
 
     def newprocess(self, level):
         if level != -1 and os.path.exists(level):
@@ -225,8 +228,12 @@ class LevelProcess:
 
     def asktoexit(self):
         if self.file2 != self.file and not self.demo:
-            ex = askyesnocancel("Exit from RWE+", "Do you want to save Changes?")
-            if ex:
+            try:
+                ex = self.menu.askstr("Save before closing? y/n", defaulttext="y", savelevel=False)
+                #ex = askyesnocancel("Exit from RWE+", "Do you want to save Changes?")
+            except:
+                print("why")
+            if ex.lower() == "y":
                 self.menu.savef()
                 self.closeprocess()
             elif ex is None:

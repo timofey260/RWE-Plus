@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "F:\Desktop\RWE+\LevelProcess.py", line 122, in mainprocessupdate
+    a = 2 + a
+            ^
+UnboundLocalError: cannot access local variable 'a' where it is not associated with a value
+This is why RWE+ crashed^^^
+Sorry
