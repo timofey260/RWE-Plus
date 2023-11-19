@@ -2,6 +2,7 @@ import argparse
 from LevelProcess import *
 
 widgets.keybol = True
+open(application_path + "\\loadLog.txt", "w")
 manager = ProcessManager()
 
 if __name__ == "__main__":
