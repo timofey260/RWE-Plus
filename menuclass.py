@@ -710,8 +710,8 @@ class MenuWithField(Menu):
         self.area = [[True for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
 
     def rfa(self):
-        if self.layer != self.renderer.lastlayer:
-            self.renderer.render_all(self.layer)
+        # if self.layer != self.renderer.lastlayer:
+        #     self.renderer.render_all(self.layer)
         self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
         if self.drawgeo:
             # self.renderer.geo_full_render(self.layer)
@@ -742,7 +742,7 @@ class MenuWithField(Menu):
                 return True
         if self.field.onmouseover():
             return True
-        for i in ["buttonslist", "buttonslist2", "params", "settingslist"]:
+        for i in ["settingslist"]:
             if hasattr(self, i):
                 for b in getattr(self, i):
                     if b.onmouseover():
@@ -779,14 +779,16 @@ class MenuWithField(Menu):
 
     def swichlayers(self):
         self.layer = (self.layer + 1) % 3
-        self.renderer.render_all(self.layer)
+        self.renderer.lastlayer = self.layer
+        # self.renderer.render_all(self.layer)
         self.rfa()
 
     def swichlayers_back(self):
         self.layer -= 1
         if self.layer < 0:
             self.layer = 2
-        self.renderer.render_all(self.layer)
+        self.renderer.lastlayer = self.layer
+        # self.renderer.render_all(self.layer)
         self.rfa()
 
     def send(self, message):

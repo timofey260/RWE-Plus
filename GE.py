@@ -540,7 +540,7 @@ class GE(MenuWithField):
                 x = self.mirrorpos[0] * 2 + (-x - 1)
             else:
                 y = self.mirrorpos[0] * 2 + (-y - 1)
-        if self.mirrorp:
+        if self.mirrorp and not domirror:
             self.place(pos, render, True)
         if x >= self.levelwidth or y >= self.levelheight or x < 0 or y < 0:
             return

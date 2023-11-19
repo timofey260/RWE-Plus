@@ -45,7 +45,6 @@ class TE(MenuWithField):
             for indx, pattern in enumerate(p["patterns"]):
                 self.items[0]["items"][indx]["cat"] = [len(self.items), indx + 1]
         self.blocks = p["blocks"]
-        self.buttonslist = []
         self.brushmode = False
         self.squarebrush = False
 

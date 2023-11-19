@@ -141,11 +141,11 @@ class ProcessManager:
                         print("Cannot save!!! sorry")
                         self.closeprocess(self.mainprocess)
                         raise e
-                try:
-                    self.mainprocess.update()
-                except:
-                    self.saveall(True)
-                    raise
+            try:
+                self.mainprocess.update()
+            except:
+                self.saveall(True)
+                raise
 
     def newprocess(self, level):
         if level != -1 and os.path.exists(level):
@@ -337,9 +337,20 @@ class LevelProcess:
             ], and other history steps...
         ]
         '''
+        def checkmatrixforchanges(old, new):
+            area = [[True for _ in range(self.menu.levelheight)] for _ in range(self.menu.levelwidth)]
+            changes = False
+            for xp in range(len(area)):
+                for yp in range(len(area[0])):
+                    if old[xp][yp] != new[xp][yp]:
+                        changes = True
+                        area[xp][yp] = False
+            return changes, area
+
         elem = historyelem[1:]
         elem.reverse()
         # print("elem: ", historyelem)
+        lastdata = deepcopy(self.menu.data)
         for i in elem:
             # print(i)
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
@@ -360,14 +371,27 @@ class LevelProcess:
                         continue
             self.menu.data[*historyelem[0], *i[0]] = i[1][1]
         self.redobuffer.append(deepcopy(self.undobuffer.pop()))
+        rerendered = True
         if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
-            self.menu.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+            self.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+            self.renderer.render_all(self.menu.layer)
+            rerendered = False
         self.menu.onundo()
+        if rerendered:
+            check, area = checkmatrixforchanges(lastdata["GE"], self.menu.data["GE"])
+            if check:
+                self.renderer.geo_render_area(area, self.menu.layer)
+            check, area = checkmatrixforchanges(lastdata["TE", "tlMatrix"], self.menu.data["TE", "tlMatrix"])
+            if check:
+                self.renderer.tiles_render_area(area, self.menu.layer)
+            if lastdata["PR"] != self.menu.data["PR"]:
+                self.renderer.props_full_render(self.menu.layer)
+            if lastdata["FE"] != self.menu.data["FE"]:
+                self.renderer.rerendereffect()
+
         if MenuWithField in type(self.menu).__bases__:
-            self.menu.renderer.render_all(self.menu.layer)
+            # self.menu.renderer.render_all(self.menu.layer)
             self.menu.rfa()
-            if hasattr(self.menu, "rebuttons"):
-                self.menu.rebuttons()
         self.manager.notify("Done undo")
 
     def redohistory(self):
@@ -376,8 +400,19 @@ class LevelProcess:
         lastsize = [self.menu.levelwidth, self.menu.levelheight]
         historyelem = self.redobuffer[-1]
 
+        def checkmatrixforchanges(old, new):
+            area = [[True for _ in range(self.menu.levelheight)] for _ in range(self.menu.levelwidth)]
+            changes = False
+            for xp in range(len(area)):
+                for yp in range(len(area[0])):
+                    if old[xp][yp] != new[xp][yp]:
+                        changes = True
+                        area[xp][yp] = False
+            return changes, area
+
         elem = historyelem[1:]
         elem.reverse()
+        lastdata = deepcopy(self.menu.data)
         for i in elem:
             # print(i)
             if len(i[0]) > 0:  # actions, used to minimize memory cost and improve performance
@@ -399,14 +434,27 @@ class LevelProcess:
             self.menu.data[*historyelem[0], *i[0]] = i[1][0]
 
         self.undobuffer.append(deepcopy(self.redobuffer.pop()))
+        rerendered = True
         if [self.menu.levelwidth, self.menu.levelheight] != lastsize:
-            self.menu.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
-        self.menu.onredo()
+            self.renderer.set_surface([image1size * self.menu.levelwidth, image1size * self.menu.levelheight])
+            self.renderer.render_all(self.menu.layer)
+            rerendered = False
+        self.menu.onundo()
+        if rerendered:
+            check, area = checkmatrixforchanges(lastdata["GE"], self.menu.data["GE"])
+            if check:
+                self.renderer.geo_render_area(area, self.menu.layer)
+            check, area = checkmatrixforchanges(lastdata["TE", "tlMatrix"], self.menu.data["TE", "tlMatrix"])
+            if check:
+                self.renderer.tiles_render_area(area, self.menu.layer)
+            if lastdata["PR"] != self.menu.data["PR"]:
+                self.renderer.props_full_render(self.menu.layer)
+            if lastdata["FE"] != self.menu.data["FE"]:
+                self.renderer.rerendereffect()
+
         if MenuWithField in type(self.menu).__bases__:
-            self.menu.renderer.render_all(self.menu.layer)
+            # self.menu.renderer.render_all(self.menu.layer)
             self.menu.rfa()
-            if hasattr(self.menu, "rebuttons"):
-                self.menu.rebuttons()
         self.manager.notify("Done redo")
 
     def keypress(self):

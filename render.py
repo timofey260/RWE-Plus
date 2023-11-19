@@ -110,6 +110,21 @@ def quadtransform(quads, image: pg.Surface):
 
 
 class Renderer:
+    """
+    FAILURE AFTER FAILURE AFTER FAILURE
+    AFTER FAILURE AFTER FAILURE AFTER
+    FAILURE AFTER FAILURE AFTER FAILURE
+    AFTER FAILURE AFTER FAILURE
+
+    THE RESULTS REFUSE TO ALTER
+
+    AGAIN AND AGAIN AND AGAIN AND AGAIN AND
+    AGAIN AND AGAIN AND AGAIN AND AGAIN AND
+    AGAIN AND AGAIN AND AGAIN AND AGAIN AND
+    AGAIN AND AGAIN AND AGAIN AND AGAIN
+
+    MY FAITH BEGINS TO FALTER
+    """
     def __init__(self, process, render=True):
         self.tiles: ItemData = process.manager.tiles
         self.props: ItemData = process.manager.props
@@ -121,51 +136,76 @@ class Renderer:
         self.offset = pg.Vector2(0, 0)
         self.size = image1size
 
+        self.geolayers = [True, True, True]
+        self.tilelayers = [True, True, True]
         if render:
             size = [self.levelwidth * image1size, self.levelheight * image1size]
             # self.f = pg.Surface(size)
-            self.surf_geo = pg.Surface(size)
-            self.geolayers = [True, True, True]
-            self.tilelayers = [True, True, True]
-            self.surf_tiles = pg.Surface(size)
-            self.surf_tiles = self.surf_tiles.convert_alpha()
-            self.surf_props = pg.Surface(size)
-            self.surf_props = self.surf_props.convert_alpha()
+            self.surfs_geo = [
+                pg.Surface(size),
+                pg.Surface(size),
+                pg.Surface(size)
+            ]
+            self.surfs_tile = [
+                pg.Surface(size, pg.SRCALPHA),
+                pg.Surface(size, pg.SRCALPHA),
+                pg.Surface(size, pg.SRCALPHA)
+            ]
+            self.surf_props = pg.Surface(size, pg.SRCALPHA)
             self.surf_effect = pg.Surface(size)
             self.surf_effect.set_alpha(190)
+
+    @property
+    def surf_geo(self):
+        return self.surfs_geo[self.lastlayer]
+
+    @property
+    def surf_tiles(self):
+        return self.surfs_tile[self.lastlayer]
 
     def set_surface(self, size=None):
         if size is None:  # auto
             size = [self.levelwidth * image1size, self.levelheight * image1size]
-        self.surf_geo = pg.Surface(size)
-        self.geolayers = [True, True, True]
-        self.tilelayers = [True, True, True]
-        self.surf_tiles = pg.Surface(size)
-        self.surf_tiles = self.surf_tiles.convert_alpha()
-        self.surf_props = pg.Surface(size)
-        self.surf_props = self.surf_props.convert_alpha()
+        self.surfs_geo = [
+            pg.Surface(size),
+            pg.Surface(size),
+            pg.Surface(size)
+        ]
+        self.surfs_tile = [
+            pg.Surface(size, pg.SRCALPHA),
+            pg.Surface(size, pg.SRCALPHA),
+            pg.Surface(size, pg.SRCALPHA)
+        ]
+        self.surf_props = pg.Surface(size, pg.SRCALPHA)
         self.surf_effect = pg.Surface(size)
         self.surf_effect.set_alpha(190)
 
     def tiles_full_render(self, layer):
-        self.surf_tiles.fill(dc)
+        for l in range(3):
+            self.surfs_tile[l].fill(dc)
         area = [[False for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
         self.tiles_render_area(area, layer)
 
     def tiles_render_area(self, area, layer):
+        self.lastlayer = layer
         for xp, x in enumerate(area):
             for yp, y in enumerate(x):
                 if y:
                     continue
-                self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [xp * image1size, yp * image1size, image1size, image1size])
+                for l in range(3):  # help
+                    self.surfs_tile[l].fill(pg.Color(0, 0, 0, 0), [xp * image1size, yp * image1size, image1size, image1size])
         for xp, x in enumerate(area):
             for yp, y in enumerate(x):
                 if y:
                     continue
-                self.render_tile_pixel(xp, yp, layer)
+                self.render_tile_pixel3(xp, yp)
+                # self.render_tile_pixel(xp, yp, layer)
+
+    def render_tile_pixel3(self, xp, yp):
+        for l in range(3):
+            self.render_tile_pixel(xp, yp, l)
 
     def render_tile_pixel(self, xp, yp, l):
-        self.lastlayer = l
         tiledata = self.data["TE"]["tlMatrix"]
 
         def findtileimage(name):
@@ -216,10 +256,10 @@ class Renderer:
                             it["image"].set_alpha(settings["global"]["tiles_secondarylayeralpha"])
                         else:
                             it["image"].set_alpha(settings["global"]["tiles_primarylayeralpha"])
-                        self.surf_tiles.blit(it["image"], [posx, posy])
+                        self.surfs_tile[l].blit(it["image"], [posx, posy])
                         it["image"].set_alpha(255)
                     except ValueError:
-                        self.surf_tiles.blit(notfound, [posx, posy])
+                        self.surfs_tile[l].blit(notfound, [posx, posy])
 
             elif datcell == "tileHead":
                 it = findtileimage(datdata[1])
@@ -227,20 +267,22 @@ class Renderer:
                 cposy = posy - int((it["size"][1] * .5) + .5) * image1size + image1size
                 siz = pg.rect.Rect([cposx, cposy, it["size"][0] * image1size, it["size"][1] * image1size])
                 if not settings["TE"]["LEtiles"]:
-                    pg.draw.rect(self.surf_tiles, it["color"], siz, 0)
+                    pg.draw.rect(self.surfs_tile[l], it["color"], siz, 0)
                 if layer != l:
                     it["image"].set_alpha(settings["global"]["tiles_secondarylayeralpha"])
                 else:
                     it["image"].set_alpha(settings["global"]["tiles_primarylayeralpha"])
-                self.surf_tiles.blit(it["image"], [cposx, cposy])
+                # self.blit_tiles_to_surfs(it["image"], [cposx, cposy])
+                self.surfs_tile[l].blit(it["image"], [cposx, cposy])
                 it["image"].set_alpha(255)
             elif datcell == "tileBody":
                 pass
         # self.surf_tiles.fill(pg.Color(0, 0, 0, 0), [posx, posy, image1size, image1size])
 
     def geo_full_render(self, layer):
-        self.surf_geo.fill(color2)
         area = [[False for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
+        for i in range(3):
+            self.surfs_geo[i].fill(color2)
         self.geo_render_area(area, layer)
 
     def geo_render_area(self, area, layer):
@@ -252,10 +294,12 @@ class Renderer:
                     try:
                         if not area[xp + i[0]][yp + i[1]]:
                             continue
-                        self.surf_geo.blit(self.render_geo_pixel(xp + i[0], yp + i[1], layer), [(xp + i[0]) * image1size, (yp + i[1]) * image1size])
+                        self.render_geo_pixel3(xp + i[0], yp + i[1])
+                        # self.surf_geo.blit(self.render_geo_pixel(xp + i[0], yp + i[1], layer), [(xp + i[0]) * image1size, (yp + i[1]) * image1size])
                     except IndexError:
                         continue
-                self.surf_geo.blit(self.render_geo_pixel(xp, yp, layer), [xp * image1size, yp * image1size])
+                self.render_geo_pixel3(xp, yp)
+                # self.surf_geo.blit(self.render_geo_pixel(xp, yp, layer), [xp * image1size, yp * image1size])
 
     def render_all(self, layer):
         self.lastlayer = layer
@@ -265,9 +309,11 @@ class Renderer:
         if len(self.data["FE"]["effects"]):
             self.rendereffect(0)
 
-    def render_geo_pixel(self, xp, yp, layer):
-        self.lastlayer = layer
+    def render_geo_pixel3(self, xp, yp):
+        for l in range(3):
+            self.surfs_geo[l].blit(self.render_geo_pixel(xp, yp, l), [xp * image1size, yp * image1size])
 
+    def render_geo_pixel(self, xp, yp, layer):
         def incorner(x, y):
             try:
                 return self.data["GE"][x][y][i][1]
@@ -390,16 +436,12 @@ class Renderer:
 
     def findprop(self, name, cat=None):
         if cat is not None:
-            for cati, items in enumerate(self.props):
-                if items["name"] == cat:
-                    for itemi, item in enumerate(self.props[cati]):
-                        if item["nm"] == name:
-                            return item, [cati, itemi]
-                    break
-        for cati, cats in enumerate(self.props):
-            for itemi, item in enumerate(cats["items"]):
-                if item["nm"] == name:
-                    return item, [cati, itemi]
+            found = self.props[cat, name]
+            if found is not None:
+                return found, [found["cat"][0] - 1, found["cat"][1] - 1]
+        found = self.props[name]
+        if found is not None:
+            return found, [found["cat"][0] - 1, found["cat"][1] - 1]
         item = {
             "nm": "notfound",
             "tp": "standard",
