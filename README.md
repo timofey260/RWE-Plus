@@ -19,4 +19,8 @@ and a lot more!
 
 ## Screenshots
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1069136276818763796/image.png)
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1175694426199306290/image.png)
+
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1175694784678084678/image.png)
+
+![image](https://cdn.discordapp.com/attachments/788349108678688792/1175695013900984340/image.png)
