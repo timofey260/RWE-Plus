@@ -262,7 +262,7 @@ def github():
 
 
 def tutorial():
-    webbrowser.open("https://www.youtube.com/watch?v=8tFo_sWt3HI")
+    webbrowser.open(globalsettings["tutorial_link"])
 
 
 def log_to_load_log(message, error=False, nl=True):
