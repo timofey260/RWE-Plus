@@ -378,21 +378,25 @@ class LevelProcess:
             rerendered = False
         self.menu.onundo()
         if rerendered:
-            check, area = checkmatrixforchanges(lastdata["GE"], self.menu.data["GE"])
-            if check:
-                self.renderer.geo_render_area(area, self.menu.layer)
+            checkgeo, geoarea = checkmatrixforchanges(lastdata["GE"], self.menu.data["GE"])
             check, area = checkmatrixforchanges(lastdata["TE", "tlMatrix"], self.menu.data["TE", "tlMatrix"])
-            if check:
+            if checkgeo:
+                self.renderer.geo_render_area(geoarea, self.menu.layer)
+                for xp, x in enumerate(geoarea):
+                    for yp, y in enumerate(x):
+                        area[xp][yp] = area[xp][yp] and y
+
+            if checkgeo or check:
                 self.renderer.tiles_render_area(area, self.menu.layer)
             if lastdata["PR"] != self.menu.data["PR"]:
                 self.renderer.props_full_render(self.menu.layer)
             if lastdata["FE"] != self.menu.data["FE"]:
                 self.renderer.rerendereffect()
 
-        if MenuWithField in type(self.menu).__bases__:
-            # self.menu.renderer.render_all(self.menu.layer)
-            self.menu.rfa()
-        self.manager.notify("Done undo")
+            if MenuWithField in type(self.menu).__bases__:
+                # self.menu.renderer.render_all(self.menu.layer)
+                self.menu.rfa()
+            self.manager.notify("Done undo")
 
     def redohistory(self):
         if len(self.redobuffer) == 0:
@@ -441,11 +445,15 @@ class LevelProcess:
             rerendered = False
         self.menu.onundo()
         if rerendered:
-            check, area = checkmatrixforchanges(lastdata["GE"], self.menu.data["GE"])
-            if check:
-                self.renderer.geo_render_area(area, self.menu.layer)
+            checkgeo, geoarea = checkmatrixforchanges(lastdata["GE"], self.menu.data["GE"])
             check, area = checkmatrixforchanges(lastdata["TE", "tlMatrix"], self.menu.data["TE", "tlMatrix"])
-            if check:
+            if checkgeo:
+                self.renderer.geo_render_area(geoarea, self.menu.layer)
+                for xp, x in enumerate(geoarea):
+                    for yp, y in enumerate(x):
+                        area[xp][yp] = area[xp][yp] and y
+
+            if checkgeo or check:
                 self.renderer.tiles_render_area(area, self.menu.layer)
             if lastdata["PR"] != self.menu.data["PR"]:
                 self.renderer.props_full_render(self.menu.layer)

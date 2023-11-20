@@ -822,6 +822,7 @@ class MenuWithField(Menu):
 
     def render_geo_area(self):
         self.renderer.geo_render_area(self.area, self.layer)
+        self.renderer.tiles_render_area(self.area, self.layer)
         self.f.blit(self.renderer.surf_geo, [0, 0])
         self.renderfield()
 

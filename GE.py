@@ -384,7 +384,7 @@ class GE(MenuWithField):
                     self.changedata(["GE", xpos, ypos, self.layer], y)
                     self.area[xpos][ypos] = False
             self.detecthistory(["GE"])
-            self.renderer.geo_render_area(self.area, self.layer)
+            self.render_geo_area()
             self.rfa()
         except:
             traceback.print_exc()
