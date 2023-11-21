@@ -709,8 +709,8 @@ class MenuWithField(Menu):
     def emptyarea(self):
         self.area = [[True for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
 
-    def rfa(self):
-        if self.layer != self.renderer.lastlayer:
+    def rfa(self, layerswap=False):
+        if layerswap:
             self.renderer.props_full_render(self.layer)
         self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
         if self.drawgeo:
@@ -781,7 +781,7 @@ class MenuWithField(Menu):
         self.layer = (self.layer + 1) % 3
         self.renderer.lastlayer = self.layer
         # self.renderer.render_all(self.layer)
-        self.rfa()
+        self.rfa(True)
 
     def swichlayers_back(self):
         self.layer -= 1
@@ -789,7 +789,7 @@ class MenuWithField(Menu):
             self.layer = 2
         self.renderer.lastlayer = self.layer
         # self.renderer.render_all(self.layer)
-        self.rfa()
+        self.rfa(True)
 
     def send(self, message):
         super().send(message)
