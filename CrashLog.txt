@@ -1,28 +1,15 @@
 Traceback (most recent call last):
-  File "F:\Desktop\RWE+\LevelProcess.py", line 121, in mainprocessupdate
-    self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 517, in update
-    self.doevents()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 505, in doevents
-    self.keypress()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 478, in keypress
-    self.menu.send(pressed)
-  File "F:\Desktop\RWE+\menuclass.py", line 795, in send
-    super().send(message)
-  File "F:\Desktop\RWE+\menuclass.py", line 544, in send
-    getattr(self, message[1:])()
-  File "F:\Desktop\RWE+\PE.py", line 428, in cat_next_propupdate
-    self.cat_next()
-  File "F:\Desktop\RWE+\PE.py", line 434, in cat_next
-    self.selector.right()
-  File "F:\Desktop\RWE+\widgets.py", line 771, in right
-    self.onclick("set")
-  File "F:\Desktop\RWE+\widgets.py", line 692, in onclick
-    self.callback(self.selecteditem)
-                  ^^^^^^^^^^^^^^^^^
-  File "F:\Desktop\RWE+\widgets.py", line 830, in selecteditem
-    return self.data[self.currentcategory]["items"][self.currentitem]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "LevelProcess.py", line 121, in mainprocessupdate
+  File "LevelProcess.py", line 525, in update
+  File "LevelProcess.py", line 513, in doevents
+  File "LevelProcess.py", line 486, in keypress
+  File "menuclass.py", line 795, in send
+  File "menuclass.py", line 544, in send
+  File "PE.py", line 431, in cat_prev_propupdate
+  File "PE.py", line 437, in cat_prev
+  File "widgets.py", line 778, in left
+  File "widgets.py", line 692, in onclick
+  File "widgets.py", line 830, in selecteditem
 IndexError: list index out of range
 This is why RWE+ crashed^^^
 Sorry

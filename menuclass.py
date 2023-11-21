@@ -710,8 +710,8 @@ class MenuWithField(Menu):
         self.area = [[True for _ in range(self.levelheight)] for _ in range(self.levelwidth)]
 
     def rfa(self):
-        # if self.layer != self.renderer.lastlayer:
-        #     self.renderer.render_all(self.layer)
+        if self.layer != self.renderer.lastlayer:
+            self.renderer.props_full_render(self.layer)
         self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
         if self.drawgeo:
             # self.renderer.geo_full_render(self.layer)
