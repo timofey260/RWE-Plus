@@ -1,8 +1,16 @@
 {
     "files": [
         {
-            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
-            "name": "SU_A25.wep"
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SI\\SI_A07.txt",
+            "name": "SI_A07.txt"
+        },
+        {
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SI\\SI_A05.txt",
+            "name": "SI_A05.txt"
+        },
+        {
+            "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SI\\SI_A06.txt",
+            "name": "SI_A06.txt"
         },
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\Hell\\HE_T04.wep",
@@ -11,6 +19,10 @@
         {
             "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\Hell\\HE_HUB.wep",
             "name": "HE_HUB.wep"
+        },
+        {
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
+            "name": "SU_A25.wep"
         },
         {
             "path": "F:\\Desktop\\rwwe\\LevelEditorProjects\\World\\SS\\SS_H01.txt",

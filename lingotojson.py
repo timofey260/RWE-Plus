@@ -21,54 +21,65 @@ notfoundtile = {
     "cat": [1, 1],
     "tags": [""]
 }
+defaultlevel = open(path + "default.txt", "r").readlines()
 
 
-def tojson(string: str):
-    closebracketscount = string.count("]")
-    openbracketscount = string.count("[")
-    t = string
-    if closebracketscount > openbracketscount:
-        t = t[:-1]
-    t = t.replace("#Data:", "#data:") \
-        .replace("#Options:", "#options:") \
-        .replace("[#", "{#") \
-        .replace("point(", "\"point(") \
-        .replace("rect(", "\"rect(") \
-        .replace("color(", "\"color(") \
-        .replace(")\"", ")") \
-        .replace(")", ")\"") \
-        .replace("void", "0")
-    count = 0
-    m = list(t)
-    brcount = 0
-    for i in m:
-        if i == "{":
-            localcount = 0
-            v = count
-            while v < len(m):
-                if m[v] == "[" or m[v] == "{":
-                    localcount += 1
-                elif m[v] == "]" or m[v] == "}":
-                    localcount -= 1
-                    if localcount == 0:
-                        m[v] = "}"
-                        break
-                v += 1
-        count += 1
-        if i in ["{", "["]:
-            brcount += 1
-        elif i in ["}", "]"]:
-            brcount -= 1
-            if brcount == 0:
-                m = m[:count+1]
-                break
-    t = "".join(m)
-    t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
-    # print(t)
-    if t.replace(" ", "") != "":
-        return json.loads(t)
-    else:
-        return {}
+def tojson(string: str, replacement: str = None):
+    try:
+        closebracketscount = string.count("]")
+        openbracketscount = string.count("[")
+        t = string
+        if closebracketscount > openbracketscount:
+            t = t[:-1]
+        t = t.replace("#Data:", "#data:") \
+            .replace("#Options:", "#options:") \
+            .replace("[#", "{#") \
+            .replace("point(", "\"point(") \
+            .replace("rect(", "\"rect(") \
+            .replace("color(", "\"color(") \
+            .replace(")\"", ")") \
+            .replace(")", ")\"") \
+            .replace("void", "0")
+        count = 0
+        m = list(t)
+        brcount = 0
+        for i in m:
+            if i == "{":
+                localcount = 0
+                v = count
+                while v < len(m):
+                    if m[v] == "[" or m[v] == "{":
+                        localcount += 1
+                    elif m[v] == "]" or m[v] == "}":
+                        localcount -= 1
+                        if localcount == 0:
+                            m[v] = "}"
+                            break
+                    v += 1
+            count += 1
+            if i in ["{", "["]:
+                brcount += 1
+            elif i in ["}", "]"]:
+                brcount -= 1
+                if brcount == 0:
+                    m = m[:count+1]
+                    break
+        t = "".join(m)
+        t = t.replace("#", "\"").replace(":", "\":").replace("1\":st", "1':st").replace("2\":nd", "2':nd").replace("3\":rd", "3':rd")
+        # print(t)
+        if t.replace(" ", "") != "":
+            if replacement is not None:
+                return {**tojson(replacement), **json.loads(t)}
+            return json.loads(t)
+        else:
+            if replacement is not None:
+                return tojson(replacement)
+            return {}
+    except:
+        print("fixing, just wait")
+        if replacement is None:
+            raise
+        return tojson(replacement)
 
 
 def turntoproject(string: str) -> RWELevel:
@@ -78,12 +89,12 @@ def turntoproject(string: str) -> RWELevel:
     proj["GE"] = eval(lines[0])  # geometry
     proj["TE"] = tojson(lines[1])  # tile editor and his settings
     proj["FE"] = tojson(lines[2])  # effect editor params
-    proj["LE"] = tojson(lines[3])  # light editor and presets
-    proj["EX"] = tojson(lines[4])  # map settings
-    proj["EX2"] = tojson(lines[5])  # light and level settings
-    proj["CM"] = tojson(lines[6])  # camera settings
-    proj["WL"] = tojson(lines[7])  # water level
-    proj["PR"] = tojson(lines[8])  # props and settings why the hell i typed both settings wrong???
+    proj["LE"] = tojson(lines[3], defaultlevel[3])  # light editor and presets
+    proj["EX"] = tojson(lines[4], defaultlevel[4])  # map settings
+    proj["EX2"] = tojson(lines[5], defaultlevel[5])  # light and level settings
+    proj["CM"] = tojson(lines[6], defaultlevel[6])  # camera settings
+    proj["WL"] = tojson(lines[7], defaultlevel[7])  # water level
+    proj["PR"] = tojson(lines[8], defaultlevel[8])  # props and settings why the hell i typed both settings wrong???
     return proj
 
 
