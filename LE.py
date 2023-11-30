@@ -172,6 +172,10 @@ class LE(MenuWithField):
         super().renderfield()
 
     def save(self):
+        pg.draw.circle(self.field2.field, black, [0, 0], 1)
+        pg.draw.circle(self.field2.field, black, [self.field2.field.get_width(), 0], 1)
+        pg.draw.circle(self.field2.field, black, [0, self.field2.field.get_height()], 1)
+        pg.draw.circle(self.field2.field, black, [self.field2.field.get_width(), self.field2.field.get_height()], 1)
         if self.data["path"] == "":
             level = self.asksaveasfilename(defaultextension=[".wep"])
             self.changedata(["level"], os.path.basename(level))
