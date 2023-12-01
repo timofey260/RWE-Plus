@@ -65,7 +65,7 @@ toolmenu = loadimage(path + globalsettings["toolmenu"])
 
 load_error_count = 0
 
-tag = "2.5.3"
+tag = "2.5.4"
 
 ofstop = 15
 ofsleft = 15
