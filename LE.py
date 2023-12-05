@@ -278,13 +278,13 @@ class LE(MenuWithField):
         self.changedata(["LE", "flatness"], min(self.data["LE"]["flatness"] + 1, 10))
 
     def fm(self):
-        self.changedata(["LE", "flatness"], min(self.data["LE"]["flatness"] - 1, 10))
+        self.changedata(["LE", "flatness"], max(self.data["LE"]["flatness"] - 1, 1))
 
     def lp(self):
         self.changedata(["LE", "lightAngle"], self.data["LE"]["lightAngle"] + 1)
 
     def lm(self):
-        self.changedata(["LE", "lightAngle"], max(self.data["LE"]["lightAngle"] - 1, 1))
+        self.changedata(["LE", "lightAngle"], self.data["LE"]["lightAngle"] - 1)
 
     def lightmod(self):
         if self.mode:
