@@ -857,6 +857,11 @@ class MenuWithField(Menu):
             self.renderer.rendereffect(self.draweffects - 1)
         self.rfa()
 
+    def togglepropvis(self):
+        self.renderer.proplayer = not self.renderer.proplayer
+        self.renderer.props_full_render(self.layer)
+        self.rfa()
+
     def toggleprops(self):
         self.drawprops = not self.drawprops
         self.rfa()

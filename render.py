@@ -138,6 +138,7 @@ class Renderer:
 
         self.geolayers = [True, True, True]
         self.tilelayers = [True, True, True]
+        self.proplayer = False # thanks to elsafogen
         if render:
             size = [self.levelwidth * image1size, self.levelheight * image1size]
             # self.f = pg.Surface(size)
@@ -329,6 +330,8 @@ class Renderer:
         pixel = pg.Surface(cellsize2)
         pixel.fill(color2)
         for i in range(2, -1, -1):
+            if i < layer:
+                continue
             if not self.geolayers[i]:
                 continue
             renderedimage.set_alpha(settings["global"]["secondarylayeralpha"])
@@ -461,6 +464,8 @@ class Renderer:
         self.lastlayer = layer
         self.surf_props.fill(dc)
         for indx, prop in enumerate(self.data["PR"]["props"]):
+            if self.proplayer and not (layer * 10 <= -prop[0] <= layer * 10 + 10):
+                continue
             var = 0
             if prop[4]["settings"].get("variation") is not None:
                 var = prop[4]["settings"]["variation"] - 1
