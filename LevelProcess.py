@@ -323,6 +323,9 @@ class LevelProcess:
                     self.menu.send(message)
 
     def undohistory(self):
+        if pg.key.get_mods() & pg.KMOD_LSHIFT > 0:
+            self.redohistory()
+            return
         if len(self.undobuffer) == 0:
             return
         lastsize = [self.menu.levelwidth, self.menu.levelheight]

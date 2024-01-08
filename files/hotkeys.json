@@ -135,8 +135,8 @@
     	"+K_KP5": "-tool2_pencil",
     	"+K_KP6": "-tool2_brush",
 
-    	"K_F1": "-tool_circle",
-    	"K_F2": "-tool_circle_hollow",
+    	"K_F9": "-tool_circle",
+    	"K_F10": "-tool_circle_hollow",
     	"K_F3": "-tool_rect",
     	"K_F4": "-tool_rect_hollow",
     	"K_F5": "-tool_fill",
@@ -144,8 +144,8 @@
     	"K_F7": "-tool_pencil",
     	"K_F8": "-tool_brush",
 
-		"+K_F1": "-tool2_circle",
-    	"+K_F2": "-tool2_circle_hollow",
+		"+K_F9": "-tool2_circle",
+    	"+K_F10": "-tool2_circle_hollow",
     	"+K_F3": "-tool2_rect",
     	"+K_F4": "-tool2_rect_hollow",
     	"+K_F5": "-tool2_fill",

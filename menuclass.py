@@ -68,6 +68,9 @@ class Menu:
         pass
 
     def changedata(self, path: list, value, checkvalue=True):
+        if self.hardhistory:
+            self.data[path] = value
+            return
         oldvalue = self.data[path]
         tohisstory = deepcopy([path, [value, oldvalue]])
         if checkvalue and value == oldvalue:
@@ -414,6 +417,11 @@ class Menu:
                 break
         if not pg.mouse.get_pressed(3)[0] and not widgets.enablebuttons:
             widgets.enablebuttons = True
+        if pg.key.get_mods() & pg.KMOD_LALT > 0:
+            pg.draw.rect(self.surface, color, [[0, 0],
+                fs(settings["global"]["fontsize"])[0].size("!!!Hard history enabled, history wouldn't be saved!!!")],
+                         border_bottom_right_radius=10)
+            widgets.fastmts(self.surface, "!!!Hard history enabled, history wouldn't be saved!!!", 0, 0, red)
 
     def setcursor(self, cursor=pg.SYSTEM_CURSOR_ARROW):
         c = pg.Cursor(cursor)
@@ -428,22 +436,35 @@ class Menu:
         return False
 
     def historyinsert(self, path, value, index):
+        if self.hardhistory:
+            return
         self.historyChanges.append([[".insert", *path], index, value])
         self.data[path].insert(index, value)
 
     def historyappend(self, path, value):
+        if self.hardhistory:
+            return
         self.historyChanges.append([[".append", *path], value])
         self.data[path].append(value)
 
     def historypop(self, path, index):
+        if self.hardhistory:
+            return
         self.historyChanges.append([[".pop", *path], index, self.data[*path, index]])
         self.data[path].pop(index)
 
     def historymove(self, path, index, move):
+        if self.hardhistory:
+            return
         self.historyChanges.append([[".move", *path], index, move])
         self.data[path].insert(move, self.data[path].pop(index))
 
     def addtohistory(self):
+        if self.hardhistory:
+            self.owner.redobuffer = []
+            self.owner.undobuffer = []
+            self.historyChanges = []
+            return
         self.owner.undobuffer.append(self.historyChanges)
         self.saved = False
         self.historyChanges = []
@@ -451,12 +472,16 @@ class Menu:
         self.owner.undobuffer = self.owner.undobuffer[-globalsettings["historylimit"]:]
 
     def updatehistory(self):
+        if self.hardhistory:
+            return
         if len(self.historyChanges) <= 0:
             return
         self.historyChanges.insert(0, smallestchange(self.historyChanges))
         self.addtohistory()
 
     def detecthistory(self, path, savedata=True):
+        if self.hardhistory:
+            return
         if len(self.historyChanges) <= 0:
             return
         elif len(self.historyChanges) <= 200:
@@ -485,6 +510,10 @@ class Menu:
         self.historyChanges.insert(0, [*path])
         # print(self.historyChanges)
         self.addtohistory()
+
+    @property
+    def hardhistory(self) -> bool:
+        return pg.key.get_mods() & pg.KMOD_LALT > 0
 
     def non(self, *args):
         pass

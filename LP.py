@@ -248,6 +248,7 @@ class LP(MenuWithField):
         self.resizeprops(x, y, w, h)
         self.resizeimage(x, y, w, h)
         self.recount_image()
+        self.cameramove(x, y)
         self.changedata(["EX2", "size"], makearr([self.levelwidth, self.levelheight], "point"))
         # self.data["EX2"]["size"] = makearr([self.levelwidth, self.levelheight], "point")
         self.owner.manager.notify("Done!")
@@ -256,6 +257,13 @@ class LP(MenuWithField):
         # self.renderer.data = self.data
         self.renderer.set_surface([image1size * self.levelwidth, image1size * self.levelheight])
         self.renderer.render_all(self.layer)
+
+    def cameramove(self, x, y):
+        for i, cam in enumerate(self.data["CM"]["cameras"]):
+            point = toarr(cam, "point")
+            point[0] += x * 20
+            point[1] += y * 20
+            self.changedata(["CM", "cameras", i], makearr(point, "point"))
 
     def recount(self):
         self.gw = self.levelwidth

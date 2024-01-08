@@ -15,7 +15,7 @@
         "/openNewProcess": "Opens level in new process",
         "/newProcess": "Creates new process",
         "/fc": "Fullscreen",
-        "/undo": "Undo level changes",
+        "/undo": "Undo level changes. Hold shift to redo.",
         "/redo": "Redo level changes",
         "/-togglegeo": "Toggles geometry",
         "/-toggletiles": "Toggles tiles",
