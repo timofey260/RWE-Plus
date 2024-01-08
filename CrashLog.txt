@@ -1,25 +1,28 @@
 Traceback (most recent call last):
-  File "F:\Desktop\RWE+\LevelProcess.py", line 121, in mainprocessupdate
+  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 121, in mainprocessupdate
     self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 534, in update
-    self.menu.blit()
-  File "F:\Desktop\RWE+\LD.py", line 78, in blit
-    self.selector.blit()
-  File "F:\Desktop\RWE+\widgets.py", line 711, in blit
-    button.blit(sum(pg.display.get_window_size()) // 120)
-  File "F:\Desktop\RWE+\widgets.py", line 158, in blit
-    self.onpress(self)
-  File "F:\Desktop\RWE+\widgets.py", line 690, in onclick
-    self.callback(button.buttondata)
-  File "F:\Desktop\RWE+\LD.py", line 14, in selectorset
-    self.owner.__init__(self.owner.manager, buttondata["path"])
-  File "F:\Desktop\RWE+\LevelProcess.py", line 214, in __init__
-    self.renderer.render_all(0)
-  File "F:\Desktop\RWE+\render.py", line 308, in render_all
-    self.props_full_render(layer)
-  File "F:\Desktop\RWE+\render.py", line 463, in props_full_render
-    for indx, prop in enumerate(self.data["PR"]["props"]):
-                                ~~~~~~~~~~~~~~~^^^^^^^^^
-KeyError: 'props'
+  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 528, in update
+    self.doevents()
+  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 516, in doevents
+    self.keypress()
+  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 489, in keypress
+    self.menu.send(pressed)
+  File "C:\Users\Admin\Desktop\RWE+\menuclass.py", line 795, in send
+    super().send(message)
+  File "C:\Users\Admin\Desktop\RWE+\menuclass.py", line 544, in send
+    getattr(self, message[1:])()
+  File "C:\Users\Admin\Desktop\RWE+\PE.py", line 432, in cat_next_propupdate
+    self.cat_next()
+  File "C:\Users\Admin\Desktop\RWE+\PE.py", line 438, in cat_next
+    self.selector.right()
+  File "C:\Users\Admin\Desktop\RWE+\widgets.py", line 771, in right
+    self.onclick("set")
+  File "C:\Users\Admin\Desktop\RWE+\widgets.py", line 692, in onclick
+    self.callback(self.selecteditem)
+                  ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Desktop\RWE+\widgets.py", line 830, in selecteditem
+    return self.data[self.currentcategory]["items"][self.currentitem]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+IndexError: list index out of range
 This is why RWE+ crashed^^^
 Sorry

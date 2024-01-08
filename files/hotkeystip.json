@@ -23,6 +23,8 @@
         "/-toggleprops": "Toggles props",
         "/-toggleeffects": "Switches effects",
         "/-togglegrid": "Toggles grid",
+        "/-togglepropvis": "Hides props on other layers",
+        "/-toggleropepropvis": "Hides rope prop images",
         "/left": "Left",
         "/right": "Right",
         "/up": "Up",
@@ -31,7 +33,8 @@
         "/-swichlayers_back": "Switch layers back",
         "/-togglelayervisible": "Toggles geometry layer",
         "/-toggletileslayervisible": "Toggles tile layer",
-        "/swichprocess": "Swiches between processes"
+        "/swichprocess": "Switches between processes",
+        "/rerender_all": "Rerenders all level visuals"
     },
     "LD": {
         "new": "New file",

@@ -862,6 +862,11 @@ class MenuWithField(Menu):
         self.renderer.props_full_render(self.layer)
         self.rfa()
 
+    def toggleropepropvis(self):
+        self.renderer.ropepropvis = not self.renderer.ropepropvis
+        self.renderer.props_full_render(self.layer)
+        self.rfa()
+
     def toggleprops(self):
         self.drawprops = not self.drawprops
         self.rfa()
@@ -1019,19 +1024,31 @@ class MenuWithField(Menu):
                     posy = backy + y2
                     if posy >= self.levelheight or posx >= self.levelwidth:
                         continue
-                    csp = sp[x2 * h + y2]
+                    # csp = sp[x2 * h + y2]
                     self.area[posx][posy] = False
-                    if csp != -1:
-                        # pg.draw.rect(self.fieldadd, red, [posx * self.size, posy * self.size, self.size, self.size])
+                    if (self.data["TE", "tlMatrix", posx, posy, layer, "tp"] == "tileBody"
+                            and toarr(self.data["TE", "tlMatrix", posx, posy, layer, "data", 0], "point") == [mx + 1, my + 1]
+                            and self.data["TE", "tlMatrix", posx, posy, layer, "data", 1] - 1 == layer) \
+                            or (posy == my and posx == mx):
                         self.changedata(["TE", "tlMatrix", posx, posy, layer], {"tp": "default", "data": 0})
+
+                    # if csp != -1:
+                        # pg.draw.rect(self.fieldadd, red, [posx * self.size, posy * self.size, self.size, self.size])
+                        #self.changedata(["TE", "tlMatrix", posx, posy, layer], {"tp": "default", "data": 0})
                         # self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
                     if sp2 != 0:
-                        try:
-                            csp = sp2[x2 * h + y2]
-                        except IndexError:
-                            csp = -1
-                        if csp != -1 and layer + 1 <= 2:
+                        if (self.data["TE", "tlMatrix", posx, posy, layer + 1, "tp"] == "tileBody"
+                            and toarr(self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 0], "point") == [mx + 1, my + 1]
+                            and self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 1] == layer) \
+                                or (posy == my and posx == mx):
                             self.changedata(["TE", "tlMatrix", posx, posy, layer + 1], {"tp": "default", "data": 0})
+
+                        # try:
+                        #     csp = sp2[x2 * h + y2]
+                        # except IndexError:
+                        #     csp = -1
+                        # if csp != -1 and layer + 1 <= 2:
+                        #     self.changedata(["TE", "tlMatrix", posx, posy, layer + 1], {"tp": "default", "data": 0})
                             # self.data["TE"]["tlMatrix"][posx][posy][layer + 1] = {"tp": "default", "data": 0}
 
         if not self.canplaceit(x, y, x, y):

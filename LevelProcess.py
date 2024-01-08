@@ -301,6 +301,9 @@ class LevelProcess:
                 self.manager.newprocess(-1)
             case "swichprocess":
                 self.manager.swichprocess()
+            case "rerender_all":
+                self.renderer.render_all(self.menu.layer)
+                self.menu.rfa()
             case "RELOAD":
                 self.menu.reload()
             case "new":

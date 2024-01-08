@@ -30,6 +30,7 @@
   		"K_5+": "/-toggleeffects",
   		"K_6+": "/-togglegrid",
   		"K_7+": "/-togglepropvis",
+  		"K_8+": "/-toggleropepropvis",
   		"K_LEFT": "/left",
     	"K_RIGHT": "/right",
     	"K_UP": "/up",
@@ -38,7 +39,8 @@
     	"K_l+": "/-swichlayers_back",
     	"K_F1": "/-togglelayervisible",
     	"K_F2": "/-toggletileslayervisible",
-    	"K_TAB+": "/swichprocess"
+    	"K_TAB+": "/swichprocess",
+    	"K_RETURN+": "/rerender_all"
   	},
   	"LD": {
   		"unlock_keys": [],

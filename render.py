@@ -139,6 +139,7 @@ class Renderer:
         self.geolayers = [True, True, True]
         self.tilelayers = [True, True, True]
         self.proplayer = False # thanks to elsafogen
+        self.ropepropvis = False
         if render:
             size = [self.levelwidth * image1size, self.levelheight * image1size]
             # self.f = pg.Surface(size)
@@ -194,6 +195,9 @@ class Renderer:
                 if y:
                     continue
                 for l in range(3):  # help
+                    if self.data["TE"]["tlMatrix"][xp][yp][l]["tp"] == "tileBody":
+                        p = toarr(self.data["TE"]["tlMatrix"][xp][yp][l]["data"][0], "point")
+                        area[p[0] - 1][p[1] - 1] = False
                     self.surfs_tile[l].fill(pg.Color(0, 0, 0, 0), [xp * image1size, yp * image1size, image1size, image1size])
         for xp, x in enumerate(area):
             for yp, y in enumerate(x):
@@ -484,19 +488,24 @@ class Renderer:
                 quads.append(toarr(q, "point"))
 
             # surf = pg.image.fromstring(string, [ws, hs], "RGBA")
-            surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
-            surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
-            surf.set_colorkey(white)
-            alph = map(abs(layer - -prop[0] / 10), 3, 0, 40, 190)
-            surf.set_alpha(alph)
-            self.surf_props.blit(surf, [mostleft * sprite2image, mosttop * sprite2image])
+            if not self.ropepropvis or prop[4].get("points") is None:
+                surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
+                surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
+                surf.set_colorkey(white)
+                alph = map(abs(layer - -prop[0] / 10), 3, 0, 40, 190)
+                surf.set_alpha(alph)
+                self.surf_props.blit(surf, [mostleft * sprite2image, mosttop * sprite2image])
             if prop[4].get("points") is not None:
                 propcolor = toarr(self.findprop(prop[1])[0]["previewColor"], "color")  # wires
+                lastpos = None
                 for point in prop[4]["points"]:
                     px, py = toarr(point, "point")
                     px = px / propsize * image1size
                     py = py / propsize * image1size
                     pg.draw.circle(self.surf_props, propcolor, [px, py], image1size / 3)
+                    if lastpos is not None:
+                        pg.draw.line(self.surf_props, white, [px, py], lastpos)
+                    lastpos = [px, py]
 
     def rerendereffect(self):
         self.rendereffect(self.effect_index)

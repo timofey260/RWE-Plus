@@ -25,6 +25,8 @@ Generated using hotkeys to md converter
 * **ctrl + 4** - /-toggleprops - Toggles props
 * **ctrl + 5** - /-toggleeffects - Switches effects
 * **ctrl + 6** - /-togglegrid - Toggles grid
+* **ctrl + 7** - /-togglepropvis - Hides props on other layers
+* **ctrl + 8** - /-toggleropepropvis - Hides rope prop images
 * **Left** - /left - Left
 * **Right** - /right - Right
 * **Up** - /up - Up
@@ -33,7 +35,8 @@ Generated using hotkeys to md converter
 * **ctrl + L** - /-swichlayers_back - Switch layers back
 * **F1** - /-togglelayervisible - Toggles geometry layer
 * **F2** - /-toggletileslayervisible - Toggles tile layer
-* **ctrl + Tab** - /swichprocess - Swiches between processes
+* **ctrl + Tab** - /swichprocess - Switches between processes
+* **ctrl + Return** - /rerender_all - Rerenders all level visuals
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -109,6 +112,22 @@ Generated using hotkeys to md converter
 * **ctrl + [4]** - -tool2_line - Changes RMB to line
 * **ctrl + [5]** - -tool2_pencil - Changes RMB to pencil
 * **ctrl + [6]** - -tool2_brush - Changes RMB to brush
+* **F1** - -tool_circle - Changes LMB to circle tool
+* **F2** - -tool_circle_hollow - Changes LMB to hollow circle tool
+* **F3** - -tool_rect - Changes LMB to rectangle tool
+* **F4** - -tool_rect_hollow - Changes LMB to hollow rectangle tool
+* **F5** - -tool_fill - Changes LMB to fill
+* **F6** - -tool_line - Changes LMB to line
+* **F7** - -tool_pencil - Changes LMB to pencil
+* **F8** - -tool_brush - Changes LMB to brush
+* **ctrl + F1** - -tool2_circle - Changes RMB to circle tool
+* **ctrl + F2** - -tool2_circle_hollow - Changes RMB to hollow circle tool
+* **ctrl + F3** - -tool2_rect - Changes RMB to rectangle tool
+* **ctrl + F4** - -tool2_rect_hollow - Changes RMB to hollow rectangle tool
+* **ctrl + F5** - -tool2_fill - Changes RMB to fill
+* **ctrl + F6** - -tool2_line - Changes RMB to line
+* **ctrl + F7** - -tool2_pencil - Changes RMB to pencil
+* **ctrl + F8** - -tool2_brush - Changes RMB to brush
 ### TE
 * **G** - force_geometry - Forces geometry to tile
 * **F** - force_place - Places tile without checking geometry
@@ -225,6 +244,10 @@ Generated using hotkeys to md converter
 * **[2]** - -fm - Light flatness -
 * **[4]** - -lp - Light Angle +
 * **[6]** - -lm - Light Angle -
+* **I** - -fp - Light flatness +
+* **K** - -fm - Light flatness -
+* **J** - -lp - Light Angle +
+* **L** - -lm - Light Angle -
 * **Q** - -rl - Rotate image clockwise
 * **E** - -rr - Rotate image counter-clockwise
 * **R** - -changeup - Change image up

@@ -320,9 +320,13 @@ class PE(MenuWithField):
                     if not self.findparampressed("pauseropephysics"):
                         self.ropeobject.modelRopeUpdate()
                     color = toarr(self.ropeobject.prop["previewColor"], "color")
+                    lastpos = None
                     for segment in self.ropeobject.segments:
                         posofwire = ((pg.Vector2(self.xoffset, self.yoffset) + (segment["pos"]) / image1size) * self.size) + pg.Vector2(self.field.rect.topleft)
                         pg.draw.circle(self.surface, color, posofwire, 5)
+                        if lastpos is not None:
+                            pg.draw.line(self.surface, white, posofwire, lastpos)
+                        lastpos = posofwire
             depthpos = [mpos[0] + 20, mpos[1]]
             if self.findparampressed("propvariation_change"):
                 varpos = [mpos[0] + 20, mpos[1] + 20]
