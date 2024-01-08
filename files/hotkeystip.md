@@ -27,6 +27,7 @@ Generated using hotkeys to md converter
 * **ctrl + 6** - /-togglegrid - Toggles grid
 * **ctrl + 7** - /-togglepropvis - Hides props on other layers
 * **ctrl + 8** - /-toggleropepropvis - Hides rope prop images
+* **ctrl + 9** - /-togglegeocolor - Toggles colored geometry
 * **Left** - /left - Left
 * **Right** - /right - Right
 * **Up** - /up - Up

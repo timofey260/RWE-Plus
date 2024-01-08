@@ -845,6 +845,11 @@ class MenuWithField(Menu):
         self.drawgeo = not self.drawgeo
         self.rfa()
 
+    def togglegeocolor(self):
+        self.renderer.coloredgeo = not self.renderer.coloredgeo
+        self.renderer.geo_full_render(self.layer)
+        self.rfa()
+
     def toggletiles(self):
         self.drawtiles = not self.drawtiles
         self.rfa()

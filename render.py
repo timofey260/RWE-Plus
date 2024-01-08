@@ -62,6 +62,14 @@ renderedimage = pg.transform.scale(tooltiles, [
     (tooltiles.get_width() / globalsettings["tilesize"][0]) * image1size,
     (tooltiles.get_height() / globalsettings["tilesize"][1]) * image1size])
 
+colorint = 170
+renderedimage2 = renderedimage.copy()
+renderedimage2.fill(pg.Color(100, colorint, 100), special_flags=pg.BLEND_MAX)
+renderedimage3 = renderedimage.copy()
+renderedimage3.fill(pg.Color(colorint, 100, 100), special_flags=pg.BLEND_MAX)
+
+renderedimagecolored = [renderedimage, renderedimage2, renderedimage3]
+
 
 def quadsize(quad):
     mostleft = bignum
@@ -140,6 +148,7 @@ class Renderer:
         self.tilelayers = [True, True, True]
         self.proplayer = False # thanks to elsafogen
         self.ropepropvis = False
+        self.coloredgeo = False
         if render:
             size = [self.levelwidth * image1size, self.levelheight * image1size]
             # self.f = pg.Surface(size)
@@ -164,6 +173,13 @@ class Renderer:
     @property
     def surf_tiles(self):
         return self.surfs_tile[self.lastlayer]
+
+    def returntiles(self, layer):
+        if self.coloredgeo:
+            # renderedimagecolored[layer].set_alpha(200)
+            return renderedimagecolored[layer]
+        else:
+            return renderedimage
 
     def set_surface(self, size=None):
         if size is None:  # auto
@@ -334,14 +350,19 @@ class Renderer:
         pixel = pg.Surface(cellsize2)
         pixel.fill(color2)
         for i in range(2, -1, -1):
-            if i < layer:
+            if not self.coloredgeo and i < layer:
                 continue
             if not self.geolayers[i]:
                 continue
-            renderedimage.set_alpha(settings["global"]["secondarylayeralpha"])
-            if i == layer:
-                renderedimage.set_alpha(settings["global"]["primarylayeralpha"])
-            self.data["GE"][xp][yp][i][1] = list(set(self.data["GE"][xp][yp][i][1]))
+            if self.coloredgeo:
+                self.returntiles(i).set_alpha(170)
+                if i == layer:
+                    self.returntiles(i).set_alpha(255)
+            else:
+                self.returntiles(i).set_alpha(settings["global"]["secondarylayeralpha"])
+                if i == layer:
+                    self.returntiles(i).set_alpha(settings["global"]["primarylayeralpha"])
+                self.data["GE"][xp][yp][i][1] = list(set(self.data["GE"][xp][yp][i][1]))
             cell = self.data["GE"][xp][yp][i][0]
             over: list = self.data["GE"][xp][yp][i][1]
             if cell == 7 and 4 not in over:
@@ -349,7 +370,7 @@ class Renderer:
                 cell = self.data["GE"][xp][yp][i][0]
             curtool = [globalsettings["shows"][str(cell)][0] * image1size,
                        globalsettings["shows"][str(cell)][1] * image1size]
-            pixel.blit(renderedimage, [0, 0], [curtool, cellsize2])
+            pixel.blit(self.returntiles(i), [0, 0], [curtool, cellsize2])
             if 4 in over and self.data["GE"][xp][yp][i][0] != 7:
                 self.data["GE"][xp][yp][i][1].remove(4)
             if 11 in over and over.index(11) != 0:
@@ -438,7 +459,7 @@ class Renderer:
                         else:  # if no breaks
                             if tilecounter == 7 and foundwire and foundair and pos != -1:  # if we found the right one
                                 curtool = [pos[0] * image1size, pos[1] * image1size]
-                pixel.blit(renderedimage, [0, 0], [curtool, cellsize2])
+                pixel.blit(self.returntiles(i), [0, 0], [curtool, cellsize2])
         return pixel
 
     def findprop(self, name, cat=None):

@@ -31,6 +31,7 @@
   		"K_6+": "/-togglegrid",
   		"K_7+": "/-togglepropvis",
   		"K_8+": "/-toggleropepropvis",
+  		"K_9+": "/-togglegeocolor",
   		"K_LEFT": "/left",
     	"K_RIGHT": "/right",
     	"K_UP": "/up",

@@ -25,6 +25,7 @@
         "/-togglegrid": "Toggles grid",
         "/-togglepropvis": "Hides props on other layers",
         "/-toggleropepropvis": "Hides rope prop images",
+        "/-togglegeocolor": "Toggles colored geometry",
         "/left": "Left",
         "/right": "Right",
         "/up": "Up",
