@@ -1,8 +1,0 @@
-WASD - Browse props  								C - clear all props														N - prop options
-QE - Rotate prop (hold space to speed up)    		 		V - delete prop, hold V and move mouse to select prop, hit mouse left to remove		M - change prop options of placed prop
-SPACE + WASD - Rotate prop to cardinal directions               B - sample prop, hold B and move mouse to select prop, hit mouse left to pick up         Z - prop color
-YGHJ - stretch prop						                        L - change work layer													F + left/right mouse - change prop variation
-SPACE + YGHJ - flip prop						        Right mouse - Change prop depth
-T - reset stretch 									Right mouse + SPACE  - Change prop depth (negative)
-R - reset all transformations	    						UIOP - freeform stretch
-X - pause rope simulation							K - reset freeform stretch

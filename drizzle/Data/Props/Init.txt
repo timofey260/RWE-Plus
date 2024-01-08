@@ -282,3 +282,6 @@
 [#nm:"UG_SHROOM_R_CLRA", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorA"], #layerExceptions:[], #notes:[]]
 [#nm:"UG_SHROOM_L_CLRB", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorB"], #layerExceptions:[], #notes:[]]
 [#nm:"UG_SHROOM_R_CLRB", #tp:"standard", #colorTreatment:"standard", #sz:point(10,6), #repeatL:[1,1,1,1,1,1,1,1,1,1], #tags:["effectColorB"], #layerExceptions:[], #notes:[]]
+
+-["SLUGFLEX", color(255, 255, 255)]
+[#nm:"SlugFlex", #tp:"standard", #colorTreatment:"standard", #sz:point(18,31), #repeatL:[3], #tags:[], #layerExceptions:[], #notes:["SEXY"], #Sexiness: 1000]

@@ -481,7 +481,8 @@ class Renderer:
             "layerExceptions": [],
             "color": white,
             "images": [notfound],
-            "notes": []
+            "notes": [],
+            "previewColor": "color(255, 255, 255)"
         }
         return item, [0, 0]
 

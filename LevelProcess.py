@@ -1,6 +1,5 @@
 from menus import *
 from menuclass import Menu, MenuWithField
-from tkinter.messagebox import askyesnocancel, askyesno
 import time
 import requests
 
@@ -131,10 +130,9 @@ class ProcessManager:
             traceback.print_exc()
 
             if not saved:
-                ex = askyesno("Crash!!!",
-                             "Oops! RWE+ seems to be crashed, Crash log saved and showed in console\n"
-                              "Do you want to save current level you opened?")
-                if ex:
+                ex = self.mainprocess.menu.askstr("Oops! RWE+ seems to be crashed!"
+                              " Do you want to save level you opened?(y/n)")
+                if ex.lower() == "y":
                     try:
                         self.mainprocess.menu.savef()
                     except:
