@@ -1,12 +1,12 @@
 {
     "files": [
         {
-            "path": "C:\\Users\\Admin\\Desktop\\RWE+\\LevelEditorProjects\/fun_maps\/blank.wep",
-            "name": "blank.wep"
-        },
-        {
             "path": "C:\\Users\\Admin\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
             "name": "SU_A25.wep"
+        },
+        {
+            "path": "C:\\Users\\Admin\\Desktop\\RWE+\\LevelEditorProjects\/fun_maps\/blank.wep",
+            "name": "blank.wep"
         },
         {
             "path": "C:\\Users\\Admin\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\bee_movie_script_room.wep",

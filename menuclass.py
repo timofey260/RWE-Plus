@@ -546,6 +546,8 @@ class Menu:
                     keys[i] = mbuttons[4]
                 case _:
                     keys[i] = False
+                    if hasattr(pg, newkey):
+                        keys[i] = pg.key.get_pressed()[getattr(pg, newkey)]
             if key.find("ctrl") >= 0:
                 keys[i] = keys[i] and pg.key.get_mods() & pg.KMOD_CTRL
             else:
