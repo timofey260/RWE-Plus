@@ -855,7 +855,8 @@ class Notification:
         self.anim = 0
         self.messagelabel = Label(surface, message, self.pos, white, 30)
         padding = 20
-        self.pos.update([-self.messagelabel.textimage.get_width() - padding * 2, padding])
+        self.pos.update([-self.messagelabel.textimage.get_width() - padding * 2,
+                         pg.display.get_window_size()[1] - padding - self.messagelabel.textimage.get_height()])
         self.startpos = copy.deepcopy(self.pos)
         self.endpos = pg.Vector2(padding, self.pos.y)
         self.delete = False

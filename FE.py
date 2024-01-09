@@ -298,7 +298,7 @@ class FE(MenuWithField):
 
     def changeseed(self):
         try:
-            value = self.askint("Enter velue(type -1 for random)", False)
+            value = self.askint("Enter value(type -1 for random)", False)
             if value is None:
                 print("Abort")
             print(value)

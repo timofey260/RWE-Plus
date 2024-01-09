@@ -50,6 +50,9 @@ class MN(MenuWithField):
     def HK(self):
         self.sendtoowner("HK")
 
+    def rerender(self):
+        self.sendtoowner("rerender_all")
+
     def save(self):
         self.savef()
 

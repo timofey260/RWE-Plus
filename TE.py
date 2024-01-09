@@ -41,9 +41,9 @@ class TE(MenuWithField):
         self.items: ItemData = process.renderer.tiles
         p = json.load(open(path + "patterns.json", "r"))
         if "special" not in self.items.categories:
-            self.items.insert(0, {"name": "special", "color": black, "items": p["patterns"]})
+            self.items.insert(-1, {"name": "special", "color": black, "items": p["patterns"]})
             for indx, pattern in enumerate(p["patterns"]):
-                self.items[0]["items"][indx]["cat"] = [len(self.items), indx + 1]
+                self.items[-1]["items"][indx]["cat"] = [len(self.items), indx + 1]
         self.blocks = p["blocks"]
         self.brushmode = False
         self.squarebrush = False

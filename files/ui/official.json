@@ -81,10 +81,11 @@
 
 			["Report", [85, 35, 14, 5], [90, 90, 90], "report", "non", "Report a bug"],
 			["Github", [85, 40, 14, 5], [90, 90, 90], "github", "non", "Go to RWE+ github"],
+			["Rerender", [85, 45, 14, 5], [90, 90, 90], "rerender", "non", "Rerenders current level preview(<[/rerender_all]>)\nIncase if something goes wrong)"],
 
-			["Layer", [85, 48, 14, 6], [90, 90, 90], "swichlayers", "non", "Change layer"],
-			["Toggle tiles", [85, 54, 14, 6], [90, 90, 90], "tiles", "non", "Toggle tiles layer"],
-			["Next tip", [85, 60, 14, 6], [90, 90, 90], "nexttip", "non", "Just next tip)"],
+			["Layer", [85, 50, 14, 5], [90, 90, 90], "swichlayers", "non", "Change layer"],
+			["Toggle tiles", [85, 55, 14, 5], [90, 90, 90], "tiles", "non", "Toggle tiles layer"],
+			["Next tip", [85, 60, 14, 5], [90, 90, 90], "nexttip", "non", "Just next tip)"],
 
 			
 			["Render", [80, 80, 19, 19], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
@@ -229,6 +230,7 @@
 			["D", [1, 20, 5, 6], [30, 30, 30], "darkmod", "non", "Dark mode(<[-darkmod]>)"],
 			["L", [1, 26, 5, 6], [230, 230, 230], "lightmod", "non", "Light mode(<[-lightmod]>)"],
 			["S", [1, 32, 5, 6], [100, 100, 100], "save", "non", "Save as image(<[-save]>)"],
+			["N", [1, 38, 5, 6], [100, 100, 100], "disablesave", "non", "Disable shadow autosave(<[-disablesave]>)"],
 			["?", [98, 0, 2, 2], [90, 90, 90], "watch_keys", "non", "Hotkeys", ["editors.png", [6, 1]]]
 
 		],

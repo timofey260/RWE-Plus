@@ -676,6 +676,7 @@ class MenuWithField(Menu):
         self.drawprops = False
         self.draweffects = False
         self.drawgrid = False
+        self.drawwater = False
 
         self.f = pg.Surface([self.levelwidth * image1size, self.levelheight * image1size])
 
@@ -727,6 +728,16 @@ class MenuWithField(Menu):
         self.field.field.fill(self.field.color)
         self.field.field.blit(self.fieldmap, [self.xoffset * self.size, self.yoffset * self.size])
         self.field.field.blit(self.fieldadd, [self.xoffset * self.size, self.yoffset * self.size])
+        if self.drawwater and self.data["WL"]["waterLevel"] != -1:
+            height = self.levelheight * self.size
+            width = self.levelwidth * self.size
+            top = height - ((wladd + self.data["WL"]["waterLevel"]) * self.size)
+            h = height - top + 1
+            s = pg.Surface([width, h])
+            s.fill(blue)
+            s.set_alpha(100)
+            self.field.field.blit(s, [self.xoffset * self.size, self.yoffset * self.size + top])
+            self.field.blit()
         self.drawborder()
 
     def renderfield(self):
@@ -879,10 +890,12 @@ class MenuWithField(Menu):
     def togglegeocolor(self):
         self.renderer.coloredgeo = not self.renderer.coloredgeo
         self.renderer.geo_full_render(self.layer)
+        print("Geo: " + ("colored" if self.renderer.coloredgeo else "normal"))
         self.rfa()
 
     def toggletiles(self):
         self.drawtiles = not self.drawtiles
+        print("Tiles: " + ("visible" if self.drawtiles else "invisible"))
         self.rfa()
 
     def toggleeffects(self):
@@ -891,24 +904,35 @@ class MenuWithField(Menu):
             self.draweffects = 0
         if self.draweffects != 0:
             self.renderer.rendereffect(self.draweffects - 1)
+            print(f'Effect:  + {self.data["FE"]["effects"][self.draweffects - 1]["nm"]}({self.draweffects - 1})')
         self.rfa()
 
     def togglepropvis(self):
         self.renderer.proplayer = not self.renderer.proplayer
         self.renderer.props_full_render(self.layer)
+        print("Prop layer only: " + ("on" if self.renderer.proplayer else "off"))
         self.rfa()
+
+    def togglewater(self):
+        print("walter")
+        self.drawwater = not self.drawwater
+        print("Water: " + ("visible" if self.drawwater else "invisible"))
+        print(self.drawwater)
 
     def toggleropepropvis(self):
         self.renderer.ropepropvis = not self.renderer.ropepropvis
         self.renderer.props_full_render(self.layer)
+        print("Rope prop sprites: " + ("visible" if self.renderer.ropepropvis else "invisible"))
         self.rfa()
 
     def toggleprops(self):
         self.drawprops = not self.drawprops
+        print("Props: " + ("visible" if self.drawprops else "invisible"))
         self.rfa()
 
     def togglegrid(self):
         self.drawgrid = not self.drawgrid
+        print("Grid: " + ("enabled" if self.drawgrid else "disabled"))
         self.rfa()
 
     def rendercameras(self):
@@ -1034,7 +1058,7 @@ class MenuWithField(Menu):
 
         def clearitem(mx, my, layer):
             val = self.data["TE"]["tlMatrix"][mx][my][layer]
-            if val["data"] == 0:
+            if val["data"] == 0 or type(val["data"][1]) is int:
                 return
             name = val["data"][1]
             itm = self.items[name]
@@ -1075,7 +1099,7 @@ class MenuWithField(Menu):
                     if sp2 != 0:
                         if (self.data["TE", "tlMatrix", posx, posy, layer + 1, "tp"] == "tileBody"
                             and toarr(self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 0], "point") == [mx + 1, my + 1]
-                            and self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 1] == layer) \
+                            and self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 1] - 1 == layer) \
                                 or (posy == my and posx == mx):
                             self.changedata(["TE", "tlMatrix", posx, posy, layer + 1], {"tp": "default", "data": 0})
 

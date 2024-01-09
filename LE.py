@@ -23,6 +23,8 @@ class LE(MenuWithField):
         self.redohistory = []
         self.oldshadow = self.field2.field.copy()
 
+        self.saveshadow = True
+
         self.n = 0
 
         self.imagerect = [375, 375]
@@ -112,7 +114,8 @@ class LE(MenuWithField):
                 self.fieldadd.fill(white)
                 self.mousp = True
                 self.updateshadowhistory()
-                self.save()
+                if self.saveshadow and not self.hardhistory:
+                    self.save()
                 self.renderfield()
             self.movemiddle(bp)
 
@@ -239,36 +242,36 @@ class LE(MenuWithField):
         self.retile()
 
     def rl(self):
-        self.direction += 1
+        self.direction += 1 + (3 * self.findparampressed("speedup"))
         self.rotate()
 
     def rr(self):
-        self.direction -= 1
+        self.direction -= 1 + (3 * self.findparampressed("speedup"))
         self.rotate()
 
     def hp(self, retile=True):
-        self.imagerect[1] += 1
+        self.imagerect[1] += 1 + (3 * self.findparampressed("speedup"))
         if self.imagerect[1] == 0:
             self.imagerect[1] = 1
         if retile:
             self.retile()
 
     def hm(self, retile=True):
-        self.imagerect[1] -= 1
+        self.imagerect[1] -= 1 + (3 * self.findparampressed("speedup"))
         if self.imagerect[1] == 0:
             self.imagerect[1] = -1
         if retile:
             self.retile()
 
     def wp(self, retile=True):
-        self.imagerect[0] += 1
+        self.imagerect[0] += 1 + (3 * self.findparampressed("speedup"))
         if self.imagerect[0] == 0:
             self.imagerect[0] = 1
         if retile:
             self.retile()
 
     def wm(self, retile=True):
-        self.imagerect[0] -= 1
+        self.imagerect[0] -= 1 + (3 * self.findparampressed("speedup"))
         if self.imagerect[0] == 0:
             self.imagerect[0] = -1
         if retile:
@@ -293,3 +296,6 @@ class LE(MenuWithField):
     def darkmod(self):
         if not self.mode:
             self.inverse()
+
+    def disablesave(self):
+        self.saveshadow = not self.saveshadow

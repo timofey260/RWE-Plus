@@ -16,18 +16,19 @@ Generated using hotkeys to md converter
 * **ctrl + O** - /openNewProcess - Opens level in new process
 * **ctrl + N** - /newProcess - Creates new process
 * **F11** - /fc - Fullscreen
-* **ctrl + Z** - /undo - Undo level changes
+* **ctrl + Z** - /undo - Undo level changes. Hold shift to redo.
 * **ctrl + Y** - /redo - Redo level changes
 * **Escape** - /MN - Menu
-* **ctrl + 1** - /-togglegeo - Toggles geometry
-* **ctrl + 2** - /-toggletiles - Toggles tiles
-* **ctrl + 3** - /-swichcameras - Toggles cameras
-* **ctrl + 4** - /-toggleprops - Toggles props
-* **ctrl + 5** - /-toggleeffects - Switches effects
-* **ctrl + 6** - /-togglegrid - Toggles grid
-* **ctrl + 7** - /-togglepropvis - Hides props on other layers
-* **ctrl + 8** - /-toggleropepropvis - Hides rope prop images
-* **ctrl + 9** - /-togglegeocolor - Toggles colored geometry
+* **ctrl + 2** - /-togglegeo - Toggles geometry
+* **ctrl + 3** - /-toggletiles - Toggles tiles
+* **ctrl + 4** - /-swichcameras - Toggles cameras
+* **ctrl + 7** - /-toggleprops - Toggles props
+* **ctrl + 6** - /-toggleeffects - Switches effects
+* **ctrl + G** - /-togglegrid - Toggles grid
+* **ctrl + 9** - /-togglepropvis - Hides props on other layers
+* **ctrl + =** - /-toggleropepropvis - Hides rope prop images
+* **ctrl + 1** - /-togglegeocolor - Toggles colored geometry
+* **ctrl + 8** - /-togglewater - Toggles water
 * **Left** - /left - Left
 * **Right** - /right - Right
 * **Up** - /up - Up
@@ -113,16 +114,16 @@ Generated using hotkeys to md converter
 * **ctrl + [4]** - -tool2_line - Changes RMB to line
 * **ctrl + [5]** - -tool2_pencil - Changes RMB to pencil
 * **ctrl + [6]** - -tool2_brush - Changes RMB to brush
-* **F1** - -tool_circle - Changes LMB to circle tool
-* **F2** - -tool_circle_hollow - Changes LMB to hollow circle tool
+* **F9** - -tool_circle - Changes LMB to circle tool
+* **F10** - -tool_circle_hollow - Changes LMB to hollow circle tool
 * **F3** - -tool_rect - Changes LMB to rectangle tool
 * **F4** - -tool_rect_hollow - Changes LMB to hollow rectangle tool
 * **F5** - -tool_fill - Changes LMB to fill
 * **F6** - -tool_line - Changes LMB to line
 * **F7** - -tool_pencil - Changes LMB to pencil
 * **F8** - -tool_brush - Changes LMB to brush
-* **ctrl + F1** - -tool2_circle - Changes RMB to circle tool
-* **ctrl + F2** - -tool2_circle_hollow - Changes RMB to hollow circle tool
+* **ctrl + F9** - -tool2_circle - Changes RMB to circle tool
+* **ctrl + F10** - -tool2_circle_hollow - Changes RMB to hollow circle tool
 * **ctrl + F3** - -tool2_rect - Changes RMB to rectangle tool
 * **ctrl + F4** - -tool2_rect_hollow - Changes RMB to hollow rectangle tool
 * **ctrl + F5** - -tool2_fill - Changes RMB to fill
@@ -205,7 +206,7 @@ Generated using hotkeys to md converter
 * **R** - -transform_reset - Resets transform of props
 * **E** - -rotate_right - Rotates prop to right
 * **Q** - -rotate_left - Rotates prop to left
-* **Space** - rotate_speedup - Rotates prop to right
+* **Space** - rotate_speedup - Increases rotation speed
 * **Space** - pauseropephysics - Pauses rope physics
 * **ctrl + X** - -addtofavs - Adds prop to favourites
 * **Space** - cursor_propdepth_inverse - While pressed, press RMB to change depth down
@@ -255,7 +256,7 @@ Generated using hotkeys to md converter
 * **F** - -changedown - Change image dowm
 * **Z** - -inverse - Turns white image to black and vise versa
 * **Tab** - -inverse - Turns white image to black and vise versa
-* **Space** - -inverse - Turns white image to black and vise versa
+* **Space** - speedup - Increases speed of scaling and rotating
 * **ctrl + A** - -undoshadow - Undo shadow image
 * **ctrl + D** - -redoshadow - Redo shadow image
 * **Return** - -save - Saves shadow

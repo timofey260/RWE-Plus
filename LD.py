@@ -66,9 +66,6 @@ class LoadMenu(Menu):
         data.append({"name": f"All .txt files p{txtpage}", "color": gray, "items": txts})
         return data
 
-    def send(self, message):
-        self.sendtoowner(message)
-
     def resize(self):
         super().resize()
         if hasattr(self, "selector"):

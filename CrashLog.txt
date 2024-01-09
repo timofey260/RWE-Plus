@@ -1,28 +1,15 @@
 Traceback (most recent call last):
-  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 121, in mainprocessupdate
+  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 120, in mainprocessupdate
     self.mainprocess.update()
-  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 528, in update
-    self.doevents()
-  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 516, in doevents
-    self.keypress()
-  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 489, in keypress
-    self.menu.send(pressed)
-  File "C:\Users\Admin\Desktop\RWE+\menuclass.py", line 795, in send
-    super().send(message)
-  File "C:\Users\Admin\Desktop\RWE+\menuclass.py", line 544, in send
-    getattr(self, message[1:])()
-  File "C:\Users\Admin\Desktop\RWE+\PE.py", line 432, in cat_next_propupdate
-    self.cat_next()
-  File "C:\Users\Admin\Desktop\RWE+\PE.py", line 438, in cat_next
-    self.selector.right()
-  File "C:\Users\Admin\Desktop\RWE+\widgets.py", line 771, in right
-    self.onclick("set")
-  File "C:\Users\Admin\Desktop\RWE+\widgets.py", line 692, in onclick
-    self.callback(self.selecteditem)
-                  ^^^^^^^^^^^^^^^^^
-  File "C:\Users\Admin\Desktop\RWE+\widgets.py", line 830, in selecteditem
-    return self.data[self.currentcategory]["items"][self.currentitem]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-IndexError: list index out of range
+  File "C:\Users\Admin\Desktop\RWE+\LevelProcess.py", line 538, in update
+    self.menu.blit()
+  File "C:\Users\Admin\Desktop\RWE+\TE.py", line 186, in blit
+    self.destroy(x + rect.x, y + rect.y)
+  File "C:\Users\Admin\Desktop\RWE+\menuclass.py", line 1099, in destroy
+    clearitem(posx - 1, posy - 1, tile["data"][1] - 1)
+  File "C:\Users\Admin\Desktop\RWE+\menuclass.py", line 1047, in clearitem
+    backx = mx - int((itm["size"][0] * .5) + .5) + 1
+                      ~~~^^^^^^^^
+KeyError: 'size'
 This is why RWE+ crashed^^^
 Sorry
