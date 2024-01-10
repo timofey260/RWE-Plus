@@ -2,6 +2,7 @@ TE: Press <[-copytile]> to copy tile
 TE: Some of floors don't have their texture on different materials,\nso be careful with default material and material placing itself
 
 LE: You can change shadow color using <[-inverse]> key(s)
+LE: Use <[diasblesave]> to disable autosaving of shadow image
 
 FE: To fill more, press <[str100]>
 
@@ -15,14 +16,20 @@ Every menu can return you to menu with <[/MN]> button
 Move camera around with <[/up]>, <[/left]>, <[/right]> and <[/down]> keys
 Save level before rendering it(<[save]>)
 Switch layers with <[-swichlayers]> key
-Use <[-swichcameras]> to enable camera showing on editor\nMight be helpful btw
-You can show any data in any editor by pressing\n<[/-togglegeo]>, <[/-toggletiles]>, <[/-toggleprops]> and <[/-toggleeffects]> buttons
+Use <[/-swichcameras]> to enable camera showing on editor\nMight be helpful btw
+You can show any data in any editor by pressing\n<[/-togglegeo]>, <[/-toggletiles]>, <[/-toggleprops]>, <[/-togglewater]> and <[/-toggleeffects]> buttons
 Copy geometry, tiles, effects and cameras by pressing <[-copylayer]>, <[-copytool]>, <[-copytool]>, <[-copycamera]>
-Undo your mistakes by pressing <[undo]> or redo changes with <[redo]>\nUse <[-undoshadow]> and <[-redoshadow]> for shadow image
+Undo your mistakes by pressing <[/undo]> or redo changes with <[/redo]>\nUse <[-undoshadow]> and <[-redoshadow]> for shadow image
 Use "..." button to find props(<[-findpropmenu]>),\ntiles(<[-findtile]>) and effects(<[-findeffect]>) with search menu
 You can add any tile, prop or effect to favourites
 Toggle grid by pressing <[/-togglegrid]>
-Camera streshing can be done my mouse wit <[-edit]>
+To hide props on other layers, use <[/-togglepropvis]>
+To hide rope prop images, use <[/-toggleropepropvis]>
+Camera stretching can be done my mouse wit <[-edit]>
+If your level preview bugs out, use <[/rerender_all]> to rerender it
+Create new level processes with <[/newProcess]>
+Switch between processes with <[/swichprocess]>
+Press <[/-togglegeocolor]> to make geo preview colored
 
 w\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne\ne
 THIS IS NOT LE+
