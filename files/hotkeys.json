@@ -260,6 +260,8 @@
 
 		"K_r": "-transform_reset",
 
+		"K_r+": "-rotate_select",
+
 		"K_e": "-rotate_right",
 		"K_q": "-rotate_left",
 		"K_SPACE@": "rotate_speedup",

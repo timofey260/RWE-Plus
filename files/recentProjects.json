@@ -1,8 +1,24 @@
 {
     "files": [
         {
-            "path": "C:\\Users\\Admin\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
+            "path": "F:\\Desktop\\RWE+\\LevelEditorProjects\\fun_maps\\SU_A25.wep",
             "name": "SU_A25.wep"
+        },
+        {
+            "path": "C:\\Users\\smail\\Downloads\\V2_A04.wep",
+            "name": "V2_A04.wep"
+        },
+        {
+            "path": "F:\\Desktop\\rwmod\\UltrakillMod\\noassets\\Hell\\HE_0_1_ROOM_2.wep",
+            "name": "HE_0_1_ROOM_2.wep"
+        },
+        {
+            "path": "F:\\Desktop\\rwmod\\UltrakillMod\\noassets\\Hell\\HE_LVL_0_1.wep",
+            "name": "HE_LVL_0_1.wep"
+        },
+        {
+            "path": "F:\\Desktop\/rwmod\/\/UltrakillMod\/\/noassets\/\/Hell\/0_1_ROOM_2.wep",
+            "name": "0_1_ROOM_2.wep"
         },
         {
             "path": "C:\\Users\\Admin\\Downloads\\ra_a9.wep",

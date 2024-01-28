@@ -127,7 +127,7 @@
 			["BM", [0, 12, 4, 6], [56, 173, 52], "s0", "beam", "Beam(<[-beam]>)\nUse <[-rotate]> to rotate them", ["geometry.png", [2, 2]]],
 			["W", [4, 12, 4, 6], [56, 173, 52], "s0", "waterfall", "Waterfall(<[-waterfall]>)\nCan be placed only on layer 1", ["geometry.png", [2, 4]]],
 			["WG", [8, 12, 4, 6], [56, 173, 52], "s0", "wormgrass", "WormGrass(<[-wormgrass]>)", ["geometry.png", [3, 4]]],
-			["WMH", [12, 12, 4, 6], [56, 173, 52], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
+			["WMH", [12, 12, 4, 6], [50, 50, 180], "s0", "whack_a_mole_hole", "whack_a_mole_hole(<[-whack_a_mole_hole]>)", ["geometry.png", [1, 5]]],
 			["FC", [0, 18, 4, 6], [56, 173, 52], "s0", "flychains", "Fly Chains(<[-flychains]>)", ["geometry.png", [0, 4]]],
 			["HV", [4, 18, 4, 6], [56, 173, 52], "s0", "flyhive", "Fly Hive(<[-flyhive]>)", ["geometry.png", [1, 4]]],
 

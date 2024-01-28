@@ -32,7 +32,7 @@ def resolvepath(input_path):  # Thanks to someone... someone nice
 
 def loadimage(filepath):
     resolved = resolvepath(filepath)
-    if filepath is None:
+    if filepath is None or resolved is None:
         raise FileNotFoundError(f"Image by path {path} does not exist", path)
     return pg.image.load(resolved)
 
@@ -65,7 +65,7 @@ toolmenu = loadimage(path + globalsettings["toolmenu"])
 
 load_error_count = 0
 
-tag = "2.5.7"
+tag = "2.5.8"
 
 ofstop = 15
 ofsleft = 15

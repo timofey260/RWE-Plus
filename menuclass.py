@@ -1096,7 +1096,7 @@ class MenuWithField(Menu):
                         # pg.draw.rect(self.fieldadd, red, [posx * self.size, posy * self.size, self.size, self.size])
                         #self.changedata(["TE", "tlMatrix", posx, posy, layer], {"tp": "default", "data": 0})
                         # self.data["TE"]["tlMatrix"][posx][posy][layer] = {"tp": "default", "data": 0}
-                    if sp2 != 0:
+                    if sp2 != 0 and layer + 1 <= 2:
                         if (self.data["TE", "tlMatrix", posx, posy, layer + 1, "tp"] == "tileBody"
                             and toarr(self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 0], "point") == [mx + 1, my + 1]
                             and self.data["TE", "tlMatrix", posx, posy, layer + 1, "data", 1] - 1 == layer) \

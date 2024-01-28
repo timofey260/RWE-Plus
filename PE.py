@@ -71,6 +71,13 @@ class PE(MenuWithField):
         self.resize()
         self.rfa()
 
+    def rotate_select(self):
+        val = self.askint("Type prop rotation", False)
+        if val is None:
+            return
+        self.transform_reset()
+        self.rotate(val)
+
     def changematshow(self):
         self.selector.catswap()
 
