@@ -1,13 +1,13 @@
-import argparse
-from LevelProcess import *
-
-widgets.keybol = True
-open(application_path + "\\loadLog.txt", "w")
-manager = ProcessManager()
 
 if __name__ == "__main__":
+    import argparse
+    from LevelProcess import *
+
+    widgets.keybol = True
+    open(application_path + "\\loadLog.txt", "w")
+    manager = ProcessManager()
     parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.\n"
-                                     "Tool for making levels for rain world",
+                                                                      "Tool for making levels for rain world",
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.version = tag
     parser.add_argument("filename", type=str, nargs="?", help="Level to load")

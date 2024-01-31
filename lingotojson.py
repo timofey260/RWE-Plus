@@ -1,7 +1,9 @@
 import copy
 import json.decoder
+import os
 import re
 import subprocess
+import multiprocessing
 import json as jsonenc
 from files import *
 import math
@@ -360,8 +362,40 @@ def renderlevel(data):
     file = open(fl, "w")
     turntolingo(data, file)
     #print(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}")
-    subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
-    #os.system(f"{application_path}\\drizzle\\Drizzle.ConsoleApp.exe render {fl}")
+    # subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
+    p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}", ))
+    theimage = loadimage(path + "theimage.png")
+    fontr: pg.font.Font = fs(30)[0]
+    text = fontr.render("wendewing level :3 Esc to cancel", True, pg.Color(255, 255, 255), None)
+    frame = 0
+    size = globalsettings["rendergifsize"]
+    pg.display.get_surface().fill([0, 0, 0])
+    clock = pg.time.Clock()
+    p.start()
+    while p.is_alive():
+        for e in pg.event.get():
+            if e.type == pg.QUIT or (e.type == pg.KEYDOWN and (e.key in (pg.K_ESCAPE, pg.K_RETURN, pg.K_TAB))):
+                print("rendering canceled")
+                p.terminate()
+                # p.kill()
+                return
+
+        # pg.draw.rect(pg.display.get_surface(), [0, 0, 0], [0, 0, 200, 200])
+        # 164 x 127
+        rightimage = theimage.subsurface([(size[0] * frame) % theimage.get_width(), 0, size[0], size[1]])
+        rect = rightimage.get_rect()
+        pg.display.get_surface().blit(rightimage, [pg.display.get_window_size()[0] / 2 - rect.centerx,
+                                                        pg.display.get_window_size()[1] / 2 - rect.centery])
+        pg.display.get_surface().blit(text, [0, 0])
+        pg.display.flip()
+        pg.display.update()
+        clock.tick(30)
+        frame += 1
+
+
+def renderlevelProccess(data):
+    os.system(data)
+    # os.system(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}")
     if not islinux:
         os.system("start " + resolvepath(path2renderedlevels))
 

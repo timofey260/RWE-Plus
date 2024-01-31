@@ -1,16 +1,29 @@
 Traceback (most recent call last):
+  File "F:\Desktop\RWE+\widgets.py", line 158, in blit
+    self.onpress(self)
+TypeError: MN.render() takes 1 positional argument but 2 were given
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
   File "F:\Desktop\RWE+\LevelProcess.py", line 120, in mainprocessupdate
     self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 529, in update
-    self.doevents()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 517, in doevents
-    self.keypress()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 492, in keypress
-    self.recievemessage(pressed[1:])
-  File "F:\Desktop\RWE+\LevelProcess.py", line 306, in recievemessage
-    self.menu.reload()
-  File "F:\Desktop\RWE+\menuclass.py", line 702, in reload
-    self.__init__(self.surface, self.menu, self.renderer)
-TypeError: GE.__init__() takes 2 positional arguments but 4 were given
+  File "F:\Desktop\RWE+\LevelProcess.py", line 538, in update
+    self.menu.blit()
+  File "F:\Desktop\RWE+\MN.py", line 20, in blit
+    super().blit()
+  File "F:\Desktop\RWE+\menuclass.py", line 817, in blit
+    super().blit()
+  File "F:\Desktop\RWE+\menuclass.py", line 414, in blit
+    i.blit(fontsize)
+  File "F:\Desktop\RWE+\widgets.py", line 160, in blit
+    self.onpress()
+  File "F:\Desktop\RWE+\MN.py", line 67, in render
+    renderlevel(self.data)
+  File "F:\Desktop\RWE+\lingotojson.py", line 381, in renderlevel
+    p.close()
+  File "C:\Users\smail\AppData\Local\Programs\Python\Python311\Lib\multiprocessing\process.py", line 181, in close
+    raise ValueError("Cannot close a process while it is still running. "
+ValueError: Cannot close a process while it is still running. You should first call join() or terminate().
 This is why RWE+ crashed^^^
 Sorry

@@ -33,6 +33,8 @@
 	"snap_error": 50,
 	"saveoncrash": true,
 
+	"rendergifsize": [164, 127],
+
 	"historylimit": 50,
 	"autosavedelay": 120,
 	"matsize": [4, 6],

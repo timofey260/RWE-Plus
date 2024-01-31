@@ -92,4 +92,4 @@ class HK(Menu):
         if islinux:
             os.system(f"open files/hotkeys.json")
         else:
-            os.system(f"{path}hotkeys.json")
+            os.system(f"\"{path}hotkeys.json\"")
