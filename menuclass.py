@@ -25,10 +25,11 @@ class Menu:
         self.mousp = False
         self.mousp1 = True
         self.mousp2 = True
+        self.mouselock = [-1, -1]
 
         self.size = image1size
-        self.buttons: list[widgets.Button, ...] = []
-        self.labels: list[widgets.Label, ...] = []
+        self.buttons: list[widgets.Button] = []
+        self.labels: list[widgets.Label] = []
 
         widgets.resetpresses()
 
@@ -57,6 +58,19 @@ class Menu:
 
         self.unlock_keys()
         self.resize()
+
+    @property
+    def mousepos(self):
+        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos.x = self.mouselock[0] if self.mouselock[0] != -1 else mpos.x
+        mpos.y = self.mouselock[1] if self.mouselock[1] != -1 else mpos.y
+        return mpos
+
+    def togglelockx(self):
+        self.mouselock[0] = -1 if self.mouselock[0] != -1 else pg.mouse.get_pos()[0]
+
+    def togglelocky(self):
+        self.mouselock[1] = -1 if self.mouselock[1] != -1 else pg.mouse.get_pos()[1]
 
     def sendtoowner(self, message: str):
         self.owner.recievemessage(message)
@@ -419,7 +433,7 @@ class Menu:
             widgets.enablebuttons = True
         if pg.key.get_mods() & pg.KMOD_LALT > 0:
             pg.draw.rect(self.surface, color, [[0, 0],
-                fs(settings["global"]["fontsize"])[0].size("!!!Hard history enabled, history wouldn't be saved!!!")],
+                                               fs(settings["global"]["fontsize"])[0].size("!!!Hard history enabled, history wouldn't be saved!!!")],
                          border_bottom_right_radius=10)
             widgets.fastmts(self.surface, "!!!Hard history enabled, history wouldn't be saved!!!", 0, 0, red)
 
@@ -806,7 +820,7 @@ class MenuWithField(Menu):
             widgets.fastmts(self.surface,
                             f"Effect({self.draweffects}): {self.data['FE']['effects'][self.draweffects - 1]['nm']}",
                             *self.field.rect.midleft, white)
-        mpos = pg.mouse.get_pos()
+        mpos = self.mousepos
         if self.drawgrid and self.field.rect.collidepoint(mpos):
             pos2 = self.pos2
             pg.draw.line(self.surface, cursor2, [self.field.rect.left, pos2[1]],
@@ -1025,7 +1039,7 @@ class MenuWithField(Menu):
                     pg.draw.line(self.surface, col, line[0], line[1], self.size // 3)
 
     def getquad(self, indx):
-        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(self.mousepos)
         rect = self.getcamerarect(self.data["CM"]["cameras"][indx])
 
         dist = [pg.Vector2(i).distance_to(mpos) for i in
@@ -1180,7 +1194,7 @@ class MenuWithField(Menu):
         self.rfa()
 
     def mouse2field(self):
-        mpos = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size
+        mpos = (self.mousepos - self.field.rect.topleft) / self.size
         # mpos -= pg.Vector2(self.xoffset, self.yoffset)
         return mpos
 
@@ -1223,7 +1237,7 @@ class MenuWithField(Menu):
 
     @property
     def onfield(self):
-        return self.field.rect.collidepoint(pg.mouse.get_pos())
+        return self.field.rect.collidepoint(self.mousepos)
 
     @property
     def custom_info(self):

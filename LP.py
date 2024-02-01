@@ -63,7 +63,7 @@ class LP(MenuWithField):
 
         if self.onfield:
             bp = self.getmouse
-            mpos = pg.Vector2(pg.mouse.get_pos())
+            mpos = pg.Vector2(self.mousepos)
             posoffset = self.posoffset
             if self.tool == "env":
                 self.setcursor(pg.SYSTEM_CURSOR_SIZENS)

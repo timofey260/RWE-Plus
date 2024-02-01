@@ -36,7 +36,9 @@
         "/-togglelayervisible": "Toggles geometry layer",
         "/-toggletileslayervisible": "Toggles tile layer",
         "/swichprocess": "Switches between processes",
-        "/rerender_all": "Rerenders all level visuals"
+        "/rerender_all": "Rerenders all level visuals",
+        "/-togglelocky": "Locks mouse by y axis",
+        "/-togglelockx": "Locks mouse by x axis"
     },
     "LD": {
         "new": "New file",
@@ -74,7 +76,7 @@
         "-entrance": "Entrance, where entites can come and leave",
         "-mirror": "Activates mirror. Horizontal or vertical. position can be changed",
         "-clearall": "Clears all data from cell",
-        "-flychains": "Dissables Fly Chains to cell",
+        "-flychains": "Disables Fly Chains to cell",
         "-flyhive": "Adds Fly Hive to cell",
         "-scavengerhole": "Spawns scavengers. Needs to be connected to shortcut",
         "-garbagewormden": "Spawns garbage worm. Needs to be connected to shortcut",
@@ -179,6 +181,7 @@
         "copy_mode": "Copies props",
         "propvariation_change": "While pressed, press mouse buttons to change variation",
         "-transform_reset": "Resets transform of props",
+        "-rotate_select": "Lets you pick the rotation of prop in degrees",
         "-rotate_right": "Rotates prop to right",
         "-rotate_left": "Rotates prop to left",
         "rotate_speedup": "Increases rotation speed",
@@ -230,6 +233,7 @@
         "speedup": "Increases speed of scaling and rotating",
         "-undoshadow": "Undo shadow image",
         "-redoshadow": "Redo shadow image",
+        "-disablesave": "Disables shadow save",
         "brush_size_scroll": "Hold to use scroll to change brush size"
     },
     "LP": {

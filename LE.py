@@ -75,7 +75,7 @@ class LE(MenuWithField):
             self.field.field.blit(self.field3.field, fieldpos2)
         self.field.blit(False)
         super().blit(False)
-        mouspos = pg.mouse.get_pos()
+        mouspos = self.mousepos
         if self.onfield:
             #  pos2 = [pos[0] * self.size + self.field.rect.x, pos[1] * self.size + self.field.rect.y]
             mouspos_onfield = [mouspos[0] - self.field.rect.x - fieldpos[0], mouspos[1] - self.field.rect.y - fieldpos[1]]

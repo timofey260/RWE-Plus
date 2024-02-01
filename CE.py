@@ -37,7 +37,7 @@ class CE(MenuWithField):
             self.if_set(s[1], 1)
             self.if_set(s[2], 2)
             self.if_set(s[3], 3)
-            mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size
+            mpos = pg.Vector2(self.mousepos) / self.size * image1size
             if self.held and self.heldindex < len(self.data["CM"]["cameras"]) and self.mode == "move":
                 val = list(self.camoffset + mpos)
                 val[0] = round(val[0], 4)
@@ -77,7 +77,7 @@ class CE(MenuWithField):
                     quadindx = self.getquad(self.heldindex)
                     rect = self.getcamerarect(self.data["CM"]["cameras"][self.heldindex])
                     qlist = [rect.topleft, rect.topright, rect.bottomright, rect.bottomleft]
-                    mouse = pg.Vector2(pg.mouse.get_pos()) - qlist[quadindx]
+                    mouse = pg.Vector2(self.mousepos) - qlist[quadindx]
                     r, o = mouse.rotate(90).as_polar()
                     self.changedata(["CM", "quads", self.heldindex, quadindx], [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)])
                     # self.data["CM", "quads", self.heldindex, quadindx] = [round(o, 4), round(min(r / 100 / self.size * image1size, 1), 4)]
@@ -154,7 +154,7 @@ class CE(MenuWithField):
             self.updatehistory()
 
     def pickupcamera(self):
-        mpos = pg.Vector2(pg.mouse.get_pos()) / self.size * image1size
+        mpos = pg.Vector2(self.mousepos) / self.size * image1size
         closeindex = self.closestcameraindex()
 
         self.heldindex = closeindex
@@ -181,7 +181,7 @@ class CE(MenuWithField):
         self.updatehistory()
 
     def closestcameraindex(self):
-        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(self.mousepos)
 
         closeindex = 0
         dist = 10000

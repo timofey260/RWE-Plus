@@ -39,6 +39,8 @@ Generated using hotkeys to md converter
 * **F2** - /-toggletileslayervisible - Toggles tile layer
 * **ctrl + Tab** - /swichprocess - Switches between processes
 * **ctrl + Return** - /rerender_all - Rerenders all level visuals
+* **/** - /-togglelocky - Locks mouse by y axis
+* **.** - /-togglelockx - Locks mouse by x axis
 ### LD
 * **N** - new - New file
 * **ctrl + N** - new - New file
@@ -75,7 +77,7 @@ Generated using hotkeys to md converter
 * **E** - -entrance - Entrance, where entites can come and leave
 * **M** - -mirror - Activates mirror. Horizontal or vertical. position can be changed
 * **Tab** - -clearall - Clears all data from cell
-* **Y** - -flychains - Dissables Fly Chains to cell
+* **Y** - -flychains - Disables Fly Chains to cell
 * **H** - -flyhive - Adds Fly Hive to cell
 * **N** - -scavengerhole - Spawns scavengers. Needs to be connected to shortcut
 * **J** - -garbagewormden - Spawns garbage worm. Needs to be connected to shortcut
@@ -204,6 +206,7 @@ Generated using hotkeys to md converter
 * **B** - copy_mode - Copies props
 * **F** - propvariation_change - While pressed, press mouse buttons to change variation
 * **R** - -transform_reset - Resets transform of props
+* **ctrl + R** - -rotate_select - Lets you pick the rotation of prop in degrees
 * **E** - -rotate_right - Rotates prop to right
 * **Q** - -rotate_left - Rotates prop to left
 * **Space** - rotate_speedup - Increases rotation speed
@@ -259,6 +262,7 @@ Generated using hotkeys to md converter
 * **Space** - speedup - Increases speed of scaling and rotating
 * **ctrl + A** - -undoshadow - Undo shadow image
 * **ctrl + D** - -redoshadow - Redo shadow image
+* **ctrl + W** - -disablesave - Disables shadow save
 * **Return** - -save - Saves shadow
 * **Left Shift** - brush_size_scroll - Hold to use scroll to change brush size
 ### LP

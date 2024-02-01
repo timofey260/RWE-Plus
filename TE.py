@@ -89,9 +89,9 @@ class TE(MenuWithField):
         #pg.draw.circle(self.surface, cursor, cir, self.buttonslist[self.toolindex].rect.h / 2)
         self.selector.blit()
         super().blit()
-        mpos = pg.mouse.get_pos()
+        mpos = self.mousepos
         if self.onfield and self.tileimage is not None:
-            # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
+            # cords = [math.floor(self.mousepos[0] / self.size) * self.size, math.floor(self.mousepos[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
             pos2 = self.pos2
             posoffset = self.posoffset
@@ -328,7 +328,7 @@ class TE(MenuWithField):
                 # px = blockx - int((w * .5) + .5) - 1
                 # py = blocky - int((h * .5) + .5) - 1
                 pa = pg.Vector2(0, 0)
-                if self.field.rect.collidepoint(pg.mouse.get_pos()):
+                if self.field.rect.collidepoint(self.mousepos):
                     pa = self.pos
                 self.place(blockx - self.xoffset + int(pa.x), blocky - self.yoffset + int(pa.y))
             else:
@@ -394,7 +394,7 @@ class TE(MenuWithField):
         else:
             i = self.items[cat, name]
         if hasattr(self, "selector"):
-            self.selector.setbyname(name, fromfavs=usefavs)
+            self.selector.setbyname(name, fromfavs=usefavs, category=cat)
         if i is not None and i["nm"] == name:
             self.tileimage2 = i.copy()
             if self.tileimage2["tp"] != "pattern" and render:

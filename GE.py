@@ -97,7 +97,7 @@ class GE(MenuWithField):
     def blit(self):
         cellsize2 = [self.size, self.size]
         super().blit()
-        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(self.mousepos)
         if self.selectedtool != self.lastselectedtool:
             self.lastselectedtool = self.selectedtool
             self.s0()
@@ -107,7 +107,7 @@ class GE(MenuWithField):
                        globalsettings["tools"][self.selectedtool][1] * globalsettings["tilesize"][1]]
             self.surface.blit(self.tools, mpos, [curtool, globalsettings["tilesize"]])
 
-            # cords = [math.floor(pg.mouse.get_pos()[0] / self.size) * self.size, math.floor(pg.mouse.get_pos()[1] / self.size) * self.size]
+            # cords = [math.floor(self.mousepos[0] / self.size) * self.size, math.floor(self.mousepos[1] / self.size) * self.size]
             # self.surface.blit(self.tools, pos, [curtool, graphics["tilesize"]])
             pos = self.pos
             pos2 = self.pos2
@@ -212,7 +212,7 @@ class GE(MenuWithField):
     def duringpress(self, fillshape, mouse, toolsized):
         pos2 = self.pos2
         rect = self.vec2rect(self.rectdata[2], pos2)
-        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(self.mousepos)
         posoffset = self.posoffset
         if fillshape in ["rect", "rect-hollow", "circle", "circle-hollow", "line"]:
             tx = f"{abs(int(rect.w / self.size))}, {abs(int(rect.h / self.size))}"
@@ -375,7 +375,7 @@ class GE(MenuWithField):
             for xi, x in enumerate(geodata):
                 for yi, y in enumerate(x):
                     pa = pg.Vector2(0, 0)
-                    if self.field.rect.collidepoint(pg.mouse.get_pos()):
+                    if self.field.rect.collidepoint(self.mousepos):
                         pa = self.pos
                     xpos = -self.xoffset + xi + int(pa.x)
                     ypos = -self.yoffset + yi + int(pa.y)

@@ -132,7 +132,7 @@ class FE(MenuWithField):
 
     def selectorset(self, buttondata):
         self.addeffect(buttondata["nm"])
-        self.selector.setbyname(buttondata["nm"])
+        self.selector.setbyname(buttondata["category"], buttondata["nm"])
 
     def blit(self):
         # super().blit()
@@ -142,7 +142,7 @@ class FE(MenuWithField):
 
         self.activeeffects.cursorcolor = blue if self.innew else red
         self.selector.cursorcolor = red if self.innew else blue
-        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(self.mousepos)
         bp = self.getmouse
         posoffset = self.posoffset
         super().blit()
@@ -233,7 +233,7 @@ class FE(MenuWithField):
             for xi, x in enumerate(geodata):
                 for yi, y in enumerate(x):
                     pa = pg.Vector2(0, 0)
-                    if self.field.rect.collidepoint(pg.mouse.get_pos()):
+                    if self.field.rect.collidepoint(self.mousepos):
                         pa = self.pos
                     xpos = -self.xoffset + xi + int(pa.x)
                     ypos = -self.yoffset + yi + int(pa.y)

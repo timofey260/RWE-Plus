@@ -1,7 +1,7 @@
 Traceback (most recent call last):
   File "F:\Desktop\RWE+\widgets.py", line 158, in blit
     self.onpress(self)
-TypeError: MN.render() takes 1 positional argument but 2 were given
+TypeError: Selector.addtofavs() takes 1 positional argument but 2 were given
 
 During handling of the above exception, another exception occurred:
 
@@ -10,20 +10,15 @@ Traceback (most recent call last):
     self.mainprocess.update()
   File "F:\Desktop\RWE+\LevelProcess.py", line 538, in update
     self.menu.blit()
-  File "F:\Desktop\RWE+\MN.py", line 20, in blit
-    super().blit()
-  File "F:\Desktop\RWE+\menuclass.py", line 817, in blit
-    super().blit()
-  File "F:\Desktop\RWE+\menuclass.py", line 414, in blit
-    i.blit(fontsize)
+  File "F:\Desktop\RWE+\TE.py", line 90, in blit
+    self.selector.blit()
+  File "F:\Desktop\RWE+\widgets.py", line 706, in blit
+    self.favsbutton.blit()
   File "F:\Desktop\RWE+\widgets.py", line 160, in blit
     self.onpress()
-  File "F:\Desktop\RWE+\MN.py", line 67, in render
-    renderlevel(self.data)
-  File "F:\Desktop\RWE+\lingotojson.py", line 381, in renderlevel
-    p.close()
-  File "C:\Users\smail\AppData\Local\Programs\Python\Python311\Lib\multiprocessing\process.py", line 181, in close
-    raise ValueError("Cannot close a process while it is still running. "
-ValueError: Cannot close a process while it is still running. You should first call join() or terminate().
+  File "F:\Desktop\RWE+\widgets.py", line 522, in addtofavs
+    cats[catname] += "\n\nRemove tile from here" * self._favourites[catname, self.selecteditem["nm"]] is not None
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: can't multiply sequence by non-int of type 'dict'
 This is why RWE+ crashed^^^
 Sorry

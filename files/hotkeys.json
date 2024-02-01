@@ -42,7 +42,9 @@
     	"K_F1": "/-togglelayervisible",
     	"K_F2": "/-toggletileslayervisible",
     	"K_TAB+": "/swichprocess",
-    	"K_RETURN+": "/rerender_all"
+    	"K_RETURN+": "/rerender_all",
+    	"K_SLASH": "/-togglelocky",
+    	"K_PERIOD": "/-togglelockx"
   	},
   	"LD": {
   		"unlock_keys": [],

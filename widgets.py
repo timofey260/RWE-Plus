@@ -515,16 +515,11 @@ class Selector():
             self.loadfavorites()
         if self.show != "items":
             return
-        tile = self._favourites[self.selecteditem["nm"]]
-        if tile is not None:
-            self.setbyname(self.selecteditem["nm"], dorecreate=False)
-            self.removefromfavs()
-            print("Item removed!")
-            return
         cats = {}
         for indx, catname in enumerate(self._favourites.categories):
             print(indx, catname, self._favourites[indx])
             cats[catname] = "\n".join([i["nm"] for i in self._favourites[indx]["items"]])
+            cats[catname] += "\n\nRemove tile from here" * int(self._favourites[catname, self.selecteditem["nm"]] is not None)
         cats["New category"] = "creates a new category"
         foundcat = self.menu.find(cats, "Select a category")
         if foundcat is None:
@@ -538,6 +533,13 @@ class Selector():
             foundcat = cat
         item = self.selecteditem.copy()
         item["category"] = foundcat
+
+        tile = self._favourites[foundcat, self.selecteditem["nm"]]
+        if tile is not None:
+            self.setbyname(self.selecteditem["nm"], dorecreate=False)
+            self.removefromfavs()
+            print("Item removed!")
+            return
         self._favourites[self._favourites.categories.index(foundcat)]["items"].append(item)
         self.savefavourites()
 
@@ -573,15 +575,10 @@ class Selector():
         if self.itemsnum == 0:
             self.resize()
             return
-        if self._favourites[self.selecteditem["nm"]] is not None and self.favouritefile is not None:
-            self.favsbutton = Button(self.surface, rect2, settings["global"]["color"], "F",
-                                     ["icons.png", [4, 0]],
-                                     tooltip=self.menu.returnkeytext("Remove selected item from favourites(<[-addtofavs]>)"),
-                                     onpress=self.addtofavs)
-        elif self.favouritefile is not None:
+        if self.favouritefile is not None:
             self.favsbutton = Button(self.surface, rect2, settings["global"]["color"], "F",
                                      ["icons.png", [5, 0]],
-                                     tooltip=self.menu.returnkeytext("Add selected item to favourites(<[-addtofavs]>)"),
+                                     tooltip=self.menu.returnkeytext("Add or remove selected item to favourites(<[-addtofavs]>)"),
                                      onpress=self.addtofavs)
         for count, item in enumerate(catdata["items"]):
             rect = self.itemrect.copy()
@@ -798,20 +795,36 @@ class Selector():
         self.show = "items"
         self.recreate()
 
-    def setbyname(self, name, dorecreate=True, fromfavs=True):
-        if self.show == "favs" and fromfavs:
-            tile = self._favourites[name]
-            self.currentcategory = self._favourites.categories.index(tile["category"])
-            self.currentitem = self._favourites[self.currentcategory]["items"].index(tile)
-        elif self.show == "favs":
-            foundtile = self.data[name]
-            self.currentcategory = self.data.categories.index(foundtile["category"])
-            self.currentitem = self.data.getnameindex(self.currentcategory, foundtile["nm"])
+    def setbyname(self, name, dorecreate=True, fromfavs=True, category=None):
+        #todo make it look better
+        if category is not None:
+            if self.show == "favs" and fromfavs:
+                tile = self._favourites[category, name]
+                self.currentcategory = self._favourites.categories.index(category)
+                self.currentitem = self._favourites[self.currentcategory]["items"].index(tile)
+            elif self.show == "favs":
+                foundtile = self.data[category, name]
+                self.currentcategory = self.data.categories.index(category)
+                self.currentitem = self.data.getnameindex(self.currentcategory, foundtile["nm"])
+            else:
+                tile = self.data[category, name]
+                self.currentcategory = self.data.categories.index(category)
+                self.currentitem = self.data[self.currentcategory]["items"].index(tile)
+                self.show = "items"
         else:
-            tile = self.data[name]
-            self.currentcategory = self.data.categories.index(tile["category"])
-            self.currentitem = self.data[self.currentcategory]["items"].index(tile)
-            self.show = "items"
+            if self.show == "favs" and fromfavs:
+                tile = self._favourites[name]
+                self.currentcategory = self._favourites.categories.index(tile["category"])
+                self.currentitem = self._favourites[self.currentcategory]["items"].index(tile)
+            elif self.show == "favs":
+                foundtile = self.data[name]
+                self.currentcategory = self.data.categories.index(foundtile["category"])
+                self.currentitem = self.data.getnameindex(self.currentcategory, foundtile["nm"])
+            else:
+                tile = self.data[name]
+                self.currentcategory = self.data.categories.index(tile["category"])
+                self.currentitem = self.data[self.currentcategory]["items"].index(tile)
+                self.show = "items"
         if dorecreate:
             self.recreate()
 

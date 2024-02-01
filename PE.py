@@ -167,7 +167,7 @@ class PE(MenuWithField):
         self.labels[2].set_text(self.labels[2].originaltext + str(self.prop_settings))
         self.labels[0].set_text(self.labels[0].originaltext + "\n".join(self.notes))
         self.selector.blit()
-        mpos = pg.Vector2(pg.mouse.get_pos())
+        mpos = pg.Vector2(self.mousepos)
         for button in self.settingslist:
             button.blitshadow()
         for button in self.settingslist:
@@ -310,13 +310,13 @@ class PE(MenuWithField):
                 if not any(self.helds):
                     if self.snap:
                         self.surface.blit(self.selectedimage, pos2)
-                        p = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size * 2
+                        p = (pg.Vector2(self.mousepos) - self.field.rect.topleft) / self.size * 2
                         p = pg.Vector2(math.floor(p.x), math.floor(p.y)) * image1size / 2
                         p -= self.offset * image1size
                         widgets.fastmts(self.surface, f"X: {p.x}, Y: {p.y}", mpos.x, mpos.y + 30, white)
                     else:
                         self.surface.blit(self.selectedimage, mpos - pg.Vector2(self.selectedimage.get_size()) / 2)
-                        p = (pg.Vector2(pg.mouse.get_pos()) - self.field.rect.topleft) / self.size * image1size
+                        p = (pg.Vector2(self.mousepos) - self.field.rect.topleft) / self.size * image1size
                         p -= self.offset * image1size
                         p = pg.Vector2(round(p.x, 2), round(p.y, 2))
                         widgets.fastmts(self.surface, f"X: {p.x}, Y: {p.y}", mpos.x, mpos.y + 30, white)
@@ -420,9 +420,9 @@ class PE(MenuWithField):
     def if_set(self, pressed, quadindx):
         if pressed and not self.helds[quadindx]:
             self.helds[quadindx] = True
-            self.helppoins = pg.Vector2(pg.mouse.get_pos())
+            self.helppoins = pg.Vector2(self.mousepos)
         elif pressed and self.helds[quadindx]:
-            self.quads[quadindx] = list(pg.Vector2(pg.mouse.get_pos()) - self.helppoins)
+            self.quads[quadindx] = list(pg.Vector2(self.mousepos) - self.helppoins)
             self.quads[quadindx] = [round(self.quads[quadindx][0], 4), round(self.quads[quadindx][1], 4)]
             self.updateproptransform()
         elif not pressed and self.helds[quadindx]:
@@ -590,7 +590,7 @@ class PE(MenuWithField):
             return 
         quads = self.quads.copy()
         quads2 = quads.copy()
-        mousepos = pg.Vector2(pg.mouse.get_pos())
+        mousepos = pg.Vector2(self.mousepos)
         posonfield = ((mousepos - pg.Vector2(self.field.rect.topleft)) / self.size - pg.Vector2(self.xoffset, self.yoffset)) * spritesize
         if self.snap:
             realpos = mousepos - self.field.rect.topleft
