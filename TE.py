@@ -423,7 +423,7 @@ class TE(MenuWithField):
         #if x + w > self.levelwidth or y + h > self.levelheight or x < 0 or y < 0:
         #    return False
         if "material" in self.tileimage["tags"]:
-            return (self.data["GE"][x][y][self.layer][0] not in [0]) \
+            return (self.data["GE"][x][y][self.layer][0] not in [0] or force_geo) \
                 and (self.data["TE"]["tlMatrix"][x][y][self.layer]["tp"] == "default"
                 or force_place)
         for x2 in range(w):

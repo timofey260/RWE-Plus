@@ -44,7 +44,8 @@
 
 			"tooltip": [255, 255, 255],
 			"buttontext": [0, 0, 0],
-			"buttontextlight": [255, 255, 255]
+			"buttontextlight": [255, 255, 255],
+			"mosttextcolor": [0, 0, 0]
 		}
 	},
 	"LD":

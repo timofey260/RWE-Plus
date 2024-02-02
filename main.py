@@ -1,3 +1,4 @@
+import multiprocessing
 
 if __name__ == "__main__":
     import argparse
@@ -5,6 +6,7 @@ if __name__ == "__main__":
 
     widgets.keybol = True
     open(application_path + "\\loadLog.txt", "w")
+    multiprocessing.freeze_support()
     manager = ProcessManager()
     parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.\n"
                                                                       "Tool for making levels for rain world",

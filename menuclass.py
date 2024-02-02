@@ -141,7 +141,7 @@ class Menu:
         buttons = []
         slider = 0
         labeltext = "Use scroll to navigate\nEnter to continue\nType to search\nEscape to exit\n"
-        label = widgets.Label(self.surface, labeltext, [50, 0], black, 30)
+        label = widgets.Label(self.surface, labeltext, [50, 0], mosttextcolor, 30)
         label.resize()
         append = True
 
@@ -330,7 +330,7 @@ class Menu:
         slider = 0
         label = widgets.Label(self.surface,
                               "Use scroll to navigate\nClick what you need\nType to search\nEscape to exit",
-                              [50, 0], black, 30)
+                              [50, 0], mosttextcolor, 30)
         label.resize()
         widgets.bol = True
         widgets.keybol = True

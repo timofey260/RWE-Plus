@@ -19,15 +19,17 @@ try:
     tooltipcolor = settings["global"]["colors"]["tooltip"]
     buttontextcolor = settings["global"]["colors"]["buttontext"]
     buttontextcolorlight = settings["global"]["colors"]["buttontextlight"]
+    mosttextcolor = settings["global"]["colors"]["mosttextcolor"]
 except KeyError:
     tooltipcolor = white
     buttontextcolor = black
     buttontextcolorlight = white
+    mosttextcolor = black
 
 
 def fastmts(window, text: str, x: int | float, y: int | float, col=None, fontsize=settings["global"]["fontsize"], centered=False):
     if col is None:
-        col = black
+        col = mosttextcolor
     fontr: pg.font.Font = fs(fontsize)[0]
     surf = fontr.render(text, True, col, None)
     textblit(window, surf, x, y, centered)

@@ -34,6 +34,7 @@
 	"saveoncrash": true,
 
 	"rendergifsize": [164, 127],
+	"viewportrenderalllayers": true,
 
 	"historylimit": 50,
 	"autosavedelay": 120,

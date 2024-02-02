@@ -34,6 +34,7 @@ slidebar = dc
 rope = dc
 
 grid = dc
+mosttextcolor = dc
 
 for key, value in colors.items():
     exec(f"{key} = pg.Color({value})")
@@ -350,7 +351,7 @@ class Renderer:
         pixel = pg.Surface(cellsize2)
         pixel.fill(color2)
         for i in range(2, -1, -1):
-            if not self.coloredgeo and i < layer:
+            if not self.coloredgeo and not globalsettings["viewportrenderalllayers"] and i < layer:
                 continue
             if not self.geolayers[i]:
                 continue
