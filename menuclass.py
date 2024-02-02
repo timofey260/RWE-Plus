@@ -62,8 +62,12 @@ class Menu:
     @property
     def mousepos(self):
         mpos = pg.Vector2(pg.mouse.get_pos())
-        mpos.x = self.mouselock[0] if self.mouselock[0] != -1 else mpos.x
-        mpos.y = self.mouselock[1] if self.mouselock[1] != -1 else mpos.y
+        if not self.findparampressed("togglelockx"):
+            self.mouselock[0] = int(mpos.x)
+        if not self.findparampressed("togglelocky"):
+            self.mouselock[1] = int(mpos.x)
+        mpos.x = self.mouselock[0] if self.findparampressed("togglelockx") else mpos.x
+        mpos.y = self.mouselock[1] if self.findparampressed("togglelocky") else mpos.y
         return mpos
 
     def togglelockx(self):

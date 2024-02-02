@@ -5,6 +5,7 @@
 		"RMB": "RMB"
 	},
   	"global": {
+  		"unlock_keys": ["K_SLASH", "K_PERIOD"],
   	  	"K_1": "/MN",
   	  	"K_2": "/GE",
   	  	"K_3": "/TE",
@@ -43,8 +44,8 @@
     	"K_F2": "/-toggletileslayervisible",
     	"K_TAB+": "/swichprocess",
     	"K_RETURN+": "/rerender_all",
-    	"K_SLASH": "/-togglelocky",
-    	"K_PERIOD": "/-togglelockx"
+    	"K_SLASH": "/togglelocky",
+    	"K_PERIOD": "/togglelockx"
   	},
   	"LD": {
   		"unlock_keys": [],

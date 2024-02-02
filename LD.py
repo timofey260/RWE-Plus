@@ -22,7 +22,7 @@ class LoadMenu(Menu):
             desc = f'Path: {i["path"]}\nLast modified: {filetime(i["path"])}'
             items.append({
                 "nm": i["name"],
-                "color": color,
+                "color": color2,
                 "description": desc,
                 "path": i["path"]
             })
