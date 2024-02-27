@@ -1,24 +1,10 @@
 Traceback (most recent call last):
-  File "F:\Desktop\RWE+\widgets.py", line 158, in blit
-    self.onpress(self)
-TypeError: Selector.addtofavs() takes 1 positional argument but 2 were given
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "F:\Desktop\RWE+\LevelProcess.py", line 120, in mainprocessupdate
+  File "LevelProcess.py", line 120, in mainprocessupdate
     self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 538, in update
-    self.menu.blit()
-  File "F:\Desktop\RWE+\TE.py", line 90, in blit
-    self.selector.blit()
-  File "F:\Desktop\RWE+\widgets.py", line 706, in blit
-    self.favsbutton.blit()
-  File "F:\Desktop\RWE+\widgets.py", line 160, in blit
-    self.onpress()
-  File "F:\Desktop\RWE+\widgets.py", line 522, in addtofavs
-    cats[catname] += "\n\nRemove tile from here" * self._favourites[catname, self.selecteditem["nm"]] is not None
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TypeError: can't multiply sequence by non-int of type 'dict'
+  File "LevelProcess.py", line 530, in update
+    self.doevents()
+  File "LevelProcess.py", line 518, in doevents
+    raise ValueError()
+ValueError
 This is why RWE+ crashed^^^
 Sorry

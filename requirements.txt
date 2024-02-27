@@ -1,10 +1,6 @@
-setuptools~=65.5.0
-requests~=2.28.2
-pygame~=2.2.0
-opencv-python~=4.7.0.72
-numpy~=1.24.2
-pyperclip~=1.8.2
-pip~=23.3.1
-py~=1.11.0
-future~=0.18.3
-ujson~=5.8.0
+pygame>=2.5.2
+ujson>=5.9.0
+opencv-python>=4.9.0.80
+numpy>=1.26.4
+pyperclip>=1.8.2
+requests>=2.31.0

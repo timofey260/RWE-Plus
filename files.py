@@ -33,7 +33,7 @@ def resolvepath(input_path):  # Thanks to someone... someone nice
 def loadimage(filepath):
     resolved = resolvepath(filepath)
     if filepath is None or resolved is None:
-        raise FileNotFoundError(f"Image by path {path} does not exist", path)
+        raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
     return pg.image.load(resolved)
 
 

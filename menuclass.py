@@ -121,7 +121,7 @@ class Menu:
         elif self.data["path"] != "" and not saveas:
             open(os.path.splitext(self.data["path"])[0] + ".wep", "w").write(json.dumps(self.data.data.data))
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
-            print(os.path.splitext(self.data["path"])[0] + ".wep")
+            # print(os.path.splitext(self.data["path"])[0] + ".wep")
         else:
             savedest = self.asksaveasfilename()
             if savedest != "" and savedest is not None:
