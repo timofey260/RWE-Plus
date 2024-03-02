@@ -2,9 +2,11 @@ Traceback (most recent call last):
   File "LevelProcess.py", line 120, in mainprocessupdate
     self.mainprocess.update()
   File "LevelProcess.py", line 530, in update
-    self.doevents()
+    if globalsettings["godmode"]:
+    ^^^^^^^^^^^^^^^
   File "LevelProcess.py", line 518, in doevents
-    raise ValueError()
+    case pg.KEYUP:
+                ^^^
 ValueError
 This is why RWE+ crashed^^^
 Sorry

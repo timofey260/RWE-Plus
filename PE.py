@@ -663,16 +663,16 @@ class PE(MenuWithField):
         self.updateproptransform()
 
     def stretchy_up(self):
-        self.stretch(1, globalsettings["PEstretch_speed"])
+        self.stretch(1, globalsettings["PEstretch_speed"] * (6 if self.findparampressed("scale_speedup") else 1))
 
     def stretchy_down(self):
-        self.stretch(1, -globalsettings["PEstretch_speed"])
+        self.stretch(1, -globalsettings["PEstretch_speed"] * (6 if self.findparampressed("scale_speedup") else 1))
 
     def stretchx_up(self):
-        self.stretch(0, globalsettings["PEstretch_speed"])
+        self.stretch(0, globalsettings["PEstretch_speed"] * (6 if self.findparampressed("scale_speedup") else 1))
 
     def stretchx_down(self):
-        self.stretch(0, -globalsettings["PEstretch_speed"])
+        self.stretch(0, -globalsettings["PEstretch_speed"] * (6 if self.findparampressed("scale_speedup") else 1))
 
     @property
     def custom_info(self):
