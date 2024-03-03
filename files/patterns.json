@@ -4,6 +4,7 @@
 			"nm": "SU Pattern box",
 			"tp": "pattern",
 			"description": "Pattern",
+			"ptype": "patternbox",
 			"category": "special",
 			"patcat": "SU patterns",
 			"color": [255, 0, 0],
@@ -14,6 +15,7 @@
 			"nm": "SU Grate box",
 			"tp": "pattern",
 			"description": "Pattern",
+			"ptype": "patternbox",
 			"category": "special",
 			"patcat": "SU grates",
 			"color": [255, 0, 255],
@@ -24,10 +26,93 @@
 			"nm": "Alt Grate box",
 			"tp": "pattern",
 			"description": "Pattern",
+			"ptype": "patternbox",
 			"category": "special",
 			"patcat": "Alt grates",
 			"color": [75, 75, 240],
-			"prefix": "AltGrate"
+			"prefix": "AltGrate",
+			"tags": ["pattern"]
+		},
+
+		{
+			"nm": "Small Pipe autoplace",
+			"tp": "pattern",
+			"description": "Places small pipes in special way",
+			"ptype": "placer4",
+			"size": 1,
+			"category": "special",
+			"color": [255, 226, 5],
+			"conf": {
+				"SW": "Pipe WS",
+				"NW": "Pipe WN",
+				"ES": "Pipe ES",
+				"NE": "Pipe EN",
+				"NSW": "Pipe TJunct E",
+				"ESW": "Pipe TJunct N",
+				"NES": "Pipe TJunct W",
+				"NEW": "Pipe TJunct S",
+				"N": "Pipe Inwards N",
+				"E": "Pipe Inwards W",
+				"S": "Pipe Inwards S",
+				"W": "Pipe Inwards E",
+				"NS": "Vertical Pipe",
+				"EW": "Horizontal Pipe",
+				"NESW": "Pipe XJunct",
+				"": "Pipe XJunct"
+			},
+			"addtiles": [
+				"Vertical Plain Pipe",
+				"Horizontal Plain Pipe"
+			],
+			"tags": ["pattern"]
+		},
+		{
+			"nm": "Pipe autoplace",
+			"tp": "pattern",
+			"description": "Places pipes in special way",
+			"ptype": "placer4",
+			"size": 2,
+			"category": "special",
+			"color": [255, 226, 5],
+			"conf": {
+				"SW": "Thick Pipe WS",
+				"NW": "Thick Pipe WN",
+				"ES": "Thick Pipe ES",
+				"NE": "Thick Pipe EN",
+				"NSW": "Thick pipe horizontal",
+				"ESW": "Thick pipe vertical",
+				"NES": "Thick pipe horizontal",
+				"NEW": "Thick pipe vertical",
+				"N": "Thick pipe vertical",
+				"E": "Thick pipe horizontal",
+				"S": "Thick pipe vertical",
+				"W": "Thick pipe horizontal",
+				"NS": "Thick pipe vertical",
+				"EW": "Thick pipe horizontal",
+				"NESW": "Thick pipe horizontal",
+				"": "Thick Pipe End Piece"
+			},
+			"addtiles": [
+				"Thick Pipe End Piece W",
+				"Thick Pipe End Piece E",
+				"Thick Pipe End Piece Upside Down",
+				"Thick pipe vertical filler",
+				"Thick pipe horizontal filler"
+			],
+			"tags": ["pattern"]
+		},
+		{
+			"nm": "Communication arrays random box",
+			"tp": "pattern",
+			"description": "Places Egg socket A and B in random order",
+			"ptype": "randchance",
+			"category": "special",
+			"color": [232, 128, 16],
+			"randconf": {
+				"Egg Socket A": 0.67,
+				"Egg Socket B": 0.33
+			},
+			"tags": ["pattern"]
 		}
 	],
 	"blocks": {

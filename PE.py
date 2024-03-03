@@ -336,7 +336,7 @@ class PE(MenuWithField):
                         lastpos = posofwire
             depthpos = [mpos[0] + 20, mpos[1]]
             if self.findparampressed("propvariation_change"):
-                varpos = [mpos[0] + 20, mpos[1] + 20]
+                varpos = [mpos[0] + 20, mpos[1] + 60]
                 if self.prop_settings.get('variation') == 0:
                     widgets.fastmts(self.surface, "Variation: Random", *varpos, white)
                 else:

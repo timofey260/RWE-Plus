@@ -19,8 +19,8 @@ and a lot more!
 
 ## Screenshots
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1175694426199306290/image.png)
+![image](https://github.com/timofey260/RWE-Plus/assets/69044246/8a401b4e-49b7-44a9-bbb2-3d0053414c6b)
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1175694784678084678/image.png)
+![image](https://github.com/timofey260/RWE-Plus/assets/69044246/aeec4b7e-b3e0-4487-afbe-ba68cb18a5ca)
 
-![image](https://cdn.discordapp.com/attachments/788349108678688792/1175695013900984340/image.png)
+![image](https://github.com/timofey260/RWE-Plus/assets/69044246/c342ba65-2feb-4c32-8c34-0c7d24443f36)

@@ -1065,9 +1065,9 @@ class MenuWithField(Menu):
                 col = mix.lerp(mixcol_fill, cell / 100)
                 pg.draw.rect(field, col, [xp * size, yp * size, size, size], 0)
 
-    def destroy(self, xp, yp, render=True):
+    def destroy(self, xp, yp, render=True, destroycolor=red):
         if render:
-            pg.draw.rect(self.fieldadd, red, [xp * self.size, yp * self.size, self.size, self.size])
+            pg.draw.rect(self.fieldadd, destroycolor, [xp * self.size, yp * self.size, self.size, self.size])
         if xp > self.levelwidth - 1 or yp > self.levelheight - 1:
             return
         x = int(xp)
@@ -1093,7 +1093,7 @@ class MenuWithField(Menu):
             sp = itm["cols"][0]
             sp2 = itm["cols"][1]
             w, h = itm["size"]
-            pg.draw.rect(self.fieldadd, red, [backx * self.size,
+            pg.draw.rect(self.fieldadd, destroycolor, [backx * self.size,
                                               backy * self.size,
                                               w * self.size, h * self.size])
             for x2 in range(w):
