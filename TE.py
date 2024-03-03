@@ -482,6 +482,15 @@ class TE(MenuWithField):
                                                                                 self.size * self.tileimage2["size"][1]])
             self.tileimage["image"].set_colorkey(white)
 
+    def rendergrid(self):
+        w, h = self.f.get_size()
+        for x in range(0, w, image1size):
+            pg.draw.line(self.f, grid, [x + self.patternoffset[0], self.patternoffset[1]],
+                                        [x + self.patternoffset[0], h + self.patternoffset[1]])
+        for y in range(0, h, image1size):
+            pg.draw.line(self.f, grid, [self.patternoffset[0], y + self.patternoffset[1]],
+                                        [w + self.patternoffset[0], y + self.patternoffset[1]])
+
     def lt(self):
         self.selector.left()
 
