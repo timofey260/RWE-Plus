@@ -1,19 +1,28 @@
 Traceback (most recent call last):
   File "F:\Desktop\RWE+\LevelProcess.py", line 120, in mainprocessupdate
     self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 538, in update
-    self.menu.blit()
-  File "F:\Desktop\RWE+\TE.py", line 169, in blit
-    self.insertpattern_pen(cposxo, cposyo)
-  File "F:\Desktop\RWE+\TE.py", line 259, in insertpattern_pen
-    self.pattern_placer4(xpos, ypos)
-  File "F:\Desktop\RWE+\TE.py", line 320, in pattern_placer4
-    self.set(savedcat, savedtool)
-  File "F:\Desktop\RWE+\TE.py", line 512, in set
-    self.selector.setbyname(name, fromfavs=usefavs, category=cat)
-  File "F:\Desktop\RWE+\widgets.py", line 814, in setbyname
-    self.currentitem = self.data[self.currentcategory]["items"].index(tile)
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-ValueError: None is not in list
+  File "F:\Desktop\RWE+\LevelProcess.py", line 529, in update
+    self.doevents()
+  File "F:\Desktop\RWE+\LevelProcess.py", line 517, in doevents
+    self.keypress()
+  File "F:\Desktop\RWE+\LevelProcess.py", line 490, in keypress
+    self.menu.send(pressed)
+  File "F:\Desktop\RWE+\menuclass.py", line 855, in send
+    super().send(message)
+  File "F:\Desktop\RWE+\menuclass.py", line 593, in send
+    getattr(self, message[1:])()
+  File "F:\Desktop\RWE+\PE.py", line 442, in cat_prev_propupdate
+    self.cat_prev()
+  File "F:\Desktop\RWE+\PE.py", line 448, in cat_prev
+    self.selector.left()
+  File "F:\Desktop\RWE+\widgets.py", line 777, in left
+    self.onclick("set")
+  File "F:\Desktop\RWE+\widgets.py", line 691, in onclick
+    self.callback(self.selecteditem)
+                  ^^^^^^^^^^^^^^^^^
+  File "F:\Desktop\RWE+\widgets.py", line 845, in selecteditem
+    return self.data[self.currentcategory]["items"][self.currentitem]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+IndexError: list index out of range
 This is why RWE+ crashed^^^
 Sorry

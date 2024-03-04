@@ -5,6 +5,8 @@ import re
 import subprocess
 import multiprocessing
 import json as jsonenc
+import sys
+
 from files import *
 import math
 
@@ -39,6 +41,7 @@ def tojson(string: str, replacement: str = None):
             .replace("point(", "\"point(") \
             .replace("rect(", "\"rect(") \
             .replace("color(", "\"color(") \
+            .replace("color (", "\"color(") \
             .replace(")\"", ")") \
             .replace(")", ")\"") \
             .replace("void", "0")
@@ -269,12 +272,12 @@ def inittolist(window: pg.Surface):
                 tp = ""
             if tp == "box":  # math
                 ln = 4
-                size = (ln * sz[1] + (item["bfTiles"] * 2)) * image1size
+                size = (ln * sz[1] + (item.get("bfTiles", 0) * 2)) * image1size
                 rect = pg.rect.Rect([0, size, sz[0] * spritesize, sz[1] * spritesize])
-            elif ((ln * sz[1] + (item["bfTiles"] * 2 * ln)) * image1size + 1) > img.get_height():
+            elif ((ln * sz[1] + (item.get("bfTiles", 0) * 2 * ln)) * image1size + 1) > img.get_height():
                 rect = pg.rect.Rect([0, img.get_height() - sz[1] * spritesize, sz[0] * spritesize, sz[1] * spritesize])
             else:
-                size = (sz[1] + (item["bfTiles"] * 2)) * ln * image1size
+                size = (sz[1] + (item.get("bfTiles", 0) * 2)) * ln * image1size
                 rect = pg.rect.Rect([0, size + 1, sz[0] * spritesize, sz[1] * spritesize])
 
             try:
@@ -306,12 +309,12 @@ def inittolist(window: pg.Surface):
                 "tp": item.get("tp"),
                 "repeatL": item["repeatL"] if item.get("repeatL") is not None else [1],
                 "description": "Size" + str(sz),
-                "bfTiles": item["bfTiles"],
+                "bfTiles": item.get("bfTiles", 0),
                 "image": img,
                 "size": sz,
                 "category": cat,
                 "color": colr,
-                "cols": [item["specs"], item["specs2"]],
+                "cols": [item.get("specs", [1]), item.get("specs2", 0)],
                 "cat": [catnum + 1, indx + 1],
                 "tags": item["tags"],
                 "printcols": True
@@ -465,7 +468,7 @@ def addprop(item: dict, img: pg.Surface):
         for iindex in range(item["vars"]):
             images.append(img.subsurface(iindex * w, 0, w, h))
     else:
-        images.append(img.subsurface(0, hs - h, w, h))
+        images.append(img.subsurface(0, hs - h if item.get("colorTreatment", "") == "bevel" else 0, w, h))
     return images
 
 
