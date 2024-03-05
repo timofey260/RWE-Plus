@@ -6,6 +6,7 @@ import os
 import sys
 import math
 import time
+from tkinter import filedialog
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):

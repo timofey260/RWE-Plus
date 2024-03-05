@@ -307,11 +307,23 @@ class LevelProcess:
             case "new":
                 self.__init__(self.manager, -1)
             case "openNewProcess":
-                file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                if globalsettings["rwefilebrowser"]:
+                    file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                else:
+                    file = filedialog.askopenfilename(initialdir=path2levels,
+                                                      defaultextension=".wep",
+                                                      filetypes=[("Leditor unrendered level", ".txt"),
+                                                                 ("World Editor Project", ".wep")])
                 if file is not None and os.path.exists(file):
                     self.manager.newprocess(file)
             case "open":
-                file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                if globalsettings["rwefilebrowser"]:
+                    file = self.menu.asksaveasfilename(defaultextension=[".txt", ".wep"])
+                else:
+                    file = filedialog.askopenfilename(initialdir=path2levels,
+                                                      defaultextension=".wep",
+                                                      filetypes=[("Leditor unrendered level", ".txt"),
+                                                                 ("World Editor Project", ".wep")])
                 if file is not None and os.path.exists(file):
                     self.__init__(self.manager, file)
             case "load":

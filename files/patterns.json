@@ -33,7 +33,26 @@
 			"prefix": "AltGrate",
 			"tags": ["pattern"]
 		},
-
+		{
+			"nm": "Fence",
+			"tp": "pattern",
+			"description": "Fence Pattern",
+			"ptype": "patternbox2",
+			"category": "special",
+			"color": [200, 200, 200],
+			"conf": {
+				"N": "",
+				"E": "",
+				"S": "",
+				"W": "",
+				"O": "",
+				"SW": "",
+				"NW": "",
+				"ES": "",
+				"NE": ""
+			},
+			"tags": ["pattern"]
+		},
 		{
 			"nm": "Small Pipe autoplace",
 			"tp": "pattern",
@@ -42,6 +61,7 @@
 			"size": 1,
 			"category": "special",
 			"color": [255, 226, 5],
+			"allequal": true,
 			"conf": {
 				"SW": "Pipe WS",
 				"NW": "Pipe WN",
@@ -74,6 +94,7 @@
 			"size": 2,
 			"category": "special",
 			"color": [255, 226, 5],
+			"allequal": true,
 			"conf": {
 				"SW": "Thick Pipe WS",
 				"NW": "Thick Pipe WN",
@@ -102,6 +123,88 @@
 			"tags": ["pattern"]
 		},
 		{
+			"nm": "Wall wires autoplace",
+			"tp": "pattern",
+			"description": "Places wall wires in special way",
+			"ptype": "placer4",
+			"size": 1,
+			"category": "special",
+			"color": [255, 255, 0],
+			"allequal": true,
+			"conf": {
+				"SW": "WallWires SW",
+				"NW": "WallWires NW",
+				"ES": "WallWires SE",
+				"NE": "WallWires NE",
+				"NSW": "WallWires T Section E",
+				"ESW": "WallWires T Section N",
+				"NES": "WallWires T Section W",
+				"NEW": "WallWires T Section S",
+				"N": "WallWires End S",
+				"E": "WallWires End W",
+				"S": "WallWires End N",
+				"W": "WallWires End E",
+				"NS": "WallWires Vertical A",
+				"EW": "WallWires Horizontal A",
+				"NESW": "WallWires X Section",
+				"": "WallWires X Section"
+			},
+			"addtiles": [
+				"WallWires Horizontal B",
+				"WallWires Vertical B"
+			],
+			"tags": ["pattern"]
+		},
+		{
+			"nm": "Crawl Space",
+			"tp": "pattern",
+			"description": "Places Crawl spaces",
+			"ptype": "placer4",
+			"size": 3,
+			"category": "special",
+			"color": [255, 180, 180],
+			"allequal": false,
+			"conf": {
+				"SW": "SW Crawl Space",
+				"NW": "NW Crawl Space",
+				"ES": "SE Crawl Space",
+				"NE": "NE Crawl Space",
+				"NSW": "NWS Crawl Space",
+				"ESW": "WSE Crawl Space",
+				"NES": "NES Crawl Space",
+				"NEW": "WNE Crawl Space",
+				"N": "Vertical Crawl Space A",
+				"E": "Horizontal Crawl Space A",
+				"S": "Vertical Crawl Space A",
+				"W": "Horizontal Crawl Space A",
+				"NS": "Vertical Crawl Space A",
+				"EW": "Horizontal Crawl Space A",
+				"NESW": "Four Way Crawl Space",
+				"": "Four Way Crawl Space"
+			},
+			"addtiles": [
+				"Vertical Crawl Space B",
+				"Horizontal Crawl Space B",
+				"Crawl Space Wall W",
+				"Crawl Space Wall N",
+				"Crawl Space Wall E",
+				"Crawl Space Wall S",
+				"Crawl Space Slope SW",
+				"Crawl Space Slope SE",
+				"Crawl Space Slope NW",
+				"Crawl Space Slope NE",
+				"Crawl Space Inr Corner SW",
+				"Crawl Space Inr Corner SE",
+				"Crawl Space Inr Corner NW",
+				"Crawl Space Inr Corner NE",
+				"Crawl Space Otr Corner SW",
+				"Crawl Space Otr Corner SE",
+				"Crawl Space Otr Corner NW",
+				"Crawl Space Otr Corner NE"
+			],
+			"tags": ["pattern"]
+		},
+		{
 			"nm": "Communication arrays random box",
 			"tp": "pattern",
 			"description": "Places Egg socket A and B in random order",
@@ -111,6 +214,45 @@
 			"randconf": {
 				"Egg Socket A": 0.67,
 				"Egg Socket B": 0.33
+			},
+			"tags": ["pattern"]
+		},
+		{
+			"nm": "Random metal",
+			"tp": "pattern",
+			"description": "random 1x1-2x2 metal tiles",
+			"ptype": "randchance",
+			"category": "special",
+			"color": [180, 255, 255],
+			"randconf": {
+				"Small Metal": 1,
+				"Metal Floor": 0.70,
+				"Square Metal": 0.60,
+				"Big Metal": 0.34,
+				"Big Metal Marked": 0.34,
+				"Skinny Beam": 0.29,
+				"Skinny Beam 2": 0.29,
+				"Four Holes": 1,
+				"Post Box": 1
+
+			},
+			"tags": ["pattern"]
+		},
+		{
+			"nm": "Random Small machines",
+			"tp": "pattern",
+			"description": "random machines",
+			"ptype": "randchance",
+			"category": "special",
+			"color": [255, 160, 255],
+			"randconf": {
+				"Small Machine A": 1,
+				"Small Machine B": 1,
+				"Small Machine C": 1,
+				"Small Machine D": 1,
+				"Small Machine E": 1,
+				"Small Machine F": 1,
+				"Small Machine G": 1
 			},
 			"tags": ["pattern"]
 		}

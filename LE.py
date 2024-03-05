@@ -180,7 +180,11 @@ class LE(MenuWithField):
         pg.draw.circle(self.field2.field, black, [0, self.field2.field.get_height()], 1)
         pg.draw.circle(self.field2.field, black, [self.field2.field.get_width(), self.field2.field.get_height()], 1)
         if self.data["path"] == "":
-            level = self.asksaveasfilename(defaultextension=[".wep"])
+            if globalsettings["rwefilebrowser"]:
+                level = self.asksaveasfilename(defaultextension=[".wep"])
+            else:
+                level =  filedialog.asksaveasfilename(filetypes=[("World Editor Project", ".wep")],
+                                                  initialdir=path2levels)
             self.changedata(["level"], os.path.basename(level))
             self.changedata(["path"], level)
             self.changedata(["dir"], os.path.abspath(level))

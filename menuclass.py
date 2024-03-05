@@ -123,7 +123,10 @@ class Menu:
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
             # print(os.path.splitext(self.data["path"])[0] + ".wep")
         else:
-            savedest = self.asksaveasfilename()
+            if globalsettings["rwefilebrowser"]:
+                savedest = self.asksaveasfilename()
+            else:
+                savedest = filedialog.asksaveasfilename(confirmoverwrite=True, defaultextension=".wep", filetypes=[("World Editor Project", ".wep")], initialdir=path2levels)
             if savedest != "" and savedest is not None:
                 open(savedest, "w").write(json.dumps(self.data.data.data))
                 self.data["level"] = os.path.basename(savedest)
@@ -410,7 +413,10 @@ class Menu:
         return inputfile.replace("\n", "")
 
     def savef_txt(self):
-        savedest = self.asksaveasfilename(defaultextension=[".txt"])
+        if globalsettings["rwefilebrowser"]:
+            savedest = self.asksaveasfilename(defaultextension=[".txt"])
+        else:
+            savedest = filedialog.asksaveasfilename(confirmoverwrite=True, defaultextension=".wep", filetypes=[("Leditor unrendered level", ".txt")], initialdir=path2levels)
         if savedest != "" and savedest is not None:
             turntolingo(self.data, open(savedest, "w"))
 

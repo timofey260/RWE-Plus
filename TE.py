@@ -141,6 +141,9 @@ class TE(MenuWithField):
                 pg.draw.rect(self.surface, canplace if self.tool == 0 else cannotplace, [[cposx - 2, cposy - 2],
                                                       [self.tileimage["size"] * self.size + 4,
                                                        self.tileimage["size"] * self.size + 4]], 2)
+            else:
+                cposxo = int(posoffset.x) - 2
+                cposyo = int(posoffset.y) - 2
             bp = self.getmouse
             if self.brushmode:
                 if self.squarebrush:
@@ -243,6 +246,10 @@ class TE(MenuWithField):
                 self.pattern_patternbox(rect)
             case "randchance":
                 self.pattern_randchance(rect)
+            case "placer4":
+                for y in range(int(rect.h)):
+                    for x in range(int(rect.w)):
+                        self.pattern_placer4(x + rect.x, y + rect.y)
             case _:
                 return
         self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
@@ -272,6 +279,7 @@ class TE(MenuWithField):
         size = self.tileimage["size"]
         conf = self.tileimage["conf"]
         add = self.tileimage["addtiles"]
+        allequal = self.tileimage.get("allequal", True)
         tile = self.items[conf[""]]
 
         saved = self.tileimage
@@ -301,20 +309,30 @@ class TE(MenuWithField):
             if not self.test_cols(xpos, ypos):
                 return
 
-            connectioncode = "N" if isplaceretile(xpos, ypos - 1) else ""
+            connectioncode = "N" if isplaceretile(xpos, ypos - size) else ""
             connectioncode += "E" if isplaceretile(xpos + size, ypos) else ""
             connectioncode += "S" if isplaceretile(xpos, ypos + size) else ""
-            connectioncode += "W" if isplaceretile(xpos - 1, ypos) else ""
+            connectioncode += "W" if isplaceretile(xpos - size, ypos) else ""
 
             tile = self.items[conf[connectioncode]]
             self.set(tile["category"], tile["nm"], False, False)
-            self.place(xpos, ypos)
+            if tile["size"][0] < size or tile["size"][1] < size:
+                for xp in range(size // tile["size"][0]):
+                    for yp in range(size // tile["size"][1]):
+                        self.place(xpos + xp, ypos + yp)
+            else:
+                self.place(xpos, ypos)
         elif self.tool == 1:
             self.destroy(xpos, ypos)
         if init:
             for i in col4:
                 if isplaceretile(xpos + i[0] * size, ypos + i[1] * size):
-                    self.destroy(xpos + i[0] * size, ypos + i[1] * size, False, green)
+                    if not allequal:
+                        for xp in range(size):
+                            for yp in range(size):
+                                self.destroy(xpos + i[0] * size + xp, ypos + i[1] * size + yp, False, green)
+                    else:
+                        self.destroy(xpos + i[0] * size, ypos + i[1] * size, False, green)
                     self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
                     self.set(savedcat, savedtool, False)
                     self.tool = stool
