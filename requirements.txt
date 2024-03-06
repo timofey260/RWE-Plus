@@ -1,6 +1,8 @@
-pygame>=2.5.2
-ujson>=5.9.0
-opencv-python>=4.9.0.80
-numpy>=1.26.4
-pyperclip>=1.8.2
-requests>=2.31.0
+appdirs~=1.4.4
+pygame~=2.5.2
+ujson~=5.9.0
+future~=1.0.0
+opencv-python~=4.9.0.80
+numpy~=1.26.4
+pyperclip~=1.8.2
+requests~=2.31.0
