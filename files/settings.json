@@ -1,5 +1,8 @@
 {
 	"uifile": "classic.json",
+	"hotkeyfile": "hotkeys.json",
+	"hotkeydescfile": "hotkeystip.json",
+
 	"toolmenu": "geometry.png",
 	"tooltiles": "geometry2.png",
 

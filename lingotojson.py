@@ -369,7 +369,7 @@ def renderlevel(data):
     p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}", ))
     theimage = loadimage(path + "theimage.png")
     fontr: pg.font.Font = fs(30)[0]
-    text = fontr.render("wendewing level :3 Esc to cancel", True, pg.Color(255, 255, 255), None)
+    text = fontr.render(settings["global"].get("renderingscugtext", "wendewing level :3 Esc to cancel"), True, pg.Color(255, 255, 255), None)
     frame = 0
     size = globalsettings["rendergifsize"]
     pg.display.get_surface().fill([0, 0, 0])

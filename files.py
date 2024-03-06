@@ -49,15 +49,16 @@ path2cast = resolvepath(application_path + f"\\drizzle\\Data\\Cast\\")
 path2renderedlevels = resolvepath(application_path + f"\\drizzle\\Data\\Levels\\")
 path2props = resolvepath(application_path + f"\\drizzle\\Data\\Props\\")
 path2levels = resolvepath(application_path + "\\LevelEditorProjects\\")
+path2hotkeys = resolvepath(path + "\\hotkeys\\")
 
 path2effectPreviews = resolvepath(path + "effectPreviews\\")
 path2materialPreviews = resolvepath(path + "materialPreviews\\")
 
 pg.font.init()
 
-globalsettings = json.load(open(path + "settings.json", "r"))
-settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
-hotkeys = json.load(open(path + "hotkeys.json", "r"))
+globalsettings : dict = json.load(open(path + "settings.json", "r"))
+settings : dict = json.load(open(path2ui + globalsettings["uifile"], "r"))
+hotkeys : dict = json.load(open(path2hotkeys + globalsettings["hotkeyfile"], "r"))
 e = json.load(open(path + "effects.json", "r"))
 
 

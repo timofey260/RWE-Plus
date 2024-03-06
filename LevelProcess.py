@@ -26,6 +26,8 @@ class ProcessManager:
         self.effects = solveeffects(e)
         self.width = settings["global"]["width"]
         self.height = settings["global"]["height"]
+        pg.quit()
+        pg.font.init()
         self.window = pg.display.set_mode([self.width, self.height],
                                           flags=pg.RESIZABLE | (pg.FULLSCREEN * self.fullscreen))
         self.notifications: list[widgets.Notification] = []
@@ -265,13 +267,18 @@ class LevelProcess:
         self.redobuffer = []
 
     def addrecent(self, file):
-        data = json.load(open(path + "recentProjects.json", "r"))
+        datadir = appdirs.user_data_dir("RWE+", "timofey26", roaming=True)
+        recentfile = os.path.join(datadir, "recentProjects.json")
+        if not os.path.exists(recentfile):
+            os.makedirs(datadir, exist_ok=True)
+            open(recentfile, "w").write("{ \"files\": [] }")
+        data = json.load(open(recentfile, "r"))
         filename = os.path.basename(file)
         for i, item in enumerate(data["files"]):
             if item["path"] == file:
                 data["files"].pop(i)
         data["files"].insert(0, {"path": file, "name": filename})
-        json.dump(data, open(path + "recentProjects.json", "w"), indent=4)
+        json.dump(data, open(recentfile, "w"), indent=4)
 
     def recievemessage(self, message):
         match message:

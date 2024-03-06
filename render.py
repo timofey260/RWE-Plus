@@ -214,6 +214,9 @@ class Renderer:
                 for l in range(3):  # help
                     if self.data["TE"]["tlMatrix"][xp][yp][l]["tp"] == "tileBody":
                         p = toarr(self.data["TE"]["tlMatrix"][xp][yp][l]["data"][0], "point")
+                        if p[0] > self.levelwidth or p[1] > self.levelheight:
+                            self.data["TE"]["tlMatrix"][xp][yp][l]["data"][0] = makearr([0, 0], "point")
+                            continue
                         area[p[0] - 1][p[1] - 1] = False
                     self.surfs_tile[l].fill(pg.Color(0, 0, 0, 0), [xp * image1size, yp * image1size, image1size, image1size])
         for xp, x in enumerate(area):

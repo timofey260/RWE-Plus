@@ -1,10 +1,20 @@
+import os.path
+
+import appdirs
+
+import files
 from menuclass import *
 
 
 class LoadMenu(Menu):
     def __init__(self, process):
         super().__init__(process, "LD")
-        self.recent = json.load(open(path + "recentProjects.json", "r"))
+        datadir = appdirs.user_data_dir("RWE+", "timofey26", roaming=True)
+        recentfile = os.path.join(datadir, "recentProjects.json")
+        if not os.path.exists(recentfile):
+            os.makedirs(datadir, exist_ok=True)
+            open(recentfile, "w").write("{ \"files\": [] }")
+        self.recent = json.load(open(recentfile, "r"))
         self.filedata = {}
         self.selector = widgets.Selector(self, self.generate_data(), "s1")
         self.selector.callback = self.selectorset

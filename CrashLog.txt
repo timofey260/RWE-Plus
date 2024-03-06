@@ -1,11 +1,24 @@
 Traceback (most recent call last):
   File "F:\Desktop\RWE+\LevelProcess.py", line 120, in mainprocessupdate
     self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 550, in update
-    self.menu.blit()
-  File "F:\Desktop\RWE+\TE.py", line 145, in blit
-    cposxo = int(posoffset.x) - int((self.tileimage["size"] * .5) + .5) + 1
-                                     ~~~~~~~~~~~~~~^^^^^^^^
-KeyError: 'size'
+  File "F:\Desktop\RWE+\LevelProcess.py", line 541, in update
+    self.doevents()
+  File "F:\Desktop\RWE+\LevelProcess.py", line 515, in doevents
+    self.manager.openlevel(event.file)
+  File "F:\Desktop\RWE+\LevelProcess.py", line 166, in openlevel
+    self.newprocess(level)
+  File "F:\Desktop\RWE+\LevelProcess.py", line 150, in newprocess
+    self.processes.append(LevelProcess(self, level))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Desktop\RWE+\LevelProcess.py", line 212, in __init__
+    self.renderer.render_all(0)
+  File "F:\Desktop\RWE+\render.py", line 329, in render_all
+    self.tiles_full_render(layer)
+  File "F:\Desktop\RWE+\render.py", line 206, in tiles_full_render
+    self.tiles_render_area(area, layer)
+  File "F:\Desktop\RWE+\render.py", line 217, in tiles_render_area
+    area[p[0] - 1][p[1] - 1] = False
+    ~~~~^^^^^^^^^^
+IndexError: list index out of range
 This is why RWE+ crashed^^^
 Sorry

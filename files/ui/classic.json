@@ -18,6 +18,7 @@
 		"secondarylayeralpha": 50,
 		"tiles_primarylayeralpha": 255,
 		"tiles_secondarylayeralpha": 100,
+		"renderingscugtext": "wendewing level :3 Esc to cancel",
 		"colors": {
 			"cursor": [255, 0, 0],
 			"cursor2": [50, 0, 255],

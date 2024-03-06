@@ -5,7 +5,7 @@ class HK(Menu):
     def __init__(self, process, openmenu="MN"):
         self.menu = "HK"
         self.m = openmenu
-        self.keys = json.load(open(path + "hotkeystip.json"))
+        self.keys = json.load(open(path2hotkeys + globalsettings["hotkeydescfile"]))
         self.scroll = 0
         self.lines = 0
 
