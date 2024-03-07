@@ -395,8 +395,13 @@ class Renderer:
                     pg.draw.line(pixel, red, [0, 0], [image1size, image1size], 1)
                     pg.draw.line(pixel, red, [image1size, 0], [0, image1size], 1)
             for addsindx, adds in enumerate(over):
-                curtool = [globalsettings["shows2"][str(adds)][0] * image1size,
-                           globalsettings["shows2"][str(adds)][1] * image1size]
+                try:
+                    curtool = [globalsettings["shows2"][str(adds)][0] * image1size,
+                               globalsettings["shows2"][str(adds)][1] * image1size]
+                except KeyError:
+                    adds = 0
+                    curtool = [globalsettings["shows2"][str(adds)][0] * image1size,
+                               globalsettings["shows2"][str(adds)][1] * image1size]
                 bufftiles = self.data["EX2"]["extraTiles"]
                 bufftiles = pg.Rect(bufftiles[0], bufftiles[1],
                                     self.levelwidth - bufftiles[0] - bufftiles[2],

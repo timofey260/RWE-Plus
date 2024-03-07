@@ -90,7 +90,7 @@
 
 			
 			["Render", [80, 80, 19, 19], [90, 90, 90], "render", "non", "Render project using Drizzle(<[render]>)"],
-			["Save", [24, 2, 6, 5], [90, 90, 90], "save", "non", "Save as .wep project(<[save]>)"],
+			["Save", [24, 2, 6, 5], [90, 90, 90], "save", "non", "Save as .wep project(<[/save]>)"],
 			["Save As...", [13, 2, 10, 5], [90, 90, 90], "saveas", "non", "Save as .wep project"],
 			["Save as txt", [2, 2, 10, 5], [90, 90, 90], "saveastxt", "non", "Save as official level editor file"],
 			["Quit", [88, 2, 10, 5], [90, 90, 90], "quit", "non", "Close current RWE+ process(<[quit]>)"],

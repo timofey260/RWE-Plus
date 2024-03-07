@@ -1,24 +1,32 @@
 Traceback (most recent call last):
-  File "F:\Desktop\RWE+\LevelProcess.py", line 120, in mainprocessupdate
+  File "F:\Desktop\RWE+\LevelProcess.py", line 122, in mainprocessupdate
     self.mainprocess.update()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 541, in update
-    self.doevents()
-  File "F:\Desktop\RWE+\LevelProcess.py", line 515, in doevents
-    self.manager.openlevel(event.file)
-  File "F:\Desktop\RWE+\LevelProcess.py", line 166, in openlevel
-    self.newprocess(level)
-  File "F:\Desktop\RWE+\LevelProcess.py", line 150, in newprocess
-    self.processes.append(LevelProcess(self, level))
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "F:\Desktop\RWE+\LevelProcess.py", line 212, in __init__
+  File "F:\Desktop\RWE+\LevelProcess.py", line 557, in update
+    self.menu.blit()
+  File "F:\Desktop\RWE+\LD.py", line 85, in blit
+    self.selector.blit()
+  File "F:\Desktop\RWE+\widgets.py", line 710, in blit
+    button.blit(sum(pg.display.get_window_size()) // 120)
+  File "F:\Desktop\RWE+\widgets.py", line 160, in blit
+    self.onpress(self)
+  File "F:\Desktop\RWE+\widgets.py", line 689, in onclick
+    self.callback(button.buttondata)
+  File "F:\Desktop\RWE+\LD.py", line 24, in selectorset
+    self.owner.__init__(self.owner.manager, buttondata["path"])
+  File "F:\Desktop\RWE+\LevelProcess.py", line 214, in __init__
     self.renderer.render_all(0)
-  File "F:\Desktop\RWE+\render.py", line 329, in render_all
-    self.tiles_full_render(layer)
-  File "F:\Desktop\RWE+\render.py", line 206, in tiles_full_render
-    self.tiles_render_area(area, layer)
-  File "F:\Desktop\RWE+\render.py", line 217, in tiles_render_area
-    area[p[0] - 1][p[1] - 1] = False
-    ~~~~^^^^^^^^^^
-IndexError: list index out of range
+  File "F:\Desktop\RWE+\render.py", line 331, in render_all
+    self.geo_full_render(layer)
+  File "F:\Desktop\RWE+\render.py", line 311, in geo_full_render
+    self.geo_render_area(area, layer)
+  File "F:\Desktop\RWE+\render.py", line 326, in geo_render_area
+    self.render_geo_pixel3(xp, yp)
+  File "F:\Desktop\RWE+\render.py", line 339, in render_geo_pixel3
+    self.surfs_geo[l].blit(self.render_geo_pixel(xp, yp, l), [xp * image1size, yp * image1size])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Desktop\RWE+\render.py", line 399, in render_geo_pixel
+    curtool = [globalsettings["shows2"][str(adds)][0] * image1size,
+               ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: '14'
 This is why RWE+ crashed^^^
 Sorry
