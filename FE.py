@@ -132,7 +132,7 @@ class FE(MenuWithField):
 
     def selectorset(self, buttondata):
         self.addeffect(buttondata["nm"])
-        self.selector.setbyname(buttondata["category"], buttondata["nm"])
+        self.selector.setbyname(buttondata["nm"], category=buttondata["category"])
 
     def blit(self):
         # super().blit()

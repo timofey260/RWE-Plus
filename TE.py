@@ -64,6 +64,7 @@ class TE(MenuWithField):
         self.selector = widgets.Selector(self, self.items, "s1", "tiles.txt")
         self.selector.callback = self.selectorset
         self.patternoffset = [0, 0]
+        self.patternoffset2 = [0, 0]
 
         self.rfa()
         #self.rebuttons()
@@ -97,6 +98,7 @@ class TE(MenuWithField):
             pos2 = self.pos2
             posoffset = self.posoffset
             fg = self.findparampressed("force_geometry")
+
             if self.tileimage["tp"] != "pattern":
                 cposx = int(pos2.x) - int((self.tileimage["size"][0] * .5) + .5) * self.size + self.size
                 cposy = int(pos2.y) - int((self.tileimage["size"][1] * .5) + .5) * self.size + self.size
@@ -130,6 +132,8 @@ class TE(MenuWithField):
                     self.surface.blit(self.tileimage["image"], [cposx, cposy])
                     self.printcols(cposxo, cposyo, self.tileimage)
             elif self.tileimage["ptype"] == "placer4":
+                if self.findparampressed("move_patternoffset"):
+                    self.rendergrid()
                 cposxo = int(posoffset.x) - int((self.tileimage["size"] * .5) + .5) + 1
                 cposyo = int(posoffset.y) - int((self.tileimage["size"] * .5) + .5) + 1
                 cposxo = cposxo // self.tileimage["size"] * self.tileimage["size"] + self.patternoffset[0]
@@ -280,6 +284,8 @@ class TE(MenuWithField):
         conf = self.tileimage["conf"]
         add = self.tileimage["addtiles"]
         allequal = self.tileimage.get("allequal", True)
+        geocount = self.tileimage.get("count_geo_as_tile", [])
+        geonotcount = self.tileimage.get("count_geo_as_nottile", [])
         tile = self.items[conf[""]]
 
         saved = self.tileimage
@@ -291,14 +297,21 @@ class TE(MenuWithField):
         def gettile(xp, yp):
             if xp < 0 or xp > self.levelwidth or yp < 0 or yp > self.levelheight:
                 return None
-            if self.data["TE"]["tlMatrix"][xp][yp][self.layer]["tp"] == "tileBody":
-                a = toarr(self.data["TE"]["tlMatrix"][xp][yp][self.layer]["data"][0], "point")
+            if self.data.TE_data(xp, yp, self.layer)["tp"] == "tileBody":
+                a = toarr(self.data.TE_data(xp, yp, self.layer)["data"][0], "point")
                 return gettile(a[0] - 1, a[1] - 1)
-            elif self.data["TE"]["tlMatrix"][xp][yp][self.layer]["tp"] == "tileHead":
-                return self.items[self.data["TE"]["tlMatrix"][xp][yp][self.layer]["data"][1]]
+            elif self.data.TE_data(xp, yp, self.layer)["tp"] == "tileHead":
+                return self.items[self.data.TE_data(xp, yp, self.layer)["data"][1]]
             return None
 
         def isplaceretile(xp, yp) -> bool:
+            if xp < 0 or xp > self.levelwidth or yp < 0 or yp > self.levelheight:
+                return False
+            geotile = self.data.GE_data(xp, yp, self.layer)[0]
+            if geotile in geocount:
+                return True
+            elif geotile in geonotcount:
+                return False
             tile = gettile(xp, yp)
             if tile is None:
                 return False
@@ -316,23 +329,26 @@ class TE(MenuWithField):
 
             tile = self.items[conf[connectioncode]]
             self.set(tile["category"], tile["nm"], False, False)
+            self.tileimage["image"] = pg.transform.scale(self.tileimage["image"],
+                               [self.tileimage["image"].get_width() / spritesize * self.size,
+                                self.tileimage["image"].get_height() / spritesize * self.size])
             if tile["size"][0] < size or tile["size"][1] < size:
                 for xp in range(size // tile["size"][0]):
                     for yp in range(size // tile["size"][1]):
-                        self.place(xpos + xp, ypos + yp)
+                        self.place(xpos + xp, ypos + yp, True)
             else:
-                self.place(xpos, ypos)
+                self.place(xpos, ypos, True)
         elif self.tool == 1:
-            self.destroy(xpos, ypos)
+            self.destroy(xpos, ypos, destroycolor=gray)
         if init:
             for i in col4:
                 if isplaceretile(xpos + i[0] * size, ypos + i[1] * size):
                     if not allequal:
                         for xp in range(size):
                             for yp in range(size):
-                                self.destroy(xpos + i[0] * size + xp, ypos + i[1] * size + yp, False, green)
+                                self.destroy(xpos + i[0] * size + xp, ypos + i[1] * size + yp, destroycolor=darkgray)
                     else:
-                        self.destroy(xpos + i[0] * size, ypos + i[1] * size, False, green)
+                        self.destroy(xpos + i[0] * size, ypos + i[1] * size, destroycolor=darkgray)
                     self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
                     self.set(savedcat, savedtool, False)
                     self.tool = stool
@@ -670,8 +686,7 @@ class TE(MenuWithField):
         if px > self.levelwidth or py > self.levelheight or px < 0 or py < 0:
             return
         if render:
-            self.fieldadd.blit(self.tileimage["image"],
-                               [x * self.size, y * self.size])
+            self.fieldadd.blit(self.tileimage["image"], [x * self.size, y * self.size])
         for x2 in range(w):
             for y2 in range(h):
                 try:

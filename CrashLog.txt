@@ -3,30 +3,15 @@ Traceback (most recent call last):
     self.mainprocess.update()
   File "F:\Desktop\RWE+\LevelProcess.py", line 557, in update
     self.menu.blit()
-  File "F:\Desktop\RWE+\LD.py", line 85, in blit
-    self.selector.blit()
-  File "F:\Desktop\RWE+\widgets.py", line 710, in blit
-    button.blit(sum(pg.display.get_window_size()) // 120)
-  File "F:\Desktop\RWE+\widgets.py", line 160, in blit
-    self.onpress(self)
-  File "F:\Desktop\RWE+\widgets.py", line 689, in onclick
-    self.callback(button.buttondata)
-  File "F:\Desktop\RWE+\LD.py", line 24, in selectorset
-    self.owner.__init__(self.owner.manager, buttondata["path"])
-  File "F:\Desktop\RWE+\LevelProcess.py", line 214, in __init__
-    self.renderer.render_all(0)
-  File "F:\Desktop\RWE+\render.py", line 331, in render_all
-    self.geo_full_render(layer)
-  File "F:\Desktop\RWE+\render.py", line 311, in geo_full_render
-    self.geo_render_area(area, layer)
-  File "F:\Desktop\RWE+\render.py", line 326, in geo_render_area
-    self.render_geo_pixel3(xp, yp)
-  File "F:\Desktop\RWE+\render.py", line 339, in render_geo_pixel3
-    self.surfs_geo[l].blit(self.render_geo_pixel(xp, yp, l), [xp * image1size, yp * image1size])
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "F:\Desktop\RWE+\render.py", line 399, in render_geo_pixel
-    curtool = [globalsettings["shows2"][str(adds)][0] * image1size,
-               ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-KeyError: '14'
+  File "F:\Desktop\RWE+\TE.py", line 176, in blit
+    self.insertpattern_pen(cposxo, cposyo)
+  File "F:\Desktop\RWE+\TE.py", line 271, in insertpattern_pen
+    self.pattern_placer4(xpos, ypos)
+  File "F:\Desktop\RWE+\TE.py", line 337, in pattern_placer4
+    self.place(xpos, ypos, True)
+  File "F:\Desktop\RWE+\TE.py", line 687, in place
+    [self.tileimage["image"].width / spritesize * self.size,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'pygame.surface.Surface' object has no attribute 'width'
 This is why RWE+ crashed^^^
 Sorry

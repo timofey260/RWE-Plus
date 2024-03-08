@@ -1099,7 +1099,8 @@ class MenuWithField(Menu):
             sp = itm["cols"][0]
             sp2 = itm["cols"][1]
             w, h = itm["size"]
-            pg.draw.rect(self.fieldadd, destroycolor, [backx * self.size,
+            if render:
+                pg.draw.rect(self.fieldadd, destroycolor, [backx * self.size,
                                               backy * self.size,
                                               w * self.size, h * self.size])
             for x2 in range(w):

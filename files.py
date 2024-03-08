@@ -140,6 +140,12 @@ class RWELevel:
     def __setitem__(self, key, value):
         self.data[key] = value
 
+    def GE_data(self, x, y, layer):
+        return self.data["GE"][x][y][layer]
+
+    def TE_data(self, x, y, layer):
+        return self.data["TE"]["tlMatrix"][x][y][layer]
+
 
 def fs(sz) -> list[pg.font.Font, int]:
     if sz in fonts.keys():
