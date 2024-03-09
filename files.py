@@ -7,6 +7,7 @@ import sys
 import math
 import time
 from tkinter import filedialog
+import jsonc  # it's so fucking dumb that i use 3 json libraries in this project why
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
@@ -31,8 +32,6 @@ def resolvepath(input_path):  # Thanks to someone... someone nice
     return None
 
 
-
-
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
 path = resolvepath(application_path + "\\files\\")
@@ -51,10 +50,11 @@ path2materialPreviews = resolvepath(path + "materialPreviews\\")
 
 pg.font.init()
 
-globalsettings : dict = json.load(open(path + "settings.json", "r"))
-settings : dict = json.load(open(path2ui + globalsettings["uifile"], "r"))
-hotkeys : dict = json.load(open(path2hotkeys + globalsettings["hotkeyfile"], "r"))
-e = json.load(open(path + "effects.json", "r"))
+globalsettings : dict = jsonc.load(open(path + "settings.json", "r"))
+settings : dict = jsonc.load(open(path2ui + globalsettings["uifile"], "r"))
+hotkeys : dict = jsonc.load(open(path2hotkeys + globalsettings["hotkeyfile"], "r"))
+e = jsonc.load(open(path + "effects.json", "r"))
+
 
 def loadimage(filepath):
     if filepath != path + globalsettings["godimage"] and globalsettings["godmode"]:

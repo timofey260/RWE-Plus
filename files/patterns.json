@@ -127,6 +127,49 @@
 			"tags": ["pattern"]
 		},
 		{
+			"nm": "Vent autoplace",
+			"tp": "pattern",
+			"description": "Places vents in special way",
+			"ptype": "placer4",
+			"size": 2,
+			"category": "special",
+			"color": [0, 50, 255],
+			"allequal": false,
+			"count_geo_as_tile": [],
+			"count_geo_as_nottile": [],
+			"conf": {
+				"SW": "Ventbox NE",
+				"NW": "Ventbox SE",
+				"ES": "Ventbox NW",
+				"NE": "Ventbox SW",
+				"NSW": "Ventbox E",
+				"ESW": "Ventbox N",
+				"NES": "Ventbox W",
+				"NEW": "Ventbox S",
+				"N": "Ventbox",
+				"E": "Ventbox",
+				"S": "Ventbox",
+				"W": "Ventbox",
+				"NS": "Ventbox",
+				"EW": "Ventbox",
+				"NESW": "Ventbox",
+				"": "Ventbox"
+			},
+			"addtiles": [
+				"Exhaust Vent Open",
+				"Exhaust Vent Closed",
+				"Round Exhaust Closed",
+				"Round Exhaust Open",
+				"Wall Exhaust",
+				"vent vertical",
+				"vent horizontal",
+				"vent vertical alt",
+				"vent horizontal alt"
+
+			],
+			"tags": ["pattern"]
+		},
+		{
 			"nm": "Wall wires autoplace",
 			"tp": "pattern",
 			"description": "Places wall wires in special way",

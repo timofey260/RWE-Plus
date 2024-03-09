@@ -886,6 +886,14 @@ class MenuWithField(Menu):
             self.offset -= pos - self.pos
             self.renderfield()
 
+    def zoomout(self):
+        self.size = max(self.size - globalsettings["scalekey_step"], 1)
+        self.renderfield()
+
+    def zoomin(self):
+        self.size = self.size + globalsettings["scalekey_step"]
+        self.renderfield()
+
     def render_geo_area(self):
         self.renderer.geo_render_area(self.area, self.layer)
         self.renderer.tiles_render_area(self.area, self.layer)

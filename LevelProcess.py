@@ -342,9 +342,6 @@ class LevelProcess:
                     self.menu.send(message)
 
     def undohistory(self):
-        if pg.key.get_mods() & pg.KMOD_LSHIFT > 0:
-            self.redohistory()
-            return
         if len(self.undobuffer) == 0:
             return
         lastsize = [self.menu.levelwidth, self.menu.levelheight]
@@ -491,19 +488,19 @@ class LevelProcess:
     def keypress(self):
         pressed = ""
         ctrl = pg.key.get_pressed()[pg.K_LCTRL]
-        # shift = pg.key.get_pressed()[pg.K_LSHIFT]
+        shift = pg.key.get_pressed()[pg.K_LSHIFT]
         for i in hotkeys["global"].keys():
-            key = i.replace("@", "").replace("+", "")
             if i == "unlock_keys":
                 continue
-            if int(i.find("+") != -1) - int(ctrl) == 0:
+            key = i.replace("@", "").replace("+", "").replace("-", "")
+            if int(i.find("+") != -1) - int(ctrl) == 0 and int(i.find("-") != -1) - int(shift) == 0:
                 if pg.key.get_pressed()[getattr(pg, key)]:
                     pressed = hotkeys["global"][i]
         for i in hotkeys[self.menu.menu].keys():
-            key = i.replace("@", "").replace("+", "")
             if i == "unlock_keys":
                 continue
-            if int(i.find("+") != -1) - int(ctrl) == 0:
+            key = i.replace("@", "").replace("+", "").replace("-", "")
+            if int(i.find("+") != -1) - int(ctrl) == 0 and int(i.find("-") != -1) - int(shift) == 0:
                 if pg.key.get_pressed()[getattr(pg, key)]:
                     pressed = hotkeys[self.menu.menu][i]
                     self.menu.send(pressed)

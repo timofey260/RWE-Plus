@@ -21,6 +21,7 @@
   	  	"K_n+": "/newProcess",
   	  	"K_F11": "/fc",
   	  	"K_z+": "/undo",
+  	  	"K_z+-": "/redo",
   	  	"K_y+": "/redo",
 
   	  	"K_ESCAPE": "/MN",
@@ -45,7 +46,9 @@
     	"K_TAB+": "/swichprocess",
     	"K_RETURN+": "/rerender_all",
     	"K_SLASH": "/togglelocky",
-    	"K_PERIOD": "/togglelockx"
+    	"K_PERIOD": "/togglelockx",
+    	"K_EQUALS-": "/-zoomin",
+    	"K_MINUS-": "/-zoomout"
   	},
   	"LD": {
   		"unlock_keys": [],

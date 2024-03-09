@@ -15,7 +15,7 @@
         "/openNewProcess": "Opens level in new process",
         "/newProcess": "Creates new process",
         "/fc": "Fullscreen",
-        "/undo": "Undo level changes. Hold shift to redo.",
+        "/undo": "Undo level changes",
         "/redo": "Redo level changes",
         "/-togglegeo": "Toggles geometry",
         "/-toggletiles": "Toggles tiles",
@@ -37,8 +37,10 @@
         "/-toggletileslayervisible": "Toggles tile layer",
         "/swichprocess": "Switches between processes",
         "/rerender_all": "Rerenders all level visuals",
-        "/-togglelocky": "Locks mouse by y axis",
-        "/-togglelockx": "Locks mouse by x axis"
+        "/togglelocky": "Locks mouse by y axis",
+        "/togglelockx": "Locks mouse by x axis",
+        "/-zoomin": "Zooms in",
+        "/-zoomout": "Zooms Out"
     },
     "LD": {
         "new": "New file",
@@ -134,7 +136,7 @@
         "movepreview": "Shows tile preview without collisions",
         "-brushp": "Increase brush size",
         "-brushm": "decrease brush size",
-        "-brush": "Enables Bruhs",
+        "move_patternoffset": "Offsets custom patterns",
         "-pencil": "Enables pencil",
         "-togglebrush": "Toggles betwen pencil and brush",
         "brush_size_scroll": "Hold to use scroll to change brush size"
@@ -185,6 +187,7 @@
         "-rotate_right": "Rotates prop to right",
         "-rotate_left": "Rotates prop to left",
         "rotate_speedup": "Increases rotation speed",
+        "scale_speedup": "Speeds up prop scaling",
         "pauseropephysics": "Pauses rope physics",
         "-addtofavs": "Adds prop to favourites",
         "cursor_propdepth_inverse": "While pressed, press RMB to change depth down",
