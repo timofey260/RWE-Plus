@@ -712,7 +712,7 @@ class MenuWithField(Menu):
         self.fieldadd.fill(white)
         self.fieldadd.set_colorkey(white)
 
-        self.offset = self.renderer.offset
+        self.offset: pg.Vector2 = self.renderer.offset
         self.size = self.renderer.size
         self.rectdata = [pg.Vector2(0, 0), pg.Vector2(0, 0), pg.Vector2(0, 0)]
         self.layer = self.renderer.lastlayer

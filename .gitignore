@@ -17,6 +17,8 @@ RWE+_win_changes.zip
 RWE+_win_release.zip
 RWE+.exe.spec
 RWEplus.run.xml
+CrashLog.txt
+loadLog.txt
 /files/recentProjects.json
 
 /drizzle/

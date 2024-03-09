@@ -31,11 +31,6 @@ def resolvepath(input_path):  # Thanks to someone... someone nice
     return None
 
 
-def loadimage(filepath):
-    resolved = resolvepath(filepath)
-    if filepath is None or resolved is None:
-        raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
-    return pg.image.load(resolved)
 
 
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
@@ -61,6 +56,19 @@ settings : dict = json.load(open(path2ui + globalsettings["uifile"], "r"))
 hotkeys : dict = json.load(open(path2hotkeys + globalsettings["hotkeyfile"], "r"))
 e = json.load(open(path + "effects.json", "r"))
 
+def loadimage(filepath):
+    if filepath != path + globalsettings["godimage"] and globalsettings["godmode"]:
+        global god
+        return god
+    resolved = resolvepath(filepath)
+    if filepath is None or resolved is None:
+        raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
+    return pg.image.load(resolved)
+
+god = loadimage(path + globalsettings["godimage"])
+if god is None:
+    raise Exception("how dare you")
+godres = pg.Surface([0, 0])
 
 tooltiles = loadimage(path + globalsettings["tooltiles"])
 toolmenu = loadimage(path + globalsettings["toolmenu"])
@@ -87,11 +95,6 @@ bignum = 9999999  # just a big number
 inputpromtname = "RWE+ input"
 debugmode = globalsettings["debugmode"]
 timeformat = globalsettings["time_format"]
-
-god = loadimage(path + globalsettings["godimage"])
-if god is None:
-    raise Exception("how dare you")
-godres = pg.Surface([0, 0])
 
 fonts: dict[[pg.font.Font, int], ...] = {}
 
@@ -141,10 +144,10 @@ class RWELevel:
         self.data[key] = value
 
     def GE_data(self, x, y, layer):
-        return self.data["GE"][x][y][layer]
+        return self.data["GE"][int(x)][int(y)][layer]
 
     def TE_data(self, x, y, layer):
-        return self.data["TE"]["tlMatrix"][x][y][layer]
+        return self.data["TE"]["tlMatrix"][int(x)][int(y)][layer]
 
 
 def fs(sz) -> list[pg.font.Font, int]:

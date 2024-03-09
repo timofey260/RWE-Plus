@@ -132,8 +132,6 @@ class TE(MenuWithField):
                     self.surface.blit(self.tileimage["image"], [cposx, cposy])
                     self.printcols(cposxo, cposyo, self.tileimage)
             elif self.tileimage["ptype"] == "placer4":
-                if self.findparampressed("move_patternoffset"):
-                    self.rendergrid()
                 cposxo = int(posoffset.x) - int((self.tileimage["size"] * .5) + .5) + 1
                 cposyo = int(posoffset.y) - int((self.tileimage["size"] * .5) + .5) + 1
                 cposxo = cposxo // self.tileimage["size"] * self.tileimage["size"] + self.patternoffset[0]
@@ -142,7 +140,11 @@ class TE(MenuWithField):
                 cposx = (cposxo + self.xoffset) * self.size + self.field.rect.x
                 cposy = (cposyo + self.yoffset) * self.size + self.field.rect.y
 
-                pg.draw.rect(self.surface, canplace if self.tool == 0 else cannotplace, [[cposx - 2, cposy - 2],
+                if self.findparampressed("move_patternoffset"):
+                    self.patternoffset = [self.posoffset.x % self.tileimage["size"], self.posoffset.y % self.tileimage["size"]]
+                    self.renderpatgrid()
+                else:
+                    pg.draw.rect(self.surface, canplace if self.tool == 0 else cannotplace, [[cposx - 2, cposy - 2],
                                                       [self.tileimage["size"] * self.size + 4,
                                                        self.tileimage["size"] * self.size + 4]], 2)
             else:
@@ -516,14 +518,16 @@ class TE(MenuWithField):
                                                                                 self.size * self.tileimage2["size"][1]])
             self.tileimage["image"].set_colorkey(white)
 
-    def rendergrid(self):
+    def renderpatgrid(self):
         w, h = self.f.get_size()
-        for x in range(0, w, image1size):
-            pg.draw.line(self.f, grid, [x + self.patternoffset[0], self.patternoffset[1]],
-                                        [x + self.patternoffset[0], h + self.patternoffset[1]])
-        for y in range(0, h, image1size):
-            pg.draw.line(self.f, grid, [self.patternoffset[0], y + self.patternoffset[1]],
-                                        [w + self.patternoffset[0], y + self.patternoffset[1]])
+        px = self.patternoffset[0] * self.size
+        py = self.patternoffset[1] * self.size
+        sx = int(self.field.rect.x + self.offset.x * self.size)
+        sy = int(self.field.rect.y + self.offset.y * self.size)
+        for x in range(sx, self.field.rect.bottomright[0], self.size * self.tileimage["size"]):
+            pg.draw.line(self.surface, grid, [x + px, sy + py], [x + px, sy + h + py])
+        for y in range(sy, self.field.rect.bottomright[1], self.size * self.tileimage["size"]):
+            pg.draw.line(self.surface, grid, [sx + px, y + py], [sx + w + px, y + py])
 
     def lt(self):
         self.selector.left()

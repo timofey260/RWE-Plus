@@ -3,15 +3,19 @@ Traceback (most recent call last):
     self.mainprocess.update()
   File "F:\Desktop\RWE+\LevelProcess.py", line 557, in update
     self.menu.blit()
-  File "F:\Desktop\RWE+\TE.py", line 176, in blit
+  File "F:\Desktop\RWE+\TE.py", line 177, in blit
     self.insertpattern_pen(cposxo, cposyo)
-  File "F:\Desktop\RWE+\TE.py", line 271, in insertpattern_pen
+  File "F:\Desktop\RWE+\TE.py", line 272, in insertpattern_pen
     self.pattern_placer4(xpos, ypos)
-  File "F:\Desktop\RWE+\TE.py", line 337, in pattern_placer4
-    self.place(xpos, ypos, True)
-  File "F:\Desktop\RWE+\TE.py", line 687, in place
-    [self.tileimage["image"].width / spritesize * self.size,
-     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'pygame.surface.Surface' object has no attribute 'width'
+  File "F:\Desktop\RWE+\TE.py", line 326, in pattern_placer4
+    connectioncode = "N" if isplaceretile(xpos, ypos - size) else ""
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Desktop\RWE+\TE.py", line 311, in isplaceretile
+    geotile = self.data.GE_data(xp, yp, self.layer)[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Desktop\RWE+\files.py", line 147, in GE_data
+    return self.data["GE"][x][y][layer]
+           ~~~~~~~~~~~~~~~^^^
+TypeError: list indices must be integers or slices, not float
 This is why RWE+ crashed^^^
 Sorry
