@@ -47,6 +47,8 @@ path2hotkeys = resolvepath(path + "\\hotkeys\\")
 
 path2effectPreviews = resolvepath(path + "effectPreviews\\")
 path2materialPreviews = resolvepath(path + "materialPreviews\\")
+path2patterns = resolvepath(path + "patternScripts\\")
+path2gifs = resolvepath(path + "gifs\\")
 
 pg.font.init()
 

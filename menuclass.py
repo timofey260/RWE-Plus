@@ -651,7 +651,7 @@ class Menu:
             groups.append(list(set(self.findkey(fgroup[1], manyparams=True, globalkeys=True))))
             groups[-1].sort()
             for i, key in enumerate(groups[-1]):
-                k = key.replace("+", "").replace("@", "")
+                k = key.replace("+", "").replace("@", "").replace("-", "")
                 if key.find("+") != -1:
                     groups[-1][i] = "ctrl + " + pg.key.name(getattr(pg, k))
                 else:

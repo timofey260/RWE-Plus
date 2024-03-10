@@ -64,8 +64,39 @@
 	//self explanatory
 	"saveoncrash": true,
 
-	//size of rendering scug single frame
-	"rendergifsize": [164, 127],
+	//disable slug gifs on render
+	"removerendergifs": false,
+	//Array of images with sizes of single frame in files/gifs
+	"rendergifimages": {
+		"theimage.png": [164, 127],
+		"arti_plush.png": [498, 498],
+		"gourmand_plush.png": [498, 498],
+		"saint_plush.png": [498, 498],
+		"riv_plush.png": [498, 498],
+		"inv_plush.png": [498, 498],
+		"liz_plush.png": [498, 498],
+
+		"aggression.png": [300, 227],
+		"brb.png": [116, 64],
+		"fuck_that.png": [303, 221],
+		"goomfy.png": [68, 152],
+		"insanity.png": [184, 228],
+		"monk_spared.png": [307, 252],
+		"pebbles_plush.png": [249, 360],
+		"riv.png": [150, 150],
+		"sadg.png": [160, 112],
+		"sick_tricks.png": [298, 273],
+		"slugs.png": [400, 228],
+		"slugwasher.png": [150, 195],
+		"smol.png": [48, 48],
+		"snacked.png": [164, 429],
+		"thorn_growers.png": [275, 225],
+		"troddle.png": [95, 65],
+		"voices.png": [140, 249],
+		"wawa.png": [100, 100],
+		"woo_yeah.png": [187, 125],
+		"yoink.png": [444, 640],
+	},
 	//render all layers of geo. if false, blocks behind other blocks will not be draw and give a slight performance boost
 	"viewportrenderalllayers": true,
 

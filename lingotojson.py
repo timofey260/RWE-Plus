@@ -1,6 +1,7 @@
 import copy
 import json.decoder
 import os
+import random
 import re
 import subprocess
 import multiprocessing
@@ -367,14 +368,17 @@ def renderlevel(data):
     #print(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}")
     # subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
     p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}", ))
-    theimage = loadimage(path + "theimage.png")
+    pickedgif = random.choice(list(globalsettings["rendergifimages"].keys()))
+    theimage = loadimage(path2gifs + pickedgif)
     fontr: pg.font.Font = fs(30)[0]
     text = fontr.render(settings["global"].get("renderingscugtext", "wendewing level :3 Esc to cancel"), True, pg.Color(255, 255, 255), None)
     frame = 0
-    size = globalsettings["rendergifsize"]
+    size = globalsettings["rendergifimages"][pickedgif]
     pg.display.get_surface().fill([0, 0, 0])
     clock = pg.time.Clock()
     p.start()
+    if globalsettings["removerendergifs"]:
+        return
     while p.is_alive():
         for e in pg.event.get():
             if e.type == pg.QUIT or (e.type == pg.KEYDOWN and (e.key in (pg.K_ESCAPE, pg.K_RETURN, pg.K_TAB))):
@@ -387,6 +391,10 @@ def renderlevel(data):
         # 164 x 127
         rightimage = theimage.subsurface([(size[0] * frame) % theimage.get_width(), 0, size[0], size[1]])
         rect = rightimage.get_rect()
+        pg.draw.rect(pg.display.get_surface(), pg.Color(0, 0, 0), [pg.display.get_window_size()[0] / 2 - rect.centerx,
+                                                        pg.display.get_window_size()[1] / 2 - rect.centery,
+                                                                   rightimage.get_width(),
+                                                                   rightimage.get_height()])
         pg.display.get_surface().blit(rightimage, [pg.display.get_window_size()[0] / 2 - rect.centerx,
                                                         pg.display.get_window_size()[1] / 2 - rect.centery])
         pg.display.get_surface().blit(text, [0, 0])

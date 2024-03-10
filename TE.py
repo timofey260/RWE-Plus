@@ -39,11 +39,16 @@ class TE(MenuWithField):
         self.matshow = False
 
         self.items: ItemData = process.renderer.tiles
-        p = json.load(open(path + "patterns.json", "r"))
+        self.codes = {}
+        p: dict = jsonc.load(open(path + "patterns.json", "r"))
         if "special" not in self.items.categories:
             self.items.append({"name": "special", "color": black, "items": p["patterns"]})
             for indx, pattern in enumerate(p["patterns"]):
                 self.items[-1]["items"][indx]["cat"] = [len(self.items), indx + 1]
+
+                # loading code presets
+                for pat in pattern.get("codenames", []):
+                    self.codes[pat] = open(path2patterns + pat, "r").read()
         self.blocks = p["blocks"]
         self.brushmode = False
         self.squarebrush = False
@@ -58,7 +63,7 @@ class TE(MenuWithField):
 
         super().__init__(process, "TE", False)
         self.drawtiles = True
-        self.set("materials 0", "Standard")
+        self.set("materials 0", "Standard", usefavs=True)
         self.labels[2].set_text("Default material: " + self.data["TE"]["defaultMaterial"])
 
         self.selector = widgets.Selector(self, self.items, "s1", "tiles.txt")
@@ -147,9 +152,16 @@ class TE(MenuWithField):
                     pg.draw.rect(self.surface, canplace if self.tool == 0 else cannotplace, [[cposx - 2, cposy - 2],
                                                       [self.tileimage["size"] * self.size + 4,
                                                        self.tileimage["size"] * self.size + 4]], 2)
+            elif self.tileimage["ptype"] == "codepat":
+                cposxo = int(posoffset.x)
+                cposyo = int(posoffset.y)
+                cposx = (cposxo + self.xoffset) * self.size + self.field.rect.x
+                cposy = (cposyo + self.yoffset) * self.size + self.field.rect.y
+                pg.draw.rect(self.surface, canplace if self.tool == 0 else cannotplace,
+                            [[cposx - 2, cposy - 2], [self.size + 4, self.size + 4]], 2)
             else:
-                cposxo = int(posoffset.x) - 2
-                cposyo = int(posoffset.y) - 2
+                cposxo = int(posoffset.x)
+                cposyo = int(posoffset.y)
             bp = self.getmouse
             if self.brushmode:
                 if self.squarebrush:
@@ -217,7 +229,7 @@ class TE(MenuWithField):
                             if block["tp"] == "material" or block["tp"] == "tileHead":
                                 history.append([x, y, block])
                     pyperclip.copy(str(history))
-                elif self.tool == 0 and self.tileimage["tp"] == "pattern":
+                elif self.tileimage["tp"] == "pattern":
                     self.insertpattern_rect(rect)
                 self.detecthistory(["TE", "tlMatrix"])
                 if fg:
@@ -255,11 +267,13 @@ class TE(MenuWithField):
             case "placer4":
                 for y in range(int(rect.h)):
                     for x in range(int(rect.w)):
-                        self.pattern_placer4(x + rect.x, y + rect.y)
+                        self.pattern_placer4(x + rect.x, y + rect.y, render=False)
+            case "codepat":
+                self.pattern_codepat(rect, True, self.tool == 1)
             case _:
                 return
         self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
-        self.set(savedcat, savedtool)
+        self.set(savedcat, savedtool, usefavs=True)
         self.selector.recreate()
 
     def insertpattern_pen(self, xpos, ypos):
@@ -271,15 +285,35 @@ class TE(MenuWithField):
         match self.tileimage["ptype"]:
             case "placer4":
                 self.pattern_placer4(xpos, ypos)
+            case "codepat":
+                self.pattern_codepat(pg.Rect(xpos, ypos, 1, 1), False, self.tool == 1)
             case _:
                 return
         self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
-        self.set(savedcat, savedtool)
+        self.set(savedcat, savedtool, usefavs=True)
         self.tool = stool
         self.selector.recreate()
 
+    def pattern_codepat(self, rect, userect, destroy):
+        def normaldestroy(dodestroy):
+            if dodestroy and userect:
+                for x in range(int(rect.w)):
+                    for y in range(int(rect.h)):
+                        self.destroy(x + rect.x, y + rect.y)
+            elif dodestroy and not userect:
+                self.destroy(rect.x, rect.y)
+        for codename in self.tileimage["codenames"]:
+            if self.codes.get(codename) is None:
+                log_to_load_log(f"Couldn't load script with name {codename}", error=True)
+                return
+            try:
+                savedtile = self.tileimage
+                exec(self.codes[codename])
+            except Exception as e:
+                traceback.print_exc()
+                print(f"script {codename} failed with error {str(e)}")
 
-    def pattern_placer4(self, xpos, ypos, init=True):
+    def pattern_placer4(self, xpos, ypos, init=True, render=True):
         if xpos < 0 or xpos > self.levelwidth or ypos < 0 or ypos > self.levelheight:
             return
         size = self.tileimage["size"]
@@ -296,16 +330,6 @@ class TE(MenuWithField):
         savedata = [self.selector.currentcategory, self.selector.currentitem, self.selector.show]
         stool = self.tool
 
-        def gettile(xp, yp):
-            if xp < 0 or xp > self.levelwidth or yp < 0 or yp > self.levelheight:
-                return None
-            if self.data.TE_data(xp, yp, self.layer)["tp"] == "tileBody":
-                a = toarr(self.data.TE_data(xp, yp, self.layer)["data"][0], "point")
-                return gettile(a[0] - 1, a[1] - 1)
-            elif self.data.TE_data(xp, yp, self.layer)["tp"] == "tileHead":
-                return self.items[self.data.TE_data(xp, yp, self.layer)["data"][1]]
-            return None
-
         def isplaceretile(xp, yp) -> bool:
             if xp < 0 or xp > self.levelwidth or yp < 0 or yp > self.levelheight:
                 return False
@@ -314,13 +338,13 @@ class TE(MenuWithField):
                 return True
             elif geotile in geonotcount:
                 return False
-            tile = gettile(xp, yp)
+            tile = self.gettile(xp, yp)
             if tile is None:
                 return False
             return tile["nm"] in conf.values() or tile["nm"] in add
 
         if self.tool == 0 or not init:
-            self.set(tile["category"], tile["nm"], False, False)
+            self.set(tile["category"], tile["nm"], False)
             if not self.test_cols(xpos, ypos):
                 return
 
@@ -330,7 +354,7 @@ class TE(MenuWithField):
             connectioncode += "W" if isplaceretile(xpos - size, ypos) else ""
 
             tile = self.items[conf[connectioncode]]
-            self.set(tile["category"], tile["nm"], False, False)
+            self.set(tile["category"], tile["nm"], render)
             self.tileimage["image"] = pg.transform.scale(self.tileimage["image"],
                                [self.tileimage["image"].get_width() / spritesize * self.size,
                                 self.tileimage["image"].get_height() / spritesize * self.size])
@@ -339,29 +363,27 @@ class TE(MenuWithField):
                     for yp in range(size // tile["size"][1]):
                         self.place(xpos + xp, ypos + yp, True)
             else:
-                self.place(xpos, ypos, True)
+                self.place(xpos, ypos, render)
         elif self.tool == 1:
-            self.destroy(xpos, ypos, destroycolor=gray)
+            self.destroy(xpos, ypos, render, destroycolor=gray)
         if init:
             for i in col4:
                 if isplaceretile(xpos + i[0] * size, ypos + i[1] * size):
                     if not allequal:
                         for xp in range(size):
                             for yp in range(size):
-                                self.destroy(xpos + i[0] * size + xp, ypos + i[1] * size + yp, destroycolor=darkgray)
+                                self.destroy(xpos + i[0] * size + xp, ypos + i[1] * size + yp, render, destroycolor=darkgray)
                     else:
-                        self.destroy(xpos + i[0] * size, ypos + i[1] * size, destroycolor=darkgray)
+                        self.destroy(xpos + i[0] * size, ypos + i[1] * size, render, destroycolor=darkgray)
                     self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
-                    self.set(savedcat, savedtool, False)
+                    self.set(savedcat, savedtool, False, usefavs=True)
                     self.tool = stool
                     self.selector.recreate()
                     self.pattern_placer4(xpos + i[0] * size, ypos + i[1] * size, False)
         self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
-        self.set(savedcat, savedtool, False)
+        self.set(savedcat, savedtool, False, usefavs=True)
         self.tool = stool
         self.selector.recreate()
-
-
 
     def pattern_randchance(self, rect):
         existingblocks = []
@@ -373,7 +395,7 @@ class TE(MenuWithField):
         for y in range(int(rect.h)):
             for x in range(int(rect.w)):
                 selecteditem = existingblocks[random.choices([i for i in range(len(existingblocks))], [i[2] for i in existingblocks])[0]][0]
-                self.set(selecteditem["category"], selecteditem["nm"], False, False)
+                self.set(selecteditem["category"], selecteditem["nm"], False)
                 self.place(x + rect.x, y + rect.y)
 
     def pattern_patternbox(self, rect):
@@ -381,22 +403,22 @@ class TE(MenuWithField):
         for y in range(int(rect.h)):
             for x in range(int(rect.w)):
                 if x == 0 and y == 0:
-                    self.set(self.blocks["cat"], self.blocks["NW"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["NW"], False)
                 elif x == rect.w - 1 and y == 0:
-                    self.set(self.blocks["cat"], self.blocks["NE"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["NE"], False)
                 elif x == 0 and y == rect.h - 1:
-                    self.set(self.blocks["cat"], self.blocks["SW"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["SW"], False)
                 elif x == rect.w - 1 and y == rect.h - 1:
-                    self.set(self.blocks["cat"], self.blocks["SE"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["SE"], False)
 
                 elif x == 0:
-                    self.set(self.blocks["cat"], self.blocks["W"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["W"], False)
                 elif y == 0:
-                    self.set(self.blocks["cat"], self.blocks["N"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["N"], False)
                 elif x == rect.w - 1:
-                    self.set(self.blocks["cat"], self.blocks["E"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["E"], False)
                 elif y == rect.h - 1:
-                    self.set(self.blocks["cat"], self.blocks["S"], False, False)
+                    self.set(self.blocks["cat"], self.blocks["S"], False)
                 else:
                     continue
                 self.place(x + rect.x, y + rect.y)
@@ -419,8 +441,18 @@ class TE(MenuWithField):
                 n = 0
                 if len(ch["tiles"]) > 1:
                     n = x % len(ch["tiles"]) - 1
-                self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n], render=False)
+                self.set(saved["patcat"], saved["prefix"] + ch["tiles"][n], render=False, usefavs=True)
                 self.place(x + rect.x, y + rect.y)
+
+    def gettile(self, xp, yp):
+        if xp < 0 or xp > self.levelwidth or yp < 0 or yp > self.levelheight:
+            return None
+        if self.data.TE_data(xp, yp, self.layer)["tp"] == "tileBody":
+            a = toarr(self.data.TE_data(xp, yp, self.layer)["data"][0], "point")
+            return self.gettile(a[0] - 1, a[1] - 1)
+        elif self.data.TE_data(xp, yp, self.layer)["tp"] == "tileHead":
+            return self.items[self.data.TE_data(xp, yp, self.layer)["data"][1]]
+        return None
 
     def togglebrush(self):
         self.squarebrush = not self.squarebrush
@@ -478,7 +510,7 @@ class TE(MenuWithField):
                 else:
                     name = data["data"][1]
                 cat = self.items[name]["category"]
-                self.set(cat, name, False)
+                self.set(cat, name, False, usefavs=True)
                 # w, h = self.tileimage["size"]
                 # px = blockx - int((w * .5) + .5) - 1
                 # py = blocky - int((h * .5) + .5) - 1
@@ -548,12 +580,12 @@ class TE(MenuWithField):
         self.selector.favourites()
 
     def selectorset(self, buttondata):
-        self.set(buttondata["category"], buttondata["nm"])
+        self.set(buttondata["category"], buttondata["nm"], usefavs=True)
 
     def addtofavs(self):
         self.selector.addtofavs()
 
-    def set(self, cat, name, render=True, usefavs=True):
+    def set(self, cat, name, render=True, usefavs=False, dorecaption=True):
         self.tool = 0
         if usefavs and hasattr(self, "selector") and self.selector.show == "favs":
             i = self.selector._favourites[cat, name]
@@ -573,7 +605,7 @@ class TE(MenuWithField):
                 self.tileimage["image"].set_colorkey(white)
             else:
                 self.tileimage = self.tileimage2.copy()
-            if render:
+            if render and dorecaption:
                 self.recaption()
             return
 
@@ -765,7 +797,7 @@ class TE(MenuWithField):
             return
         item = self.items[name]
         self.selector.setbyname(name)
-        self.set(item["category"], name)
+        self.set(item["category"], name, usefavs=True)
 
     def copytile(self):
         posoffset = self.posoffset
@@ -780,7 +812,7 @@ class TE(MenuWithField):
                 name = tile["data"]
                 tile = self.items[name]
                 if tile is not None:
-                    self.set(tile["category"], tile["nm"])
+                    self.set(tile["category"], tile["nm"], usefavs=True)
                     return
             case "tileBody":
                 pos = toarr(tile["data"][0], "point")
@@ -791,7 +823,7 @@ class TE(MenuWithField):
         if tile["tp"] == "tileHead":
             tile = self.items[tile["data"][1]]
             if tile is not None:
-                self.set(tile["category"], tile["nm"])
+                self.set(tile["category"], tile["nm"], usefavs=True)
                 return
         print("couldn't find tile")
 

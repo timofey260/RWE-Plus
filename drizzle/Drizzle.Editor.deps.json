@@ -7,15 +7,15 @@
   "targets": {
     ".NETCoreApp,Version=v7.0": {},
     ".NETCoreApp,Version=v7.0/win-x64": {
-      "Drizzle.Editor/0.2.0.8": {
+      "Drizzle.Editor/0.2.0.9": {
         "dependencies": {
           "Avalonia": "0.10.18",
           "Avalonia.Controls.PanAndZoom": "10.14.0",
           "Avalonia.Desktop": "0.10.18",
           "Avalonia.ReactiveUI": "0.10.18",
-          "Drizzle.Lingo.Runtime": "0.2.0.8",
-          "Drizzle.Logic": "0.2.0.8",
-          "Drizzle.Ported": "0.2.0.8",
+          "Drizzle.Lingo.Runtime": "0.2.0.9",
+          "Drizzle.Logic": "0.2.0.9",
+          "Drizzle.Ported": "0.2.0.9",
           "DynamicData": "7.12.11",
           "ReactiveUI.Fody": "18.4.1",
           "Serilog": "2.12.0",
@@ -1202,7 +1202,7 @@
         }
       },
       "XamlNameReferenceGenerator/1.5.1": {},
-      "Drizzle.Lingo.Runtime/0.2.0.8": {
+      "Drizzle.Lingo.Runtime/0.2.0.9": {
         "dependencies": {
           "DynamicLanguageRuntime": "1.3.3",
           "Pidgin": "3.0.0",
@@ -1214,18 +1214,18 @@
           "Drizzle.Lingo.Runtime.dll": {}
         }
       },
-      "Drizzle.Logic/0.2.0.8": {
+      "Drizzle.Logic/0.2.0.9": {
         "dependencies": {
-          "Drizzle.Lingo.Runtime": "0.2.0.8",
-          "Drizzle.Ported": "0.2.0.8"
+          "Drizzle.Lingo.Runtime": "0.2.0.9",
+          "Drizzle.Ported": "0.2.0.9"
         },
         "runtime": {
           "Drizzle.Logic.dll": {}
         }
       },
-      "Drizzle.Ported/0.2.0.8": {
+      "Drizzle.Ported/0.2.0.9": {
         "dependencies": {
-          "Drizzle.Lingo.Runtime": "0.2.0.8"
+          "Drizzle.Lingo.Runtime": "0.2.0.9"
         },
         "runtime": {
           "Drizzle.Ported.dll": {}
@@ -1234,7 +1234,7 @@
     }
   },
   "libraries": {
-    "Drizzle.Editor/0.2.0.8": {
+    "Drizzle.Editor/0.2.0.9": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1615,17 +1615,17 @@
       "path": "xamlnamereferencegenerator/1.5.1",
       "hashPath": "xamlnamereferencegenerator.1.5.1.nupkg.sha512"
     },
-    "Drizzle.Lingo.Runtime/0.2.0.8": {
+    "Drizzle.Lingo.Runtime/0.2.0.9": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "Drizzle.Logic/0.2.0.8": {
+    "Drizzle.Logic/0.2.0.9": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "Drizzle.Ported/0.2.0.8": {
+    "Drizzle.Ported/0.2.0.9": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

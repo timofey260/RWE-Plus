@@ -562,13 +562,13 @@ class GE(MenuWithField):
                 self.changedata(["GE", x, y, self.layer, 1], [])
             elif self.selectedtool in globalsettings["codes"].keys():  # else
                 if globalsettings["codes"][self.selectedtool] == 1:
-                    self.changedata(["GE", x, y, self.layer, 0], self.placetile + self.state)
+                    self.changedata(["GE", x, y, self.layer, 0], self.reverseslope(self.placetile + self.state) if domirror else (self.placetile + self.state))
                 if globalsettings["codes"][self.selectedtool] == 0:
                     if (abs(int(self.placetile))) + self.state not in self.data["GE"][x][y][self.layer][1]:
                         self.changedata(["GE", x, y, self.layer, 1], [*self.data["GE"][x][y][self.layer][1],
                                                                       (abs(int(self.placetile))) + self.state])
             else:
-                self.changedata(["GE", x, y, self.layer, 0], self.placetile)
+                self.changedata(["GE", x, y, self.layer, 0], self.reverseslope(self.placetile) if domirror else self.placetile)
         if render:
             self.render_geo_area()
             self.rfa()

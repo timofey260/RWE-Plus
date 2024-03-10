@@ -34,22 +34,44 @@
 			"tags": ["pattern"]
 		},
 		{
+			"nm": "Example pattern",
+			"tp": "pattern",
+			"description": "Example pattern you can make with code",
+			"ptype": "codepat", //type should be codepat
+			"category": "special",
+			"color": [200, 200, 200], //pattern color
+			//one code pattern can use several scripts for different stuff
+			"codenames": [
+				"examplepat.py"
+			],
+			//pattern config can be accessed with savedtile["conf"]
+			"conf": {
+				"examplecat": "Metal",
+				"examplename": "Small Metal",
+				"examplenameborder": "Four Holes"
+			},
+			"tags": ["pattern"]
+		},
+		{
 			"nm": "Fence",
 			"tp": "pattern",
 			"description": "Fence Pattern",
-			"ptype": "patternbox2",
+			"ptype": "codepat",
 			"category": "special",
 			"color": [200, 200, 200],
+			"codenames": [
+				"fencepat.py"
+			],
 			"conf": {
-				"N": "",
-				"E": "",
-				"S": "",
-				"W": "",
-				"O": "",
-				"SW": "",
-				"NW": "",
-				"ES": "",
-				"NE": ""
+				"fence": "fence",
+				"fence_pole": "fence with pole",
+				"fence_end": "fence top end",
+				"fence_end_pole": "fence with pole top end",
+				"wire": "barbed wire",
+				"wire_pole": "barbed wire pole",
+				"offsetx": 5,
+				"offsety": 2,
+				"searchcat": "Fences and grates"
 			},
 			"tags": ["pattern"]
 		},
