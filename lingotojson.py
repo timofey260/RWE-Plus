@@ -578,7 +578,7 @@ def getprops(tiles: dict, window: pg.Surface):
                     "cat": [catnum + 1, indx + 1]
                 })
                 count -= 1
-    solved_copy[count2]["items"] = itemlist
+    solved_copy.append({"name": title, "color": pg.Color(0, 0, 0), "items": itemlist})
     printmessage("All props loaded!")
     return solved_copy
 
