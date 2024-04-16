@@ -498,6 +498,7 @@ class TE(MenuWithField):
 
     def pastedata(self):
         try:
+            print("pasting data")
             geodata = eval(pyperclip.paste())
             if type(geodata) != list or len(pyperclip.paste()) <= 2:
                 print("Error pasting data!")
@@ -511,9 +512,9 @@ class TE(MenuWithField):
                     name = data["data"][1]
                 cat = self.items[name]["category"]
                 self.set(cat, name, False, usefavs=True)
-                # w, h = self.tileimage["size"]
-                # px = blockx - int((w * .5) + .5) - 1
-                # py = blocky - int((h * .5) + .5) - 1
+                w, h = self.tileimage["size"]
+                blockx = blockx - int((w * .5) + .5) + 1
+                blocky = blocky - int((h * .5) + .5) + 1
                 pa = pg.Vector2(0, 0)
                 if self.field.rect.collidepoint(self.mousepos):
                     pa = self.pos

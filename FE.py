@@ -422,6 +422,26 @@ class FE(MenuWithField):
                     self.renderfield()
                     return
 
+    def changeeffect(self):
+        if self.activeeffects.itemsnum == 0:
+            print("no effects present")
+            return
+        mtrx = deepcopy(self.data["FE", "effects", self.selectedeffect, "mtrx"])
+        inp = self.askstr("What this effect should be changed to(Case sensitive)", savelevel=False)
+        foundeffect = self.effects[inp]
+        if foundeffect is None:
+            print("no effect found")
+            return
+
+        self.deleteeffect()
+        self.addeffect(inp)
+        self.changedata(["FE", "effects", self.selectedeffect, "mtrx"], mtrx)
+
+        self.renderer.rerendereffect()
+        self.renderfield()
+
+        self.updatehistory()
+
     def paint(self, x, y, st):
         currenteffect = self.data["FE"]["effects"][self.selectedeffect]["nm"]
         strength = 10 + (90 * self.findparampressed("str100"))
