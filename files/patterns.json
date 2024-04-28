@@ -84,8 +84,8 @@
 			"category": "special",
 			"color": [255, 226, 5],
 			"allequal": true,
-			"count_geo_as_tile": [0],
-			"count_geo_as_nottile": [],
+			"count_geo_as_tile": [],
+			"count_geo_as_nottile": [0],
 			"conf": {
 				"SW": "Pipe WS",
 				"NW": "Pipe WN",

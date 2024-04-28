@@ -346,6 +346,10 @@ class TE(MenuWithField):
         if self.tool == 0 or not init:
             self.set(tile["category"], tile["nm"], False)
             if not self.test_cols(xpos, ypos):
+                self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
+                self.set(savedcat, savedtool, False, usefavs=True)
+                self.tool = stool
+                self.selector.recreate()
                 return
 
             connectioncode = "N" if isplaceretile(xpos, ypos - size) else ""
@@ -354,16 +358,16 @@ class TE(MenuWithField):
             connectioncode += "W" if isplaceretile(xpos - size, ypos) else ""
 
             tile = self.items[conf[connectioncode]]
-            self.set(tile["category"], tile["nm"], render)
-            self.tileimage["image"] = pg.transform.scale(self.tileimage["image"],
-                               [self.tileimage["image"].get_width() / spritesize * self.size,
-                                self.tileimage["image"].get_height() / spritesize * self.size])
+            self.set(tile["category"], tile["nm"], render, dorecaption=False)
+            # self.tileimage["image"] = pg.transform.scale(self.tileimage["image"],
+            #                    [self.tileimage["image"].get_width() / spritesize * self.size,
+            #                     self.tileimage["image"].get_height() / spritesize * self.size])
             if tile["size"][0] < size or tile["size"][1] < size:
                 for xp in range(size // tile["size"][0]):
                     for yp in range(size // tile["size"][1]):
-                        self.place(xpos + xp, ypos + yp, True)
+                        self.place(xpos + xp, ypos + yp, render, force=init)
             else:
-                self.place(xpos, ypos, render)
+                self.place(xpos, ypos, render, force=init)
         elif self.tool == 1:
             self.destroy(xpos, ypos, render, destroycolor=gray)
         if init:
@@ -376,7 +380,7 @@ class TE(MenuWithField):
                     else:
                         self.destroy(xpos + i[0] * size, ypos + i[1] * size, render, destroycolor=darkgray)
                     self.selector.currentcategory, self.selector.currentitem, self.selector.show = savedata
-                    self.set(savedcat, savedtool, False, usefavs=True)
+                    self.set(savedcat, savedtool, False, usefavs=True, dorecaption=False)
                     self.tool = stool
                     self.selector.recreate()
                     self.pattern_placer4(xpos + i[0] * size, ypos + i[1] * size, False)
@@ -610,9 +614,9 @@ class TE(MenuWithField):
                 self.recaption()
             return
 
-    def test_cols(self, x, y) -> bool:
-        force_place = self.findparampressed("force_place")
-        force_geo = self.findparampressed("force_geometry") or force_place
+    def test_cols(self, x, y, force=True) -> bool:
+        force_place = force and self.findparampressed("force_place")
+        force_geo = force and self.findparampressed("force_geometry") or force_place
         w, h = self.tileimage["size"]
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]
@@ -710,15 +714,15 @@ class TE(MenuWithField):
                         csp = -1
                     printtile(shift, layer2)
 
-    def place(self, x, y, render=False):
-        fg = self.findparampressed("force_geometry")
+    def place(self, x, y, render=False, force=True):
+        fg = force and self.findparampressed("force_geometry")
         w, h = self.tileimage["size"]
         px = x + int((w * .5) + .5) - 1 # center coordinates
         py = y + int((h * .5) + .5) - 1
         p = makearr(self.tileimage["cat"], "point")
         sp = self.tileimage["cols"][0]
         sp2 = self.tileimage["cols"][1]
-        if not self.test_cols(x, y):
+        if not self.test_cols(x, y, force=force):
             return
         if px > self.levelwidth or py > self.levelheight or px < 0 or py < 0:
             return
