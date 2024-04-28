@@ -2,13 +2,13 @@
 # custom code pattens use python
 
 if destroy: # if we destroying instead of placing
-	#sam could be achieved by using self.tool == 1 because 1 is destroy(0 - place, 1 - destroy, 2 - copy)
+	#same could be achieved by using self.tool == 1 because 1 is destroy(0 - place, 1 - destroy, 2 - copy)
 
-	# use mornaldestroy function remove use normal destroy whenever we use destroy
+	# use normaldestroy function just be default destroy
 	normaldestroy(destroy)
 # first off, we need to decide if we use rect tool or pen(brush is not working rn)
 elif userect: # userect checks if we use rect to fill
-	# this block executes after we selecterd an area with rect(after we pressed rmb)
+	# this block executes after we selected an area with rect(after we pressed rmb)
 	# position of our cursor is rect.bottomright or just [rect.x + rect.w, rect.y + rect.h]
 
 	# normal rect procedure, iterating over all pixels in our rect
