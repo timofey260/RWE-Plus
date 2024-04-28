@@ -308,8 +308,8 @@ class LP(MenuWithField):
                 for layer, item in enumerate(yv):
                     if item["tp"] == "tileBody":
                         dat = toarr(item["data"][0], "point")
-                        dat[0] -= x
-                        dat[1] -= y
+                        dat[0] += x
+                        dat[1] += y
                         if dat[0] < 0 or dat[1] < 0 or dat[0] > self.levelwidth or dat[1] > self.levelheight:
                             self.changedata(["TE", "tlMatrix", xp, yp, layer], {"tp": "default", "data": 0})
                             # cutted[xp][yp][layer] = {"tp": "default", "data": 0}
