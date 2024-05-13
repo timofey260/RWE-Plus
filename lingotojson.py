@@ -92,7 +92,7 @@ def turntoproject(string: str) -> RWELevel:
     proj = RWELevel()
     lines = string.split("\n")
     print("Loading level...")
-    proj["GE"] = eval(lines[0])  # geometry
+    proj["GE"] = json.loads(lines[0])  # geometry
     proj["TE"] = tojson(lines[1])  # tile editor and his settings
     proj["FE"] = tojson(lines[2])  # effect editor params
     proj["LE"] = tojson(lines[3], defaultlevel[3])  # light editor and presets
