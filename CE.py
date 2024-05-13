@@ -1,3 +1,5 @@
+import json
+
 import render
 from menuclass import *
 from lingotojson import *
@@ -126,12 +128,12 @@ class CE(MenuWithField):
 
     def copycamera(self):
         if self.held:
-            pyperclip.copy(str(self.data["CM"]["quads"][self.heldindex]))
+            pyperclip.copy(json.dumps(self.data["CM"]["quads"][self.heldindex]))
 
     def pastedata(self):
         if not self.held:
             try:
-                geodata = eval(pyperclip.paste())
+                geodata = json.loads(pyperclip.paste())
                 if type(geodata) != list or len(pyperclip.paste()) <= 2:
                     return
                 self.historyappend(["CM", "cameras"], makearr([0, 0], "point"))

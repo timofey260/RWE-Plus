@@ -1,3 +1,5 @@
+import json
+
 from menuclass import *
 from lingotojson import *
 import random
@@ -183,7 +185,7 @@ class FE(MenuWithField):
                 if self.copymode:
                     data1 = self.data["FE"]["effects"][self.selectedeffect]["mtrx"][rect.x:rect.w + rect.x]
                     data1 = [i[rect.y:rect.h + rect.y] for i in data1]
-                    pyperclip.copy(str(data1))
+                    pyperclip.copy(json.dumps(data1))
                     print("Copied!")
                 self.updatehistory()
                 #self.detecthistory(["FE", "effects", self.selectedeffect, "mtrx"])
@@ -227,7 +229,7 @@ class FE(MenuWithField):
 
     def pastedata(self):
         try:
-            geodata = eval(pyperclip.paste())
+            geodata = json.loads(pyperclip.paste())
             if type(geodata) != list:
                 return
             for xi, x in enumerate(geodata):

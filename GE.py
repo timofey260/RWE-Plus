@@ -1,3 +1,4 @@
+import json
 import traceback
 
 from menuclass import *
@@ -188,7 +189,7 @@ class GE(MenuWithField):
                 pg.draw.rect(self.surface, mirror, [self.field.rect.x, py, self.field.field.get_width(), 3])
         if pg.key.get_pressed()[pg.K_LCTRL]:
             try:
-                geodata = eval(pyperclip.paste())
+                geodata = json.loads(pyperclip.paste())
                 if type(geodata) is not list:
                     return
                 pos = self.field.rect.topleft + (self.pos * self.size if self.onfield else pg.Vector2(0, 0))
@@ -369,7 +370,7 @@ class GE(MenuWithField):
     def pastegeo(self):
         try:
             self.emptyarea()
-            geodata = eval(pyperclip.paste())
+            geodata = json.loads(pyperclip.paste())
             if type(geodata) != list:
                 return
             for xi, x in enumerate(geodata):

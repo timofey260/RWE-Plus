@@ -1,3 +1,4 @@
+import json
 import traceback
 from menuclass import *
 from lingotojson import *
@@ -228,7 +229,7 @@ class TE(MenuWithField):
                             block = self.data["TE"]["tlMatrix"][xpos][ypos][self.layer]
                             if block["tp"] == "material" or block["tp"] == "tileHead":
                                 history.append([x, y, block])
-                    pyperclip.copy(str(history))
+                    pyperclip.copy(json.dumps(history))
                 elif self.tileimage["tp"] == "pattern":
                     self.insertpattern_rect(rect)
                 self.detecthistory(["TE", "tlMatrix"])
@@ -241,7 +242,7 @@ class TE(MenuWithField):
         self.selector.blittooltip()
         if pg.key.get_pressed()[pg.K_LCTRL]:
             try:
-                geodata: list = eval(pyperclip.paste())
+                geodata: list = json.loads(pyperclip.paste())
                 if type(geodata) != list:
                     return
                 pos = self.field.rect.topleft + (self.pos * self.size if self.onfield else pg.Vector2(0, 0))
@@ -503,7 +504,7 @@ class TE(MenuWithField):
     def pastedata(self):
         try:
             print("pasting data")
-            geodata = eval(pyperclip.paste())
+            geodata = json.loads(pyperclip.paste())
             if type(geodata) != list or len(pyperclip.paste()) <= 2:
                 print("Error pasting data!")
                 return
