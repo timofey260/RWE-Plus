@@ -61,7 +61,7 @@ class RopeModel:
                                   "vel": Vector2(0, 0)
                                   })
 
-    def modelRopeUpdate(self):
+    def modelRopeUpdate(self, collision=True):
         if self.edgeDirection > 0:
             dir = MoveToPoint(self.posA, self.posB, 1)
             if self.release > -1:
@@ -118,9 +118,9 @@ class RopeModel:
             for A in range(len(self.segments)):
                 self.segments[A]["vel"] += MoveToPoint(self.posA, self.segments[A]["pos"], self.sourcePush) * restrict(((A - 1) / (len(self.segments) - 1)) - 0.7, 0, 1)
                 self.segments[A]["vel"] += MoveToPoint(self.posB, self.segments[A]["pos"], self.sourcePush) * restrict((1 - ((A - 1) / (len(self.segments) - 1))) - 0.7, 0, 1)
-
-        for i in range(int(self.release > -1), len(self.segments) - int(self.release < 1)):
-            self.PushRopePointOutOfTerrain(i)
+        if collision:
+            for i in range(int(self.release > -1), len(self.segments) - int(self.release < 1)):
+                self.PushRopePointOutOfTerrain(i)
 
 
     def ApplyRigidity(self, A):

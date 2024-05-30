@@ -461,7 +461,7 @@ class Selector():
             self.currentitem = 0
         if not self.data.isempty():
             self.currentcategory = restrict(self.currentcategory, 0, len(self.data.categories) - 1)
-            self.currentitem = restrict(self.currentitem, 0, len(self.data[self.currentcategory]["items"])  -1)
+            self.currentitem = restrict(self.currentitem, 0, len(self.data[self.currentcategory]["items"]) - 1)
         self.items()
 
     def loadfavorites(self):

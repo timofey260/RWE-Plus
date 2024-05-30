@@ -275,6 +275,7 @@
     	"K_SPACE@@@@": "scale_speedup",
 
     	"K_SPACE@@@": "pauseropephysics",
+    	"K_LSHIFT": "disableropecollisions",
 
     	"K_x": "-showfavs",
     	"K_x+": "-addtofavs",

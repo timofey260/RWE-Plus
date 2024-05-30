@@ -263,31 +263,44 @@ class FE(MenuWithField):
         else:
             self.activeeffects.catswap()
 
-    def changeparam(self, text: str): # "Delete", "Move Back", "Move Forth"
+    def changeparam(self, text: str):  # "Delete", "Move Back", "Move Forth"
+        cc = self.settings["category_count"] + 1
         match text.lower():
             case "delete":
                 self.deleteeffect()
                 return
             case "move back":
-                se = self.activeeffects.currentitem - 1
-                if se < 0:
-                    se = 0
-                self.historymove(["FE", "effects"], self.selectedeffect, se)
+                currenteffect = self.selectedeffect
+                neweffect = currenteffect - 1
+                lastcat = self.paramsselector.currentcategory
+                if neweffect < 0:
+                    neweffect = len(self.data["FE"]["effects"]) - 1
+                print(currenteffect, neweffect)
+                self.historymove(["FE", "effects"], currenteffect, neweffect)
                 # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
                 self.updatehistory()
-                self.activeeffects.currentitem = se
+                self.activeeffects.currentitem = neweffect % cc
+                self.activeeffects.currentcategory = neweffect // cc
                 self.remakeactive(False)
+                self.paramsselector.currentcategory = lastcat
                 self.renderer.rerendereffect()
                 return
             case "move forth":
-                se = self.activeeffects.currentitem + 1
-                if se < len(self.data["FE"]["effects"]):
-                    self.historymove(["FE", "effects"], self.selectedeffect, se)
-                    # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
-                    self.updatehistory()
-                    self.activeeffects.currentitem = se
-                    self.remakeactive(False)
-                    self.renderer.rerendereffect()
+                currenteffect = self.selectedeffect
+                neweffect = currenteffect + 1
+                lastcat = self.paramsselector.currentcategory
+                if neweffect > len(self.data["FE"]["effects"]) - 1:
+                    neweffect = 0
+                print(currenteffect, neweffect)
+
+                self.historymove(["FE", "effects"], currenteffect, neweffect)
+                # self.data["FE"]["effects"].insert(se, self.data["FE"]["effects"].pop(self.selectedeffect))
+                self.updatehistory()
+                self.activeeffects.currentitem = neweffect % cc
+                self.activeeffects.currentcategory = neweffect // cc
+                self.remakeactive(False)
+                self.paramsselector.currentcategory = lastcat
+                self.renderer.rerendereffect()
                 return
             case "change seed":
                 self.changeseed()

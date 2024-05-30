@@ -325,7 +325,7 @@ class PE(MenuWithField):
                     self.surface.blit(self.selectedimage, self.helppoins + q2s)
                 if self.selectedprop["tp"] == "rope":
                     if not self.findparampressed("pauseropephysics"):
-                        self.ropeobject.modelRopeUpdate()
+                        self.ropeobject.modelRopeUpdate(not self.findparampressed("disableropecollisions"))
                     color = toarr(self.ropeobject.prop["previewColor"], "color")
                     lastpos = None
                     for segment in self.ropeobject.segments:
