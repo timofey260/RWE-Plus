@@ -32,3 +32,5 @@ loadLog.txt
 /drizzle_solar/
 
 __pycache__
+
+*.wep
