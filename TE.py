@@ -41,7 +41,7 @@ class TE(MenuWithField):
 
         self.items: ItemData = process.renderer.tiles
         self.codes = {}
-        p: dict = jsonc.load(open(path + "patterns.json", "r"))
+        p: dict = jsonc.load(open(path / "patterns.json", "r"))
         if "special" not in self.items.categories:
             self.items.append({"name": "special", "color": black, "items": p["patterns"]})
             for indx, pattern in enumerate(p["patterns"]):
@@ -49,7 +49,7 @@ class TE(MenuWithField):
 
                 # loading code presets
                 for pat in pattern.get("codenames", []):
-                    self.codes[pat] = open(path2patterns + pat, "r").read()
+                    self.codes[pat] = open(path2patterns / pat, "r").read()
         self.blocks = p["blocks"]
         self.brushmode = False
         self.squarebrush = False

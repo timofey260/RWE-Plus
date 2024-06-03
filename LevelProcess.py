@@ -13,11 +13,11 @@ class ProcessManager:
         self.keys = [pg.K_LCTRL, pg.K_LALT, pg.K_LSHIFT]
         self.movekeys = [pg.K_LEFT, pg.K_UP, pg.K_DOWN, pg.K_RIGHT]
         self.fullscreen = settings["global"]["fullscreen"]
-        loadi = loadimage(f"{path}load.png")
+        loadi = loadimage(path / "load.png")
         self.window = pg.display.set_mode(loadi.get_size(), flags=pg.NOFRAME)
         self.window.blit(loadi, [0, 0])
 
-        pg.display.set_icon(loadimage(path + "icon.png"))
+        pg.display.set_icon(loadimage(path / "icon.png"))
         pg.display.flip()
         pg.display.update()
         self.tiles = inittolist(self.window)
@@ -122,7 +122,7 @@ class ProcessManager:
             self.mainprocess.update()
         except Exception as e:
             # extra save level in case of eny crashes
-            f = open(application_path + "\\CrashLog.txt", "w")
+            f = open(application_path / "CrashLog.txt", "w")
             f.write(traceback.format_exc())
             f.write("This is why RWE+ crashed^^^\nSorry")
             saved = False
@@ -245,7 +245,7 @@ class LevelProcess:
 
     def launchload(self, level):
         if level == -1:
-            self.file = turntoproject(open(path + "default.txt", "r").read())
+            self.file = turntoproject(open(path / "default.txt", "r").read())
             self.file["level"] = ""
             self.file["path"] = ""
             self.file["dir"] = ""
@@ -331,7 +331,7 @@ class LevelProcess:
                                                       defaultextension=".wep",
                                                       filetypes=[("Leditor unrendered level", ".txt"),
                                                                  ("World Editor Project", ".wep")])
-                if file is not None and os.path.exists(file):
+                if file and os.path.exists(file):
                     self.__init__(self.manager, file)
             case "load":
                 self.menu = LoadMenu(self)

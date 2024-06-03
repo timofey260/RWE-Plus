@@ -7,3 +7,5 @@ numpy~=1.26.4
 pyperclip~=1.8.2
 requests~=2.31.0
 json-with-comments
+ujson
+path-dict

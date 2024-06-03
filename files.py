@@ -8,72 +8,60 @@ import math
 import time
 from tkinter import filedialog
 import jsonc  # it's so fucking dumb that i use 3 json libraries in this project why
+from pathlib import Path
 
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
-    application_path = os.path.dirname(sys.executable)
+    application_path = Path(os.path.dirname(sys.executable))
 else:
-    application_path = os.path.dirname(__file__)
+    application_path = Path(os.path.dirname(__file__))
 
 islinux = os.name == "posix"
 
 
-def resolvepath(input_path):  # Thanks to someone... someone nice
-    if not islinux:
-        return input_path
-    path = input_path.replace("\\", "/")
-    if os.path.isdir(path):
-        return path
-    directory, filename = os.path.split(path)
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.lower() == filename.lower():
-                return os.path.join(root, file)
-    return None
 
 
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
-path = resolvepath(application_path + "\\files\\")
-path2favs = resolvepath(path + "favourites\\")
-path2tutorial = resolvepath(path + "tutorial\\")
-path2ui = resolvepath(path + "ui\\")
-path2graphics = resolvepath(application_path + f"\\drizzle\\Data\\Graphics\\")
-path2cast = resolvepath(application_path + f"\\drizzle\\Data\\Cast\\")
-path2renderedlevels = resolvepath(application_path + f"\\drizzle\\Data\\Levels\\")
-path2props = resolvepath(application_path + f"\\drizzle\\Data\\Props\\")
-path2levels = resolvepath(application_path + "\\LevelEditorProjects\\")
-path2hotkeys = resolvepath(path + "\\hotkeys\\")
+path = application_path / "files"
+path2favs = path / "favourites"
+path2tutorial = path / "tutorial"
+path2ui = path / "ui"
+path2graphics = application_path / "drizzle" / "Data" / "Graphics"
+path2cast = application_path / "drizzle" / "Data" / "Cast"
+path2renderedlevels = application_path / "drizzle" / "Data" / "Levels"
+path2props = application_path / "drizzle" / "Data" / "Props"
+path2levels = application_path / "LevelEditorProjects"
+path2hotkeys = path  /"hotkeys"
 
-path2effectPreviews = resolvepath(path + "effectPreviews\\")
-path2materialPreviews = resolvepath(path + "materialPreviews\\")
-path2patterns = resolvepath(path + "patternScripts\\")
-path2gifs = resolvepath(path + "gifs\\")
+path2effectPreviews = path / "effectPreviews"
+path2materialPreviews = path / "materialPreviews"
+path2patterns = path / "patternScripts"
+path2gifs = path / "gifs"
 
 pg.font.init()
 
-globalsettings : dict = jsonc.load(open(path + "settings.json", "r"))
-settings : dict = jsonc.load(open(path2ui + globalsettings["uifile"], "r"))
-hotkeys : dict = jsonc.load(open(path2hotkeys + globalsettings["hotkeyfile"], "r"))
-e = jsonc.load(open(path + "effects.json", "r"))
+globalsettings : dict = jsonc.load(open(path / "settings.json", "r"))
+settings : dict = jsonc.load(open(path2ui / globalsettings["uifile"], "r"))
+hotkeys : dict = jsonc.load(open(path2hotkeys / globalsettings["hotkeyfile"], "r"))
+e = jsonc.load(open(path / "effects.json", "r"))
 
 
 def loadimage(filepath):
-    if filepath != path + globalsettings["godimage"] and globalsettings["godmode"]:
+    if filepath != path / globalsettings["godimage"] and globalsettings["godmode"]:
         global god
         return god
-    resolved = resolvepath(filepath)
-    if filepath is None or resolved is None:
+    if not (filepath or filepath.exists()):
         raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
-    return pg.image.load(resolved)
+    return pg.image.load(filepath)
 
-god = loadimage(path + globalsettings["godimage"])
+god = loadimage(path / globalsettings["godimage"])
 if god is None:
     raise Exception("how dare you")
 godres = pg.Surface([0, 0])
 
-tooltiles = loadimage(path + globalsettings["tooltiles"])
-toolmenu = loadimage(path + globalsettings["toolmenu"])
+tooltiles = loadimage(path / globalsettings["tooltiles"])
+toolmenu = loadimage(path / globalsettings["toolmenu"])
 
 load_error_count = 0
 
@@ -156,7 +144,7 @@ def fs(sz) -> list[pg.font.Font, int]:
     if sz in fonts.keys():
         return fonts[sz]
     else:
-        f = pg.font.Font(path + "/" + settings["global"]["font"], sz)
+        f = pg.font.Font(path / settings["global"]["font"], sz)
         fonts[sz] = [f, f.size(allleters)[1]]
         return fonts[sz]
 
@@ -280,7 +268,7 @@ def tutorial():
 
 def log_to_load_log(message, error=False, nl=True):
     global load_error_count
-    with open(application_path + "\\loadLog.txt", "a") as load_log:
+    with open(application_path / "loadLog.txt", "a") as load_log:
         load_log.write(f"{'[ERROR]: ' if error else ''}{message}")
         if nl:
             load_log.write("\n")

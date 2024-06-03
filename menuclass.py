@@ -117,7 +117,7 @@ class Menu:
 
     def savef(self, saveas=False, crashsave=False):
         if crashsave:
-            open(f"{path2levels}AutoSave_{self.data.data.data.get('level', 'new')}.wep", "w").write(json.dumps(self.data.data.data))
+            open(path2levels / f"AutoSave_{self.data.data.data.get('level', 'new')}.wep", "w").write(json.dumps(self.data.data.data))
         elif self.data["path"] != "" and not saveas:
             open(os.path.splitext(self.data["path"])[0] + ".wep", "w").write(json.dumps(self.data.data.data))
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
@@ -590,7 +590,7 @@ class Menu:
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
+        settings = json.load(open(path2ui / globalsettings["uifile"], "r"))
         self.__init__(self.owner)
 
     def send(self, message):
@@ -722,7 +722,7 @@ class MenuWithField(Menu):
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui + globalsettings["uifile"], "r"))
+        settings = json.load(open(path2ui / globalsettings["uifile"], "r"))
         self.__init__(self.surface, self.menu, self.renderer)
 
     def movemiddle(self, bp):
