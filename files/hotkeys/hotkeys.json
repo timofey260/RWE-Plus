@@ -193,13 +193,13 @@
     	"K_c": "-pencil",
     	"K_v": "-togglebrush",
     	"K_LSHIFT@": "brush_size_scroll",
-    	"K_b": "move_patternoffset"
+    	"K_b+": "move_patternoffset"
 
   	},
 	"CE": {
 		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_i", "K_k", "K_j", "K_l", "K_w", "K_a", "K_s", "K_d"],
 
-		"K_d": "-deletecamera",
+		"K_d+": "-deletecamera",
 		"K_DELETE": "-deletecamera",
 
 		"K_n": "-addcamera",
@@ -231,13 +231,13 @@
 
   	},
 	"PE": {
-		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_SPACE", "K_q", "K_e",
+		"unlock_keys": ["K_LEFT", "K_RIGHT", "K_UP", "K_DOWN", "K_SPACE", "K_t", "K_q", "K_e",
 			"K_u", "K_i", "K_o", "K_p", "K_y", "K_g", "K_h", "K_j"
 		],
 
 		"K_q+": "-changematshow",
 
-		"K_x": "-togglesnap",
+		"K_z": "-togglesnap",
 		"K_w": "-browse_prev",
 		"K_a": "-cat_prev_propupdate",
 		"K_s": "-browse_next",
@@ -275,7 +275,7 @@
     	"K_SPACE@@@@": "scale_speedup",
 
     	"K_SPACE@@@": "pauseropephysics",
-    	"K_LSHIFT": "disableropecollisions",
+    	"K_t": "disableropecollisions",
 
     	"K_x": "-showfavs",
     	"K_x+": "-addtofavs",
