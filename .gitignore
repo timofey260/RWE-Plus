@@ -30,3 +30,7 @@ loadLog.txt
 /Scripts/
 /.idea/
 /drizzle_solar/
+
+__pycache__
+
+*.wep

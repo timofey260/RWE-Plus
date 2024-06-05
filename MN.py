@@ -6,7 +6,7 @@ import random
 class MN(MenuWithField):
     def __init__(self, process):
         super().__init__(process, "MN")
-        tips = set(open(path + "tips.txt", "r").readlines())
+        tips = set(open(path / "tips.txt", "r").readlines())
         self.tips = list(tips)
         self.mousp = True
         self.mousp1 = True

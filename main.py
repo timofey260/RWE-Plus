@@ -5,7 +5,7 @@ if __name__ == "__main__":
     from LevelProcess import *
 
     widgets.keybol = True
-    open(application_path + "\\loadLog.txt", "w")
+    open(application_path / "loadLog.txt", "w")
     multiprocessing.freeze_support()
     manager = ProcessManager()
     parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.\n"
