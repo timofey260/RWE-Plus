@@ -258,7 +258,7 @@ def inittolist(window: pg.Surface):
         for indx, item in enumerate(items):
             printmessage(f"Loading tile {item['nm']}...")
             try:
-                img = loadimage(f"{path2graphics}{item['nm']}.png")
+                img = loadimage(f"{path2graphics / item['nm']}.png")
             except FileNotFoundError:
                 continue
             sz = toarr(item["sz"], "point")
@@ -369,7 +369,7 @@ def renderlevel(data):
     # subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
     p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}", ))
     pickedgif = random.choice(list(globalsettings["rendergifimages"].keys()))
-    theimage = loadimage(path2gifs + pickedgif)
+    theimage = loadimage(path2gifs / pickedgif)
     fontr: pg.font.Font = fs(30)[0]
     text = fontr.render(settings["global"].get("renderingscugtext", "wendewing level :3 Esc to cancel"), True, pg.Color(255, 255, 255), None)
     frame = 0
@@ -548,11 +548,11 @@ def getprops(tiles: dict, window: pg.Surface):
                 returnimage = pg.Surface(size)
                 returnimage.fill(pg.Color(255, 255, 255))
                 try:
-                    img = loadimage(path2graphics + tile["nm"] + ".png")
+                    img = loadimage(path2graphics / (tile["nm"] + ".png"))
                 except:
                     img = pg.transform.scale(notfound, size)
                     returnimage.blit(pg.transform.scale(notfound, size), [0, 0])
-                    print(f"{tile['name']} is not Loaded properly")
+                    print(f"{tile['nm']} is not Loaded properly")
                 img.set_colorkey(pg.Color(255, 255, 255))
                 truewidth = size.x
                 if truewidth > img.get_width():

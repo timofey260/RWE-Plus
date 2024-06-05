@@ -19,6 +19,19 @@ else:
 islinux = os.name == "posix"
 
 
+def resolvepath(input_path):  # Thanks to someone... someone nice
+    # returning function back for compatibility
+    if not islinux:
+        return input_path
+    path = input_path.replace("\\", "/")
+    if os.path.isdir(path):
+        return path
+    directory, filename = os.path.split(path)
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.lower() == filename.lower():
+                return os.path.join(root, file)
+    return None
 
 
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
@@ -42,8 +55,8 @@ path2gifs = path / "gifs"
 pg.font.init()
 
 globalsettings : dict = jsonc.load(open(path / "settings.json", "r"))
-settings : dict = jsonc.load(open(path2ui / globalsettings["uifile"], "r"))
-hotkeys : dict = jsonc.load(open(path2hotkeys / globalsettings["hotkeyfile"], "r"))
+settings: dict = jsonc.load(open(path2ui / globalsettings["uifile"], "r"))
+hotkeys: dict = jsonc.load(open(path2hotkeys / globalsettings["hotkeyfile"], "r"))
 e = jsonc.load(open(path / "effects.json", "r"))
 
 
@@ -51,7 +64,10 @@ def loadimage(filepath):
     if filepath != path / globalsettings["godimage"] and globalsettings["godmode"]:
         global god
         return god
-    if not (filepath or filepath.exists()):
+    if not os.path.exists(filepath):
+        newpath = resolvepath(filepath)
+        if newpath is not None:
+            return pg.image.load(newpath)
         raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
     return pg.image.load(filepath)
 
