@@ -261,7 +261,7 @@ def rect2ellipse(rect: pg.Rect, hollow, callback):
                 callback(pg.Vector2(origin[0] + x, origin[1] + y), False)
 
 
-def map(x, in_min, in_max, out_min, out_max):
+def map2(x, in_min, in_max, out_min, out_max):
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 

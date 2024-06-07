@@ -523,7 +523,7 @@ class Renderer:
                 surf, mostleft, mosttop, ww, wh = quadtransform(quads, image)
                 surf = pg.transform.scale(surf, [ww * sprite2image, wh * sprite2image])
                 surf.set_colorkey(white)
-                alph = map(abs(layer - -prop[0] / 10), 3, 0, 40, 190)
+                alph = map2(abs(layer - -prop[0] / 10), 3, 0, 40, 190)
                 surf.set_alpha(alph)
                 self.surf_props.blit(surf, [mostleft * sprite2image, mosttop * sprite2image])
             if prop[4].get("points") is not None:

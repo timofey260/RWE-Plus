@@ -1,5 +1,4 @@
 import math
-
 from menuclass import *
 import random as rnd
 from rope import RopeModel
@@ -174,10 +173,11 @@ class PE(MenuWithField):
             button.blit(sum(pg.display.get_window_size()) // 120)
         if self.onfield or any(self.helds):
 
-            realpos = mpos - self.field.rect.topleft
+            # realpos = mpos - self.field.rect.topleft
+            realpos = self.mouse2field() * self.size
             s2 = self.size / 2
-            pos2 = pg.Vector2(round(math.floor(realpos.x / s2) * s2 - self.selectedimage.get_width() / 2, 4),
-                              round(math.floor(realpos.y / s2) * s2 - self.selectedimage.get_height() / 2, 4))
+            pos2 = pg.Vector2(round(realpos.x // s2 * s2, 4),
+                              round(realpos.y // s2 * s2, 4))
             pos2 += self.field.rect.topleft
 
             posoffset = self.posoffset * spritesize
@@ -263,29 +263,34 @@ class PE(MenuWithField):
             elif bp[0] == 1 and not self.mousp and (self.mousp2 and self.mousp1):
                 if self.selectedprop["tp"] == "long" and self.renderprop:
                     self.transform_reset()
-                    p1 = self.rectdata[0]
-                    p2 = posoffset
+                    p1 = self.rectdata[0] if self.snap else self.rectdata[1]
+                    p2 = posoffset if self.snap else mpos
                     vec = p2 - p1
                     angle = math.degrees(math.atan2(vec.y, vec.x))
                     distance = p1.distance_to(p2)
+                    if not self.snap:
+                        distance = distance / self.size * spritesize
                     newquads = self.quadsnor.copy()
-                    newquads[1][0] = distance + newquads[0][0]
-                    newquads[2][0] = distance + newquads[0][0]
+                    newquads[1][0] = 0
+                    newquads[2][0] = 0
+                    newquads[0][0] = -distance
+                    newquads[3][0] = -distance
                     q = []
-                    point = pg.Vector2(newquads[0])
+                    # point = pg.Vector2(newquads[0])
                     for quad in newquads:
                         newq = pg.Vector2(quad).rotate(angle)
-                        if quad[0] < point.x:
-                            point.x = quad[0]
-                        if quad[1] < point.y:
-                            point.y = quad[1]
+                        # if quad[0] < point.x:
+                        #     point.x = quad[0]
+                        # if quad[1] < point.y:
+                        #     point.y = quad[1]
                         q.append(newq)
                     self.quads = q
-                    i, *_, ww, wh = quadtransform(q, self.selectedimage)
-                    self.rectdata[2] = pg.Vector2(i.get_size())
-                    i = pg.transform.scale(i, [ww / spritesize * self.size, wh / spritesize * self.size])
-                    i.set_colorkey(white)
-                    self.surface.blit(i, (self.rectdata[1] + mpos) / 2 - pg.Vector2(i.get_size()) / 2)
+                    self.updateproptransform()
+                    # i, *_, ww, wh = quadtransform(q, self.selectedimage)
+                    # self.rectdata[2] = pg.Vector2(i.get_size())
+                    # i = pg.transform.scale(i, [ww / spritesize * self.size, wh / spritesize * self.size])
+                    # i.set_colorkey(white)
+                    # self.surface.blit(self.selectedimage, (mpos if self.snap else pos2) - mostlefttop)
 
             elif bp[0] == 0 and not self.mousp and (self.mousp2 and self.mousp1):
                 self.mousp = True
@@ -308,18 +313,12 @@ class PE(MenuWithField):
 
             if self.renderprop:
                 if not any(self.helds):
-                    if self.snap:
-                        self.surface.blit(self.selectedimage, pos2)
-                        p = (pg.Vector2(self.mousepos) - self.field.rect.topleft) / self.size * 2
-                        p = pg.Vector2(math.floor(p.x), math.floor(p.y)) * image1size / 2
-                        p -= self.offset * image1size
-                        widgets.fastmts(self.surface, f"X: {p.x}, Y: {p.y}", mpos.x, mpos.y + 30, white)
-                    else:
-                        self.surface.blit(self.selectedimage, mpos - pg.Vector2(self.selectedimage.get_size()) / 2)
-                        p = (pg.Vector2(self.mousepos) - self.field.rect.topleft) / self.size * image1size
-                        p -= self.offset * image1size
-                        p = pg.Vector2(round(p.x, 2), round(p.y, 2))
-                        widgets.fastmts(self.surface, f"X: {p.x}, Y: {p.y}", mpos.x, mpos.y + 30, white)
+                    mostlefttop = pg.Vector2(min(list(i[0] for i in self.quads)),
+                                             min(list(i[1] for i in self.quads))) / spritesize * self.size
+                    proppos = pos2 if self.snap else mpos
+                    self.surface.blit(self.selectedimage, proppos + mostlefttop)
+                    p = (proppos - self.field.rect.topleft + self.offset * self.size) * image2sprite
+                    widgets.fastmts(self.surface, f"X: {round(p.x, 4)}, Y: {round(p.y, 4)}", mpos.x, mpos.y + 30, white)
                 else:
                     q2s = pg.Vector2(mosts[0], mosts[1])
                     self.surface.blit(self.selectedimage, self.helppoins + q2s)
@@ -587,27 +586,31 @@ class PE(MenuWithField):
 
     def place(self, longpos=None):
         if not self.renderprop:
-            return 
-        quads = self.quads.copy()
-        quads2 = quads.copy()
-        mousepos = pg.Vector2(self.mousepos)
-        posonfield = ((mousepos - pg.Vector2(self.field.rect.topleft)) / self.size - pg.Vector2(self.xoffset, self.yoffset)) * spritesize
-        if self.snap:
-            realpos = mousepos - self.field.rect.topleft
-            posonfield = pg.Vector2(
-                round(math.floor(realpos.x / (self.size / 2)) * (spritesize / 2) - self.xoffset * spritesize, 4),
-                round(math.floor(realpos.y / (self.size / 2)) * (spritesize / 2) - self.yoffset * spritesize, 4))
-        qv = []
-        for i, q in enumerate(quads):
-            vec = pg.Vector2(q)
-            qv.append(vec)
-        qv = sum(qv, start=pg.Vector2(0, 0)) / 4
-        for i, q in enumerate(quads):
-            vec = pg.Vector2(q) - qv * 2 + posonfield
-            if longpos:
-                vec = pg.Vector2(q) - qv + longpos  # I literally have no idea how this works
-            vec = [round(vec.x, 4), round(vec.y, 4)]
-            quads2[i] = makearr(vec, "point")
+            return
+        pos = (self.mouse2field() - self.offset) * spritesize
+        quads2 = []
+        for i in self.quads:
+            vec = pos + pg.Vector2(i)
+            if self.snap:
+                s2 = 16 / 2
+                vec = pos // s2 * s2 + pg.Vector2(i)
+            listvec = [round(vec.x, 4), round(vec.y, 4)]
+            quads2.append(makearr(listvec, "point"))
+        # quads = self.quads.copy()
+        # quads2 = quads.copy()
+        # mousepos = pg.Vector2(self.mousepos)
+        # posonfield = ((mousepos - pg.Vector2(self.field.rect.topleft)) / self.size - pg.Vector2(self.xoffset, self.yoffset)) * spritesize
+        # qv = []
+        # for i, q in enumerate(quads):
+        #     vec = pg.Vector2(q)
+        #     qv.append(vec)
+        # qv = sum(qv, start=pg.Vector2(0, 0)) / 4
+        # for i, q in enumerate(quads):
+        #     vec = pg.Vector2(q) - qv * 2 + posonfield
+        #     if longpos:
+        #         vec = pg.Vector2(q) - qv + longpos  # I literally have no idea how this works
+        #     vec = [round(vec.x, 4), round(vec.y, 4)]
+        #     quads2[i] = makearr(vec, "point")
         newpropsettings = self.prop_settings.copy()
         if self.prop_settings.get("variation") is not None:
             if self.prop_settings["variation"] == 0:  # random

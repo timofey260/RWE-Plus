@@ -3,7 +3,7 @@ import pygame as pg
 import copy
 import files
 import render
-from files import settings, fs, path, map, allleters, loadimage
+from files import settings, fs, path, map2, allleters, loadimage
 from lingotojson import ItemData
 from render import gray, darkgray
 
@@ -376,7 +376,7 @@ class Slider:
         screensize = sum(pg.display.get_window_size())
         s = screensize // 100
         mpos = pg.Vector2(pg.mouse.get_pos())
-        sliderpos = self.pos.lerp(self.pos + pg.Vector2(self.len, 0), map(self.value, self.min, self.max, 0, 1))
+        sliderpos = self.pos.lerp(self.pos + pg.Vector2(self.len, 0), map2(self.value, self.min, self.max, 0, 1))
         pos2 = self.pos + pg.Vector2(self.len, 0)
 
         pg.draw.line(self.surface, buttontextcolor, self.pos, pos2, 5)
@@ -389,7 +389,7 @@ class Slider:
                 self.held = True
         elif pg.mouse.get_pressed()[0] and not self.mp:
             if self.held:
-                val = max(min(map(mpos.x, self.pos.x, pos2.x, self.min, self.max), self.max), self.min)
+                val = max(min(map2(mpos.x, self.pos.x, pos2.x, self.min, self.max), self.max), self.min)
                 self.value = val - val % self.step
                 self.set_text(f"{self.originaltext}: {int(self.value)}")
         elif not pg.mouse.get_pressed()[0] and not self.mp:
