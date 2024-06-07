@@ -136,13 +136,13 @@
         "movepreview": "Shows tile preview without collisions",
         "-brushp": "Increase brush size",
         "-brushm": "decrease brush size",
-        "move_patternoffset": "Offsets custom patterns",
+        "-brush": "Toggles Brush",
         "-pencil": "Enables pencil",
         "-togglebrush": "Toggles betwen pencil and brush",
-        "brush_size_scroll": "Hold to use scroll to change brush size"
+        "brush_size_scroll": "Hold to use scroll to change brush size",
+        "move_patternoffset": "Offsets custom patterns"
     },
     "CE": {
-        "-addright": "Rotates nearest edge of nearest camera clockwise",
         "-deletecamera": "Deletes the nearest placed camera",
         "-addcamera": "Adds camera at center of level",
         "-pickupcamera": "Pick up nearest camera",
@@ -153,6 +153,7 @@
         "-addup": "Moves nearest edge of nearest camera out of original position",
         "-adddown": "Moves nearest edge of nearest camera to original position",
         "-addleft": "Rotates nearest edge of nearest camera counter-clockwise",
+        "-addright": "Rotates nearest edge of nearest camera clockwise",
         "-camup": "Moves selected camera up",
         "-camdown": "Moves selected camera down",
         "-edit": "Enables edit mode",
@@ -160,7 +161,7 @@
     },
     "PE": {
         "-changematshow": "Shows list of categories",
-        "-showfavs": "Shows favourites",
+        "-togglesnap": "Toggle snap to grid",
         "-browse_prev": "Previous prop",
         "-cat_prev_propupdate": "Previous category + update current prop",
         "-browse_next": "Next prop",
@@ -189,6 +190,8 @@
         "rotate_speedup": "Increases rotation speed",
         "scale_speedup": "Speeds up prop scaling",
         "pauseropephysics": "Pauses rope physics",
+        "disableropecollisions": "Disable rope collisions while held",
+        "-showfavs": "Shows favourites",
         "-addtofavs": "Adds prop to favourites",
         "cursor_propdepth_inverse": "While pressed, press RMB to change depth down",
         "-findpropmenu": "Opens find prop menu"
@@ -196,6 +199,7 @@
     "FE": {
         "-changematshow": "Shows list of categories",
         "-addordeleteselectedeffect": "Adds or deletes selected effect",
+        "-changeeffect": "Change effect",
         "-prevparam": "Previous effect parameter",
         "-nextparam": "Next effect parameter",
         "-bsup": "Increases brush size",

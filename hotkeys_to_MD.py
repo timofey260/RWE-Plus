@@ -46,11 +46,11 @@ def turntomd(filename, desc, output):
                 if key == "unlock_keys":
                     continue
                 description = modded[menu][func]
-                key2 = key.replace("+", "").replace("@", "")
-                if key.find("+") != -1:
-                    file.write(f"* **ctrl + {k.name(getattr(pg, key2)).title()}** - {func} - {description}\n")
-                else:
-                    file.write(f"* **{k.name(getattr(pg, key2)).title()}** - {func} - {description}\n")
+                key2 = key.replace("+", "").replace("@", "").replace("-", "")
+                add = ""
+                add += "ctrl + " if key.find("+") != -1 else ""
+                add += "shift + " if key.find("-") != -1 else ""
+                file.write(f"* **{add}{k.name(getattr(pg, key2)).title()}** - {func} - {description}\n")
     print("Done!")
 
 
