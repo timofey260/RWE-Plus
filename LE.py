@@ -39,11 +39,11 @@ class LE(MenuWithField):
         self.images = {True: [], False: []}
 
         for i in globalsettings["shadowimages"]:
-            img = loadimage(path2cast + i)
+            img = loadimage(path2cast / i)
             img.set_colorkey(white)
             self.images[True].append(img)
 
-            img = loadimage(path2cast + i)
+            img = loadimage(path2cast / i)
             arr = pg.pixelarray.PixelArray(img)
             arr.replace(black, red)
             arr.replace(white, black)

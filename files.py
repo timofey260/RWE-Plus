@@ -68,8 +68,9 @@ def loadimage(filepath):
         newpath = resolvepath(filepath)
         if newpath is not None:
             return pg.image.load(newpath)
-        raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
+        raise FileNotFoundError(f"Image by path {os.path.relpath(path.absolute(), application_path.absolute())} does not exist", path)
     return pg.image.load(filepath)
+
 
 god = loadimage(path / globalsettings["godimage"])
 if god is None:

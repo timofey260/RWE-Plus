@@ -5,7 +5,7 @@ class HK(Menu):
     def __init__(self, process, openmenu="MN"):
         self.menu = "HK"
         self.m = openmenu
-        self.keys = json.load(open(path2hotkeys + globalsettings["hotkeydescfile"]))
+        self.keys = json.load(open(path2hotkeys / globalsettings["hotkeydescfile"]))
         self.scroll = 0
         self.lines = 0
 
@@ -90,6 +90,6 @@ class HK(Menu):
 
     def edit(self):
         if islinux:
-            os.system(f"open files/hotkeys.json")
+            os.system(f"open {path / 'files/hotkeys.json'}")
         else:
-            os.system(f"\"{path}hotkeys.json\"")
+            os.system(f"\"{path / 'hotkeys.json'}\"")
