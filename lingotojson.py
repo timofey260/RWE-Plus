@@ -367,7 +367,7 @@ def renderlevel(data):
     turntolingo(data, file)
     #print(f"\"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}")
     # subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
-    p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}", ))
+    p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render \"{fl}\"", ))
     pickedgif = random.choice(list(globalsettings["rendergifimages"].keys()))
     theimage = loadimage(path2gifs / pickedgif)
     fontr: pg.font.Font = fs(30)[0]

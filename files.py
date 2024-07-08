@@ -22,7 +22,7 @@ islinux = os.name == "posix"
 def resolvepath(input_path):  # Thanks to someone... someone nice
     # returning function back for compatibility
     if not islinux:
-        return input_path
+        return str(input_path)
     path = input_path.replace("\\", "/")
     if os.path.isdir(path):
         return path
@@ -82,7 +82,7 @@ toolmenu = loadimage(path / globalsettings["toolmenu"])
 
 load_error_count = 0
 
-tag = "2.6.7"
+tag = "2.6.8"
 
 ofstop = 15
 ofsleft = 15
