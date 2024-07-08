@@ -408,7 +408,7 @@ def renderlevelProccess(data):
     os.system(data)
     # os.system(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render {fl}")
     if not islinux:
-        os.system("start " + resolvepath(path2renderedlevels))
+        os.system("start " + str(resolvepath(path2renderedlevels)))
 
 
 def getcolors():
