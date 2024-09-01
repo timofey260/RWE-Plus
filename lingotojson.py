@@ -11,7 +11,7 @@ import sys
 from files import *
 import math
 
-notfound = loadimage(path / "notfound.png")
+notfound = loadimage(os.path.join(path, "notfound.png"))
 notfound.set_colorkey(pg.Color(255, 255, 255))
 notfoundtile = {
     "name": "unloaded tile",
@@ -26,7 +26,7 @@ notfoundtile = {
     "cat": [1, 1],
     "tags": [""]
 }
-defaultlevel = open(path / "default.txt", "r").readlines()
+defaultlevel = open(os.path.join(path, "default.txt"), "r").readlines()
 
 
 def tojson(string: str, replacement: str = None):
@@ -245,10 +245,10 @@ def inittolist(window: pg.Surface):
         window.blit(surf, [0, 0])
         pg.display.update()
     inv = settings["TE"]["LEtiles"]
-    tilefiles = [path2graphics / i for i in globalsettings["tileinits"]]
+    tilefiles = [os.path.join(path2graphics, i) for i in globalsettings["tileinits"]]
     solved = init_solve(tilefiles)
     solved_copy = copy.deepcopy(solved)
-    f = pg.font.Font(path / settings["global"]["font"], 20)
+    f = pg.font.Font(os.path.join(path, settings["global"]["font"]), 20)
     for catnum, catitem in enumerate(solved.data):
         cat = catitem["name"]
 
@@ -258,7 +258,7 @@ def inittolist(window: pg.Surface):
         for indx, item in enumerate(items):
             printmessage(f"Loading tile {item['nm']}...")
             try:
-                img = loadimage(f"{path2graphics / item['nm']}.png")
+                img = loadimage(f"{os.path.join(path2graphics, item['nm'])}.png")
             except FileNotFoundError:
                 continue
             sz = toarr(item["sz"], "point")
@@ -331,7 +331,7 @@ def inittolist(window: pg.Surface):
         ms = globalsettings["matsize"]
         pg.draw.rect(img, v, pg.Rect(ms[0], ms[0], ms[1], ms[1]))
         try:
-            preview = loadimage(path2materialPreviews / (k + ".png"))
+            preview = loadimage(os.path.join(path2materialPreviews, (k + ".png")))
         except FileNotFoundError:
             preview = pg.Surface([image1size, image1size])
             preview.set_alpha(0)
@@ -369,7 +369,7 @@ def renderlevel(data):
     # subprocess.Popen([f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'}", "render", fl], shell=True)
     p = multiprocessing.Process(target=renderlevelProccess, args=(f"{application_path}/drizzle/Drizzle.ConsoleApp{'' if islinux else '.exe'} render \"{fl}\"", ))
     pickedgif = random.choice(list(globalsettings["rendergifimages"].keys()))
-    theimage = loadimage(path2gifs / pickedgif)
+    theimage = loadimage(os.path.join(path2gifs, pickedgif))
     fontr: pg.font.Font = fs(30)[0]
     text = fontr.render(settings["global"].get("renderingscugtext", "wendewing level :3 Esc to cancel"), True, pg.Color(255, 255, 255), None)
     frame = 0
@@ -412,7 +412,7 @@ def renderlevelProccess(data):
 
 
 def getcolors():
-    solved = open(application_path / "drizzle" / "Data" / "Props" / "propColors.txt", 'r').readlines()
+    solved = open(os.path.join(application_path, "drizzle", "Data", "Props", "propColors.txt"), 'r').readlines()
     cols = []
     for line in solved:
         if line[0] != '[':
@@ -487,11 +487,11 @@ def getprops(tiles: dict, window: pg.Surface):
         pg.draw.rect(window, pg.color.THECOLORS["black"], [0, 0, window.get_width(), surf.get_height()])
         window.blit(surf, [0, 0])
         pg.display.update()
-    propfiles = [path2props / i for i in globalsettings["propinits"]]
-    propfiles.append(path / "additionprops.txt")
+    propfiles = [os.path.join(path2props, i) for i in globalsettings["propinits"]]
+    propfiles.append(os.path.join(path, "additionprops.txt"))
     solved = init_solve(propfiles)
     solved_copy = copy.deepcopy(solved)
-    f = pg.font.Font(path / settings["global"]["font"], 20)
+    f = pg.font.Font(os.path.join(path, settings["global"]["font"]), 20)
     for catnum, catitem in enumerate(solved.data):
         items = catitem["items"]
         colr = catitem["color"]
@@ -499,7 +499,7 @@ def getprops(tiles: dict, window: pg.Surface):
         for indx, item in enumerate(items):
             printmessage(f"Loading prop {item['nm']}...")
             try:
-                img = loadimage(path2props / f"{item['nm']}.png")
+                img = loadimage(f"{os.path.join(path2props, item['nm'])}.png")
                 images = addprop(item, img)
                 newitem = solved[catnum]["items"][indx]
                 newitem["images"] = images
@@ -548,7 +548,7 @@ def getprops(tiles: dict, window: pg.Surface):
                 returnimage = pg.Surface(size)
                 returnimage.fill(pg.Color(255, 255, 255))
                 try:
-                    img = loadimage(path2graphics / (tile["nm"] + ".png"))
+                    img = loadimage(os.path.join(path2graphics, (tile["nm"] + ".png")))
                 except:
                     img = pg.transform.scale(notfound, size)
                     returnimage.blit(pg.transform.scale(notfound, size), [0, 0])
@@ -600,7 +600,7 @@ def solveeffects(effects):
             if "options" not in d:
                 d["options"] = []
             if "preview" in d:
-                d["preview"] = loadimage(path2effectPreviews / f"{d['preview']}.png")
+                d["preview"] = loadimage(os.path.join(path2effectPreviews, f"{d['preview']}.png"))
             for i in effects["defaultparams"]:
                 d["options"].append(i)
             for indx, option in enumerate(d["options"]):

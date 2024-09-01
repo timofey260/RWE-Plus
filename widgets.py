@@ -1,4 +1,6 @@
 import math
+import os.path
+
 import pygame as pg
 import copy
 import files
@@ -41,7 +43,7 @@ def mts(text: str = "", col=None, fontsize=settings["global"]["fontsize"]):
     fontr: pg.font.Font = fs(fontsize)[0]
     sz: int = fs(fontsize)[1]
     if text == "RWE+":
-        fontr: pg.font.Font = pg.font.Font(path / settings["global"]["titlefont"], fontsize)
+        fontr: pg.font.Font = pg.font.Font(os.path.join(path, settings["global"]["titlefont"]), fontsize)
         sz: int = fontr.size(allleters)[1]
     items = text.split("\n")
     rendered = []
@@ -116,7 +118,7 @@ class Button:
         if type(icon) is list:
             cut = [icon[1][0] * settings["global"]["size"], icon[1][1] * settings["global"]["size"],
                    settings["global"]["size"], settings["global"]["size"]]
-            image = loadimage(path / icon[0]).subsurface(cut)
+            image = loadimage(os.path.join(path, icon[0])).subsurface(cut)
             wh = image.get_height() / settings["global"]["size"] * (rect.height / 100 * surface.get_height())
             size = [wh, wh]
             image = pg.transform.scale(image, size)
@@ -227,7 +229,7 @@ class Button:
         if type(self.loadicon) is list:
             cut = [self.loadicon[1][0] * settings["global"]["size"], self.loadicon[1][1] * settings["global"]["size"],
                    settings["global"]["size"], settings["global"]["size"]]
-            image = loadimage(path / self.loadicon[0]).subsurface(cut)
+            image = loadimage(os.path.join(path, self.loadicon[0])).subsurface(cut)
             wh = image.get_height() / settings["global"]["size"] * self.rect.height
             size = [wh, wh]
             image = pg.transform.scale(image, size)
@@ -431,7 +433,7 @@ class Selector():
         self.lastitem = 0
 
         self.surface = menu.surface
-        self.favouritefile = files.path2favs / favouritesfile if favouritesfile is not None else None
+        self.favouritefile = os.path.join(files.path2favs, favouritesfile) if favouritesfile is not None else None
 
         self.pos = pg.Vector2()
         self.lastshow = "items"

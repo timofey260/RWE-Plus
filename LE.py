@@ -39,11 +39,11 @@ class LE(MenuWithField):
         self.images = {True: [], False: []}
 
         for i in globalsettings["shadowimages"]:
-            img = loadimage(path2cast / i)
+            img = loadimage(os.path.join(path2cast, i))
             img.set_colorkey(white)
             self.images[True].append(img)
 
-            img = loadimage(path2cast / i)
+            img = loadimage(os.path.join(path2cast, i))
             arr = pg.pixelarray.PixelArray(img)
             arr.replace(black, red)
             arr.replace(white, black)
@@ -180,7 +180,7 @@ class LE(MenuWithField):
         pg.draw.circle(self.field2.field, black, [0, self.field2.field.get_height()], 1)
         pg.draw.circle(self.field2.field, black, [self.field2.field.get_width(), self.field2.field.get_height()], 1)
         if self.data["path"] == "":
-            if globalsettings["rwefilebrowser"]:
+            if globalsettings["rwefilebrowser"] or islinux:
                 level = self.asksaveasfilename(defaultextension=[".wep"])
             else:
                 level =  filedialog.asksaveasfilename(filetypes=[("World Editor Project", ".wep")],

@@ -6,15 +6,15 @@ import os
 import sys
 import math
 import time
-from tkinter import filedialog
+
 import jsonc  # it's so fucking dumb that i use 3 json libraries in this project why
-from pathlib import Path
 
 # determine if application is a script file or frozen exe
+
 if getattr(sys, 'frozen', False):
-    application_path = Path(os.path.dirname(sys.executable))
+    application_path = os.path.dirname(sys.executable)
 else:
-    application_path = Path(os.path.dirname(__file__))
+    application_path = os.path.dirname(__file__)
 
 islinux = os.name == "posix"
 
@@ -23,7 +23,8 @@ def resolvepath(input_path):  # Thanks to someone... someone nice
     # returning function back for compatibility
     if not islinux:
         return str(input_path)
-    path = input_path.replace("\\", "/")
+    #path = input_path.replace("\\", "/")
+    path = input_path
     if os.path.isdir(path):
         return path
     directory, filename = os.path.split(path)
@@ -36,49 +37,49 @@ def resolvepath(input_path):  # Thanks to someone... someone nice
 
 allleters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- =+_*()[]{}#@"
 
-path = application_path / "files"
-path2favs = path / "favourites"
-path2tutorial = path / "tutorial"
-path2ui = path / "ui"
-path2graphics = application_path / "drizzle" / "Data" / "Graphics"
-path2cast = application_path / "drizzle" / "Data" / "Cast"
-path2renderedlevels = application_path / "drizzle" / "Data" / "Levels"
-path2props = application_path / "drizzle" / "Data" / "Props"
-path2levels = application_path / "LevelEditorProjects"
-path2hotkeys = path  /"hotkeys"
+path = os.path.join(application_path, "files")
+path2favs = os.path.join(path, "favourites")
+path2tutorial = os.path.join(path, "tutorial")
+path2ui = os.path.join(path, "ui")
+path2graphics = os.path.join(application_path,  "drizzle",  "Data", "Graphics")
+path2cast = os.path.join(application_path, "drizzle", "Data", "Cast")
+path2renderedlevels = os.path.join(application_path, "drizzle", "Data", "Levels")
+path2props = os.path.join(application_path, "drizzle", "Data", "Props")
+path2levels = os.path.join(application_path, "LevelEditorProjects")
+path2hotkeys = os.path.join(path, "hotkeys")
 
-path2effectPreviews = path / "effectPreviews"
-path2materialPreviews = path / "materialPreviews"
-path2patterns = path / "patternScripts"
-path2gifs = path / "gifs"
+path2effectPreviews = os.path.join(path, "effectPreviews")
+path2materialPreviews = os.path.join(path, "materialPreviews")
+path2patterns = os.path.join(path, "patternScripts")
+path2gifs = os.path.join(path, "gifs")
 
 pg.font.init()
 
-globalsettings : dict = jsonc.load(open(path / "settings.json", "r"))
-settings: dict = jsonc.load(open(path2ui / globalsettings["uifile"], "r"))
-hotkeys: dict = jsonc.load(open(path2hotkeys / globalsettings["hotkeyfile"], "r"))
-e = jsonc.load(open(path / "effects.json", "r"))
+globalsettings: dict = jsonc.load(open(os.path.join(path, "settings.json"), "r"))
+settings: dict = jsonc.load(open(os.path.join(path2ui, globalsettings["uifile"]), "r"))
+hotkeys: dict = jsonc.load(open(os.path.join(path2hotkeys, globalsettings["hotkeyfile"]), "r"))
+e = jsonc.load(open(os.path.join(path, "effects.json"), "r"))
 
 
 def loadimage(filepath):
-    if filepath != path / globalsettings["godimage"] and globalsettings["godmode"]:
+    if filepath != os.path.join(path, globalsettings["godimage"]) and globalsettings["godmode"]:
         global god
         return god
     if not os.path.exists(filepath):
         newpath = resolvepath(filepath)
         if newpath is not None:
             return pg.image.load(newpath)
-        raise FileNotFoundError(f"Image by path {os.path.relpath(path.absolute(), application_path.absolute())} does not exist", path)
+        raise FileNotFoundError(f"Image by path {os.path.relpath(path, application_path)} does not exist", path)
     return pg.image.load(filepath)
 
 
-god = loadimage(path / globalsettings["godimage"])
+god = loadimage(os.path.join(path, globalsettings["godimage"]))
 if god is None:
     raise Exception("how dare you")
 godres = pg.Surface([0, 0])
 
-tooltiles = loadimage(path / globalsettings["tooltiles"])
-toolmenu = loadimage(path / globalsettings["toolmenu"])
+tooltiles = loadimage(os.path.join(path, globalsettings["tooltiles"]))
+toolmenu = loadimage(os.path.join(path, globalsettings["toolmenu"]))
 
 load_error_count = 0
 
@@ -161,7 +162,7 @@ def fs(sz) -> list[pg.font.Font, int]:
     if sz in fonts.keys():
         return fonts[sz]
     else:
-        f = pg.font.Font(path / settings["global"]["font"], sz)
+        f = pg.font.Font(os.path.join(path, settings["global"]["font"]), sz)
         fonts[sz] = [f, f.size(allleters)[1]]
         return fonts[sz]
 
@@ -285,7 +286,7 @@ def tutorial():
 
 def log_to_load_log(message, error=False, nl=True):
     global load_error_count
-    with open(application_path / "loadLog.txt", "a") as load_log:
+    with open(os.path.join(application_path, "loadLog.txt"), "a") as load_log:
         load_log.write(f"{'[ERROR]: ' if error else ''}{message}")
         if nl:
             load_log.write("\n")

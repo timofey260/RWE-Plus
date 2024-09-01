@@ -1,11 +1,12 @@
 import multiprocessing
+import os
 
 if __name__ == "__main__":
     import argparse
     from LevelProcess import *
 
     widgets.keybol = True
-    open(application_path / "loadLog.txt", "w")
+    open(os.path.join(application_path, "loadLog.txt"), "w")
     multiprocessing.freeze_support()
     manager = ProcessManager()
     parser = argparse.ArgumentParser(prog="RWE+ console", description="Maybe a better, than official LE.\n"

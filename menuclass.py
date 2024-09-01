@@ -1,9 +1,12 @@
 import copy
+import os.path
+
 import render
 import widgets
 import pyperclip
 from render import *
 import time
+from tkinter import filedialog
 
 
 class Menu:
@@ -117,13 +120,13 @@ class Menu:
 
     def savef(self, saveas=False, crashsave=False):
         if crashsave:
-            open(path2levels / f"AutoSave_{self.data.data.data.get('level', 'new')}.wep", "w").write(json.dumps(self.data.data.data))
+            open(os.path.join(path2levels, f"AutoSave_{self.data.data.data.get('level', 'new')}.wep"), "w").write(json.dumps(self.data.data.data))
         elif self.data["path"] != "" and not saveas:
             open(os.path.splitext(self.data["path"])[0] + ".wep", "w").write(json.dumps(self.data.data.data))
             self.data["path"] = os.path.splitext(self.data["path"])[0] + ".wep"
             # print(os.path.splitext(self.data["path"])[0] + ".wep")
         else:
-            if globalsettings["rwefilebrowser"]:
+            if globalsettings["rwefilebrowser"] or islinux:
                 savedest = self.asksaveasfilename()
             else:
                 savedest = filedialog.asksaveasfilename(confirmoverwrite=True, defaultextension=".wep", filetypes=[("World Editor Project", ".wep")], initialdir=path2levels)
@@ -150,7 +153,7 @@ class Menu:
 
         def addfolder(folder):
             global filepath, append
-            filepath += "/" + folder.text + "/"
+            filepath = os.path.join(filepath, folder.text)
             append = True
 
         def goback():
@@ -413,7 +416,7 @@ class Menu:
         return inputfile.replace("\n", "")
 
     def savef_txt(self):
-        if globalsettings["rwefilebrowser"]:
+        if globalsettings["rwefilebrowser"] or islinux:
             savedest = self.asksaveasfilename(defaultextension=[".txt"])
         else:
             savedest = filedialog.asksaveasfilename(confirmoverwrite=True, defaultextension=".wep", filetypes=[("Leditor unrendered level", ".txt")], initialdir=path2levels)
@@ -590,7 +593,7 @@ class Menu:
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui / globalsettings["uifile"], "r"))
+        settings = json.load(open(os.path.join(path2ui, globalsettings["uifile"]), "r"))
         self.__init__(self.owner)
 
     def send(self, message):
@@ -722,7 +725,7 @@ class MenuWithField(Menu):
 
     def reload(self):
         global settings
-        settings = json.load(open(path2ui / globalsettings["uifile"], "r"))
+        settings = json.load(open(os.path.join(path2ui, globalsettings["uifile"]), "r"))
         self.__init__(self.surface, self.menu, self.renderer)
 
     def movemiddle(self, bp):
